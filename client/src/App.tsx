@@ -14,6 +14,7 @@ import AdminKYCReview from "./pages/AdminKYCReview";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoles from "./pages/AdminRoles";
 import AdminPermissions from "./pages/AdminPermissions";
+import FAQ from "./pages/FAQ";
 
 function Router() {
   return (
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/portfolio" component={Portfolio} />
       <Route path="/profile" component={Profile} />
       <Route path={"/contact"} component={Contact} />
+      <Route path={"/faq"} component={FAQ} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/roles" component={AdminRoles} />
       <Route path="/admin/permissions" component={AdminPermissions} />

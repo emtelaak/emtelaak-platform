@@ -34,6 +34,7 @@ export const en = {
     portfolio: "Portfolio",
     profile: "Profile",
     contact: "Contact Us",
+    faq: "FAQ",
     login: "Login",
     logout: "Logout",
     getStarted: "Get Started",
@@ -409,6 +410,41 @@ export const en = {
     rejected: "Rejected",
     completed: "Completed",
     processing: "Processing",
+  },
+
+  // FAQ Page
+  faq: {
+    title: "Frequently Asked Questions",
+    subtitle: "Find answers to common questions about fractional property ownership and investing with Emtelaak",
+    stillHaveQuestions: "Still have questions?",
+    contactPrompt: "Our team is here to help. Get in touch with us for personalized assistance.",
+    contactUs: "Contact Us",
+    questions: {
+      q1: {
+        question: "What's the sharing economy?",
+        answer: "It's an economic model where individuals share physical assets and collaborate in producing and trading goods and services between people and businesses. It relies on information that facilitates sharing and exchange.",
+      },
+      q2: {
+        question: "What's fractional property ownership?",
+        answer: "Fractional ownership is a modern real-estate investment concept. It allows individuals to own a share of a property—residential, commercial, or administrative—often as square-meter ownership, for renting or reselling units and distributing returns to investors.",
+      },
+      q3: {
+        question: "Can fractional property shares be registered?",
+        answer: "Yes. The fractional owner can register their fractions—specific or common—at the Egyptian notary public after obtaining the developer contract, in accordance with civil law rules for common shares.",
+      },
+      q4: {
+        question: "What are the risks and responsibilities of fractional ownership?",
+        answer: "Like any investment, property fractions are affected by market conditions, developer performance, and operating costs. Holders share ongoing expenses proportionally to their stake and must comply with the project's legal terms and timelines. Always review due-diligence and legal agreements before investing.",
+      },
+      q5: {
+        question: "How can I exit or resell my property fraction?",
+        answer: "You may resell your fraction through mechanisms allowed by the project (e.g., a secondary market or direct transfer) subject to developer rules and local regulations. Transfers are documented and, where applicable, notarized. Settlement times and fees depend on the project terms and market demand.",
+      },
+      q6: {
+        question: "Who manages the property and distributes returns?",
+        answer: "Properties are typically operated by the developer or an appointed operator. Returns (from rental or resale proceeds) are calculated and distributed to holders in line with their share and the project terms. EMTELAAK facilitates information and the investment process; legal obligations remain with the developer and the governing contracts.",
+      },
+    },
   },
 
   // Roles
