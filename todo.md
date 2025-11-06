@@ -417,3 +417,14 @@
 - [x] Add AdminKYCReview route to App.tsx
 - [x] KYC status badges already present on profile page (verification level, documents, questionnaire)
 - [x] Test KYC workflow end-to-end (submission → admin review → approval → notification)
+
+
+## Phase 37: KYC Questionnaire Progress Bar (COMPLETED)
+- [x] Analyze current KYC questionnaire form structure
+- [x] Implement progress calculation logic based on filled fields
+- [x] Create visual progress bar component with percentage display
+- [x] Add progress bar to KYC questionnaire page header
+- [x] Update progress bar in real-time as user fills form
+- [x] Add Arabic translation for progress indicator
+- [x] Test progress bar on mobile and desktop
+- [x] Save checkpoint with progress bar feature

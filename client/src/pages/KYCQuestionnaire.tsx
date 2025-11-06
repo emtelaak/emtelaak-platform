@@ -15,6 +15,7 @@ import { getLoginUrl, APP_LOGO, APP_TITLE } from "@/const";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { CheckCircle2, AlertCircle, Clock } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 
 export default function KYCQuestionnaire() {
@@ -83,6 +84,25 @@ export default function KYCQuestionnaire() {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  // Calculate progress based on filled fields
+  const calculateProgress = () => {
+    const requiredFields = [
+      'annualIncome', 'netWorth', 'liquidAssets', 'employmentStatus', 'occupation',
+      'investmentExperience', 'realEstateExperience', 'riskTolerance',
+      'investmentGoals', 'investmentHorizon', 'expectedReturnRate',
+      'sourceOfFunds'
+    ];
+    
+    const filledFields = requiredFields.filter(field => {
+      const value = formData[field as keyof typeof formData];
+      return value !== '' && value !== null && value !== undefined;
+    });
+    
+    return Math.round((filledFields.length / requiredFields.length) * 100);
+  };
+
+  const progress = calculateProgress();
+
   if (authLoading || questionnaireLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -145,11 +165,31 @@ export default function KYCQuestionnaire() {
                 {t.kyc.questionnaire.subtitle || "Complete your investor accreditation questionnaire"}
               </p>
             </div>
-            <LanguageSwitcher />
+            <div className="flex items-center gap-4">
+              <LanguageSwitcher />
+            </div>
             <Link href="/profile">
               <Button variant="outline">Back to Profile</Button>
             </Link>
           </div>
+          
+          {/* Progress Bar */}
+          {questionnaire?.status !== "approved" && (
+            <div className="mt-6 space-y-2">
+              <div className="flex items-center justify-between text-sm">
+                <span className="font-medium">
+                  {t.kyc.questionnaire.progress || "Completion Progress"}
+                </span>
+                <span className="text-muted-foreground font-semibold">{progress}%</span>
+              </div>
+              <Progress value={progress} className="h-2" />
+              {progress < 100 && (
+                <p className="text-xs text-muted-foreground">
+                  {t.kyc.questionnaire.progressHint || "Fill in all required fields to submit your questionnaire"}
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

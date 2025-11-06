@@ -330,6 +330,8 @@ export const ar: Translation = {
       additionalDesc: "معلومات الامتثال التنظيمي",
       pepDetails: "تفاصيل الشخص المعرض سياسياً",
       notes: "ملاحظات إضافية",
+      progress: "تقدم الإكمال",
+      progressHint: "املأ جميع الحقول المطلوبة لتقديم الاستبيان",
     },
     review: {
       title: "المراجعة والإرسال",

@@ -328,6 +328,8 @@ export const en = {
       additionalDesc: "Regulatory compliance information",
       pepDetails: "PEP Details",
       notes: "Additional Notes",
+      progress: "Completion Progress",
+      progressHint: "Fill in all required fields to submit your questionnaire",
     },
     review: {
       title: "Review & Submit",
