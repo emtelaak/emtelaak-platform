@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PROPERTY_TYPES, INVESTMENT_TYPES } from "@/const";
+import { PROPERTY_TYPES, INVESTMENT_TYPES, APP_LOGO, APP_TITLE } from "@/const";
 import { Building2, MapPin, TrendingUp, Calendar, ArrowRight, Search } from "lucide-react";
 import { Link } from "wouter";
 
@@ -42,8 +42,11 @@ export default function Properties() {
       {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container py-6">
-          <div className="flex items-center justify-between mb-6">
-            <div>
+          <div className="flex items-center gap-4 mb-6">
+            <Link href="/">
+              <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-auto cursor-pointer" />
+            </Link>
+            <div className="flex-1">
               <h1 className="text-3xl font-bold mb-2">Investment Properties</h1>
               <p className="text-muted-foreground">
                 Browse our curated selection of premium real estate opportunities

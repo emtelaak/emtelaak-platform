@@ -216,3 +216,11 @@
 - [x] Store current step and form data
 - [x] Add progress indicator on profile page
 - [x] Backend infrastructure for save and resume functionality
+
+
+## Phase 20: Branding - Add Emtelaak Logo (Current)
+- [x] Copy logo file to public directory
+- [x] Update navigation bar to use Emtelaak logo
+- [x] Update all pages to display logo (Home, Properties, Portfolio, Profile)
+- [x] Ensure logo is responsive on mobile
+- [x] Update app constants with logo URL

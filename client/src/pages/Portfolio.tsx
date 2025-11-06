@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { TrendingUp, TrendingDown, DollarSign, Building2, Calendar, ArrowUpRight, Download } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { getLoginUrl } from "@/const";
+import { getLoginUrl, APP_LOGO, APP_TITLE } from "@/const";
 
 export default function Portfolio() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
@@ -88,8 +88,11 @@ export default function Portfolio() {
       {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container py-6">
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex items-center gap-4">
+            <Link href="/">
+              <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-auto cursor-pointer" />
+            </Link>
+            <div className="flex-1">
               <h1 className="text-3xl font-bold mb-2">My Portfolio</h1>
               <p className="text-muted-foreground">
                 Track your investments and monitor performance

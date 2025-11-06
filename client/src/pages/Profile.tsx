@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
+import { Link } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import KYCProgressIndicator from "@/components/KYCProgressIndicator";
+import { APP_LOGO, APP_TITLE } from "@/const";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -104,8 +106,11 @@ export default function Profile() {
       {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container py-6">
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex items-center gap-4">
+            <Link href="/">
+              <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-auto cursor-pointer" />
+            </Link>
+            <div className="flex-1">
               <h1 className="text-3xl font-bold mb-2">My Profile</h1>
               <p className="text-muted-foreground">
                 Manage your account settings and verification status

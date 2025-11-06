@@ -22,9 +22,8 @@ export default function Home() {
       {/* Navigation */}
       <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <img src={APP_LOGO} alt={APP_TITLE} className="h-8 w-8" />
-            <span className="font-bold text-xl text-foreground">{APP_TITLE}</span>
+          <div className="flex items-center gap-3">
+            <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-auto" />
           </div>
           
           <div className="hidden md:flex items-center gap-6">
