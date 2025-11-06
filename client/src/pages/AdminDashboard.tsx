@@ -44,9 +44,12 @@ import {
   Eye,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -104,14 +107,14 @@ export default function AdminDashboard() {
       <div className="min-h-screen flex items-center justify-center bg-muted/30">
         <Card className="max-w-md">
           <CardHeader>
-            <CardTitle>Authentication Required</CardTitle>
+            <CardTitle>{t.nav.login}</CardTitle>
             <CardDescription>
-              Please log in to access the admin dashboard
+              {t.admin.subtitle}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <a href={getLoginUrl()}>
-              <Button className="w-full">Login to Continue</Button>
+              <Button className="w-full">{t.nav.login}</Button>
             </a>
           </CardContent>
         </Card>
@@ -131,7 +134,7 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <Link href="/">
-              <Button className="w-full">Return to Home</Button>
+              <Button className="w-full">{t.nav.home}</Button>
             </Link>
           </CardContent>
         </Card>
@@ -171,13 +174,14 @@ export default function AdminDashboard() {
             </Link>
             <div className="flex-1">
               <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+                <h1 className="text-3xl font-bold">{t.admin.title}</h1>
                 <Badge variant="default">{user.role === "super_admin" ? "Super Admin" : "Admin"}</Badge>
               </div>
               <p className="text-muted-foreground mt-2">
-                Manage users, roles, and platform settings
+                {t.admin.subtitle}
               </p>
             </div>
+            <LanguageSwitcher />
             <div className="flex gap-2">
               {user.role === "super_admin" && (
                 <>
@@ -190,7 +194,7 @@ export default function AdminDashboard() {
                   <Link href="/admin/settings">
                     <Button variant="outline">
                       <Settings className="mr-2 h-4 w-4" />
-                      Settings
+                      {t.nav.settings}
                     </Button>
                   </Link>
                 </>

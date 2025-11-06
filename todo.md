@@ -348,3 +348,16 @@
 - [ ] Translate all UI text in KYC wizard
 - [ ] Test RTL layout on all screen sizes (mobile, tablet, desktop)
 - [ ] Test language switching across all pages
+
+
+## Phase 32: Apply Bilingual to Admin Dashboard and Profile Pages (Current)
+- [x] Update Profile page with translation support (key sections)
+- [x] Update AdminDashboard page with translation support (headers, navigation)
+- [x] Add LanguageSwitcher to Profile and AdminDashboard pages
+- [ ] Update Portfolio page with translation support
+- [ ] Update AdminRoles page with translation support
+- [ ] Update AdminPermissions page with translation support
+- [ ] Update AdminSettings page with translation support
+- [ ] Test RTL layout on admin dashboard
+- [ ] Test RTL layout on profile pages
+- [ ] Verify all admin functionality works in both languages

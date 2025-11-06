@@ -17,9 +17,12 @@ import { User, Mail, Phone, MapPin, Globe, DollarSign, Shield, CheckCircle2, XCi
 import { toast } from "sonner";
 import { getLoginUrl, LANGUAGES, CURRENCIES } from "@/const";
 import KYCWizard from "@/components/KYCWizard";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export default function Profile() {
   const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
+  const { t } = useLanguage();
   const [isEditing, setIsEditing] = useState(false);
 
   const { data: profile, refetch: refetchProfile } = trpc.profile.get.useQuery(
@@ -69,7 +72,7 @@ export default function Profile() {
 
     const level = verificationStatus.level;
     const variant = level === "level_2" ? "default" : level === "level_1" ? "secondary" : "outline";
-    const label = level === "level_2" ? "Fully Verified" : level === "level_1" ? "Basic Verification" : "Unverified";
+    const label = level === "level_2" ? t.status.approved : level === "level_1" ? t.profile.verification.level : t.status.pending;
 
     return <Badge variant={variant}>{label}</Badge>;
   };
@@ -87,14 +90,14 @@ export default function Profile() {
       <div className="min-h-screen flex items-center justify-center bg-muted/30">
         <Card className="max-w-md">
           <CardHeader>
-            <CardTitle>Authentication Required</CardTitle>
+            <CardTitle>{t.nav.login}</CardTitle>
             <CardDescription>
-              Please log in to view your profile
+              {t.profile.subtitle}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <a href={getLoginUrl()}>
-              <Button className="w-full">Login to Continue</Button>
+              <Button className="w-full">{t.nav.login}</Button>
             </a>
           </CardContent>
         </Card>
@@ -112,13 +115,14 @@ export default function Profile() {
               <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-auto cursor-pointer" />
             </Link>
             <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2">My Profile</h1>
+              <h1 className="text-3xl font-bold mb-2">{t.profile.title}</h1>
               <p className="text-muted-foreground">
-                Manage your account settings and verification status
+                {t.profile.subtitle}
               </p>
             </div>
+            <LanguageSwitcher />
             <Button variant="outline" onClick={() => logout()}>
-              Logout
+              {t.nav.logout}
             </Button>
           </div>
         </div>
@@ -142,9 +146,9 @@ export default function Profile() {
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="personal">Personal Info</TabsTrigger>
-            <TabsTrigger value="verification">Verification</TabsTrigger>
-            <TabsTrigger value="preferences">Preferences</TabsTrigger>
+            <TabsTrigger value="personal">{t.profile.personalInfo.title}</TabsTrigger>
+            <TabsTrigger value="verification">{t.profile.verification.title}</TabsTrigger>
+            <TabsTrigger value="preferences">{ t.nav.settings || 'Preferences'}</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
