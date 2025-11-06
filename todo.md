@@ -224,3 +224,8 @@
 - [x] Update all pages to display logo (Home, Properties, Portfolio, Profile)
 - [x] Ensure logo is responsive on mobile
 - [x] Update app constants with logo URL
+
+
+## Phase 21: Logo Cache-Busting Fix (Current)
+- [x] Add cache-busting query parameter to logo URL
+- [x] Test logo displays correctly after cache-busting implementation
