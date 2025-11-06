@@ -249,3 +249,11 @@
 - [x] Add route for Contact Us page
 - [x] Test form submission and validation
 - [x] Add contact information cards (email, phone, address)
+
+
+## Phase 24: FAQ Section on Contact Page (Current)
+- [x] Add FAQ section to Contact Us page
+- [x] Create accordion component for FAQ items
+- [x] Add common questions about platform, investments, KYC, fees (16 FAQs total)
+- [x] Organize FAQs by category (Getting Started, KYC, Investments, Fees, Liquidity, Risk)
+- [x] Make FAQ section responsive and accessible

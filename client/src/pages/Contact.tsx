@@ -8,7 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CheckCircle2, ChevronDown } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import Footer from "@/components/Footer";
 
 export default function Contact() {
@@ -226,6 +232,170 @@ export default function Contact() {
               )}
             </CardContent>
           </Card>
+
+          {/* FAQ Section */}
+          <div className="mt-16">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
+              <p className="text-muted-foreground">
+                Find answers to common questions about investing with Emtelaak
+              </p>
+            </div>
+
+            <div className="max-w-3xl mx-auto">
+              <Accordion type="single" collapsible className="space-y-4">
+                {/* Getting Started */}
+                <AccordionItem value="what-is-emtelaak" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    What is Emtelaak and how does it work?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Emtelaak is a fractional real estate investment platform that allows you to invest in premium properties across MEASA markets starting from just $100. We divide properties into fractions, enabling multiple investors to own shares and earn rental income or capital gains proportional to their investment.
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="minimum-investment" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    What is the minimum investment amount?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    The minimum investment amount is $100 USD. This low barrier to entry allows more people to participate in real estate investment and diversify their portfolio across multiple properties.
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="how-to-start" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    How do I start investing?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Getting started is simple: (1) Create your account and complete KYC verification, (2) Browse available properties and review detailed analytics, (3) Choose your investment amount and distribution frequency, (4) Complete payment and become a fractional owner. You'll start earning returns based on your selected distribution schedule.
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* KYC & Verification */}
+                <AccordionItem value="kyc-required" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    Why is KYC verification required?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    KYC (Know Your Customer) verification is required by financial regulations to prevent fraud, money laundering, and ensure platform security. We're licensed by FRA Sandbox and DIFC Innovation License, and compliance with these regulations protects both you and the platform.
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="kyc-documents" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    What documents do I need for KYC verification?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    You'll need a government-issued ID (passport, national ID, or driver's license), proof of address (utility bill or bank statement from the last 3 months), and a selfie for identity verification. Accredited investors may need additional documentation to verify their status.
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="kyc-time" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    How long does KYC verification take?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Most KYC verifications are completed within 24-48 hours. You'll receive real-time notifications about your verification status. Once approved, you can immediately start investing in available properties.
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* Investments & Returns */}
+                <AccordionItem value="how-earn" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    How do I earn returns on my investment?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    You earn returns in two ways: (1) Rental Income - Regular distributions from property rental income based on your ownership percentage, and (2) Capital Appreciation - Potential gains when the property value increases or when you sell your shares on the secondary market.
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="distribution-frequency" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    How often are distributions paid?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    You can choose your preferred distribution frequency when investing: monthly, quarterly, or annual. Distributions are automatically deposited to your wallet, and you can track all income history in your portfolio dashboard.
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="expected-returns" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    What are the expected returns?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Target returns vary by property but typically range from 6-8% annual yield from rental income, plus potential capital appreciation. Each property listing includes detailed financial projections, historical performance, and risk assessments to help you make informed decisions.
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* Fees & Payments */}
+                <AccordionItem value="fees" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    What fees does Emtelaak charge?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    We charge a transparent fee structure: Platform fee (1-2% of investment amount), Annual management fee (0.5-1% of property value), and Secondary market transaction fee (2-3% on sales). All fees are clearly disclosed before you invest, with no hidden charges.
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="payment-methods" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    What payment methods are accepted?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    We accept bank transfers, credit/debit cards, and digital wallets. All payments are processed through secure, encrypted channels with bank-level security. Your payment information is never stored on our servers.
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* Liquidity & Exit */}
+                <AccordionItem value="sell-shares" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    Can I sell my shares before the property is sold?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Yes! Our secondary market allows you to list and sell your shares to other investors. While real estate is traditionally illiquid, our marketplace provides liquidity options. Note that selling price depends on market demand and property performance.
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="lock-in-period" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    Is there a lock-in period for investments?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Most properties have a recommended holding period of 3-5 years for optimal returns, but there's no mandatory lock-in. You can list your shares on the secondary market at any time, subject to market conditions and buyer availability.
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* Risk & Security */}
+                <AccordionItem value="risks" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    What are the risks of investing?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Like all investments, fractional real estate carries risks including property value fluctuations, rental income variability, market conditions, and liquidity constraints. We provide comprehensive risk disclosures for each property. Diversifying across multiple properties can help mitigate risk.
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="investment-protection" className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-semibold">
+                    How is my investment protected?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Your investments are protected through: (1) Regulatory compliance with FRA and DIFC licenses, (2) Legal ownership structure ensuring your fractional ownership rights, (3) Professional property management and insurance, (4) Regular audits and transparent reporting, and (5) Secure platform with bank-level encryption.
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+
+              <div className="mt-12 text-center">
+                <p className="text-muted-foreground mb-4">
+                  Still have questions? We're here to help!
+                </p>
+                <Button variant="outline" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                  Contact Our Support Team
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
