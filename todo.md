@@ -361,3 +361,16 @@
 - [ ] Test RTL layout on admin dashboard
 - [ ] Test RTL layout on profile pages
 - [ ] Verify all admin functionality works in both languages
+
+
+## Phase 33: Apply Bilingual to Portfolio Dashboard and Settings Pages (Current)
+- [x] Update Portfolio page with translation support (headers, navigation, summary cards)
+- [x] Add LanguageSwitcher to Portfolio page
+- [ ] Update Properties page with translation support
+- [ ] Update Contact page with translation support
+- [ ] Update AdminSettings page with translation support
+- [ ] Update AdminRoles page with translation support
+- [ ] Update AdminPermissions page with translation support
+- [ ] Test RTL layout on Portfolio dashboard
+- [ ] Test RTL layout on settings pages
+- [ ] Verify all dashboard functionality works in both languages

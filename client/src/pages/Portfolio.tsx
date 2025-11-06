@@ -9,9 +9,12 @@ import { TrendingUp, TrendingDown, DollarSign, Building2, Calendar, ArrowUpRight
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl, APP_LOGO, APP_TITLE } from "@/const";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export default function Portfolio() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const { t } = useLanguage();
   const [, setLocation] = useLocation();
 
   const { data: portfolioSummary, isLoading: summaryLoading } = trpc.portfolio.summary.useQuery(
@@ -68,14 +71,14 @@ export default function Portfolio() {
       <div className="min-h-screen flex items-center justify-center bg-muted/30">
         <Card className="max-w-md">
           <CardHeader>
-            <CardTitle>Authentication Required</CardTitle>
+            <CardTitle>{t.nav.login}</CardTitle>
             <CardDescription>
-              Please log in to view your portfolio
+              {t.portfolio.subtitle}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <a href={getLoginUrl()}>
-              <Button className="w-full">Login to Continue</Button>
+              <Button className="w-full">{t.nav.login}</Button>
             </a>
           </CardContent>
         </Card>
@@ -93,14 +96,15 @@ export default function Portfolio() {
               <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-auto cursor-pointer" />
             </Link>
             <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2">My Portfolio</h1>
+              <h1 className="text-3xl font-bold mb-2">{t.portfolio.title}</h1>
               <p className="text-muted-foreground">
-                Track your investments and monitor performance
+                {t.portfolio.subtitle}
               </p>
             </div>
+            <LanguageSwitcher />
             <div className="flex gap-3">
               <Link href="/properties">
-                <Button variant="outline">Browse Properties</Button>
+                <Button variant="outline">{t.nav.properties}</Button>
               </Link>
               <Button>
                 <Download className="mr-2 h-4 w-4" />
@@ -116,7 +120,7 @@ export default function Portfolio() {
         <div className="grid md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Invested</CardTitle>
+              <CardTitle className="text-sm font-medium">{t.portfolio.overview.totalInvested}</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -128,7 +132,7 @@ export default function Portfolio() {
                     {formatCurrency(portfolioSummary?.totalInvested || 0)}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Across {portfolioSummary?.activeInvestments || 0} properties
+                    {t.portfolio.overview.activeProperties}: {portfolioSummary?.activeInvestments || 0}
                   </p>
                 </>
               )}
@@ -137,7 +141,7 @@ export default function Portfolio() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Income</CardTitle>
+              <CardTitle className="text-sm font-medium">{t.portfolio.income.title}</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
