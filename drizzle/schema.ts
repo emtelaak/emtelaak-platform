@@ -554,6 +554,194 @@ export const userPermissions = mysqlTable("user_permissions", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
+// ============================================
+// CRM - SALES CLOUD
+// ============================================
+
+export const crmLeads = mysqlTable("crm_leads", {
+  id: int("id").autoincrement().primaryKey(),
+  firstName: varchar("firstName", { length: 100 }).notNull(),
+  lastName: varchar("lastName", { length: 100 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  phone: varchar("phone", { length: 50 }),
+  company: varchar("company", { length: 255 }),
+  title: varchar("title", { length: 100 }),
+  source: mysqlEnum("source", ["website", "referral", "social_media", "event", "advertisement", "other"]).notNull(),
+  status: mysqlEnum("status", ["new", "contacted", "qualified", "converted", "lost"]).default("new").notNull(),
+  score: int("score").default(0), // 0-100
+  industry: varchar("industry", { length: 100 }),
+  investmentInterest: varchar("investmentInterest", { length: 255 }),
+  budget: decimal("budget", { precision: 15, scale: 2 }),
+  notes: text("notes"),
+  assignedTo: int("assignedTo").references(() => users.id),
+  convertedToOpportunityId: int("convertedToOpportunityId"),
+  convertedToAccountId: int("convertedToAccountId"),
+  convertedToContactId: int("convertedToContactId"),
+  convertedAt: timestamp("convertedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  createdBy: int("createdBy").references(() => users.id),
+}, (table) => ({
+  statusIdx: index("status_idx").on(table.status),
+  assignedToIdx: index("assigned_to_idx").on(table.assignedTo),
+  emailIdx: index("email_idx").on(table.email),
+}));
+
+export const crmOpportunities = mysqlTable("crm_opportunities", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  accountId: int("accountId"),
+  contactId: int("contactId"),
+  amount: decimal("amount", { precision: 15, scale: 2 }).notNull(),
+  stage: mysqlEnum("stage", ["prospecting", "qualification", "proposal", "negotiation", "closed_won", "closed_lost"]).default("prospecting").notNull(),
+  probability: int("probability").default(10), // 0-100
+  expectedCloseDate: timestamp("expectedCloseDate"),
+  actualCloseDate: timestamp("actualCloseDate"),
+  propertyId: int("propertyId").references(() => properties.id),
+  propertyType: varchar("propertyType", { length: 100 }),
+  investmentAmount: decimal("investmentAmount", { precision: 15, scale: 2 }),
+  numberOfShares: int("numberOfShares"),
+  source: varchar("source", { length: 100 }),
+  description: text("description"),
+  nextStep: varchar("nextStep", { length: 255 }),
+  competitorInfo: text("competitorInfo"),
+  lossReason: varchar("lossReason", { length: 255 }),
+  assignedTo: int("assignedTo").references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  createdBy: int("createdBy").references(() => users.id),
+}, (table) => ({
+  stageIdx: index("stage_idx").on(table.stage),
+  accountIdx: index("account_idx").on(table.accountId),
+  assignedToIdx: index("assigned_to_idx").on(table.assignedTo),
+  closeDateIdx: index("close_date_idx").on(table.expectedCloseDate),
+}));
+
+export const crmAccounts = mysqlTable("crm_accounts", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  type: mysqlEnum("type", ["investor", "partner", "vendor", "other"]).default("investor").notNull(),
+  industry: varchar("industry", { length: 100 }),
+  website: varchar("website", { length: 255 }),
+  phone: varchar("phone", { length: 50 }),
+  email: varchar("email", { length: 320 }),
+  billingAddress: text("billingAddress"),
+  shippingAddress: text("shippingAddress"),
+  city: varchar("city", { length: 100 }),
+  country: varchar("country", { length: 100 }),
+  annualRevenue: decimal("annualRevenue", { precision: 15, scale: 2 }),
+  numberOfEmployees: int("numberOfEmployees"),
+  description: text("description"),
+  parentAccountId: int("parentAccountId"),
+  ownerId: int("ownerId").references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  createdBy: int("createdBy").references(() => users.id),
+}, (table) => ({
+  nameIdx: index("name_idx").on(table.name),
+  ownerIdx: index("owner_idx").on(table.ownerId),
+}));
+
+export const crmContacts = mysqlTable("crm_contacts", {
+  id: int("id").autoincrement().primaryKey(),
+  accountId: int("accountId").references(() => crmAccounts.id, { onDelete: "cascade" }),
+  userId: int("userId").references(() => users.id),
+  firstName: varchar("firstName", { length: 100 }).notNull(),
+  lastName: varchar("lastName", { length: 100 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  phone: varchar("phone", { length: 50 }),
+  mobile: varchar("mobile", { length: 50 }),
+  title: varchar("title", { length: 100 }),
+  department: varchar("department", { length: 100 }),
+  isPrimary: boolean("isPrimary").default(false),
+  mailingAddress: text("mailingAddress"),
+  city: varchar("city", { length: 100 }),
+  country: varchar("country", { length: 100 }),
+  birthdate: timestamp("birthdate"),
+  description: text("description"),
+  ownerId: int("ownerId").references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  createdBy: int("createdBy").references(() => users.id),
+}, (table) => ({
+  accountIdx: index("account_idx").on(table.accountId),
+  emailIdx: index("email_idx").on(table.email),
+}));
+
+// ============================================
+// CRM - SERVICE CLOUD
+// ============================================
+
+export const crmCases = mysqlTable("crm_cases", {
+  id: int("id").autoincrement().primaryKey(),
+  caseNumber: varchar("caseNumber", { length: 50 }).notNull().unique(),
+  subject: varchar("subject", { length: 255 }).notNull(),
+  description: text("description"),
+  status: mysqlEnum("status", ["new", "in_progress", "pending_customer", "resolved", "closed"]).default("new").notNull(),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium").notNull(),
+  type: mysqlEnum("type", ["question", "problem", "feature_request", "complaint"]).default("question").notNull(),
+  origin: mysqlEnum("origin", ["web", "email", "phone", "chat", "social_media"]).default("web").notNull(),
+  accountId: int("accountId").references(() => crmAccounts.id),
+  contactId: int("contactId").references(() => crmContacts.id),
+  userId: int("userId").references(() => users.id),
+  propertyId: int("propertyId").references(() => properties.id),
+  assignedTo: int("assignedTo").references(() => users.id),
+  escalated: boolean("escalated").default(false),
+  resolution: text("resolution"),
+  customerSatisfaction: int("customerSatisfaction"), // 1-5
+  firstResponseAt: timestamp("firstResponseAt"),
+  resolvedAt: timestamp("resolvedAt"),
+  closedAt: timestamp("closedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  createdBy: int("createdBy").references(() => users.id),
+}, (table) => ({
+  statusIdx: index("status_idx").on(table.status),
+  priorityIdx: index("priority_idx").on(table.priority),
+  assignedToIdx: index("assigned_to_idx").on(table.assignedTo),
+  accountIdx: index("account_idx").on(table.accountId),
+  contactIdx: index("contact_idx").on(table.contactId),
+  caseNumberIdx: unique("case_number_idx").on(table.caseNumber),
+}));
+
+export const crmCaseComments = mysqlTable("crm_case_comments", {
+  id: int("id").autoincrement().primaryKey(),
+  caseId: int("caseId").notNull().references(() => crmCases.id, { onDelete: "cascade" }),
+  comment: text("comment").notNull(),
+  isInternal: boolean("isInternal").default(false),
+  isFromCustomer: boolean("isFromCustomer").default(false),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  createdBy: int("createdBy").references(() => users.id),
+}, (table) => ({
+  caseIdx: index("case_idx").on(table.caseId),
+}));
+
+// ============================================
+// CRM - ACTIVITIES
+// ============================================
+
+export const crmActivities = mysqlTable("crm_activities", {
+  id: int("id").autoincrement().primaryKey(),
+  type: mysqlEnum("type", ["note", "task", "call", "email", "meeting"]).notNull(),
+  subject: varchar("subject", { length: 255 }).notNull(),
+  description: text("description"),
+  status: mysqlEnum("status", ["planned", "in_progress", "completed", "cancelled"]).default("planned").notNull(),
+  priority: mysqlEnum("priority", ["low", "medium", "high"]).default("medium").notNull(),
+  dueDate: timestamp("dueDate"),
+  completedAt: timestamp("completedAt"),
+  relatedToType: mysqlEnum("relatedToType", ["lead", "opportunity", "account", "contact", "case"]),
+  relatedToId: int("relatedToId"),
+  assignedTo: int("assignedTo").references(() => users.id),
+  isInternal: boolean("isInternal").default(true),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  createdBy: int("createdBy").references(() => users.id),
+}, (table) => ({
+  relatedIdx: index("related_idx").on(table.relatedToType, table.relatedToId),
+  assignedToIdx: index("assigned_to_idx").on(table.assignedTo),
+  dueDateIdx: index("due_date_idx").on(table.dueDate),
+}));
+
 export const auditLogs = mysqlTable("audit_logs", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull().references(() => users.id),
@@ -575,3 +763,19 @@ export type UserPermission = typeof userPermissions.$inferSelect;
 export type InsertUserPermission = typeof userPermissions.$inferInsert;
 export type AuditLog = typeof auditLogs.$inferSelect;
 export type InsertAuditLog = typeof auditLogs.$inferInsert;
+
+// CRM Types
+export type CrmLead = typeof crmLeads.$inferSelect;
+export type InsertCrmLead = typeof crmLeads.$inferInsert;
+export type CrmOpportunity = typeof crmOpportunities.$inferSelect;
+export type InsertCrmOpportunity = typeof crmOpportunities.$inferInsert;
+export type CrmAccount = typeof crmAccounts.$inferSelect;
+export type InsertCrmAccount = typeof crmAccounts.$inferInsert;
+export type CrmContact = typeof crmContacts.$inferSelect;
+export type InsertCrmContact = typeof crmContacts.$inferInsert;
+export type CrmCase = typeof crmCases.$inferSelect;
+export type InsertCrmCase = typeof crmCases.$inferInsert;
+export type CrmCaseComment = typeof crmCaseComments.$inferSelect;
+export type InsertCrmCaseComment = typeof crmCaseComments.$inferInsert;
+export type CrmActivity = typeof crmActivities.$inferSelect;
+export type InsertCrmActivity = typeof crmActivities.$inferInsert;

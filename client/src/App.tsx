@@ -16,6 +16,9 @@ import AdminRoles from "./pages/AdminRoles";
 import AdminPermissions from "./pages/AdminPermissions";
 import FAQ from "./pages/FAQ";
 import About from "./pages/About";
+import CRMDashboard from "./pages/CRMDashboard";
+import CRMLeads from "./pages/CRMLeads";
+import CRMCases from "./pages/CRMCases";
 
 function Router() {
   return (
@@ -32,6 +35,9 @@ function Router() {
       <Route path="/admin/permissions" component={AdminPermissions} />
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/kyc-review" component={AdminKYCReview} />
+      <Route path="/crm" component={CRMDashboard} />
+      <Route path="/crm/leads" component={CRMLeads} />
+      <Route path="/crm/cases" component={CRMCases} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
