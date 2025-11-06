@@ -566,7 +566,7 @@ export const crmLeads = mysqlTable("crm_leads", {
   phone: varchar("phone", { length: 50 }),
   company: varchar("company", { length: 255 }),
   title: varchar("title", { length: 100 }),
-  source: mysqlEnum("source", ["website", "referral", "social_media", "event", "advertisement", "other"]).notNull(),
+  source: mysqlEnum("source", ["website", "referral", "social_media", "facebook", "instagram", "whatsapp", "event", "advertisement", "other"]).notNull(),
   status: mysqlEnum("status", ["new", "contacted", "qualified", "converted", "lost"]).default("new").notNull(),
   score: int("score").default(0), // 0-100
   industry: varchar("industry", { length: 100 }),

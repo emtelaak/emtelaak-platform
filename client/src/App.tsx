@@ -19,6 +19,7 @@ import About from "./pages/About";
 import CRMDashboard from "./pages/CRMDashboard";
 import CRMLeads from "./pages/CRMLeads";
 import CRMCases from "./pages/CRMCases";
+import LeadCapture from "./pages/LeadCapture";
 
 function Router() {
   return (
@@ -38,6 +39,7 @@ function Router() {
       <Route path="/crm" component={CRMDashboard} />
       <Route path="/crm/leads" component={CRMLeads} />
       <Route path="/crm/cases" component={CRMCases} />
+      <Route path="/lead-capture" component={LeadCapture} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

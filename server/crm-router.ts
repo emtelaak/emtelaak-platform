@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { protectedProcedure, router } from "./_core/trpc";
+import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { TRPCError } from "@trpc/server";
 import * as crmDb from "./crm-db";
 
@@ -37,7 +37,7 @@ const leadsRouter = router({
       phone: z.string().optional(),
       company: z.string().optional(),
       title: z.string().optional(),
-      source: z.enum(["website", "referral", "social_media", "event", "advertisement", "other"]),
+      source: z.enum(["website", "referral", "social_media", "facebook", "instagram", "whatsapp", "event", "advertisement", "other"]),
       industry: z.string().optional(),
       investmentInterest: z.string().optional(),
       budget: z.number().optional(),
@@ -51,6 +51,28 @@ const leadsRouter = router({
         createdBy: ctx.user.id,
       });
       return { id };
+    }),
+
+  createPublic: publicProcedure
+    .input(z.object({
+      firstName: z.string(),
+      lastName: z.string(),
+      email: z.string().email(),
+      phone: z.string().optional(),
+      company: z.string().optional(),
+      source: z.enum(["website", "referral", "social_media", "facebook", "instagram", "whatsapp", "event", "advertisement", "other"]),
+      investmentInterest: z.string().optional(),
+      notes: z.string().optional(),
+    }))
+    .mutation(async ({ input }) => {
+      // Public lead creation - no authentication required
+      const id = await crmDb.createLead({
+        ...input,
+        status: "new",
+        score: 0,
+        createdBy: null, // No user context for public submissions
+      });
+      return { id, success: true };
     }),
 
   update: protectedProcedure
