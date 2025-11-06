@@ -20,12 +20,14 @@ import CRMDashboard from "./pages/CRMDashboard";
 import CRMLeads from "./pages/CRMLeads";
 import CRMCases from "./pages/CRMCases";
 import LeadCapture from "./pages/LeadCapture";
+import PropertyDetail from "./pages/PropertyDetail";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path="/properties" component={Properties} />
+      <Route path="/properties/:id" component={PropertyDetail} />
       <Route path="/portfolio" component={Portfolio} />
       <Route path="/profile" component={Profile} />
       <Route path={"/contact"} component={Contact} />
