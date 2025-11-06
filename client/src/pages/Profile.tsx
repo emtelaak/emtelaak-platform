@@ -38,7 +38,7 @@ export default function Profile() {
     onSuccess: () => {
       refetchProfile();
       setIsEditing(false);
-      toast.success("Profile updated successfully");
+      toast.success(t.profile.messages.updateSuccess);
     },
     onError: (error) => {
       toast.error(error.message);
@@ -144,11 +144,11 @@ export default function Profile() {
         <KYCProgressIndicator />
         
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="personal">{t.profile.personalInfo.title}</TabsTrigger>
-            <TabsTrigger value="verification">{t.profile.verification.title}</TabsTrigger>
-            <TabsTrigger value="preferences">{ t.nav.settings || 'Preferences'}</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="overview">{t.profile.tabs.overview}</TabsTrigger>
+            <TabsTrigger value="personal">{t.profile.tabs.personal}</TabsTrigger>
+            <TabsTrigger value="verification">{t.profile.tabs.verification}</TabsTrigger>
+            <TabsTrigger value="preferences">{t.profile.tabs.preferences}</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -157,8 +157,8 @@ export default function Profile() {
               {/* Account Information */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Account Information</CardTitle>
-                  <CardDescription>Your basic account details</CardDescription>
+                  <CardTitle>{t.profile.overview.accountInfo}</CardTitle>
+                  <CardDescription>{t.profile.overview.accountDesc}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center gap-3">
@@ -178,7 +178,7 @@ export default function Profile() {
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-sm">
                       <Mail className="h-4 w-4 text-muted-foreground" />
-                      <span>{user?.email || "Not provided"}</span>
+                      <span>{user?.email || t.profile.overview.notProvided}</span>
                     </div>
                     {profile?.city && profile?.country && (
                       <div className="flex items-center gap-3 text-sm">
@@ -202,10 +202,10 @@ export default function Profile() {
               <Card>
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle>Verification Status</CardTitle>
+                    <CardTitle>{t.profile.overview.verificationStatus}</CardTitle>
                     {getVerificationLevelBadge()}
                   </div>
-                  <CardDescription>Your account verification progress</CardDescription>
+                  <CardDescription>{t.profile.overview.verificationDesc}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
@@ -216,7 +216,7 @@ export default function Profile() {
                         ) : (
                           <XCircle className="h-4 w-4 text-muted-foreground" />
                         )}
-                        <span className="text-sm">Email Verified</span>
+                        <span className="text-sm">{t.profile.overview.emailVerified}</span>
                       </div>
                     </div>
 
@@ -227,7 +227,7 @@ export default function Profile() {
                         ) : (
                           <XCircle className="h-4 w-4 text-muted-foreground" />
                         )}
-                        <span className="text-sm">Phone Verified</span>
+                        <span className="text-sm">{t.profile.overview.phoneVerified}</span>
                       </div>
                     </div>
 
@@ -238,7 +238,7 @@ export default function Profile() {
                         ) : (
                           <Clock className="h-4 w-4 text-muted-foreground" />
                         )}
-                        <span className="text-sm">Documents Verified</span>
+                        <span className="text-sm">{t.profile.overview.documentsVerified}</span>
                       </div>
                     </div>
 
@@ -249,7 +249,7 @@ export default function Profile() {
                         ) : (
                           <XCircle className="h-4 w-4 text-muted-foreground" />
                         )}
-                        <span className="text-sm">Questionnaire Completed</span>
+                        <span className="text-sm">{t.profile.overview.questionnaireCompleted}</span>
                       </div>
                     </div>
                   </div>
@@ -259,13 +259,13 @@ export default function Profile() {
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Shield className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm font-medium">Investment Access</span>
+                      <span className="text-sm font-medium">{t.profile.overview.investmentAccess}</span>
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {verificationStatus?.canInvest ? (
-                        <span className="text-primary font-medium">✓ You can invest in properties</span>
+                        <span className="text-primary font-medium">{t.profile.overview.canInvest}</span>
                       ) : (
-                        <span>Complete verification to start investing</span>
+                        <span>{t.profile.overview.completeVerification}</span>
                       )}
                     </p>
                   </div>
@@ -280,11 +280,11 @@ export default function Profile() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle>Personal Information</CardTitle>
-                    <CardDescription>Update your personal details</CardDescription>
+                    <CardTitle>{t.profile.personalInfo.title}</CardTitle>
+                    <CardDescription>{t.profile.personalInfo.subtitle}</CardDescription>
                   </div>
                   {!isEditing && (
-                    <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+                    <Button onClick={() => setIsEditing(true)}>{t.profile.personalInfo.editProfile}</Button>
                   )}
                 </div>
               </CardHeader>
@@ -292,7 +292,7 @@ export default function Profile() {
                 <form onSubmit={handleProfileSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="firstNameEn">First Name (English)</Label>
+                      <Label htmlFor="firstNameEn">{t.profile.personalInfo.firstNameEn}</Label>
                       <Input
                         id="firstNameEn"
                         name="firstNameEn"
@@ -303,7 +303,7 @@ export default function Profile() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="lastNameEn">Last Name (English)</Label>
+                      <Label htmlFor="lastNameEn">{t.profile.personalInfo.lastNameEn}</Label>
                       <Input
                         id="lastNameEn"
                         name="lastNameEn"
@@ -314,7 +314,7 @@ export default function Profile() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="firstNameAr">First Name (Arabic)</Label>
+                      <Label htmlFor="firstNameAr">{t.profile.personalInfo.firstNameAr}</Label>
                       <Input
                         id="firstNameAr"
                         name="firstNameAr"
@@ -325,7 +325,7 @@ export default function Profile() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="lastNameAr">Last Name (Arabic)</Label>
+                      <Label htmlFor="lastNameAr">{t.profile.personalInfo.lastNameAr}</Label>
                       <Input
                         id="lastNameAr"
                         name="lastNameAr"
@@ -336,7 +336,7 @@ export default function Profile() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="nationality">Nationality</Label>
+                      <Label htmlFor="nationality">{t.profile.personalInfo.nationality}</Label>
                       <Input
                         id="nationality"
                         name="nationality"
@@ -372,7 +372,7 @@ export default function Profile() {
                     <h3 className="text-lg font-semibold mb-4">Address</h3>
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-2 md:col-span-2">
-                        <Label htmlFor="addressLine1">Address Line 1</Label>
+                        <Label htmlFor="addressLine1">{t.profile.personalInfo.addressLine1}</Label>
                         <Input
                           id="addressLine1"
                           name="addressLine1"
@@ -382,7 +382,7 @@ export default function Profile() {
                       </div>
 
                       <div className="space-y-2 md:col-span-2">
-                        <Label htmlFor="addressLine2">Address Line 2</Label>
+                        <Label htmlFor="addressLine2">{t.profile.personalInfo.addressLine2}</Label>
                         <Input
                           id="addressLine2"
                           name="addressLine2"
@@ -392,7 +392,7 @@ export default function Profile() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="city">City</Label>
+                        <Label htmlFor="city">{t.profile.personalInfo.city}</Label>
                         <Input
                           id="city"
                           name="city"
@@ -402,7 +402,7 @@ export default function Profile() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="country">Country</Label>
+                        <Label htmlFor="country">{t.profile.personalInfo.country}</Label>
                         <Input
                           id="country"
                           name="country"
@@ -460,7 +460,7 @@ export default function Profile() {
                         variant="outline"
                         onClick={() => setIsEditing(false)}
                       >
-                        Cancel
+                        {t.profile.personalInfo.cancel}
                       </Button>
                     </div>
                   )}
@@ -478,14 +478,14 @@ export default function Profile() {
           <TabsContent value="preferences" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Preferences</CardTitle>
-                <CardDescription>Customize your platform experience</CardDescription>
+                <CardTitle>{t.profile.preferences.title}</CardTitle>
+                <CardDescription>{t.profile.preferences.subtitle}</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleProfileSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="preferredLanguage">Preferred Language</Label>
+                      <Label htmlFor="preferredLanguage">{t.profile.preferences.language}</Label>
                       <Select
                         name="preferredLanguage"
                         defaultValue={profile?.preferredLanguage || "en"}
@@ -504,7 +504,7 @@ export default function Profile() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="preferredCurrency">Preferred Currency</Label>
+                      <Label htmlFor="preferredCurrency">{t.profile.preferences.currency}</Label>
                       <Select
                         name="preferredCurrency"
                         defaultValue={profile?.preferredCurrency || "USD"}
@@ -530,7 +530,7 @@ export default function Profile() {
                         Saving...
                       </>
                     ) : (
-                      "Save Preferences"
+                      t.profile.preferences.savePreferences
                     )}
                   </Button>
                 </form>
