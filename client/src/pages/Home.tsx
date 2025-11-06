@@ -5,6 +5,7 @@ import { APP_LOGO, APP_TITLE, getLoginUrl, PROPERTY_TYPES, MIN_INVESTMENT_USD } 
 import { Building2, TrendingUp, Shield, Users, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link } from "wouter";
 import NotificationCenter from "@/components/NotificationCenter";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
@@ -321,53 +322,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t py-12 bg-background">
-        <div className="container">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <img src={APP_LOGO} alt={APP_TITLE} className="h-8 w-8" />
-                <span className="font-bold text-lg">{APP_TITLE}</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Democratizing real estate investment across MEASA markets.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-4">Platform</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="/properties"><a className="hover:text-primary">Properties</a></Link></li>
-                <li><Link href="/how-it-works"><a className="hover:text-primary">How It Works</a></Link></li>
-                <li><Link href="/about"><a className="hover:text-primary">About Us</a></Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="/terms"><a className="hover:text-primary">Terms of Service</a></Link></li>
-                <li><Link href="/privacy"><a className="hover:text-primary">Privacy Policy</a></Link></li>
-                <li><Link href="/compliance"><a className="hover:text-primary">Compliance</a></Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-4">Support</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="/faq"><a className="hover:text-primary">FAQ</a></Link></li>
-                <li><Link href="/contact"><a className="hover:text-primary">Contact Us</a></Link></li>
-                <li><Link href="/help"><a className="hover:text-primary">Help Center</a></Link></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; {new Date().getFullYear()} {APP_TITLE}. All rights reserved.</p>
-            <p className="mt-2">Licensed by FRA Sandbox & DIFC Innovation License</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
