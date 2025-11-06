@@ -1,12 +1,19 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { ChevronDown, ChevronUp, TrendingUp, DollarSign, Calendar, BarChart3 } from "lucide-react";
+import { ChevronDown, ChevronUp, TrendingUp, DollarSign, Calendar, BarChart3, RefreshCw } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  SUPPORTED_CURRENCIES,
+  convertCurrency,
+  formatCurrency as formatCurrencyWithSymbol,
+  getLastUpdated,
+  refreshExchangeRates,
+} from "@/lib/currency";
 import {
   PROPERTY_TYPES,
   calculateROI,
@@ -44,6 +51,10 @@ export default function ROICalculator({
   const [investmentAmount, setInvestmentAmount] = useState(defaultInvestmentAmount);
   const [propertyValue, setPropertyValue] = useState(defaultPropertyValue);
   const [selectedPropertyType, setSelectedPropertyType] = useState(defaultPropertyType);
+  const [selectedCurrency, setSelectedCurrency] = useState("USD");
+  const [convertedValues, setConvertedValues] = useState<Record<string, number>>({});
+  const [isConverting, setIsConverting] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   // Calculate ROI for selected property type
   const calculation = useMemo(() => {
@@ -52,6 +63,48 @@ export default function ROICalculator({
     }
     return null;
   }, [investmentAmount, propertyValue, selectedPropertyType]);
+
+  // Convert currency values when currency changes
+  useEffect(() => {
+    async function convertValues() {
+      if (!calculation) return;
+      
+      setIsConverting(true);
+      try {
+        const converted = {
+          monthlyIncome: await convertCurrency(calculation.monthlyIncome, selectedCurrency),
+          investorAnnualIncome: await convertCurrency(calculation.investorAnnualIncome, selectedCurrency),
+          totalReturn5Year: await convertCurrency(calculation.totalReturn5Year, selectedCurrency),
+          totalReturn10Year: await convertCurrency(calculation.totalReturn10Year, selectedCurrency),
+          annualGrossRent: await convertCurrency(calculation.annualGrossRent, selectedCurrency),
+          annualManagementFee: await convertCurrency(calculation.annualManagementFee, selectedCurrency),
+          annualOtherCosts: await convertCurrency(calculation.annualOtherCosts, selectedCurrency),
+          annualNetRent: await convertCurrency(calculation.annualNetRent, selectedCurrency),
+        };
+        setConvertedValues(converted);
+        setLastUpdated(getLastUpdated());
+      } catch (error) {
+        console.error("Error converting currency:", error);
+      } finally {
+        setIsConverting(false);
+      }
+    }
+    convertValues();
+  }, [calculation, selectedCurrency]);
+
+  const handleRefreshRates = async () => {
+    setIsConverting(true);
+    try {
+      await refreshExchangeRates();
+      setLastUpdated(getLastUpdated());
+      // Trigger re-conversion
+      setSelectedCurrency(selectedCurrency);
+    } catch (error) {
+      console.error("Error refreshing rates:", error);
+    } finally {
+      setIsConverting(false);
+    }
+  };
 
   // Calculate ROI for all property types for comparison
   const allCalculations = useMemo(() => {
@@ -88,12 +141,7 @@ export default function ROICalculator({
   }, [calculation]);
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat(language === "en" ? "en-US" : "ar-SA", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
+    return formatCurrencyWithSymbol(value, selectedCurrency, language);
   };
 
   const formatPercentage = (value: number) => {
@@ -122,7 +170,7 @@ export default function ROICalculator({
       {isExpanded && (
         <CardContent className="space-y-6">
           {/* Input Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
               <Label htmlFor="investment-amount">
                 {language === "en" ? "Investment Amount ($)" : "مبلغ الاستثمار ($)"}
@@ -169,6 +217,45 @@ export default function ROICalculator({
                 ))}
               </select>
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="currency">
+                {language === "en" ? "Currency" : "العملة"}
+              </Label>
+              <div className="flex gap-2">
+                <select
+                  id="currency"
+                  value={selectedCurrency}
+                  onChange={(e) => setSelectedCurrency(e.target.value)}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={isConverting}
+                >
+                  {Object.values(SUPPORTED_CURRENCIES).map((currency) => (
+                    <option key={currency.code} value={currency.code}>
+                      {currency.symbol} {language === "en" ? currency.name : currency.nameAr}
+                    </option>
+                  ))}
+                </select>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleRefreshRates}
+                  disabled={isConverting}
+                  title={language === "en" ? "Refresh exchange rates" : "تحديث أسعار الصرف"}
+                >
+                  <RefreshCw className={`h-4 w-4 ${isConverting ? 'animate-spin' : ''}`} />
+                </Button>
+              </div>
+              {lastUpdated && (
+                <p className="text-xs text-muted-foreground">
+                  {language === "en" ? "Updated: " : "آخر تحديث: "}
+                  {lastUpdated.toLocaleTimeString(language === "en" ? "en-US" : "ar-SA", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+              )}
+            </div>
           </div>
 
           {/* Validation Message */}
@@ -205,7 +292,9 @@ export default function ROICalculator({
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">{formatCurrency(calculation.monthlyIncome)}</div>
+                      <div className="text-2xl font-bold">
+                        {formatCurrency(convertedValues.monthlyIncome || calculation.monthlyIncome)}
+                      </div>
                     </CardContent>
                   </Card>
 
@@ -218,7 +307,7 @@ export default function ROICalculator({
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">
-                        {formatCurrency(calculation.investorAnnualIncome)}
+                        {formatCurrency(convertedValues.investorAnnualIncome || calculation.investorAnnualIncome)}
                       </div>
                     </CardContent>
                   </Card>
@@ -246,7 +335,7 @@ export default function ROICalculator({
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold text-blue-600">
-                        {formatCurrency(calculation.totalReturn10Year)}
+                        {formatCurrency(convertedValues.totalReturn10Year || calculation.totalReturn10Year)}
                       </div>
                     </CardContent>
                   </Card>
@@ -275,14 +364,14 @@ export default function ROICalculator({
                     <span className="text-muted-foreground">
                       {language === "en" ? "Annual Gross Rent" : "الإيجار الإجمالي السنوي"}
                     </span>
-                    <span className="font-medium">{formatCurrency(calculation.annualGrossRent)}</span>
+                    <span className="font-medium">{formatCurrency(convertedValues.annualGrossRent || calculation.annualGrossRent)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">
                       {language === "en" ? "Management Fees" : "رسوم الإدارة"}
                     </span>
                     <span className="font-medium text-destructive">
-                      -{formatCurrency(calculation.annualManagementFee)}
+                      -{formatCurrency(convertedValues.annualManagementFee || calculation.annualManagementFee)}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -290,7 +379,7 @@ export default function ROICalculator({
                       {language === "en" ? "Other Costs" : "تكاليف أخرى"}
                     </span>
                     <span className="font-medium text-destructive">
-                      -{formatCurrency(calculation.annualOtherCosts)}
+                      -{formatCurrency(convertedValues.annualOtherCosts || calculation.annualOtherCosts)}
                     </span>
                   </div>
                   <div className="flex justify-between pt-2 border-t">
@@ -298,7 +387,7 @@ export default function ROICalculator({
                       {language === "en" ? "Net Annual Rent" : "صافي الإيجار السنوي"}
                     </span>
                     <span className="font-bold text-green-600">
-                      {formatCurrency(calculation.annualNetRent)}
+                      {formatCurrency(convertedValues.annualNetRent || calculation.annualNetRent)}
                     </span>
                   </div>
                 </div>
