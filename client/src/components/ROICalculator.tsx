@@ -1,0 +1,480 @@
+import { useState, useMemo } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { ChevronDown, ChevronUp, TrendingUp, DollarSign, Calendar, BarChart3 } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  PROPERTY_TYPES,
+  calculateROI,
+  getBestForTags,
+  type ROICalculation,
+} from "@/lib/propertyTypes";
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+
+interface ROICalculatorProps {
+  defaultPropertyType?: string;
+  defaultPropertyValue?: number;
+  defaultInvestmentAmount?: number;
+  compact?: boolean;
+}
+
+export default function ROICalculator({
+  defaultPropertyType = "commercial",
+  defaultPropertyValue = 1000000,
+  defaultInvestmentAmount = 5000,
+  compact = false,
+}: ROICalculatorProps) {
+  const { language } = useLanguage();
+  const [isExpanded, setIsExpanded] = useState(!compact);
+  const [investmentAmount, setInvestmentAmount] = useState(defaultInvestmentAmount);
+  const [propertyValue, setPropertyValue] = useState(defaultPropertyValue);
+  const [selectedPropertyType, setSelectedPropertyType] = useState(defaultPropertyType);
+
+  // Calculate ROI for selected property type
+  const calculation = useMemo(() => {
+    if (investmentAmount > 0 && propertyValue > 0 && investmentAmount <= propertyValue) {
+      return calculateROI(investmentAmount, propertyValue, selectedPropertyType);
+    }
+    return null;
+  }, [investmentAmount, propertyValue, selectedPropertyType]);
+
+  // Calculate ROI for all property types for comparison
+  const allCalculations = useMemo(() => {
+    if (investmentAmount > 0 && propertyValue > 0 && investmentAmount <= propertyValue) {
+      return Object.keys(PROPERTY_TYPES).map((typeId) => ({
+        typeId,
+        calculation: calculateROI(investmentAmount, propertyValue, typeId),
+      }));
+    }
+    return [];
+  }, [investmentAmount, propertyValue]);
+
+  // Prepare data for comparison chart
+  const comparisonChartData = useMemo(() => {
+    return allCalculations.map(({ typeId, calculation }) => {
+      const propertyType = PROPERTY_TYPES[typeId];
+      return {
+        name: language === "en" ? propertyType.name : propertyType.nameAr,
+        "Annual Income": calculation.investorAnnualIncome,
+        "5-Year Return": calculation.totalReturn5Year,
+        "10-Year Return": calculation.totalReturn10Year,
+        ROI: calculation.roi,
+      };
+    });
+  }, [allCalculations, language]);
+
+  // Prepare data for projected income chart
+  const projectedIncomeData = useMemo(() => {
+    if (!calculation) return [];
+    return calculation.projectedIncome.map((item) => ({
+      year: `Year ${item.year}`,
+      income: item.amount,
+    }));
+  }, [calculation]);
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat(language === "en" ? "en-US" : "ar-SA", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
+
+  const formatPercentage = (value: number) => {
+    return `${value.toFixed(2)}%`;
+  };
+
+  return (
+    <Card className="w-full">
+      <CardHeader className="cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5" />
+              {language === "en" ? "ROI Calculator" : "حاسبة العائد على الاستثمار"}
+            </CardTitle>
+            <CardDescription>
+              {language === "en"
+                ? "Compare returns across different property types"
+                : "قارن العوائد عبر أنواع العقارات المختلفة"}
+            </CardDescription>
+          </div>
+          {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+        </div>
+      </CardHeader>
+
+      {isExpanded && (
+        <CardContent className="space-y-6">
+          {/* Input Section */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="investment-amount">
+                {language === "en" ? "Investment Amount ($)" : "مبلغ الاستثمار ($)"}
+              </Label>
+              <Input
+                id="investment-amount"
+                type="number"
+                value={investmentAmount}
+                onChange={(e) => setInvestmentAmount(Number(e.target.value))}
+                min={100}
+                step={100}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="property-value">
+                {language === "en" ? "Property Value ($)" : "قيمة العقار ($)"}
+              </Label>
+              <Input
+                id="property-value"
+                type="number"
+                value={propertyValue}
+                onChange={(e) => setPropertyValue(Number(e.target.value))}
+                min={1000}
+                step={1000}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="property-type">
+                {language === "en" ? "Property Type" : "نوع العقار"}
+              </Label>
+              <select
+                id="property-type"
+                value={selectedPropertyType}
+                onChange={(e) => setSelectedPropertyType(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {Object.values(PROPERTY_TYPES).map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {language === "en" ? type.name : type.nameAr} -{" "}
+                    {formatPercentage(type.baseRentalYield * 100)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Validation Message */}
+          {investmentAmount > propertyValue && (
+            <div className="p-4 bg-destructive/10 text-destructive rounded-md text-sm">
+              {language === "en"
+                ? "Investment amount cannot exceed property value"
+                : "لا يمكن أن يتجاوز مبلغ الاستثمار قيمة العقار"}
+            </div>
+          )}
+
+          {calculation && (
+            <Tabs defaultValue="summary" className="w-full">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="summary">
+                  {language === "en" ? "Summary" : "ملخص"}
+                </TabsTrigger>
+                <TabsTrigger value="comparison">
+                  {language === "en" ? "Comparison" : "مقارنة"}
+                </TabsTrigger>
+                <TabsTrigger value="projections">
+                  {language === "en" ? "Projections" : "التوقعات"}
+                </TabsTrigger>
+              </TabsList>
+
+              {/* Summary Tab */}
+              <TabsContent value="summary" className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardDescription className="flex items-center gap-2">
+                        <DollarSign className="h-4 w-4" />
+                        {language === "en" ? "Monthly Income" : "الدخل الشهري"}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">{formatCurrency(calculation.monthlyIncome)}</div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardDescription className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4" />
+                        {language === "en" ? "Annual Income" : "الدخل السنوي"}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        {formatCurrency(calculation.investorAnnualIncome)}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardDescription className="flex items-center gap-2">
+                        <TrendingUp className="h-4 w-4" />
+                        {language === "en" ? "Annual ROI" : "العائد السنوي"}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold text-green-600">
+                        {formatPercentage(calculation.roi)}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardDescription className="flex items-center gap-2">
+                        <BarChart3 className="h-4 w-4" />
+                        {language === "en" ? "10-Year Return" : "العائد لـ 10 سنوات"}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold text-blue-600">
+                        {formatCurrency(calculation.totalReturn10Year)}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Best For Tags */}
+                <div className="flex flex-wrap gap-2">
+                  {getBestForTags(selectedPropertyType, language).map((tag) => (
+                    <Badge key={tag} variant="secondary">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+
+                {/* Breakdown */}
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      {language === "en" ? "Ownership Percentage" : "نسبة الملكية"}
+                    </span>
+                    <span className="font-medium">
+                      {formatPercentage(calculation.ownershipPercentage * 100)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      {language === "en" ? "Annual Gross Rent" : "الإيجار الإجمالي السنوي"}
+                    </span>
+                    <span className="font-medium">{formatCurrency(calculation.annualGrossRent)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      {language === "en" ? "Management Fees" : "رسوم الإدارة"}
+                    </span>
+                    <span className="font-medium text-destructive">
+                      -{formatCurrency(calculation.annualManagementFee)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      {language === "en" ? "Other Costs" : "تكاليف أخرى"}
+                    </span>
+                    <span className="font-medium text-destructive">
+                      -{formatCurrency(calculation.annualOtherCosts)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between pt-2 border-t">
+                    <span className="font-medium">
+                      {language === "en" ? "Net Annual Rent" : "صافي الإيجار السنوي"}
+                    </span>
+                    <span className="font-bold text-green-600">
+                      {formatCurrency(calculation.annualNetRent)}
+                    </span>
+                  </div>
+                </div>
+              </TabsContent>
+
+              {/* Comparison Tab */}
+              <TabsContent value="comparison" className="space-y-4">
+                {/* Comparison Table */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-2">
+                          {language === "en" ? "Property Type" : "نوع العقار"}
+                        </th>
+                        <th className="text-right p-2">
+                          {language === "en" ? "Base Yield" : "العائد الأساسي"}
+                        </th>
+                        <th className="text-right p-2">
+                          {language === "en" ? "Monthly Income" : "الدخل الشهري"}
+                        </th>
+                        <th className="text-right p-2">
+                          {language === "en" ? "Annual ROI" : "العائد السنوي"}
+                        </th>
+                        <th className="text-right p-2">
+                          {language === "en" ? "10-Year Return" : "عائد 10 سنوات"}
+                        </th>
+                        <th className="text-left p-2">
+                          {language === "en" ? "Best For" : "الأفضل لـ"}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {allCalculations
+                        .sort((a, b) => b.calculation.roi - a.calculation.roi)
+                        .map(({ typeId, calculation: calc }) => {
+                          const propertyType = PROPERTY_TYPES[typeId];
+                          const bestForTags = getBestForTags(typeId, language);
+                          return (
+                            <tr
+                              key={typeId}
+                              className={`border-b hover:bg-muted/50 ${
+                                typeId === selectedPropertyType ? "bg-muted" : ""
+                              }`}
+                            >
+                              <td className="p-2">
+                                <div className="font-medium">
+                                  {language === "en" ? propertyType.name : propertyType.nameAr}
+                                </div>
+                              </td>
+                              <td className="text-right p-2">
+                                {formatPercentage(propertyType.baseRentalYield * 100)}
+                              </td>
+                              <td className="text-right p-2 font-medium">
+                                {formatCurrency(calc.monthlyIncome)}
+                              </td>
+                              <td className="text-right p-2 font-bold text-green-600">
+                                {formatPercentage(calc.roi)}
+                              </td>
+                              <td className="text-right p-2 font-bold text-blue-600">
+                                {formatCurrency(calc.totalReturn10Year)}
+                              </td>
+                              <td className="p-2">
+                                <div className="flex flex-wrap gap-1">
+                                  {bestForTags.slice(0, 1).map((tag) => (
+                                    <Badge key={tag} variant="outline" className="text-xs">
+                                      {tag}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Comparison Bar Chart */}
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={comparisonChartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                      <Legend />
+                      <Bar
+                        dataKey="Annual Income"
+                        fill="#10B981"
+                        name={language === "en" ? "Annual Income" : "الدخل السنوي"}
+                      />
+                      <Bar
+                        dataKey="10-Year Return"
+                        fill="#3B82F6"
+                        name={language === "en" ? "10-Year Return" : "عائد 10 سنوات"}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </TabsContent>
+
+              {/* Projections Tab */}
+              <TabsContent value="projections" className="space-y-4">
+                {/* Projected Income Line Chart */}
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={projectedIncomeData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="year" />
+                      <YAxis />
+                      <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                      <Legend />
+                      <Line
+                        type="monotone"
+                        dataKey="income"
+                        stroke="#10B981"
+                        strokeWidth={2}
+                        name={language === "en" ? "Annual Income" : "الدخل السنوي"}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Projected Income Table */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-2">{language === "en" ? "Year" : "السنة"}</th>
+                        <th className="text-right p-2">
+                          {language === "en" ? "Annual Income" : "الدخل السنوي"}
+                        </th>
+                        <th className="text-right p-2">
+                          {language === "en" ? "Cumulative Income" : "الدخل التراكمي"}
+                        </th>
+                        <th className="text-right p-2">
+                          {language === "en" ? "Property Value" : "قيمة العقار"}
+                        </th>
+                        <th className="text-right p-2">
+                          {language === "en" ? "Total Return" : "العائد الإجمالي"}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {calculation.projectedIncome.map((item, index) => {
+                        const cumulativeIncome = calculation.projectedIncome
+                          .slice(0, index + 1)
+                          .reduce((sum, i) => sum + i.amount, 0);
+                        const propertyValue = calculation.projectedValue[index].value;
+                        const totalReturn =
+                          cumulativeIncome + (propertyValue - calculation.investmentAmount);
+                        return (
+                          <tr key={item.year} className="border-b hover:bg-muted/50">
+                            <td className="p-2 font-medium">
+                              {language === "en" ? `Year ${item.year}` : `السنة ${item.year}`}
+                            </td>
+                            <td className="text-right p-2">{formatCurrency(item.amount)}</td>
+                            <td className="text-right p-2 font-medium">
+                              {formatCurrency(cumulativeIncome)}
+                            </td>
+                            <td className="text-right p-2">{formatCurrency(propertyValue)}</td>
+                            <td className="text-right p-2 font-bold text-blue-600">
+                              {formatCurrency(totalReturn)}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </TabsContent>
+            </Tabs>
+          )}
+        </CardContent>
+      )}
+    </Card>
+  );
+}

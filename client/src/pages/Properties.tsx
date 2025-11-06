@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PROPERTY_TYPES, INVESTMENT_TYPES, APP_LOGO, APP_TITLE } from "@/const";
 import { Building2, MapPin, TrendingUp, Calendar, ArrowRight, Search } from "lucide-react";
 import { Link } from "wouter";
+import ROICalculator from "@/components/ROICalculator";
 
 export default function Properties() {
   const [filters, setFilters] = useState({
@@ -110,6 +111,11 @@ export default function Properties() {
             </Button>
           </div>
         </div>
+      </div>
+
+      {/* ROI Calculator */}
+      <div className="container py-8">
+        <ROICalculator compact />
       </div>
 
       {/* Property Grid */}

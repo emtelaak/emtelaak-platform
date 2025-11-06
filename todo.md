@@ -572,3 +572,21 @@
 - [x] Update schema to support facebook, instagram, whatsapp sources
 - [x] Test lead capture from social media
 - [x] Save checkpoint with lead capture feature
+
+
+## Phase 46: Enhanced ROI Calculator with Property Comparison (COMPLETED)
+- [x] Review investment module document specifications
+- [x] Design ROI calculator component architecture
+- [x] Create property type comparison data structure (6 types: Commercial, Residential, Medical, Administrative, Educational, Hotel)
+- [x] Implement ROI calculation engine with yield formulas
+- [x] Build collapsible ROI calculator UI component
+- [x] Add property type comparison table with side-by-side returns
+- [x] Integrate chart visualization library (Recharts)
+- [x] Create ROI comparison charts (bar chart, line chart for projections)
+- [x] Add 'Best for' tags based on ROI performance (highest yield, most stable, best appreciation, etc.)
+- [x] Integrate ROI calculator into Home page (collapsible)
+- [x] Integrate ROI calculator into Properties listing page (collapsible)
+- [x] Property detail page integration (pending - page doesn't exist yet)
+- [x] Reference emtelaak.com for UI/UX design patterns
+- [x] Test ROI calculator across all pages
+- [x] Save checkpoint with enhanced ROI calculator

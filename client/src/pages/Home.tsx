@@ -8,10 +8,11 @@ import NotificationCenter from "@/components/NotificationCenter";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import ROICalculator from "@/components/ROICalculator";
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   if (loading) {
     return (
@@ -215,6 +216,23 @@ export default function Home() {
               </Card>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ROI Calculator */}
+      <section className="py-20 bg-background">
+        <div className="container">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">
+              {language === "en" ? "Calculate Your Returns" : "احسب عوائدك"}
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              {language === "en"
+                ? "Compare potential returns across different property types and see how your investment can grow over time."
+                : "قارن العوائد المحتملة عبر أنواع العقارات المختلفة وشاهد كيف يمكن لاستثمارك أن ينمو بمرور الوقت."}
+            </p>
+          </div>
+          <ROICalculator compact />
         </div>
       </section>
 
