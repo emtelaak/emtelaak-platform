@@ -198,6 +198,35 @@ export default function About() {
         </div>
       </section>
 
+      {/* Team Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">{t.about.team.title}</h2>
+            <p className="text-muted-foreground">{t.about.team.subtitle}</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {t.about.team.members.map((member: any, index: number) => (
+              <Card key={index} className="overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="aspect-square bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                    <div className="w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Users className="h-16 w-16 text-primary" />
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-1">{member.name}</h3>
+                    <p className="text-primary font-medium mb-3">{member.title}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{member.bio}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-b from-primary/5 to-background">
         <div className="container max-w-3xl text-center">

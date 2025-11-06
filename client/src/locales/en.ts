@@ -468,6 +468,42 @@ export const en = {
       browseProperties: "Browse Properties",
       contactUs: "Contact Us",
     },
+    team: {
+      title: "Meet Our Team",
+      subtitle: "Experienced professionals dedicated to democratizing real estate investment",
+      members: [
+        {
+          name: "Ahmed Al-Masri",
+          title: "Chief Executive Officer",
+          bio: "With over 15 years of experience in real estate and fintech, Ahmed leads Emtelaak's vision to make property investment accessible to everyone across MEASA markets.",
+        },
+        {
+          name: "Sarah Hassan",
+          title: "Chief Financial Officer",
+          bio: "Sarah brings deep expertise in financial structuring and regulatory compliance, ensuring Emtelaak operates with the highest standards of transparency and governance.",
+        },
+        {
+          name: "Omar Khalil",
+          title: "Chief Technology Officer",
+          bio: "Omar architected Emtelaak's secure and scalable platform, leveraging cutting-edge technology to deliver seamless investment experiences for thousands of users.",
+        },
+        {
+          name: "Layla Ibrahim",
+          title: "Head of Legal & Compliance",
+          bio: "Layla ensures Emtelaak maintains full regulatory compliance across all markets, protecting investor interests and maintaining trust with financial authorities.",
+        },
+        {
+          name: "Khaled Mansour",
+          title: "Head of Property Acquisition",
+          bio: "Khaled leads the identification and evaluation of premium properties, conducting thorough due diligence to ensure quality investment opportunities for our investors.",
+        },
+        {
+          name: "Nadia Farouk",
+          title: "Head of Investor Relations",
+          bio: "Nadia manages relationships with our growing investor community, ensuring clear communication and exceptional service throughout the investment journey.",
+        },
+      ],
+    },
   },
 
   // FAQ Page
