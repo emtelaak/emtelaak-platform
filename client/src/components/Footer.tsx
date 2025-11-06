@@ -28,31 +28,23 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Platform</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/properties">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    Properties
-                  </a>
+                <Link href="/properties" className="text-muted-foreground hover:text-primary transition-colors">
+                  Properties
                 </Link>
               </li>
               <li>
-                <Link href="/how-it-works">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    How It Works
-                  </a>
+                <Link href="/how-it-works" className="text-muted-foreground hover:text-primary transition-colors">
+                  How It Works
                 </Link>
               </li>
               <li>
-                <Link href="/about">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    About Us
-                  </a>
+                <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link href="/portfolio">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    Portfolio
-                  </a>
+                <Link href="/portfolio" className="text-muted-foreground hover:text-primary transition-colors">
+                  Portfolio
                 </Link>
               </li>
             </ul>
@@ -95,10 +87,8 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <Link href="/contact">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    Contact Us
-                  </a>
+                <Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors">
+                  Contact Us
                 </Link>
               </li>
               <li>

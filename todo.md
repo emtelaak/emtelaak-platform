@@ -320,3 +320,9 @@
 - [x] Implement filtering options for user exports (role, status)
 - [x] Add user search functionality in permissions page
 - [x] Visual permission categories with color-coded status badges
+
+
+## Phase 30: Bug Fix - Nested Anchor Tags (Current)
+- [x] Fix nested anchor tags in Footer component
+- [x] Remove inner `<a>` tags from Link components (5 instances fixed)
+- [x] Test all navigation links work correctly
