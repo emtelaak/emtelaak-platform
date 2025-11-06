@@ -28,25 +28,17 @@ export default function Home() {
           </div>
           
           <div className="hidden md:flex items-center gap-6">
-            <Link href="/">
-              <a className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-                Home
-              </a>
+            <Link href="/" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+              Home
             </Link>
-            <Link href="/properties">
-              <a className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-                Properties
-              </a>
+            <Link href="/properties" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+              Properties
             </Link>
-            <Link href="/how-it-works">
-              <a className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-                How It Works
-              </a>
+            <Link href="/how-it-works" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+              How It Works
             </Link>
-            <Link href="/about">
-              <a className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-                About
-              </a>
+            <Link href="/about" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+              About
             </Link>
           </div>
 

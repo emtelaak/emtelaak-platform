@@ -135,9 +135,17 @@ export async function getUserById(userId: number) {
 
 export async function getUserProfile(userId: number) {
   const db = await getDb();
-  if (!db) return undefined;
+  if (!db) return null;
   const result = await db.select().from(userProfiles).where(eq(userProfiles.userId, userId)).limit(1);
-  return result.length > 0 ? result[0] : undefined;
+  
+  // If no profile exists, create a default one
+  if (result.length === 0) {
+    await db.insert(userProfiles).values({ userId });
+    const newResult = await db.select().from(userProfiles).where(eq(userProfiles.userId, userId)).limit(1);
+    return newResult[0] || null;
+  }
+  
+  return result[0];
 }
 
 export async function createOrUpdateUserProfile(profile: InsertUserProfile) {
@@ -154,9 +162,20 @@ export async function createOrUpdateUserProfile(profile: InsertUserProfile) {
 
 export async function getVerificationStatus(userId: number) {
   const db = await getDb();
-  if (!db) return undefined;
+  if (!db) return null;
   const result = await db.select().from(verificationStatus).where(eq(verificationStatus.userId, userId)).limit(1);
-  return result.length > 0 ? result[0] : undefined;
+  
+  // If no verification status exists, create a default one
+  if (result.length === 0) {
+    await db.insert(verificationStatus).values({ 
+      userId,
+      level: 'level_0'
+    });
+    const newResult = await db.select().from(verificationStatus).where(eq(verificationStatus.userId, userId)).limit(1);
+    return newResult[0] || null;
+  }
+  
+  return result[0];
 }
 
 export async function updateVerificationStatus(userId: number, updates: Partial<typeof verificationStatus.$inferInsert>) {

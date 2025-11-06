@@ -257,3 +257,10 @@
 - [x] Add common questions about platform, investments, KYC, fees (16 FAQs total)
 - [x] Organize FAQs by category (Getting Started, KYC, Investments, Fees, Liquidity, Risk)
 - [x] Make FAQ section responsive and accessible
+
+
+## Phase 25: Bug Fixes - Profile API and Navigation (Current)
+- [x] Fix profile.get API returning undefined (auto-create profile if not exists)
+- [x] Fix profile.getVerificationStatus API returning undefined (auto-create with level_0)
+- [x] Fix nested anchor tags in navigation (removed inner <a> tags from Link components)
+- [x] Changed return values from undefined to null for proper tRPC handling
