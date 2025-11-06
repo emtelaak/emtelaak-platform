@@ -180,12 +180,20 @@ export default function AdminDashboard() {
             </div>
             <div className="flex gap-2">
               {user.role === "super_admin" && (
-                <Link href="/admin/settings">
-                  <Button variant="outline">
-                    <Settings className="mr-2 h-4 w-4" />
-                    Settings
-                  </Button>
-                </Link>
+                <>
+                  <Link href="/admin/permissions">
+                    <Button variant="outline">
+                      <Shield className="mr-2 h-4 w-4" />
+                      Permissions
+                    </Button>
+                  </Link>
+                  <Link href="/admin/settings">
+                    <Button variant="outline">
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </Button>
+                  </Link>
+                </>
               )}
               <Button variant="outline" onClick={() => logout()}>
                 Logout

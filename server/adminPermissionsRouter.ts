@@ -341,4 +341,77 @@ export const adminPermissionsRouter = router({
         return await getAuditLogs(input.limit, input.offset);
       }),
   }),
+
+  // Export Data
+  export: router({
+    users: superAdminProcedure
+      .input(z.object({
+        role: z.enum(["user", "investor", "fundraiser", "admin", "super_admin"]).optional(),
+        status: z.enum(["active", "suspended", "pending_verification"]).optional(),
+      }))
+      .query(async ({ input }) => {
+        const db = await getDb();
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+
+        let query = db.select().from(users);
+        const conditions = [];
+
+        if (input.role) {
+          conditions.push(eq(users.role, input.role));
+        }
+        if (input.status) {
+          conditions.push(eq(users.status, input.status));
+        }
+
+        let result;
+        if (conditions.length > 0) {
+          result = await query.where(or(...conditions));
+        } else {
+          result = await query;
+        }
+
+        // Format as CSV
+        const headers = ["ID", "Name", "Email", "Phone", "Role", "Status", "Login Method", "Created At", "Last Signed In"];
+        const rows = result.map(u => [
+          u.id,
+          u.name || "",
+          u.email || "",
+          u.phone || "",
+          u.role,
+          u.status,
+          u.loginMethod || "",
+          new Date(u.createdAt).toISOString(),
+          new Date(u.lastSignedIn).toISOString(),
+        ]);
+
+        const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(",")).join("\n");
+        return { csv, filename: `users-export-${new Date().toISOString().split('T')[0]}.csv` };
+      }),
+
+    auditLogs: superAdminProcedure
+      .input(z.object({
+        limit: z.number().min(1).max(10000).default(1000),
+      }))
+      .query(async ({ input }) => {
+        const logs = await getAuditLogs(input.limit, 0);
+
+        // Format as CSV
+        const headers = ["ID", "User ID", "User Name", "User Email", "Action", "Target Type", "Target ID", "Details", "IP Address", "Created At"];
+        const rows = logs.map(l => [
+          l.log.id,
+          l.user.id,
+          l.user.name || "",
+          l.user.email || "",
+          l.log.action,
+          l.log.targetType || "",
+          l.log.targetId || "",
+          l.log.details || "",
+          l.log.ipAddress || "",
+          new Date(l.log.createdAt).toISOString(),
+        ]);
+
+        const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(",")).join("\n");
+        return { csv, filename: `audit-logs-export-${new Date().toISOString().split('T')[0]}.csv` };
+      }),
+  }),
 });
