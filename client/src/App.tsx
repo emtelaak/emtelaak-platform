@@ -10,6 +10,7 @@ import Properties from "./pages/Properties";
 import Portfolio from "./pages/Portfolio";
 import Profile from "./pages/Profile";
 import AdminSettings from "./pages/AdminSettings";
+import AdminKYCReview from "./pages/AdminKYCReview";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoles from "./pages/AdminRoles";
 import AdminPermissions from "./pages/AdminPermissions";
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/admin/roles" component={AdminRoles} />
       <Route path="/admin/permissions" component={AdminPermissions} />
       <Route path="/admin/settings" component={AdminSettings} />
+      <Route path="/admin/kyc-review" component={AdminKYCReview} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

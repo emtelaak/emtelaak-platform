@@ -114,6 +114,16 @@ export async function notifyKYCQuestionnaireApproved(userId: number) {
   });
 }
 
+export async function notifyKYCQuestionnaireRejected(userId: number) {
+  return createNotification({
+    userId,
+    type: "kyc",
+    title: "Questionnaire Requires Revision",
+    message: "Your investment questionnaire needs additional information. Please review and resubmit.",
+    actionUrl: "/profile?tab=verification",
+  });
+}
+
 export async function notifyKYCFullyVerified(userId: number) {
   return createNotification({
     userId,

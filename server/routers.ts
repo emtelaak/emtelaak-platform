@@ -159,12 +159,25 @@ export const appRouter = router({
     
     submitQuestionnaire: protectedProcedure
       .input(z.object({
+        annualIncome: z.string(),
+        netWorth: z.string(),
+        liquidAssets: z.string(),
+        employmentStatus: z.string(),
+        occupation: z.string(),
         investmentExperience: z.string(),
+        realEstateExperience: z.string(),
+        previousInvestments: z.string(),
         riskTolerance: z.string(),
-        financialCapacity: z.string(),
+        isAccredited: z.boolean(),
+        accreditationType: z.string(),
         investmentGoals: z.string(),
-        isAccreditedInvestor: z.boolean(),
-        accreditationDetails: z.string().optional(),
+        investmentHorizon: z.string(),
+        expectedReturnRate: z.string(),
+        sourceOfFunds: z.string(),
+        sourceOfFundsDetails: z.string(),
+        politicallyExposed: z.boolean(),
+        pepDetails: z.string().optional(),
+        additionalNotes: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         await createKycQuestionnaire({

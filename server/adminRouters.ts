@@ -30,6 +30,141 @@ const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
 export const adminRouter = router({
   // KYC Management
   kyc: router({
+    // Get pending questionnaires
+    getPendingQuestionnaires: adminProcedure.query(async () => {
+      const db = await import("./db").then(m => m.getDb());
+      if (!db) return [];
+      const { kycQuestionnaires } = await import("../drizzle/schema");
+      const { eq } = await import("drizzle-orm");
+      return await db.select().from(kycQuestionnaires).where(eq(kycQuestionnaires.status, "pending"));
+    }),
+
+    // Get pending documents
+    getPendingDocuments: adminProcedure.query(async () => {
+      const db = await import("./db").then(m => m.getDb());
+      if (!db) return [];
+      const { kycDocuments } = await import("../drizzle/schema");
+      const { eq } = await import("drizzle-orm");
+      return await db.select().from(kycDocuments).where(eq(kycDocuments.status, "pending"));
+    }),
+
+    // Approve questionnaire
+    approveQuestionnaire: adminProcedure
+      .input(z.object({
+        questionnaireId: z.number(),
+        reviewNotes: z.string().optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const db = await import("./db").then(m => m.getDb());
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+        const { kycQuestionnaires } = await import("../drizzle/schema");
+        const { eq } = await import("drizzle-orm");
+        
+        // Get questionnaire to find userId
+        const [questionnaire] = await db.select().from(kycQuestionnaires).where(eq(kycQuestionnaires.id, input.questionnaireId));
+        if (!questionnaire) throw new TRPCError({ code: "NOT_FOUND" });
+        
+        // Update status
+        await db.update(kycQuestionnaires)
+          .set({ 
+            status: "approved",
+            reviewedBy: ctx.user.id,
+            reviewedAt: new Date(),
+            reviewNotes: input.reviewNotes,
+          })
+          .where(eq(kycQuestionnaires.id, input.questionnaireId));
+        
+        // Update verification status
+        await updateVerificationStatus(questionnaire.userId, {
+          questionnaireCompleted: true,
+        });
+        
+        // Send notification
+        await notificationHelpers.notifyKYCQuestionnaireApproved(questionnaire.userId);
+        
+        return { success: true };
+      }),
+
+    // Reject questionnaire
+    rejectQuestionnaire: adminProcedure
+      .input(z.object({
+        questionnaireId: z.number(),
+        reviewNotes: z.string().optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const db = await import("./db").then(m => m.getDb());
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+        const { kycQuestionnaires } = await import("../drizzle/schema");
+        const { eq } = await import("drizzle-orm");
+        
+        // Get questionnaire to find userId
+        const [questionnaire] = await db.select().from(kycQuestionnaires).where(eq(kycQuestionnaires.id, input.questionnaireId));
+        if (!questionnaire) throw new TRPCError({ code: "NOT_FOUND" });
+        
+        // Update status
+        await db.update(kycQuestionnaires)
+          .set({ 
+            status: "rejected",
+            reviewedBy: ctx.user.id,
+            reviewedAt: new Date(),
+            reviewNotes: input.reviewNotes,
+          })
+          .where(eq(kycQuestionnaires.id, input.questionnaireId));
+        
+        // Send notification
+        await notificationHelpers.notifyKYCQuestionnaireRejected(questionnaire.userId);
+        
+        return { success: true };
+      }),
+
+    // Approve document
+    approveDocument: adminProcedure
+      .input(z.object({
+        documentId: z.number(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const db = await import("./db").then(m => m.getDb());
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+        const { kycDocuments } = await import("../drizzle/schema");
+        const { eq } = await import("drizzle-orm");
+        
+        // Get document to find userId
+        const [document] = await db.select().from(kycDocuments).where(eq(kycDocuments.id, input.documentId));
+        if (!document) throw new TRPCError({ code: "NOT_FOUND" });
+        
+        // Update status
+        await updateKycDocumentStatus(input.documentId, "approved", ctx.user.id);
+        
+        // Send notification
+        await notificationHelpers.notifyKYCDocumentApproved(document.userId, document.documentType);
+        
+        return { success: true };
+      }),
+
+    // Reject document
+    rejectDocument: adminProcedure
+      .input(z.object({
+        documentId: z.number(),
+        rejectionReason: z.string().optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const db = await import("./db").then(m => m.getDb());
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+        const { kycDocuments } = await import("../drizzle/schema");
+        const { eq } = await import("drizzle-orm");
+        
+        // Get document to find userId
+        const [document] = await db.select().from(kycDocuments).where(eq(kycDocuments.id, input.documentId));
+        if (!document) throw new TRPCError({ code: "NOT_FOUND" });
+        
+        // Update status
+        await updateKycDocumentStatus(input.documentId, "rejected", ctx.user.id, input.rejectionReason);
+        
+        // Send notification
+        await notificationHelpers.notifyKYCDocumentRejected(document.userId, document.documentType, input.rejectionReason);
+        
+        return { success: true };
+      }),
     // Get all pending KYC verifications
     getPending: adminProcedure.query(async () => {
       return await getPendingKycVerifications();
@@ -110,46 +245,6 @@ export const adminRouter = router({
             doc.documentType,
             input.rejectionReason
           );
-        }
-
-        return { success: true };
-      }),
-
-    // Approve questionnaire
-    approveQuestionnaire: adminProcedure
-      .input(z.object({
-        userId: z.number(),
-      }))
-      .mutation(async ({ input }) => {
-        // Send approval notification
-        await notificationHelpers.notifyKYCQuestionnaireApproved(input.userId);
-
-        // Check verification status and update level if needed
-        const verificationStatus = await getVerificationStatus(input.userId);
-        if (verificationStatus) {
-          const oldLevel = verificationStatus.level;
-          let newLevel: "level_0" | "level_1" | "level_2" = "level_0";
-          
-          if (verificationStatus.documentsVerified && verificationStatus.questionnaireCompleted) {
-            newLevel = "level_2";
-          } else if (verificationStatus.documentsVerified || verificationStatus.questionnaireCompleted) {
-            newLevel = "level_1";
-          }
-
-          if (newLevel !== oldLevel) {
-            await updateVerificationStatus(input.userId, { level: newLevel });
-            
-            const canInvest = newLevel === "level_2";
-            await notificationHelpers.notifyKYCVerificationLevelChanged(
-              input.userId,
-              newLevel,
-              canInvest
-            );
-
-            if (newLevel === "level_2") {
-              await notificationHelpers.notifyKYCFullyVerified(input.userId);
-            }
-          }
         }
 
         return { success: true };

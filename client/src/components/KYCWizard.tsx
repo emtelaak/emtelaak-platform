@@ -92,12 +92,25 @@ export default function KYCWizard() {
     const formData = new FormData(e.currentTarget);
     
     submitQuestionnaireMutation.mutate({
-      investmentExperience: formData.get("investmentExperience") as string,
-      riskTolerance: formData.get("riskTolerance") as string,
-      financialCapacity: formData.get("financialCapacity") as string,
-      investmentGoals: formData.get("investmentGoals") as string,
-      isAccreditedInvestor: formData.get("isAccreditedInvestor") === "yes",
-      accreditationDetails: formData.get("accreditationDetails") as string || undefined,
+      annualIncome: formData.get("financialCapacity") as string || "",
+      netWorth: "",
+      liquidAssets: "",
+      employmentStatus: "",
+      occupation: "",
+      investmentExperience: formData.get("investmentExperience") as string || "",
+      realEstateExperience: "",
+      previousInvestments: "",
+      riskTolerance: formData.get("riskTolerance") as string || "",
+      isAccredited: formData.get("isAccreditedInvestor") === "yes",
+      accreditationType: formData.get("accreditationDetails") as string || "",
+      investmentGoals: formData.get("investmentGoals") as string || "",
+      investmentHorizon: "",
+      expectedReturnRate: "",
+      sourceOfFunds: "",
+      sourceOfFundsDetails: "",
+      politicallyExposed: false,
+      pepDetails: "",
+      additionalNotes: "",
     });
   };
 

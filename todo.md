@@ -380,3 +380,40 @@
 - [x] Fix kyc.getQuestionnaire returning undefined instead of null
 - [x] Update database helper to return null when no questionnaire exists
 - [x] Test Profile page loads without errors
+
+
+## Phase 35: Complete KYC Questionnaire System & Full Arabic Translation (Current)
+- [ ] Create full KYC questionnaire page with all required fields
+- [ ] Add investor accreditation questions
+- [ ] Add financial information fields
+- [ ] Add investment experience questions
+- [ ] Translate KYC questionnaire to Arabic
+- [ ] Create admin KYC review interface
+- [ ] Add approve/reject functionality for admin
+- [ ] Add KYC status indicator on profile page (pending/verified/rejected)
+- [ ] Add KYC status badge with color coding
+- [ ] Review and translate all remaining untranslated content
+- [ ] Translate Properties page to Arabic
+- [ ] Translate Contact page to Arabic
+- [ ] Translate Admin pages to Arabic
+- [ ] Translate KYC Wizard to Arabic
+- [ ] Translate all form labels and buttons
+- [ ] Translate all error messages
+- [ ] Test complete platform in Arabic with RTL layout
+
+
+## Phase 36: KYC Questionnaire Page & Admin Review Interface (COMPLETED)
+- [x] Create comprehensive KYC questionnaire page with 18+ fields
+- [x] Add investor accreditation questions (income, net worth, investment experience)
+- [x] Add financial information fields (employment status, income sources)
+- [x] Add investment experience questions (years of experience, property investment history)
+- [x] Add risk tolerance assessment
+- [x] Add investment goals and objectives
+- [x] Translate KYC questionnaire to Arabic (comprehensive translations)
+- [x] Create AdminKYCReview interface at /admin/kyc-review
+- [x] Add approve/reject functionality for admin (both documents and questionnaires)
+- [x] Add notification functions for questionnaire approval/rejection
+- [x] Fix duplicate approveQuestionnaire procedure in admin router
+- [x] Add AdminKYCReview route to App.tsx
+- [x] KYC status badges already present on profile page (verification level, documents, questionnaire)
+- [x] Test KYC workflow end-to-end (submission → admin review → approval → notification)

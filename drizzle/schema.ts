@@ -74,13 +74,34 @@ export const kycDocuments = mysqlTable("kyc_documents", {
 export const kycQuestionnaires = mysqlTable("kyc_questionnaires", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+  // Financial Information
+  annualIncome: varchar("annualIncome", { length: 50 }),
+  netWorth: varchar("netWorth", { length: 50 }),
+  liquidAssets: varchar("liquidAssets", { length: 50 }),
+  employmentStatus: varchar("employmentStatus", { length: 50 }),
+  occupation: varchar("occupation", { length: 255 }),
+  // Investment Experience
   investmentExperience: varchar("investmentExperience", { length: 50 }),
+  realEstateExperience: varchar("realEstateExperience", { length: 50 }),
+  previousInvestments: text("previousInvestments"),
   riskTolerance: varchar("riskTolerance", { length: 50 }),
-  financialCapacity: varchar("financialCapacity", { length: 50 }),
+  // Investor Accreditation
+  isAccredited: boolean("isAccredited").default(false),
+  accreditationType: varchar("accreditationType", { length: 100 }),
+  // Investment Goals
   investmentGoals: text("investmentGoals"),
-  isAccreditedInvestor: boolean("isAccreditedInvestor").default(false),
-  accreditationDetails: text("accreditationDetails"),
+  investmentHorizon: varchar("investmentHorizon", { length: 50 }),
+  expectedReturnRate: varchar("expectedReturnRate", { length: 50 }),
+  // Source of Funds
+  sourceOfFunds: varchar("sourceOfFunds", { length: 100 }),
+  sourceOfFundsDetails: text("sourceOfFundsDetails"),
+  // Additional Information
+  politicallyExposed: boolean("politicallyExposed").default(false),
+  pepDetails: text("pepDetails"),
+  additionalNotes: text("additionalNotes"),
+  // Status and Review
   status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("pending").notNull(),
+  reviewNotes: text("reviewNotes"),
   submittedAt: timestamp("submittedAt").defaultNow().notNull(),
   reviewedAt: timestamp("reviewedAt"),
   reviewedBy: int("reviewedBy").references(() => users.id),
