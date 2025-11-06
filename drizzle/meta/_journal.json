@@ -36,6 +36,20 @@
       "when": 1762433291221,
       "tag": "0004_flawless_jean_grey",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1762434233024,
+      "tag": "0005_fancy_human_fly",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1762434357634,
+      "tag": "0006_tiresome_whiplash",
+      "breakpoints": true
     }
   ]
 }

@@ -2,6 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { adminRouter } from "./adminRouters";
+import { adminPermissionsRouter } from "./adminPermissionsRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import {
@@ -42,6 +43,7 @@ import { notifyOwner } from "./_core/notification";
 export const appRouter = router({
   system: systemRouter,
   admin: adminRouter,
+  adminPermissions: adminPermissionsRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

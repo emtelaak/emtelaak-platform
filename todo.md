@@ -285,3 +285,25 @@
 - [x] Implement logo validation (size max 2MB, image format check)
 - [x] Add database helpers for platform settings (getPlatformSetting, setPlatformSetting)
 - [x] Add admin route /admin/settings
+
+
+## Phase 28: Comprehensive Admin Dashboard with Permissions System (Current)
+- [x] Create permissions and roles database tables
+- [x] Create user_permissions junction table
+- [x] Add granular permissions (22 permissions across 6 categories)
+- [x] Build admin dashboard overview page with stats and metrics
+- [x] Create user management interface (list, search, filter users)
+- [x] Add user detail view with role and permission management
+- [x] Create role management interface (create, edit, delete roles)
+- [x] Add permission assignment UI for roles
+- [x] Implement super admin check and permissions middleware
+- [x] Create audit log system to track admin actions
+- [x] Seed default permissions and 5 system roles
+- [x] Add super_admin role to user schema
+- [x] Create comprehensive admin API endpoints
+- [x] Add routes for /admin/dashboard and /admin/roles
+- [ ] Build KYC approval queue interface
+- [ ] Add property management interface for admins
+- [ ] Create analytics dashboard with charts
+- [ ] Add permission-based UI rendering (show/hide features based on permissions)
+- [ ] Test permission system with different user roles
