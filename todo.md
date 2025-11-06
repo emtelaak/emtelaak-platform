@@ -374,3 +374,9 @@
 - [ ] Test RTL layout on Portfolio dashboard
 - [ ] Test RTL layout on settings pages
 - [ ] Verify all dashboard functionality works in both languages
+
+
+## Phase 34: Bug Fix - KYC Questionnaire Undefined Error (Current)
+- [x] Fix kyc.getQuestionnaire returning undefined instead of null
+- [x] Update database helper to return null when no questionnaire exists
+- [x] Test Profile page loads without errors

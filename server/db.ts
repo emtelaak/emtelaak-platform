@@ -228,9 +228,9 @@ export async function createKycQuestionnaire(questionnaire: InsertKycQuestionnai
 
 export async function getUserKycQuestionnaire(userId: number) {
   const db = await getDb();
-  if (!db) return undefined;
+  if (!db) return null;
   const result = await db.select().from(kycQuestionnaires).where(eq(kycQuestionnaires.userId, userId)).limit(1);
-  return result.length > 0 ? result[0] : undefined;
+  return result.length > 0 ? result[0] : null;
 }
 
 export async function getPendingKycVerifications() {
