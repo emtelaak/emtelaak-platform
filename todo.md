@@ -264,3 +264,14 @@
 - [x] Fix profile.getVerificationStatus API returning undefined (auto-create with level_0)
 - [x] Fix nested anchor tags in navigation (removed inner <a> tags from Link components)
 - [x] Changed return values from undefined to null for proper tRPC handling
+
+
+## Phase 26: Profile Picture Upload (Current)
+- [x] Add profilePicture field to user_profiles table
+- [x] Create profile picture upload component with image preview
+- [x] Add backend API endpoint to handle profile picture upload
+- [x] Integrate S3 storage for profile pictures
+- [x] Add file validation (type and size checks)
+- [x] Display profile picture in profile page with Avatar component
+- [x] Add upload button with camera icon
+- [x] Add remove picture functionality

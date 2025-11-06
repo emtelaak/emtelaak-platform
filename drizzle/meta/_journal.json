@@ -22,6 +22,13 @@
       "when": 1762430256531,
       "tag": "0002_lively_ravenous",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1762433040481,
+      "tag": "0003_lazy_ender_wiggin",
+      "breakpoints": true
     }
   ]
 }

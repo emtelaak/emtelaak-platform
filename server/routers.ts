@@ -35,6 +35,7 @@ import {
   createNotification,
 } from "./db";
 import { TRPCError } from "@trpc/server";
+import { storagePut } from './storage';
 import * as notificationHelpers from "./notifications";
 import { notifyOwner } from "./_core/notification";
 
@@ -85,6 +86,33 @@ export const appRouter = router({
           ...input,
         });
         return { success: true };
+      }),
+    
+    uploadProfilePicture: protectedProcedure
+      .input(z.object({
+        imageData: z.string(), // base64 encoded image
+        mimeType: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        
+        // Convert base64 to buffer
+        const base64Data = input.imageData.replace(/^data:image\/\w+;base64,/, '');
+        const buffer = Buffer.from(base64Data, 'base64');
+        
+        // Generate unique filename
+        const fileExtension = input.mimeType.split('/')[1];
+        const fileName = `profile-${ctx.user.id}-${Date.now()}.${fileExtension}`;
+        
+        // Upload to S3
+        const { url } = await storagePut(fileName, buffer, input.mimeType);
+        
+        // Update user profile with new picture URL
+        await createOrUpdateUserProfile({
+          userId: ctx.user.id,
+          profilePicture: url,
+        });
+        
+        return { url };
       }),
     
     getVerificationStatus: protectedProcedure.query(async ({ ctx }) => {

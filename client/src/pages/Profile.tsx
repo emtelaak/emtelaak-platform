@@ -3,6 +3,7 @@ import { trpc } from "@/lib/trpc";
 import { Link } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import KYCProgressIndicator from "@/components/KYCProgressIndicator";
+import ProfilePictureUpload from "@/components/ProfilePictureUpload";
 import { APP_LOGO, APP_TITLE } from "@/const";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -124,6 +125,18 @@ export default function Profile() {
       </div>
 
       <div className="container py-8">
+        <div className="max-w-4xl mx-auto space-y-6">
+          {/* Profile Picture Section */}
+          <ProfilePictureUpload
+            currentPicture={profile?.profilePicture}
+            userName={user?.name || undefined}
+            onUploadSuccess={() => {
+              // Refetch profile to get updated picture
+              refetchProfile();
+            }}
+          />
+        </div>
+        
         <KYCProgressIndicator />
         
         <Tabs defaultValue="overview" className="space-y-6">

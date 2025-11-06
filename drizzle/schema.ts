@@ -26,6 +26,7 @@ export const users = mysqlTable("users", {
 export const userProfiles = mysqlTable("user_profiles", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+  profilePicture: text("profilePicture"),
   firstNameEn: varchar("firstNameEn", { length: 100 }),
   lastNameEn: varchar("lastNameEn", { length: 100 }),
   firstNameAr: varchar("firstNameAr", { length: 100 }),
