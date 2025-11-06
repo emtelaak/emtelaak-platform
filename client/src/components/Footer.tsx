@@ -1,7 +1,9 @@
 import { Link } from "wouter";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { APP_LOGO, APP_TITLE } from "@/const";
 
 export default function Footer() {
+  const { t } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -14,10 +16,9 @@ export default function Footer() {
               <div className="flex items-center gap-3 mb-4 cursor-pointer">
                 <img src={APP_LOGO} alt={APP_TITLE} className="h-12 w-auto" />
               </div>
-            </Link>
-            <p className="text-sm text-muted-foreground mb-4">
-              Democratizing real estate investment across MEASA markets.
-            </p>
+            </Link>              <p className="text-sm text-muted-foreground">
+                {t.footer.tagline}
+              </p>
             <p className="text-xs text-muted-foreground">
               Licensed by FRA Sandbox & DIFC Innovation License
             </p>
@@ -25,26 +26,26 @@ export default function Footer() {
 
           {/* Platform Links */}
           <div>
-            <h3 className="font-semibold mb-4">Platform</h3>
+            <h3 className="font-semibold mb-4">{t.footer.platform}</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/properties" className="text-muted-foreground hover:text-primary transition-colors">
-                  Properties
+                  {t.nav.properties}
                 </Link>
               </li>
               <li>
                 <Link href="/how-it-works" className="text-muted-foreground hover:text-primary transition-colors">
-                  How It Works
+                  {t.nav.howItWorks}
                 </Link>
               </li>
               <li>
                 <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">
-                  About Us
+                  {t.nav.about}
                 </Link>
               </li>
               <li>
                 <Link href="/portfolio" className="text-muted-foreground hover:text-primary transition-colors">
-                  Portfolio
+                  {t.nav.portfolio}
                 </Link>
               </li>
             </ul>
@@ -52,26 +53,26 @@ export default function Footer() {
 
           {/* Legal Links */}
           <div>
-            <h3 className="font-semibold mb-4">Legal</h3>
+            <h3 className="font-semibold mb-4">{t.footer.legal}</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Terms of Service
+                  {t.footer.termsOfService}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Privacy Policy
+                  {t.footer.privacyPolicy}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Compliance
+                  {t.footer.compliance}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Risk Disclosure
+                  {t.footer.riskDisclosure}
                 </a>
               </li>
             </ul>
@@ -79,16 +80,16 @@ export default function Footer() {
 
           {/* Support Links */}
           <div>
-            <h3 className="font-semibold mb-4">Support</h3>
+            <h3 className="font-semibold mb-4">{t.footer.support}</h3>
               <ul className="space-y-2 text-sm">
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  FAQ
+                  {t.footer.faq}
                 </a>
               </li>
               <li>
                 <Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors">
-                  Contact Us
+                  {t.nav.contact}
                 </Link>
               </li>
               <li>
@@ -98,12 +99,12 @@ export default function Footer() {
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Help Center
+                  {t.footer.helpCenter}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Investor Resources
+                  {t.footer.investorResources}
                 </a>
               </li>
             </ul>
@@ -113,7 +114,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} Emtelaak Property Fractions. All rights reserved.
+            © {currentYear} Emtelaak. {t.footer.rights}
           </p>
           <div className="flex gap-6">
             <a href="#" className="text-muted-foreground hover:text-primary transition-colors">

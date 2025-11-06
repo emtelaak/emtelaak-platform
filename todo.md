@@ -326,3 +326,25 @@
 - [x] Fix nested anchor tags in Footer component
 - [x] Remove inner `<a>` tags from Link components (5 instances fixed)
 - [x] Test all navigation links work correctly
+
+
+## Phase 31: Bilingual Support - Arabic & English with RTL (Current)
+- [x] Create translation files for Arabic and English (en.ts, ar.ts)
+- [x] Implement language context and provider with localStorage
+- [x] Add language switcher component to navigation
+- [x] Implement RTL layout support for Arabic
+- [x] Add dir attribute switching based on language
+- [x] Translate all UI text in Home page
+- [x] Translate all UI text in Footer and navigation
+- [x] Add Arabic font support (Cairo)
+- [x] Store language preference in localStorage
+- [x] Update CSS for RTL-specific adjustments
+- [x] Add LanguageProvider to main.tsx
+- [ ] Translate all UI text in Properties page
+- [ ] Translate all UI text in Portfolio page
+- [ ] Translate all UI text in Profile page
+- [ ] Translate all UI text in Contact page
+- [ ] Translate all UI text in Admin Dashboard
+- [ ] Translate all UI text in KYC wizard
+- [ ] Test RTL layout on all screen sizes (mobile, tablet, desktop)
+- [ ] Test language switching across all pages

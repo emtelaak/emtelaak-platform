@@ -1,0 +1,393 @@
+export const en = {
+  // Common
+  common: {
+    loading: "Loading...",
+    error: "Error",
+    success: "Success",
+    save: "Save",
+    cancel: "Cancel",
+    delete: "Delete",
+    edit: "Edit",
+    create: "Create",
+    update: "Update",
+    search: "Search",
+    filter: "Filter",
+    export: "Export",
+    download: "Download",
+    upload: "Upload",
+    submit: "Submit",
+    back: "Back",
+    next: "Next",
+    previous: "Previous",
+    close: "Close",
+    confirm: "Confirm",
+    yes: "Yes",
+    no: "No",
+  },
+
+  // Navigation
+  nav: {
+    home: "Home",
+    properties: "Properties",
+    howItWorks: "How It Works",
+    about: "About",
+    portfolio: "Portfolio",
+    profile: "Profile",
+    contact: "Contact Us",
+    login: "Login",
+    logout: "Logout",
+    getStarted: "Get Started",
+    dashboard: "Dashboard",
+    settings: "Settings",
+  },
+
+  // Home Page
+  home: {
+    hero: {
+      title: "Invest in Real Estate",
+      subtitle: "Starting from",
+      amount: "$100",
+      description: "Democratizing property investment across MEASA markets. Own fractions of premium properties and earn rental income or capital gains.",
+      startInvesting: "Start Investing Today",
+      learnMore: "Learn More",
+    },
+    whyChoose: {
+      title: "Why Choose Emtelaak?",
+      subtitle: "We make real estate investment accessible, transparent, and profitable for everyone.",
+      lowMinimum: {
+        title: "Low Minimum Investment",
+        description: "Start with just $100 instead of hundreds of thousands. Diversify across multiple properties.",
+      },
+      highReturns: {
+        title: "High Returns",
+        description: "Earn 6-8% annual yields from rental income or appreciation. Choose between Buy to Let or Buy to Sell strategies.",
+      },
+      fullyRegulated: {
+        title: "Fully Regulated",
+        description: "Licensed by FRA Sandbox and DIFC Innovation License. Your investments are secure and compliant with all regulations.",
+      },
+      professionalManagement: {
+        title: "Professional Management",
+        description: "Expert property management, transparent reporting, and hassle-free income distribution directly to your account.",
+      },
+    },
+    howItWorks: {
+      title: "How It Works",
+      subtitle: "Start investing in real estate in four simple steps",
+      step1: {
+        title: "Sign Up & Verify",
+        description: "Create your account and complete KYC verification in minutes. We ensure a secure and compliant platform.",
+      },
+      step2: {
+        title: "Browse Properties",
+        description: "Explore our curated selection of premium properties across different categories with detailed analytics.",
+      },
+      step3: {
+        title: "Invest & Own",
+        description: "Choose your investment amount, select distribution frequency, and own fractional shares of the property.",
+      },
+      step4: {
+        title: "Earn Returns",
+        description: "Receive regular rental income or capital gains. Track your portfolio performance in real-time.",
+      },
+    },
+    categories: {
+      title: "Investment Categories",
+      subtitle: "Diversify your portfolio across multiple property types",
+      residential: "Residential",
+      commercial: "Commercial",
+      administrative: "Administrative",
+      hospitality: "Hospitality",
+      education: "Education",
+      logistics: "Logistics",
+      medical: "Medical",
+    },
+    trust: {
+      title: "Trusted & Secure",
+      fra: {
+        title: "FRA Sandbox Licensed",
+        description: "Regulated by Financial Regulatory Authority",
+      },
+      difc: {
+        title: "DIFC Innovation License",
+        description: "Dubai International Financial Centre approved",
+      },
+      security: {
+        title: "Bank-Level Security",
+        description: "256-bit encryption and secure payment processing",
+      },
+    },
+    cta: {
+      title: "Ready to Start Your Investment Journey?",
+      subtitle: "Join thousands of investors building wealth through fractional real estate ownership.",
+      button: "Get Started Now",
+    },
+  },
+
+  // Footer
+  footer: {
+    tagline: "Democratizing real estate investment across MEASA markets.",
+    platform: "Platform",
+    legal: "Legal",
+    support: "Support",
+    termsOfService: "Terms of Service",
+    privacyPolicy: "Privacy Policy",
+    compliance: "Compliance",
+    riskDisclosure: "Risk Disclosure",
+    faq: "FAQ",
+    helpCenter: "Help Center",
+    investorResources: "Investor Resources",
+    rights: "All rights reserved.",
+  },
+
+  // Properties Page
+  properties: {
+    title: "Investment Properties",
+    subtitle: "Browse our curated selection of premium real estate opportunities",
+    searchPlaceholder: "Search properties...",
+    filters: {
+      all: "All Properties",
+      residential: "Residential",
+      commercial: "Commercial",
+      administrative: "Administrative",
+    },
+    card: {
+      minInvestment: "Min. Investment",
+      targetReturn: "Target Return",
+      fundingProgress: "Funding Progress",
+      daysLeft: "days left",
+      viewDetails: "View Details",
+      invested: "Invested",
+      raised: "Raised",
+    },
+    noProperties: "No properties found",
+  },
+
+  // Portfolio Page
+  portfolio: {
+    title: "My Portfolio",
+    subtitle: "Track your investments and performance",
+    overview: {
+      totalInvested: "Total Invested",
+      currentValue: "Current Value",
+      totalReturn: "Total Return",
+      activeProperties: "Active Properties",
+    },
+    performance: {
+      title: "Portfolio Performance",
+      last6Months: "Last 6 Months",
+    },
+    allocation: {
+      title: "Asset Allocation",
+    },
+    income: {
+      title: "Income Distributions",
+      date: "Date",
+      property: "Property",
+      amount: "Amount",
+      status: "Status",
+      noDistributions: "No income distributions yet",
+    },
+    transactions: {
+      title: "Transaction History",
+      date: "Date",
+      type: "Type",
+      property: "Property",
+      amount: "Amount",
+      status: "Status",
+      noTransactions: "No transactions yet",
+    },
+  },
+
+  // Profile Page
+  profile: {
+    title: "My Profile",
+    subtitle: "Manage your account information and settings",
+    personalInfo: {
+      title: "Personal Information",
+      name: "Full Name",
+      email: "Email Address",
+      phone: "Phone Number",
+      updateProfile: "Update Profile",
+    },
+    verification: {
+      title: "Verification Status",
+      level: "Verification Level",
+      status: "Status",
+      startKYC: "Start KYC Verification",
+      continueKYC: "Continue KYC",
+      viewDetails: "View Details",
+    },
+    kycProgress: {
+      title: "KYC Progress",
+      completed: "Completed",
+      lastSaved: "Last saved",
+    },
+    profilePicture: {
+      upload: "Upload Picture",
+      remove: "Remove Picture",
+      uploading: "Uploading...",
+    },
+  },
+
+  // Contact Page
+  contact: {
+    title: "Contact Us",
+    subtitle: "Get in touch with our team",
+    form: {
+      title: "Send us a message",
+      name: "Your Name",
+      email: "Your Email",
+      subject: "Subject",
+      message: "Message",
+      send: "Send Message",
+      sending: "Sending...",
+    },
+    info: {
+      email: {
+        title: "Email",
+        value: "support@emtelaak.com",
+      },
+      phone: {
+        title: "Phone",
+        value: "+971 4 123 4567",
+      },
+      address: {
+        title: "Office",
+        value: "DIFC, Dubai, UAE",
+      },
+    },
+    success: {
+      title: "Message Sent!",
+      description: "Thank you for contacting us. We'll get back to you soon.",
+      backToHome: "Back to Home",
+    },
+    faq: {
+      title: "Frequently Asked Questions",
+    },
+  },
+
+  // KYC Wizard
+  kyc: {
+    title: "KYC Verification",
+    subtitle: "Complete your verification to start investing",
+    steps: {
+      personal: "Personal Info",
+      documents: "Documents",
+      questionnaire: "Questionnaire",
+      review: "Review",
+    },
+    personalInfo: {
+      title: "Personal Information",
+      fullName: "Full Name",
+      dateOfBirth: "Date of Birth",
+      nationality: "Nationality",
+      address: "Address",
+      city: "City",
+      country: "Country",
+      postalCode: "Postal Code",
+    },
+    documents: {
+      title: "Upload Documents",
+      idDocument: "ID Document",
+      proofOfAddress: "Proof of Address",
+      dragDrop: "Drag and drop or click to upload",
+      maxSize: "Maximum file size: 5MB",
+    },
+    questionnaire: {
+      title: "Investor Questionnaire",
+      accreditedInvestor: "Are you an accredited investor?",
+      investmentExperience: "Investment Experience",
+      riskTolerance: "Risk Tolerance",
+    },
+    review: {
+      title: "Review & Submit",
+      description: "Please review your information before submitting",
+      submit: "Submit for Verification",
+    },
+  },
+
+  // Admin Dashboard
+  admin: {
+    title: "Admin Dashboard",
+    subtitle: "Manage users, roles, and platform settings",
+    stats: {
+      totalUsers: "Total Users",
+      pendingKYC: "Pending KYC",
+      activeInvestments: "Active Investments",
+      totalRevenue: "Total Revenue",
+    },
+    users: {
+      title: "User Management",
+      search: "Search users...",
+      name: "Name",
+      email: "Email",
+      role: "Role",
+      status: "Status",
+      actions: "Actions",
+      changeRole: "Change Role",
+      updateStatus: "Update Status",
+    },
+    roles: {
+      title: "Role Management",
+      createRole: "Create Role",
+      roleName: "Role Name",
+      description: "Description",
+      permissions: "Permissions",
+      system: "System",
+      custom: "Custom",
+    },
+    permissions: {
+      title: "Permissions Management",
+      selectUser: "Select User",
+      permissionsMatrix: "Permissions Matrix",
+      granted: "Granted",
+      denied: "Denied",
+      exportUsers: "Export Users",
+      exportAuditLogs: "Export Audit Logs",
+    },
+    settings: {
+      title: "Platform Settings",
+      logo: "Platform Logo",
+      currentLogo: "Current Logo",
+      newLogo: "New Logo",
+      uploadLogo: "Upload New Logo",
+      maxSize: "Maximum size: 2MB",
+    },
+  },
+
+  // Notifications
+  notifications: {
+    title: "Notifications",
+    markAllRead: "Mark all as read",
+    noNotifications: "No notifications",
+    types: {
+      kycApproved: "KYC Approved",
+      kycRejected: "KYC Rejected",
+      investmentConfirmed: "Investment Confirmed",
+      incomeDistributed: "Income Distributed",
+    },
+  },
+
+  // Status
+  status: {
+    active: "Active",
+    pending: "Pending",
+    suspended: "Suspended",
+    approved: "Approved",
+    rejected: "Rejected",
+    completed: "Completed",
+    processing: "Processing",
+  },
+
+  // Roles
+  roles: {
+    user: "User",
+    investor: "Investor",
+    fundraiser: "Fundraiser",
+    admin: "Admin",
+    superAdmin: "Super Admin",
+  },
+};
+
+export type Translation = typeof en;
