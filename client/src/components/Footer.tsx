@@ -88,15 +88,22 @@ export default function Footer() {
           {/* Support Links */}
           <div>
             <h3 className="font-semibold mb-4">Support</h3>
-            <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-sm">
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
                   FAQ
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Contact Us
+                <Link href="/contact">
+                  <a className="text-muted-foreground hover:text-primary transition-colors">
+                    Contact Us
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <a href="mailto:support@emtelaak.com" className="text-muted-foreground hover:text-primary transition-colors">
+                  support@emtelaak.com
                 </a>
               </li>
               <li>

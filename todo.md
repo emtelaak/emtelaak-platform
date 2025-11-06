@@ -237,3 +237,15 @@
 - [x] Update HTML to include favicon links
 - [x] Add footer to Home page
 - [x] Test favicon displays correctly in browser tabs
+
+
+## Phase 23: Contact Us Page and Form (Current)
+- [x] Create Contact Us page with form
+- [x] Add contact form fields (name, email, subject, message)
+- [x] Implement form validation
+- [x] Add backend API endpoint to handle contact form submissions
+- [x] Add clickable email address to footer (support@emtelaak.com)
+- [x] Send owner notifications when contact form is submitted
+- [x] Add route for Contact Us page
+- [x] Test form submission and validation
+- [x] Add contact information cards (email, phone, address)

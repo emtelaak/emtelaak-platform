@@ -36,6 +36,7 @@ import {
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import * as notificationHelpers from "./notifications";
+import { notifyOwner } from "./_core/notification";
 
 export const appRouter = router({
   system: systemRouter,
@@ -333,6 +334,25 @@ export const appRouter = router({
       .input(z.object({ id: z.number() }))
       .mutation(async ({ input }) => {
         await markNotificationAsRead(input.id);
+        return { success: true };
+      }),
+  }),
+
+  contact: router({
+    submit: publicProcedure
+      .input(z.object({
+        name: z.string().min(1),
+        email: z.string().email(),
+        subject: z.string().min(1),
+        message: z.string().min(10),
+      }))
+      .mutation(async ({ input }) => {
+        // Send notification to owner
+        await notifyOwner({
+          title: `New Contact Form Submission from ${input.name}`,
+          content: `Subject: ${input.subject}\n\nFrom: ${input.name} (${input.email})\n\nMessage:\n${input.message}`,
+        });
+        
         return { success: true };
       }),
   }),
