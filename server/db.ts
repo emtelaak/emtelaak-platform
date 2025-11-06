@@ -3,6 +3,7 @@ import { drizzle } from "drizzle-orm/mysql2";
 import {
   InsertUser, users, kycProgress, InsertKycProgress,
   userProfiles,
+  platformSettings,
   InsertUserProfile,
   kycDocuments,
   InsertKycDocument,
@@ -640,6 +641,32 @@ export async function clearKycProgress(userId: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   await db.delete(kycProgress).where(eq(kycProgress.userId, userId));
+}
+
+// Platform Settings
+export async function getPlatformSetting(key: string) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.select().from(platformSettings).where(eq(platformSettings.settingKey, key)).limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function setPlatformSetting(key: string, value: string, updatedBy: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.insert(platformSettings).values({
+    settingKey: key,
+    settingValue: value,
+    updatedBy,
+  }).onDuplicateKeyUpdate({
+    set: {
+      settingValue: value,
+      updatedBy,
+      updatedAt: new Date(),
+    },
+  });
 }
 
 // Type exports for convenience

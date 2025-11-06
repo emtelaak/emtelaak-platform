@@ -486,3 +486,16 @@ export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = typeof notifications.$inferInsert;
 export type DeveloperProfile = typeof developerProfiles.$inferSelect;
 export type InsertDeveloperProfile = typeof developerProfiles.$inferInsert;
+
+// Platform Settings for dynamic configuration
+export const platformSettings = mysqlTable("platform_settings", {
+  id: int("id").autoincrement().primaryKey(),
+  settingKey: varchar("settingKey", { length: 100 }).notNull().unique(),
+  settingValue: text("settingValue"),
+  updatedBy: int("updatedBy").references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PlatformSetting = typeof platformSettings.$inferSelect;
+export type InsertPlatformSetting = typeof platformSettings.$inferInsert;

@@ -6,6 +6,7 @@
 import { router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { storagePut } from './storage';
 import {
   getPendingKycVerifications,
   getUserKycDocuments,
@@ -13,6 +14,8 @@ import {
   getVerificationStatus,
   updateVerificationStatus,
   getUserProfile,
+  getPlatformSetting,
+  setPlatformSetting,
 } from "./db";
 import * as notificationHelpers from "./notifications";
 
@@ -191,5 +194,36 @@ export const adminRouter = router({
 
         return { success: true };
       }),
+  }),
+
+  // Platform Settings Management
+  settings: router({
+    uploadLogo: adminProcedure
+      .input(z.object({
+        imageData: z.string(),
+        mimeType: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        // Convert base64 to buffer
+        const base64Data = input.imageData.replace(/^data:image\/\w+;base64,/, '');
+        const buffer = Buffer.from(base64Data, 'base64');
+        
+        // Generate unique filename
+        const fileExtension = input.mimeType.split('/')[1];
+        const fileName = `platform-logo-${Date.now()}.${fileExtension}`;
+        
+        // Upload to S3
+        const { url } = await storagePut(fileName, buffer, input.mimeType);
+        
+        // Save to platform settings
+        await setPlatformSetting('platform_logo', url, ctx.user.id);
+        
+        return { url };
+      }),
+    
+    getLogo: adminProcedure.query(async () => {
+      const setting = await getPlatformSetting('platform_logo');
+      return setting?.settingValue || null;
+    }),
   }),
 });

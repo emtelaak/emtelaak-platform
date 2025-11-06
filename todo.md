@@ -275,3 +275,13 @@
 - [x] Display profile picture in profile page with Avatar component
 - [x] Add upload button with camera icon
 - [x] Add remove picture functionality
+
+
+## Phase 27: Admin Logo Upload Feature (Current)
+- [x] Create platform_settings table to store logo URL
+- [x] Add admin API endpoint to upload new logo (admin.settings.uploadLogo)
+- [x] Create admin settings page with logo upload component
+- [x] Add logo preview in admin settings (current and new)
+- [x] Implement logo validation (size max 2MB, image format check)
+- [x] Add database helpers for platform settings (getPlatformSetting, setPlatformSetting)
+- [x] Add admin route /admin/settings

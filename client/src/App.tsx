@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Properties from "./pages/Properties";
 import Portfolio from "./pages/Portfolio";
 import Profile from "./pages/Profile";
+import AdminSettings from "./pages/AdminSettings";
 
 function Router() {
   return (
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/portfolio" component={Portfolio} />
       <Route path="/profile" component={Profile} />
       <Route path={"/contact"} component={Contact} />
+      <Route path="/admin/settings" component={AdminSettings} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
