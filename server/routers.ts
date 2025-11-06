@@ -1,11 +1,40 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, router } from "./_core/trpc";
+import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
+import { z } from "zod";
+import {
+  getUserProfile,
+  createOrUpdateUserProfile,
+  getVerificationStatus,
+  updateVerificationStatus,
+  createKycDocument,
+  getUserKycDocuments,
+  updateKycDocumentStatus,
+  createKycQuestionnaire,
+  getUserKycQuestionnaire,
+  getPendingKycVerifications,
+  getAvailableProperties,
+  getPropertyById,
+  searchProperties,
+  getPropertyDocuments,
+  getPropertyMedia,
+  joinPropertyWaitlist,
+  getUserInvestments,
+  getUserPortfolioSummary,
+  getUserIncomeHistory,
+  getUserTransactions,
+  createInvestment,
+  createTransaction,
+  getUserNotifications,
+  markNotificationAsRead,
+  createNotification,
+} from "./db";
+import { TRPCError } from "@trpc/server";
 
 export const appRouter = router({
-    // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
+  
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
@@ -17,12 +46,289 @@ export const appRouter = router({
     }),
   }),
 
-  // TODO: add feature routers here, e.g.
-  // todo: router({
-  //   list: protectedProcedure.query(({ ctx }) =>
-  //     db.getUserTodos(ctx.user.id)
-  //   ),
-  // }),
+  // User Profile Management
+  profile: router({
+    get: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserProfile(ctx.user.id);
+    }),
+    
+    update: protectedProcedure
+      .input(z.object({
+        firstNameEn: z.string().optional(),
+        lastNameEn: z.string().optional(),
+        firstNameAr: z.string().optional(),
+        lastNameAr: z.string().optional(),
+        dateOfBirth: z.date().optional(),
+        nationality: z.string().optional(),
+        addressLine1: z.string().optional(),
+        addressLine2: z.string().optional(),
+        city: z.string().optional(),
+        country: z.string().optional(),
+        postalCode: z.string().optional(),
+        employmentStatus: z.string().optional(),
+        employmentInfo: z.string().optional(),
+        annualIncomeRange: z.string().optional(),
+        investorType: z.enum(["individual", "institutional"]).optional(),
+        preferredLanguage: z.enum(["en", "ar"]).optional(),
+        preferredCurrency: z.enum(["USD", "EGP"]).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        await createOrUpdateUserProfile({
+          userId: ctx.user.id,
+          ...input,
+        });
+        return { success: true };
+      }),
+    
+    getVerificationStatus: protectedProcedure.query(async ({ ctx }) => {
+      return await getVerificationStatus(ctx.user.id);
+    }),
+  }),
+
+  // KYC/AML Verification
+  kyc: router({
+    uploadDocument: protectedProcedure
+      .input(z.object({
+        documentType: z.enum(["id_card", "passport", "proof_of_address", "income_verification", "accreditation"]),
+        fileUrl: z.string(),
+        fileKey: z.string(),
+        fileName: z.string(),
+        mimeType: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        await createKycDocument({
+          userId: ctx.user.id,
+          ...input,
+        });
+        
+        // Update verification status
+        const docs = await getUserKycDocuments(ctx.user.id);
+        const hasIdDoc = docs.some(d => (d.documentType === "id_card" || d.documentType === "passport") && d.status === "approved");
+        const hasAddressDoc = docs.some(d => d.documentType === "proof_of_address" && d.status === "approved");
+        
+        await updateVerificationStatus(ctx.user.id, {
+          documentsVerified: hasIdDoc && hasAddressDoc,
+        });
+        
+        return { success: true };
+      }),
+    
+    getDocuments: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserKycDocuments(ctx.user.id);
+    }),
+    
+    submitQuestionnaire: protectedProcedure
+      .input(z.object({
+        investmentExperience: z.string(),
+        riskTolerance: z.string(),
+        financialCapacity: z.string(),
+        investmentGoals: z.string(),
+        isAccreditedInvestor: z.boolean(),
+        accreditationDetails: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        await createKycQuestionnaire({
+          userId: ctx.user.id,
+          ...input,
+        });
+        
+        await updateVerificationStatus(ctx.user.id, {
+          questionnaireCompleted: true,
+        });
+        
+        return { success: true };
+      }),
+    
+    getQuestionnaire: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserKycQuestionnaire(ctx.user.id);
+    }),
+  }),
+
+  // Properties
+  properties: router({
+    list: publicProcedure
+      .input(z.object({
+        propertyType: z.string().optional(),
+        investmentType: z.string().optional(),
+        minValue: z.number().optional(),
+        maxValue: z.number().optional(),
+        status: z.string().optional(),
+      }).optional())
+      .query(async ({ input }) => {
+        if (input && Object.keys(input).length > 0) {
+          return await searchProperties(input);
+        }
+        return await getAvailableProperties();
+      }),
+    
+    getById: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        const property = await getPropertyById(input.id);
+        if (!property) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Property not found" });
+        }
+        return property;
+      }),
+    
+    getDocuments: publicProcedure
+      .input(z.object({ propertyId: z.number() }))
+      .query(async ({ input }) => {
+        return await getPropertyDocuments(input.propertyId);
+      }),
+    
+    getMedia: publicProcedure
+      .input(z.object({ propertyId: z.number() }))
+      .query(async ({ input }) => {
+        return await getPropertyMedia(input.propertyId);
+      }),
+    
+    joinWaitlist: protectedProcedure
+      .input(z.object({ propertyId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        await joinPropertyWaitlist(input.propertyId, ctx.user.id);
+        
+        // Create notification
+        await createNotification({
+          userId: ctx.user.id,
+          type: "property",
+          title: "Joined Waitlist",
+          message: "You have successfully joined the waitlist for this property. We'll notify you when it becomes available.",
+        });
+        
+        return { success: true };
+      }),
+  }),
+
+  // Investments
+  investments: router({
+    create: protectedProcedure
+      .input(z.object({
+        propertyId: z.number(),
+        amount: z.number(),
+        shares: z.number(),
+        sharePrice: z.number(),
+        distributionFrequency: z.enum(["monthly", "quarterly", "annual"]),
+        paymentMethod: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        // Check verification status
+        const verificationStatus = await getVerificationStatus(ctx.user.id);
+        if (!verificationStatus?.canInvest) {
+          throw new TRPCError({ 
+            code: "FORBIDDEN", 
+            message: "Please complete KYC verification before investing" 
+          });
+        }
+        
+        // Calculate ownership percentage
+        const property = await getPropertyById(input.propertyId);
+        if (!property) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Property not found" });
+        }
+        
+        const ownershipPercentage = Math.round((input.shares / property.totalShares) * 1000000);
+        
+        // Create investment
+        const result = await createInvestment({
+          userId: ctx.user.id,
+          propertyId: input.propertyId,
+          amount: input.amount,
+          shares: input.shares,
+          sharePrice: input.sharePrice,
+          ownershipPercentage,
+          distributionFrequency: input.distributionFrequency,
+          paymentMethod: input.paymentMethod,
+          status: "pending",
+          paymentStatus: "pending",
+        });
+        
+        // Create transaction record
+        await createTransaction({
+          userId: ctx.user.id,
+          type: "investment",
+          amount: input.amount,
+          status: "pending",
+          paymentMethod: input.paymentMethod,
+        });
+        
+        // Create notification
+        await createNotification({
+          userId: ctx.user.id,
+          type: "investment",
+          title: "Investment Created",
+          message: `Your investment of $${(input.amount / 100).toFixed(2)} is pending payment confirmation.`,
+        });
+        
+        return { success: true };
+      }),
+    
+    list: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserInvestments(ctx.user.id);
+    }),
+  }),
+
+  // Portfolio
+  portfolio: router({
+    summary: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserPortfolioSummary(ctx.user.id);
+    }),
+    
+    incomeHistory: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserIncomeHistory(ctx.user.id);
+    }),
+    
+    transactions: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserTransactions(ctx.user.id);
+    }),
+  }),
+
+  // Notifications
+  notifications: router({
+    list: protectedProcedure
+      .input(z.object({ unreadOnly: z.boolean().optional() }).optional())
+      .query(async ({ ctx, input }) => {
+        return await getUserNotifications(ctx.user.id, input?.unreadOnly);
+      }),
+    
+    markAsRead: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        await markNotificationAsRead(input.id);
+        return { success: true };
+      }),
+  }),
+
+  // Admin procedures (for future implementation)
+  admin: router({
+    kycVerifications: protectedProcedure.query(async ({ ctx }) => {
+      if (ctx.user.role !== "admin") {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
+      }
+      return await getPendingKycVerifications();
+    }),
+    
+    approveKycDocument: protectedProcedure
+      .input(z.object({ 
+        documentId: z.number(),
+        approved: z.boolean(),
+        rejectionReason: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
+        }
+        
+        await updateKycDocumentStatus(
+          input.documentId,
+          input.approved ? "approved" : "rejected",
+          ctx.user.id,
+          input.rejectionReason
+        );
+        
+        return { success: true };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
