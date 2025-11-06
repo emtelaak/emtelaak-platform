@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { APP_LOGO, APP_TITLE, getLoginUrl, PROPERTY_TYPES, MIN_INVESTMENT_USD } from "@/const";
 import { Building2, TrendingUp, Shield, Users, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link } from "wouter";
+import NotificationCenter from "@/components/NotificationCenter";
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
@@ -52,8 +53,9 @@ export default function Home() {
           <div className="flex items-center gap-3">
             {isAuthenticated ? (
               <>
-                <Link href="/dashboard">
-                  <Button variant="ghost">Dashboard</Button>
+                <NotificationCenter />
+                <Link href="/profile">
+                  <Button variant="ghost">Profile</Button>
                 </Link>
                 <Link href="/portfolio">
                   <Button variant="default">Portfolio</Button>

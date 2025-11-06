@@ -173,3 +173,18 @@
 - [x] Property listing page with filters and search
 - [x] Responsive navigation
 - [x] Shared constants for platform-wide use
+
+
+## Phase 16: KYC Wizard, Portfolio Dashboard, Profile & Notifications (Current)
+- [x] Multi-step KYC wizard component
+- [x] Document upload with drag-and-drop
+- [x] Accreditation questionnaire form
+- [x] KYC status tracking component
+- [x] Portfolio dashboard with summary cards
+- [x] Investment performance charts (line, pie, donut)
+- [x] Income distribution history table
+- [x] Transaction history table
+- [x] User profile page with edit functionality
+- [x] Notification center component
+- [x] Notification bell with unread count
+- [x] Real-time notification updates
