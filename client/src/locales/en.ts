@@ -412,6 +412,64 @@ export const en = {
     processing: "Processing",
   },
 
+  // About Page
+  about: {
+    title: "About Emtelaak",
+    subtitle: "Pioneering fractional real estate investment across MEASA markets",
+    ourStory: {
+      title: "Our Story",
+      description: "Emtelaak is the pioneer company in providing a unique experience for investing in real estate as a popular and high-value investment product by dividing this investment into real-estate stakes at reasonable values to enable clients to seize the opportunity of fractional ownership across residential, commercial, administrative, medical and educational assets from foundation to operation and management.",
+    },
+    values: {
+      pioneer: {
+        title: "Pioneer Status",
+        description: "First platform offering fractional real estate investment in the region",
+      },
+      accessibility: {
+        title: "Accessible Investment",
+        description: "Reasonable stake values make real estate investment accessible to everyone",
+      },
+      diverse: {
+        title: "Diverse Assets",
+        description: "Invest across residential, commercial, administrative, medical, and educational properties",
+      },
+      fullService: {
+        title: "Full Service",
+        description: "Complete management from foundation to operation",
+      },
+    },
+    mission: {
+      title: "Our Mission",
+      description: "To democratize real estate investment by providing accessible, transparent, and profitable fractional ownership opportunities that empower individuals to build wealth through property investment.",
+    },
+    vision: {
+      title: "Our Vision",
+      description: "To become the leading fractional real estate investment platform across MEASA markets, setting the standard for transparency, compliance, and investor returns.",
+    },
+    compliance: {
+      title: "Trusted & Secure",
+      subtitle: "Regulated by leading financial authorities",
+      fra: {
+        title: "FRA Sandbox Licensed",
+        description: "Regulated by Financial Regulatory Authority",
+      },
+      difc: {
+        title: "DIFC Innovation License",
+        description: "Dubai International Financial Centre approved",
+      },
+      security: {
+        title: "Bank-Level Security",
+        description: "256-bit encryption and secure payment processing",
+      },
+    },
+    cta: {
+      title: "Ready to Start Your Investment Journey?",
+      description: "Join thousands of investors building wealth through fractional real estate ownership.",
+      browseProperties: "Browse Properties",
+      contactUs: "Contact Us",
+    },
+  },
+
   // FAQ Page
   faq: {
     title: "Frequently Asked Questions",

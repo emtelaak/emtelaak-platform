@@ -15,6 +15,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoles from "./pages/AdminRoles";
 import AdminPermissions from "./pages/AdminPermissions";
 import FAQ from "./pages/FAQ";
+import About from "./pages/About";
 
 function Router() {
   return (
@@ -25,6 +26,7 @@ function Router() {
       <Route path="/profile" component={Profile} />
       <Route path={"/contact"} component={Contact} />
       <Route path={"/faq"} component={FAQ} />
+      <Route path={"/about"} component={About} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/roles" component={AdminRoles} />
       <Route path="/admin/permissions" component={AdminPermissions} />
