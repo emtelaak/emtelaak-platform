@@ -188,3 +188,15 @@
 - [x] Notification center component
 - [x] Notification bell with unread count
 - [x] Real-time notification updates
+
+
+## Phase 17: Real-time KYC Notification System (Current)
+- [x] Create notification helper functions for KYC events
+- [x] Integrate notifications into KYC document approval/rejection workflow
+- [x] Add notifications for verification level changes
+- [x] Add notifications for questionnaire processing
+- [x] Create KYC status change notification templates
+- [x] Add real-time notification polling/refresh (30s interval)
+- [x] Create admin router for KYC document approval with automatic notifications
+- [x] Add investment and income distribution notifications
+- [x] Create admin router for KYC document approval with notifications

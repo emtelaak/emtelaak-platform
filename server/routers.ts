@@ -1,6 +1,7 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
+import { adminRouter } from "./adminRouters";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import {
@@ -31,9 +32,11 @@ import {
   createNotification,
 } from "./db";
 import { TRPCError } from "@trpc/server";
+import * as notificationHelpers from "./notifications";
 
 export const appRouter = router({
   system: systemRouter,
+  admin: adminRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
@@ -101,6 +104,9 @@ export const appRouter = router({
           ...input,
         });
         
+        // Send notification that document is under review
+        await notificationHelpers.notifyKYCDocumentPending(ctx.user.id, input.documentType);
+        
         // Update verification status
         const docs = await getUserKycDocuments(ctx.user.id);
         const hasIdDoc = docs.some(d => (d.documentType === "id_card" || d.documentType === "passport") && d.status === "approved");
@@ -131,6 +137,9 @@ export const appRouter = router({
           userId: ctx.user.id,
           ...input,
         });
+        
+        // Send notification that questionnaire was submitted
+        await notificationHelpers.notifyKYCQuestionnaireSubmitted(ctx.user.id);
         
         await updateVerificationStatus(ctx.user.id, {
           questionnaireCompleted: true,
@@ -299,36 +308,7 @@ export const appRouter = router({
       }),
   }),
 
-  // Admin procedures (for future implementation)
-  admin: router({
-    kycVerifications: protectedProcedure.query(async ({ ctx }) => {
-      if (ctx.user.role !== "admin") {
-        throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
-      }
-      return await getPendingKycVerifications();
-    }),
-    
-    approveKycDocument: protectedProcedure
-      .input(z.object({ 
-        documentId: z.number(),
-        approved: z.boolean(),
-        rejectionReason: z.string().optional(),
-      }))
-      .mutation(async ({ ctx, input }) => {
-        if (ctx.user.role !== "admin") {
-          throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
-        }
-        
-        await updateKycDocumentStatus(
-          input.documentId,
-          input.approved ? "approved" : "rejected",
-          ctx.user.id,
-          input.rejectionReason
-        );
-        
-        return { success: true };
-      }),
-  }),
+  // Admin routes moved to adminRouters.ts
 });
 
 export type AppRouter = typeof appRouter;
