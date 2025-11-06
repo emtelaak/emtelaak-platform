@@ -1,8 +1,7 @@
 import { eq, and, desc, asc, sql, gte, lte, inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
-  InsertUser,
-  users,
+  InsertUser, users, kycProgress, InsertKycProgress,
   userProfiles,
   InsertUserProfile,
   kycDocuments,
@@ -581,6 +580,47 @@ export async function getVerifiedDevelopers() {
   const db = await getDb();
   if (!db) return [];
   return await db.select().from(developerProfiles).where(eq(developerProfiles.verified, true)).orderBy(desc(developerProfiles.totalFunding));
+}
+
+// ============================================
+// KYC PROGRESS TRACKING
+// ============================================
+
+export async function saveKycProgress(data: InsertKycProgress) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Check if progress exists for this user
+  const existing = await db.select().from(kycProgress).where(eq(kycProgress.userId, data.userId)).limit(1);
+  
+  if (existing.length > 0) {
+    // Update existing progress
+    await db.update(kycProgress)
+      .set({
+        ...data,
+        lastSavedAt: new Date(),
+      })
+      .where(eq(kycProgress.userId, data.userId));
+  } else {
+    // Insert new progress
+    await db.insert(kycProgress).values({
+      ...data,
+      lastSavedAt: new Date(),
+    });
+  }
+}
+
+export async function getKycProgress(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(kycProgress).where(eq(kycProgress.userId, userId)).limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function clearKycProgress(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(kycProgress).where(eq(kycProgress.userId, userId));
 }
 
 // Type exports for convenience

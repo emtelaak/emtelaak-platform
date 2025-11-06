@@ -15,6 +15,9 @@ import {
   createKycQuestionnaire,
   getUserKycQuestionnaire,
   getPendingKycVerifications,
+  saveKycProgress,
+  getKycProgress,
+  clearKycProgress,
   getAvailableProperties,
   getPropertyById,
   searchProperties,
@@ -150,6 +153,32 @@ export const appRouter = router({
     
     getQuestionnaire: protectedProcedure.query(async ({ ctx }) => {
       return await getUserKycQuestionnaire(ctx.user.id);
+    }),
+
+    // KYC Progress Management
+    saveProgress: protectedProcedure
+      .input(z.object({
+        currentStep: z.number(),
+        personalInfoData: z.string().optional(),
+        documentUploadData: z.string().optional(),
+        questionnaireData: z.string().optional(),
+        completionPercentage: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        await saveKycProgress({
+          userId: ctx.user.id,
+          ...input,
+        });
+        return { success: true };
+      }),
+
+    getProgress: protectedProcedure.query(async ({ ctx }) => {
+      return await getKycProgress(ctx.user.id);
+    }),
+
+    clearProgress: protectedProcedure.mutation(async ({ ctx }) => {
+      await clearKycProgress(ctx.user.id);
+      return { success: true };
     }),
   }),
 

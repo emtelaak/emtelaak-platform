@@ -15,6 +15,13 @@
       "when": 1762428557712,
       "tag": "0001_fantastic_slapstick",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1762430256531,
+      "tag": "0002_lively_ravenous",
+      "breakpoints": true
     }
   ]
 }

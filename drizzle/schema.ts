@@ -465,6 +465,22 @@ export type SecondaryMarketListing = typeof secondaryMarketListings.$inferSelect
 export type InsertSecondaryMarketListing = typeof secondaryMarketListings.$inferInsert;
 export type SecondaryMarketDeal = typeof secondaryMarketDeals.$inferSelect;
 export type InsertSecondaryMarketDeal = typeof secondaryMarketDeals.$inferInsert;
+
+// KYC Progress Tracking
+export const kycProgress = mysqlTable("kyc_progress", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  currentStep: int("currentStep").notNull().default(0),
+  personalInfoData: text("personalInfoData"), // JSON string
+  documentUploadData: text("documentUploadData"), // JSON string
+  questionnaireData: text("questionnaireData"), // JSON string
+  completionPercentage: int("completionPercentage").notNull().default(0),
+  lastSavedAt: timestamp("lastSavedAt").defaultNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type KycProgress = typeof kycProgress.$inferSelect;
+export type InsertKycProgress = typeof kycProgress.$inferInsert;
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = typeof notifications.$inferInsert;
 export type DeveloperProfile = typeof developerProfiles.$inferSelect;
