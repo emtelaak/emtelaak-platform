@@ -350,6 +350,8 @@ export const en = {
       subtitle: "Complete your investor accreditation questionnaire",
       submitSuccess: "Questionnaire Submitted",
       submitSuccessDesc: "Your KYC questionnaire has been submitted for review.",
+      progress: "Completion Progress",
+      progressHint: "Fill in all required fields to submit your questionnaire",
       financialInfo: "Financial Information",
       financialInfoDesc: "Provide details about your financial situation",
       annualIncome: "Annual Income",

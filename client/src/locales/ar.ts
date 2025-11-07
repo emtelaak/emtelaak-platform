@@ -352,6 +352,8 @@ export const ar: Translation = {
       subtitle: "أكمل استبيان اعتماد المستثمر",
       submitSuccess: "تم إرسال الاستبيان",
       submitSuccessDesc: "تم إرسال استبيان التحقق للمراجعة.",
+      progress: "تقدم الإكمال",
+      progressHint: "املأ جميع الحقول المطلوبة لإرسال استبيانك",
       financialInfo: "المعلومات المالية",
       financialInfoDesc: "قدم تفاصيل عن وضعك المالي",
       annualIncome: "الدخل السنوي",
