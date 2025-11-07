@@ -16,6 +16,7 @@ import AdminRoles from "./pages/AdminRoles";
 import AdminPermissions from "./pages/AdminPermissions";
 import FAQ from "./pages/FAQ";
 import About from "./pages/About";
+import HowItWorks from "./pages/HowItWorks";
 import CRMDashboard from "./pages/CRMDashboard";
 import CRMLeads from "./pages/CRMLeads";
 import CRMCases from "./pages/CRMCases";
@@ -33,6 +34,7 @@ function Router() {
       <Route path={"/contact"} component={Contact} />
       <Route path={"/faq"} component={FAQ} />
       <Route path={"/about"} component={About} />
+      <Route path={"/how-it-works"} component={HowItWorks} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/roles" component={AdminRoles} />
       <Route path="/admin/permissions" component={AdminPermissions} />
