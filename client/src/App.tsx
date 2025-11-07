@@ -22,6 +22,7 @@ import CRMLeads from "./pages/CRMLeads";
 import CRMCases from "./pages/CRMCases";
 import LeadCapture from "./pages/LeadCapture";
 import PropertyDetail from "./pages/PropertyDetail";
+import KYCQuestionnaire from "./pages/KYCQuestionnaire";
 
 function Router() {
   return (
@@ -31,6 +32,7 @@ function Router() {
       <Route path="/properties/:id" component={PropertyDetail} />
       <Route path="/portfolio" component={Portfolio} />
       <Route path="/profile" component={Profile} />
+      <Route path="/kyc-questionnaire" component={KYCQuestionnaire} />
       <Route path={"/contact"} component={Contact} />
       <Route path={"/faq"} component={FAQ} />
       <Route path={"/about"} component={About} />
