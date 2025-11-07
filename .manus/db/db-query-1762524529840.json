@@ -1,0 +1,24 @@
+{
+  "query": "SELECT id, openId, name, email, role FROM users;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT id, openId, name, email, role FROM users;",
+  "rows": [
+    {
+      "id": "1",
+      "openId": "9GKap9sx5hZfrEFGkxSSpi",
+      "name": "Waleed Shaarawy",
+      "email": "waleed@uptown6october.com",
+      "role": "super_admin"
+    },
+    {
+      "id": "750038",
+      "openId": "YypR5FW9Q63bxjxSMvaKAQ",
+      "name": "Waleed Shaarawy",
+      "email": "waleed@emtelaak.com",
+      "role": "super_admin"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\temail\trole\n1\t9GKap9sx5hZfrEFGkxSSpi\tWaleed Shaarawy\twaleed@uptown6october.com\tsuper_admin\n750038\tYypR5FW9Q63bxjxSMvaKAQ\tWaleed Shaarawy\twaleed@emtelaak.com\tsuper_admin\n",
+  "stderr": "",
+  "execution_time_ms": 384
+}

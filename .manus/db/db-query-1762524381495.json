@@ -1,0 +1,19 @@
+{
+  "query": "SELECT id, openId, name, email, role, createdAt, lastSignedIn FROM users WHERE email = 'waleed@emtelaak.com' LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT id, openId, name, email, role, createdAt, lastSignedIn FROM users WHERE email = 'waleed@emtelaak.com' LIMIT 1;",
+  "rows": [
+    {
+      "id": "750038",
+      "openId": "YypR5FW9Q63bxjxSMvaKAQ",
+      "name": "Waleed Shaarawy",
+      "email": "waleed@emtelaak.com",
+      "role": "super_admin",
+      "createdAt": "2025-11-07 10:38:22",
+      "lastSignedIn": "2025-11-07 13:59:03"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\temail\trole\tcreatedAt\tlastSignedIn\n750038\tYypR5FW9Q63bxjxSMvaKAQ\tWaleed Shaarawy\twaleed@emtelaak.com\tsuper_admin\t2025-11-07 10:38:22\t2025-11-07 13:59:03\n",
+  "stderr": "",
+  "execution_time_ms": 403
+}
