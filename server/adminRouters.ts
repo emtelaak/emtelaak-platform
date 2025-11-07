@@ -3,7 +3,7 @@
  * These routes require admin role and are used by the admin dashboard
  */
 
-import { router, protectedProcedure } from "./_core/trpc";
+import { router, protectedProcedure, adminProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { storagePut } from './storage';
@@ -16,16 +16,7 @@ import {
   getUserProfile,
   getPlatformSetting,
   setPlatformSetting,
-} from "./db";
-import * as notificationHelpers from "./notifications";
-
-// Admin-only procedure that checks for admin role
-const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.user.role !== "admin") {
-    throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
-  }
-  return next({ ctx });
-});
+} from "./db";import * as notificationHelpers from "./notifications";
 
 export const adminRouter = router({
   // KYC Management

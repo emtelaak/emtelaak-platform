@@ -226,3 +226,15 @@
 - [x] Test and verify no React warnings in console
 - [x] Restart dev server to clear cached warnings
 - [x] Verify homepage displays correctly with no errors
+
+
+## Phase 59: Fix AuditLogViewer Key Prop Warning and Related Issues (Completed)
+- [x] Investigate AuditLogViewer component structure
+- [x] Identify nested data structure issue from getAuditLogs API
+- [x] Transform nested {log, user} structure to flat structure in AuditLogViewer
+- [x] Fix export functionality to use tRPC utils.fetch instead of .query
+- [x] Fix AdminPermissionsManager to use correct user properties (id, name, email)
+- [x] Fix AdminPermissionsManager to use correct mutation name (applyRoleTemplate)
+- [x] Fix adminRouters.ts to import adminProcedure instead of redefining it
+- [x] Verify homepage loads correctly
+- [ ] Note: Super-admin page still crashes - requires further investigation of other components

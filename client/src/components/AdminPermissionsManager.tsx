@@ -29,7 +29,7 @@ export default function AdminPermissionsManager() {
 
   const { data: permissionsList, isLoading, refetch } = trpc.adminPermissions.users.list.useQuery({});
   const { data: roleTemplates } = trpc.adminPermissions.roleTemplates.list.useQuery();
-  const applyTemplateMutation = trpc.adminPermissions.roleTemplates.applyToUser.useMutation({
+  const applyTemplateMutation = trpc.adminPermissions.roleTemplates.applyRoleTemplate.useMutation({
     onSuccess: () => {
       toast.success(
         language === "en"
@@ -135,19 +135,19 @@ export default function AdminPermissionsManager() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {permissionsList.map((userPerm, index) => (
-                  <TableRow key={`user-${userPerm.userId}-${index}`}>
+                {permissionsList.map((user, index) => (
+                  <TableRow key={`user-${user.id}-${index}`}>
                     <TableCell>
                       <div>
-                        <p className="font-medium">{userPerm.userName || "Unknown"}</p>
-                        <p className="text-sm text-muted-foreground">{userPerm.userEmail}</p>
+                        <p className="font-medium">{user.name || "Unknown"}</p>
+                        <p className="text-sm text-muted-foreground">{user.email}</p>
                       </div>
                     </TableCell>
                     <TableCell>
                       <Select
                         onValueChange={(value) => {
                           applyTemplateMutation.mutate({
-                            userId: userPerm.userId,
+                            userId: user.id,
                             templateId: parseInt(value),
                           });
                         }}
@@ -173,15 +173,15 @@ export default function AdminPermissionsManager() {
                       <TableCell key={perm.key} className="text-center">
                         <div className="flex justify-center">
                           <Switch
-                            checked={userPerm[perm.key as keyof typeof userPerm] as boolean || false}
+                            checked={user[perm.key as keyof typeof user] as boolean || false}
                             onCheckedChange={() =>
                               handlePermissionToggle(
-                                userPerm.userId,
+                                user.id,
                                 perm.key,
-                                userPerm[perm.key as keyof typeof userPerm] as boolean || false
+                                user[perm.key as keyof typeof user] as boolean || false
                               )
                             }
-                            disabled={updatingUserId === userPerm.userId}
+                            disabled={updatingUserId === user.id}
                           />
                         </div>
                       </TableCell>

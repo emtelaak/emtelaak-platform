@@ -29,14 +29,19 @@ export default function AuditLogViewer() {
   const [actionFilter, setActionFilter] = useState<string>("all");
   const [limit, setLimit] = useState(50);
   const [offset, setOffset] = useState(0);
+  const utils = trpc.useUtils();
 
   const { data: auditLogs, isLoading, refetch } = trpc.adminPermissions.auditLogs.list.useQuery({
     limit,
     offset,
   });
 
-  const exportMutation = trpc.adminPermissions.export.auditLogs.useMutation({
-    onSuccess: (data) => {
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExport = async () => {
+    try {
+      setIsExporting(true);
+      const data = await utils.adminPermissions.export.auditLogs.fetch({ limit: 1000 });
       // Create a blob from the CSV data
       const blob = new Blob([data.csv], { type: "text/csv" });
       const url = window.URL.createObjectURL(blob);
@@ -47,11 +52,11 @@ export default function AuditLogViewer() {
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-    },
-  });
-
-  const handleExport = () => {
-    exportMutation.mutate();
+    } catch (error) {
+      console.error("Export failed:", error);
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const getActionBadgeVariant = (action: string): "default" | "secondary" | "destructive" | "outline" => {
@@ -92,7 +97,20 @@ export default function AuditLogViewer() {
     return mapped ? (language === "en" ? mapped.en : mapped.ar) : action;
   };
 
-  const filteredLogs = auditLogs?.filter((log) => {
+  // Transform the nested structure to flat structure with null safety
+  const transformedLogs = auditLogs?.map((item) => ({
+    id: item?.log?.id || 0,
+    userId: item?.log?.userId || 0,
+    action: item?.log?.action || "",
+    targetType: item?.log?.targetType || null,
+    targetId: item?.log?.targetId || null,
+    details: item?.log?.details || null,
+    createdAt: item?.log?.createdAt || null,
+    userName: item?.user?.name || "Unknown",
+    userEmail: item?.user?.email || "",
+  })) || [];
+
+  const filteredLogs = transformedLogs?.filter((log) => {
     const matchesSearch =
       searchQuery === "" ||
       log.action?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -135,7 +153,7 @@ export default function AuditLogViewer() {
               </CardDescription>
             </div>
           </div>
-          <Button onClick={handleExport} disabled={exportMutation.isPending}>
+          <Button onClick={handleExport} disabled={isExporting}>
             <Download className="h-4 w-4 mr-2" />
             {language === "en" ? "Export CSV" : "تصدير CSV"}
           </Button>
