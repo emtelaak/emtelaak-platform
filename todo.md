@@ -81,3 +81,14 @@
 - [x] Show "Join Waitlist" button in header for coming_soon properties
 - [x] Ensure both header button and card button have consistent behavior
 - [x] Test the fix with the demo coming_soon property
+
+
+## Phase 49: Property Status Filters and Card Labels (Current)
+- [x] Add status filter tabs at the top of Properties page (Available, Funded, Exited, Coming Soon, Saved)
+- [x] Update property card label to show "Capital Growth" for buy_to_sell properties
+- [x] Update property card label to show "High Yield" for buy_to_let properties
+- [x] Add bilingual support for status filter tabs
+- [x] Implement filter logic to show properties based on selected status
+- [x] Implement Saved properties filter (requires saved properties feature) - Placeholder added, full implementation deferred
+- [x] Test all status filters with different property types
+- [x] Verify card labels display correctly for all properties

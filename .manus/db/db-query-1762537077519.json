@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO properties (id, name, description, addressLine1, city, country, propertyType, investmentType, totalValue, availableValue, sharePrice, totalShares, availableShares, expectedAppreciation, status, createdAt, updatedAt) VALUES (30002, 'Luxury Villa - North Coast', 'Premium beachfront villa with high appreciation potential. Perfect for capital growth investment.', 'Marina District', 'North Coast', 'Egypt', 'residential', 'buy_to_sell', 1200000000, 1200000000, 20000, 60000, 60000, 1500, 'available', NOW(), NOW());",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute INSERT INTO properties (id, name, description, addressLine1, city, country, propertyType, investmentType, totalValue, availableValue, sharePrice, totalShares, availableShares, expectedAppreciation, status, createdAt, updatedAt) VALUES (30002, 'Luxury Villa - North Coast', 'Premium beachfront villa with high appreciation potential. Perfect for capital growth investment.', 'Marina District', 'North Coast', 'Egypt', 'residential', 'buy_to_sell', 1200000000, 1200000000, 20000, 60000, 60000, 1500, 'available', NOW(), NOW());",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 398
+}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,7 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PROPERTY_TYPES, INVESTMENT_TYPES, APP_LOGO, APP_TITLE } from "@/const";
-import { Building2, MapPin, TrendingUp, Calendar, ArrowRight, Search } from "lucide-react";
+import { Building2, MapPin, TrendingUp, Calendar, ArrowRight, Search, Bookmark } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "wouter";
 import ROICalculator from "@/components/ROICalculator";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -16,6 +17,7 @@ import { formatCurrency as formatCurrencyUtil } from "@/lib/currency";
 
 export default function Properties() {
   const { language } = useLanguage();
+  const [statusFilter, setStatusFilter] = useState<string>("available");
   const [filters, setFilters] = useState({
     propertyType: undefined as string | undefined,
     investmentType: undefined as string | undefined,
@@ -23,7 +25,20 @@ export default function Properties() {
     maxValue: undefined as number | undefined,
   });
 
-  const { data: properties, isLoading } = trpc.properties.list.useQuery(filters);
+  const { data: allProperties, isLoading } = trpc.properties.list.useQuery(filters);
+
+  // Filter properties based on status
+  const properties = useMemo(() => {
+    if (!allProperties) return [];
+    
+    if (statusFilter === "saved") {
+      // TODO: Implement saved properties feature
+      // For now, return empty array
+      return [];
+    }
+    
+    return allProperties.filter(property => property.status === statusFilter);
+  }, [allProperties, statusFilter]);
 
   const formatCurrency = (cents: number) => {
     return formatCurrencyUtil(cents / 100, 'EGP', language);
@@ -63,6 +78,28 @@ export default function Properties() {
               </Link>
             </div>
           </div>
+
+          {/* Status Filter Tabs */}
+          <Tabs value={statusFilter} onValueChange={setStatusFilter} className="mb-6">
+            <TabsList className="grid grid-cols-5 w-full max-w-3xl">
+              <TabsTrigger value="available">
+                {language === "en" ? "Available" : "متاح"}
+              </TabsTrigger>
+              <TabsTrigger value="funded">
+                {language === "en" ? "Funded" : "ممول"}
+              </TabsTrigger>
+              <TabsTrigger value="exited">
+                {language === "en" ? "Exited" : "خرج"}
+              </TabsTrigger>
+              <TabsTrigger value="coming_soon">
+                {language === "en" ? "Coming Soon" : "قريباً"}
+              </TabsTrigger>
+              <TabsTrigger value="saved">
+                <Bookmark className="h-4 w-4 mr-1" />
+                {language === "en" ? "Saved" : "محفوظ"}
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
 
           {/* Filters */}
           <div className="grid md:grid-cols-4 gap-4">
@@ -141,7 +178,7 @@ export default function Properties() {
               </Card>
             ))}
           </div>
-        ) : properties && properties.length > 0 ? (
+        ) : allProperties && allProperties.length > 0 ? (
           <>
             <div className="mb-6 text-sm text-muted-foreground">
               Showing {properties.length} {properties.length === 1 ? 'property' : 'properties'}
@@ -170,7 +207,9 @@ export default function Properties() {
                           </Badge>
                         )}
                         <Badge className="bg-primary text-primary-foreground">
-                          {property.investmentType === "buy_to_let" ? "High Yield" : "Capital Growth"}
+                          {property.investmentType === "buy_to_let" 
+                            ? (language === "en" ? "High Yield" : "عائد مرتفع") 
+                            : (language === "en" ? "Capital Growth" : "نمو رأس المال")}
                         </Badge>
                       </div>
                     </div>
