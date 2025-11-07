@@ -71,15 +71,27 @@ export default function Contact() {
         </div>
       </nav>
 
-      {/* Contact Section */}
-      <div className="container py-16">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4">Get in Touch</h1>
-            <p className="text-xl text-muted-foreground">
+      {/* Hero Section - Matching emtelaak.com design */}
+      <section className="relative overflow-hidden py-24 md:py-32" style={{
+        backgroundImage: 'linear-gradient(rgba(0, 43, 73, 0.9), rgba(0, 43, 73, 0.9)), url("https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1920&q=80")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+      }}>
+        <div className="container">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
+              Get in Touch
+            </h1>
+            <p className="text-xl text-white/90 leading-relaxed">
               Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <div className="container py-16">
+        <div className="max-w-5xl mx-auto">
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {/* Contact Info Cards */}

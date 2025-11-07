@@ -54,14 +54,18 @@ export default function About() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-primary/10 to-background py-16">
+      {/* Hero Section - Matching emtelaak.com design */}
+      <section className="relative overflow-hidden py-24 md:py-32" style={{
+        backgroundImage: 'linear-gradient(rgba(0, 43, 73, 0.85), rgba(0, 43, 73, 0.85)), url("https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&q=80")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+      }}>
         <div className="container">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
               {t.about.title}
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-xl text-white/90 leading-relaxed">
               {t.about.subtitle}
             </p>
           </div>
