@@ -12,6 +12,7 @@ export interface Currency {
 
 export const SUPPORTED_CURRENCIES: Record<string, Currency> = {
   USD: { code: "USD", name: "US Dollar", symbol: "$", nameAr: "دولار أمريكي" },
+  EGP: { code: "EGP", name: "Egyptian Pound", symbol: "ج.م", nameAr: "جنيه مصري" },
   EUR: { code: "EUR", name: "Euro", symbol: "€", nameAr: "يورو" },
   GBP: { code: "GBP", name: "British Pound", symbol: "£", nameAr: "جنيه إسترليني" },
   AED: { code: "AED", name: "UAE Dirham", symbol: "د.إ", nameAr: "درهم إماراتي" },
@@ -53,6 +54,7 @@ async function fetchExchangeRates(): Promise<Record<string, number>> {
 function getFallbackRates(): Record<string, number> {
   return {
     USD: 1.0,
+    EGP: 49.50, // Egyptian Pound (approximate rate)
     EUR: 0.92,
     GBP: 0.79,
     AED: 3.67,
@@ -89,13 +91,20 @@ export async function getExchangeRates(): Promise<Record<string, number>> {
 
 /**
  * Convert amount from USD to target currency
+ * @param customRate Optional custom exchange rate to override automatic rate
  */
 export async function convertCurrency(
   amountUSD: number,
-  targetCurrency: string
+  targetCurrency: string,
+  customRate?: number
 ): Promise<number> {
   if (targetCurrency === "USD") {
     return amountUSD;
+  }
+
+  // Use custom rate if provided
+  if (customRate !== undefined && customRate > 0) {
+    return amountUSD * customRate;
   }
 
   const rates = await getExchangeRates();
@@ -156,4 +165,47 @@ export async function refreshExchangeRates(): Promise<void> {
   exchangeRatesCache = null;
   lastUpdated = null;
   await getExchangeRates();
+}
+
+/**
+ * Fetch historical exchange rates for the past 30 days
+ * Returns array of {date, rate} objects
+ */
+export async function getHistoricalRates(
+  targetCurrency: string,
+  days: number = 30
+): Promise<Array<{ date: string; rate: number }>> {
+  if (targetCurrency === "USD") {
+    return [];
+  }
+
+  try {
+    // Generate dates for the past N days
+    const historicalData: Array<{ date: string; rate: number }> = [];
+    const today = new Date();
+    
+    // For demo purposes, generate simulated historical data
+    // In production, this would fetch from a real API
+    const currentRates = await getExchangeRates();
+    const baseRate = currentRates[targetCurrency] || 1;
+    
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      
+      // Simulate slight variations (±3% from current rate)
+      const variation = (Math.random() - 0.5) * 0.06; // -3% to +3%
+      const rate = baseRate * (1 + variation);
+      
+      historicalData.push({
+        date: date.toISOString().split('T')[0],
+        rate: Number(rate.toFixed(4)),
+      });
+    }
+    
+    return historicalData;
+  } catch (error) {
+    console.error("Error fetching historical rates:", error);
+    return [];
+  }
 }

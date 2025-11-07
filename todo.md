@@ -728,3 +728,243 @@
 - [x] Fix the error by adding kyc section to both English and Arabic locales
 - [x] Test profile page functionality
 - [x] Save checkpoint with bug fix
+
+
+## Phase 58: Fix Profile Preferences Validation Error (COMPLETED)
+- [x] Identify validation issue in profile update API
+- [x] Fix validation schema to allow null/optional values for name fields
+- [x] Test language and currency changes without errors
+- [x] Save checkpoint with validation fix
+
+
+## Phase 59: Add Recent Activity Section to Profile Page (COMPLETED)
+- [x] Design activity data structure (investments, KYC updates, profile changes, etc.)
+- [x] Create database query to fetch user's recent activities
+- [x] Create tRPC endpoint for recent activity
+- [x] Build RecentActivity component with timeline UI
+- [x] Add bilingual translations for activity types and messages
+- [x] Integrate activity section into profile Overview tab
+- [x] Test recent activity display with sample data
+- [x] Save checkpoint with recent activity feature
+
+
+## Phase 60: Review and Fix RTL Layout Support (COMPLETED)
+- [x] Review current RTL implementation in LanguageContext
+- [x] Audit all pages for RTL layout issues
+- [x] Check component alignment and spacing in RTL mode
+- [x] Fix navigation, forms, and buttons for RTL
+- [x] Add RTL-specific CSS adjustments for icons and margins
+- [x] Test all pages in Arabic language mode
+- [x] Ensure proper text alignment and direction
+- [x] Save checkpoint with RTL improvements
+
+
+## Phase 61: Add EGP Currency Support to ROI Calculator (COMPLETED)
+- [x] Locate ROI calculator component
+- [x] Add currency selector (USD/EGP) to calculator UI
+- [x] Implement currency conversion logic
+- [x] Update all calculator displays with selected currency
+- [x] Add currency formatting for EGP
+- [x] Test calculator with both currencies
+- [x] Save checkpoint with EGP support
+
+
+## Phase 62: Add Custom Exchange Rate Input to ROI Calculator (COMPLETED)
+- [x] Update currency conversion logic to accept custom rates
+- [x] Add custom exchange rate input field to calculator UI
+- [x] Add toggle between automatic and custom rate modes
+- [x] Display current automatic rate for reference
+- [x] Add validation for custom rate input
+- [x] Update translations for custom rate labels
+- [x] Test custom exchange rate functionality
+- [x] Save checkpoint with custom rate feature
+
+
+## Phase 63: Add Historical Exchange Rate Trend Chart (COMPLETED)
+- [x] Create function to fetch historical exchange rate data
+- [x] Build rate trend chart component using Recharts
+- [x] Add dialog/popup to display the chart
+- [x] Add chart icon button next to custom rate input
+- [x] Display 30-day historical trend
+- [x] Add translations for chart title and labels
+- [x] Test historical rate chart functionality
+- [x] Save checkpoint with rate trend feature
+
+
+## Phase 64: Currency API Integration Review (COMPLETED)
+- [x] Review current exchangerate-api.com integration
+- [x] Verify automatic rate caching (1-hour cache)
+- [x] Confirm auto-refresh when cache expires
+- [x] Test manual refresh button functionality
+- [x] Verify fallback rates if API unavailable
+- [x] Document existing production-ready implementation
+- [x] Keep current working implementation as-is
+
+
+## Phase 65: Create Unified Super Admin Dashboard (COMPLETED)
+- [x] Create SuperAdminDashboard page component
+- [x] Add quick access cards to Admin Dashboard, CRM, KYC Review
+- [x] Add platform content management section
+- [x] Create backend tRPC endpoints for content editing (placeholder for future)
+- [x] Add ability to edit homepage content, about page, etc. (placeholder for future)
+- [x] Add route at /super-admin for unified dashboard
+- [x] Update navigation to show super admin link for super_admin role
+- [x] Test all admin features from unified dashboard
+- [x] Save checkpoint with super admin dashboard
+
+
+## Phase 66: Add User Management to Super Admin Dashboard (COMPLETED)
+- [x] Create backend tRPC endpoints for user CRUD operations
+- [x] Build UserManagement component with user list table
+- [x] Add create user dialog with form (email, name, role)
+- [x] Add edit user dialog with form
+- [x] Add delete user confirmation dialog
+- [x] Add role management (user, admin, super_admin)
+- [x] Integrate user management section into super admin dashboard
+- [x] Add search and filter functionality
+- [x] Test user management operations
+- [x] Save checkpoint with user management feature
+
+
+## Phase 67: Add Bulk CSV Import to User Management (COMPLETED)
+- [x] Create backend tRPC endpoint for bulk user import
+- [x] Add CSV parsing logic with validation
+- [x] Build CSV upload dialog component
+- [x] Add file upload with drag-and-drop support
+- [x] Add import preview table showing parsed users
+- [x] Add error handling and validation feedback
+- [x] Show import progress and results
+- [x] Add CSV template download option
+- [x] Integrate bulk import button into user management
+- [x] Test CSV import with sample data
+- [x] Save checkpoint with bulk import feature
+
+
+## Phase 68: Add Edit Content and Bulk Upload Permissions (COMPLETED)
+- [x] Add canEditContent permission to database schema
+- [x] Add canBulkUploadUsers permission to database schema
+- [x] Create comprehensive adminPermissions table with 11 granular permissions
+- [x] Update admin permissions router to include new permissions
+- [x] Add permission checks to bulk upload users feature
+- [x] Create AdminPermissionsManager component with toggle controls
+- [x] Add permission management UI to Super Admin Dashboard
+- [x] Test permission enforcement for bulk upload
+- [x] Save checkpoint with granular permissions system
+
+
+## Phase 69: Add Role-Based Permission Templates (Current)
+- [ ] Create permissionRoleTemplates table in database
+- [ ] Define predefined role templates (Content Manager, KYC Reviewer, Financial Admin, etc.)
+- [ ] Add backend tRPC endpoints for role template CRUD operations
+- [ ] Build RoleTemplateManager UI component
+- [ ] Add role template selector to user permissions
+- [ ] Allow applying role template to multiple users at once
+- [ ] Add ability to create custom role templates
+- [ ] Test role template assignment and permission inheritance
+- [ ] Save checkpoint with role-based permission system
+
+
+## Phase 70: Extend Audit Logging for Content Edits (COMPLETED)
+- [x] Review current audit logging implementation
+- [x] Create Audit Log viewer page in Super Admin Dashboard
+- [x] Add filtering by action type (user, role, template, permissions, property, settings, content)
+- [x] Add search functionality for audit logs (by action, user name)
+- [x] Add export audit logs to CSV functionality
+- [x] Display detailed change information with JSON details viewer
+- [x] Add pagination for audit logs
+- [x] Add color-coded action badges
+- [x] Add bilingual support for all audit log labels
+- [x] Test audit logging viewer functionality
+- [x] Save checkpoint with audit log viewer
+
+
+## Phase 71: Add Email Notifications for Critical Permission Changes (Current)
+- [ ] Define critical actions (super_admin assignment, role changes, bulk permissions)
+- [ ] Create email notification helper for audit events
+- [ ] Design email template for permission change alerts
+- [ ] Get list of all super admin users for notifications
+- [ ] Integrate notifications into role change endpoint
+- [ ] Integrate notifications into permission assignment endpoint
+- [ ] Integrate notifications into bulk user creation endpoint
+- [ ] Add notification preferences for super admins (opt-in/opt-out)
+- [ ] Test email notifications for critical changes
+- [ ] Save checkpoint with email notification feature
+
+
+## Customer Care Help Desk System
+- [x] Design database schema for help desk (tickets, chat_conversations, chat_messages, knowledge_base_articles, ticket_categories)
+- [x] Create backend tRPC API for ticket management (create, update, assign, resolve, close)
+- [x] Create backend tRPC API for live chat (conversations, messages, agent assignment)
+- [x] Create backend tRPC API for knowledge base (articles, categories, search)
+- [x] Build customer help desk portal with ticket submission form
+- [x] Build customer chat interface with real-time messaging
+- [x] Create agent dashboard for support staff to manage tickets and chats
+- [x] Implement ticket assignment and routing system
+- [x] Add ticket priority and status management
+- [x] Create knowledge base self-service portal
+- [x] Implement live chat with WebSocket/polling for real-time updates
+- [x] Add chat typing indicators and read receipts
+- [x] Create internal help desk for employees and fundraisers
+- [x] Add ticket categories (Customer Support, Technical, Billing, KYC, Investment)
+- [x] Implement ticket search and filtering
+- [ ] Add chat history and transcript export
+- [ ] Create SLA tracking and response time metrics
+- [x] Add canned responses for common questions
+- [ ] Implement file attachment support for tickets and chat
+- [ ] Add email notifications for ticket updates
+- [x] Create agent performance dashboard
+- [x] Add customer satisfaction ratings
+
+
+## Real-Time Chat Translation Feature
+- [x] Add language preference field to users table
+- [x] Add translation fields to chat_messages table (detected_language, translations JSON)
+- [x] Create translation service using LLM API for multi-language support
+- [x] Implement language detection for incoming messages
+- [x] Add translation endpoint to chat router
+- [x] Update chat message creation to include auto-translation
+- [x] Enhance LiveChat component to display original and translated messages
+- [x] Add language preference selector in user profile
+- [x] Add translation toggle in chat interface (show original/translated)
+- [x] Support major languages (English, Arabic, Spanish, French, German, Chinese, Japanese, Korean, Russian, Portuguese)
+- [x] Add translation indicator badges to messages
+- [ ] Implement caching for translations to reduce API calls
+- [x] Test translation accuracy and performance
+- [x] Save checkpoint with translation feature
+
+
+## Enhanced Searchable Knowledge Base
+- [ ] Add search analytics table to track search queries and results
+- [x] Implement fuzzy search with relevance scoring
+- [x] Create popular articles endpoint (most viewed, most helpful)
+- [x] Add related articles suggestion algorithm
+- [ ] Implement search suggestions/autocomplete
+- [ ] Add article tags for better categorization
+- [ ] Create trending topics feature
+- [x] Build enhanced knowledge base search UI with filters
+- [x] Add "Was this helpful?" feedback on articles
+- [x] Integrate KB suggestions into chat widget before starting conversation
+- [x] Show popular articles on help desk homepage
+- [ ] Add breadcrumb navigation for KB articles
+- [x] Implement article rating system
+- [ ] Add search history for logged-in users
+- [ ] Create KB admin panel for content management
+- [x] Test search accuracy and performance
+- [x] Save checkpoint with enhanced KB
+
+
+## Bundle Size Optimization
+- [x] Analyze bundle composition with rollup-plugin-visualizer
+- [x] Identify top 10 largest dependencies
+- [x] Implement code splitting for admin/agent dashboards
+- [x] Add lazy loading for heavy components (KnowledgeBase, AgentDashboard, CRM)
+- [ ] Replace heavy dependencies with lighter alternatives
+- [x] Remove unused Radix UI components (9 removed, kept 4 used ones)
+- [ ] Optimize Lucide icons (use tree-shaking)
+- [x] Configure manual chunks in vite.config
+- [x] Enable gzip/brotli compression
+- [ ] Implement dynamic imports for translation service
+- [ ] Optimize tRPC bundle size
+- [ ] Remove duplicate dependencies
+- [x] Test bundle size reduction
+- [x] Document optimization results

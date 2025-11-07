@@ -286,6 +286,11 @@ export const ar: Translation = {
       completeDesc: "أكمل استبيان التحقق لفتح جميع ميزات الاستثمار والبدء في بناء محفظتك العقارية.",
       completeButton: "إكمال استبيان التحقق",
     },
+    recentActivity: {
+      title: "النشاط الأخير",
+      subtitle: "أحدث إجراءاتك ومعاملاتك",
+      noActivity: "لا يوجد نشاط حديث لعرضه",
+    },
   },
 
   // Contact Page

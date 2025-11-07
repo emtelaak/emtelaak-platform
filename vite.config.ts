@@ -5,9 +5,21 @@ import fs from "node:fs";
 import path from "path";
 import { defineConfig } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
+import { visualizer } from "rollup-plugin-visualizer";
 
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime()];
+const plugins = [
+  react(),
+  tailwindcss(),
+  jsxLocPlugin(),
+  vitePluginManusRuntime(),
+  visualizer({
+    filename: "dist/stats.html",
+    open: false,
+    gzipSize: true,
+    brotliSize: true,
+  }),
+];
 
 export default defineConfig({
   plugins,
@@ -24,6 +36,37 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Vendor chunks
+          'react-vendor': ['react', 'react-dom', 'react/jsx-runtime'],
+          'router': ['wouter'],
+          'trpc': ['@trpc/client', '@trpc/react-query', '@tanstack/react-query'],
+          
+          // UI library chunks
+          'radix-ui': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-select',
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-accordion',
+            '@radix-ui/react-alert-dialog',
+          ],
+          
+          // Feature chunks (lazy loaded)
+          'admin': [
+            './client/src/pages/AdminDashboard.tsx',
+            './client/src/pages/SuperAdminDashboard.tsx',
+          ],
+          'helpdesk': [
+            './client/src/pages/HelpDesk.tsx',
+            './client/src/pages/AgentDashboard.tsx',
+            './client/src/components/LiveChat.tsx',
+          ],
+        },
+      },
+    },
   },
   server: {
     host: true,

@@ -1,13 +1,14 @@
 import { eq, and, desc, asc, sql, gte, lte, inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
-  InsertUser, users, kycProgress, InsertKycProgress,
+  InsertUser, users, adminPermissions, permissionRoleTemplates, kycProgress, InsertKycProgress,
   userProfiles,
   platformSettings,
   InsertUserProfile,
   kycDocuments,
   InsertKycDocument,
   kycQuestionnaires,
+  exchangeRates,
   InsertKycQuestionnaire,
   verificationStatus,
   properties,
@@ -671,3 +672,457 @@ export async function setPlatformSetting(key: string, value: string, updatedBy: 
 
 // Type exports for convenience
 export type { User, Property, Investment };
+
+
+export async function getUserRecentActivity(userId: number, limit: number = 10) {
+  const db = await getDb();
+  if (!db) return [];
+
+  // Gather activities from multiple sources
+  const activities: Array<{
+    id: string;
+    type: 'investment' | 'transaction' | 'kyc_update' | 'profile_update' | 'distribution';
+    description: string;
+    amount?: number;
+    currency?: string;
+    status?: string;
+    timestamp: Date;
+  }> = [];
+
+  // Recent investments
+  const recentInvestments = await db
+    .select({
+      id: investments.id,
+      amount: investments.amount,
+      shares: investments.shares,
+      status: investments.status,
+      investmentDate: investments.investmentDate,
+      propertyId: investments.propertyId,
+    })
+    .from(investments)
+    .where(eq(investments.userId, userId))
+    .orderBy(desc(investments.investmentDate))
+    .limit(5);
+
+  for (const inv of recentInvestments) {
+    activities.push({
+      id: `inv-${inv.id}`,
+      type: 'investment',
+      description: `Invested in property #${inv.propertyId}`,
+      amount: inv.amount,
+      currency: 'USD',
+      status: inv.status,
+      timestamp: inv.investmentDate,
+    });
+  }
+
+  // Recent transactions
+  const recentTransactions = await db
+    .select()
+    .from(transactions)
+    .where(eq(transactions.userId, userId))
+    .orderBy(desc(transactions.createdAt))
+    .limit(5);
+
+  for (const txn of recentTransactions) {
+    activities.push({
+      id: `txn-${txn.id}`,
+      type: 'transaction',
+      description: `${txn.type} transaction`,
+      amount: txn.amount,
+      currency: txn.currency,
+      status: txn.status,
+      timestamp: txn.createdAt,
+    });
+  }
+
+  // Recent income distributions
+  const userInvestments = await db
+    .select({ id: investments.id })
+    .from(investments)
+    .where(eq(investments.userId, userId));
+
+  if (userInvestments.length > 0) {
+    const investmentIds = userInvestments.map(i => i.id);
+    const recentDistributions = await db
+      .select()
+      .from(incomeDistributions)
+      .where(sql`${incomeDistributions.investmentId} IN (${sql.join(investmentIds.map(id => sql`${id}`), sql`, `)})`)
+      .orderBy(desc(incomeDistributions.distributionDate))
+      .limit(5);
+
+    for (const dist of recentDistributions) {
+      activities.push({
+        id: `dist-${dist.id}`,
+        type: 'distribution',
+        description: `Received ${dist.distributionType} distribution`,
+        amount: dist.amount,
+        currency: 'USD',
+        status: dist.status,
+        timestamp: dist.distributionDate,
+      });
+    }
+  }
+
+  // Recent KYC updates
+  const kycUpdates = await db
+    .select()
+    .from(kycQuestionnaires)
+    .where(eq(kycQuestionnaires.userId, userId))
+    .orderBy(desc(kycQuestionnaires.updatedAt))
+    .limit(2);
+
+  for (const kyc of kycUpdates) {
+    activities.push({
+      id: `kyc-${kyc.id}`,
+      type: 'kyc_update',
+      description: `KYC questionnaire ${kyc.status}`,
+      status: kyc.status,
+      timestamp: kyc.updatedAt,
+    });
+  }
+
+  // Recent profile updates
+  const profileUpdates = await db
+    .select()
+    .from(userProfiles)
+    .where(eq(userProfiles.userId, userId))
+    .orderBy(desc(userProfiles.updatedAt))
+    .limit(1);
+
+  if (profileUpdates.length > 0 && profileUpdates[0].updatedAt) {
+    activities.push({
+      id: `profile-${profileUpdates[0].id}`,
+      type: 'profile_update',
+      description: 'Updated profile information',
+      timestamp: profileUpdates[0].updatedAt,
+    });
+  }
+
+  // Sort all activities by timestamp and return limited results
+  return activities
+    .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+    .slice(0, limit);
+}
+
+
+// ============================================
+// EXCHANGE RATES
+// ============================================
+
+export async function getLatestExchangeRates(): Promise<Record<string, number>> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get exchange rates: database not available");
+    return {};
+  }
+
+  try {
+    const rates = await db
+      .select()
+      .from(exchangeRates)
+      .where(eq(exchangeRates.baseCurrency, "USD"))
+      .orderBy(desc(exchangeRates.fetchedAt))
+      .limit(20); // Get latest rate for each currency
+
+    const ratesMap: Record<string, number> = { USD: 1.0 };
+    
+    // Use the most recent rate for each currency
+    const seenCurrencies = new Set<string>();
+    for (const rate of rates) {
+      if (!seenCurrencies.has(rate.targetCurrency)) {
+        ratesMap[rate.targetCurrency] = Number(rate.rate);
+        seenCurrencies.add(rate.targetCurrency);
+      }
+    }
+
+    return ratesMap;
+  } catch (error) {
+    console.error("[Database] Failed to get exchange rates:", error);
+    return {};
+  }
+}
+
+export async function saveExchangeRates(rates: Record<string, number>, source: string = "exchangerate-api.com"): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot save exchange rates: database not available");
+    return;
+  }
+
+  try {
+    const now = new Date();
+    const rateEntries = Object.entries(rates)
+      .filter(([currency]) => currency !== "USD")
+      .map(([currency, rate]) => ({
+        baseCurrency: "USD",
+        targetCurrency: currency,
+        rate: rate.toString(),
+        source,
+        fetchedAt: now,
+        createdAt: now,
+      }));
+
+    if (rateEntries.length > 0) {
+      await db.insert(exchangeRates).values(rateEntries);
+      console.log(`[Database] Saved ${rateEntries.length} exchange rates`);
+    }
+  } catch (error) {
+    console.error("[Database] Failed to save exchange rates:", error);
+    throw error;
+  }
+}
+
+export async function fetchAndSaveExchangeRates(): Promise<Record<string, number>> {
+  try {
+    const response = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+    if (!response.ok) {
+      throw new Error("Failed to fetch exchange rates from API");
+    }
+    const data = await response.json();
+    const rates = data.rates as Record<string, number>;
+    
+    await saveExchangeRates(rates, "exchangerate-api.com");
+    return rates;
+  } catch (error) {
+    console.error("[Exchange Rates] Failed to fetch and save rates:", error);
+    throw error;
+  }
+}
+
+
+// Admin user management functions
+export async function getAllUsers(): Promise<User[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get users: database not available");
+    return [];
+  }
+
+  try {
+    const allUsers = await db.select().from(users).orderBy(desc(users.createdAt));
+    return allUsers;
+  } catch (error) {
+    console.error("[Database] Failed to get users:", error);
+    return [];
+  }
+}
+
+export async function updateUserById(id: number, updates: Partial<InsertUser>): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot update user: database not available");
+    return;
+  }
+
+  try {
+    await db.update(users).set(updates).where(eq(users.id, id));
+    console.log(`[Database] Updated user ${id}`);
+  } catch (error) {
+    console.error("[Database] Failed to update user:", error);
+    throw error;
+  }
+}
+
+export async function deleteUserById(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot delete user: database not available");
+    return;
+  }
+
+  try {
+    await db.delete(users).where(eq(users.id, id));
+    console.log(`[Database] Deleted user ${id}`);
+  } catch (error) {
+    console.error("[Database] Failed to delete user:", error);
+    throw error;
+  }
+}
+
+export async function createUser(user: InsertUser): Promise<User> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  try {
+    const result = await db.insert(users).values(user);
+    const insertId = Number(result[0].insertId);
+    const newUser = await db.select().from(users).where(eq(users.id, insertId)).limit(1);
+    return newUser[0];
+  } catch (error) {
+    console.error("[Database] Failed to create user:", error);
+    throw error;
+  }
+}
+
+
+export async function bulkCreateUsers(users: InsertUser[]): Promise<{ success: number; failed: number; errors: string[] }> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  let success = 0;
+  let failed = 0;
+  const errors: string[] = [];
+
+  for (const user of users) {
+    try {
+      await db.insert(users).values(user);
+      success++;
+    } catch (error: any) {
+      failed++;
+      errors.push(`Failed to create user ${user.email || user.openId}: ${error.message}`);
+    }
+  }
+
+  return { success, failed, errors };
+}
+
+
+// ============================================
+// ADMIN PERMISSIONS
+// ============================================
+
+export async function getAdminPermissions(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const result = await db
+    .select()
+    .from(adminPermissions)
+    .where(eq(adminPermissions.userId, userId))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function upsertAdminPermissions(userId: number, permissions: Partial<typeof adminPermissions.$inferInsert>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const existing = await getAdminPermissions(userId);
+
+  if (existing) {
+    await db
+      .update(adminPermissions)
+      .set({ ...permissions, updatedAt: new Date() })
+      .where(eq(adminPermissions.userId, userId));
+  } else {
+    await db.insert(adminPermissions).values({
+      userId,
+      ...permissions,
+    });
+  }
+
+  return await getAdminPermissions(userId);
+}
+
+export async function getAllAdminPermissions() {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db
+    .select({
+      id: adminPermissions.id,
+      userId: adminPermissions.userId,
+      userName: users.name,
+      userEmail: users.email,
+      canManageUsers: adminPermissions.canManageUsers,
+      canBulkUploadUsers: adminPermissions.canBulkUploadUsers,
+      canEditContent: adminPermissions.canEditContent,
+      canManageProperties: adminPermissions.canManageProperties,
+      canReviewKYC: adminPermissions.canReviewKYC,
+      canApproveInvestments: adminPermissions.canApproveInvestments,
+      canManageTransactions: adminPermissions.canManageTransactions,
+      canViewFinancials: adminPermissions.canViewFinancials,
+      canAccessCRM: adminPermissions.canAccessCRM,
+      canViewAnalytics: adminPermissions.canViewAnalytics,
+      canManageSettings: adminPermissions.canManageSettings,
+      createdAt: adminPermissions.createdAt,
+      updatedAt: adminPermissions.updatedAt,
+    })
+    .from(adminPermissions)
+    .leftJoin(users, eq(adminPermissions.userId, users.id));
+}
+
+
+// ============================================
+// PERMISSION ROLE TEMPLATES
+// ============================================
+
+export async function getAllRoleTemplates() {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db.select().from(permissionRoleTemplates).orderBy(asc(permissionRoleTemplates.name));
+}
+
+export async function getRoleTemplateById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const result = await db
+    .select()
+    .from(permissionRoleTemplates)
+    .where(eq(permissionRoleTemplates.id, id))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function createRoleTemplate(template: typeof permissionRoleTemplates.$inferInsert) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(permissionRoleTemplates).values(template);
+  return await getRoleTemplateById(Number(result.insertId));
+}
+
+export async function updateRoleTemplate(id: number, template: Partial<typeof permissionRoleTemplates.$inferInsert>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db
+    .update(permissionRoleTemplates)
+    .set({ ...template, updatedAt: new Date() })
+    .where(eq(permissionRoleTemplates.id, id));
+
+  return await getRoleTemplateById(id);
+}
+
+export async function deleteRoleTemplate(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Check if it's a system template
+  const template = await getRoleTemplateById(id);
+  if (template?.isSystem) {
+    throw new Error("Cannot delete system templates");
+  }
+
+  await db.delete(permissionRoleTemplates).where(eq(permissionRoleTemplates.id, id));
+}
+
+export async function applyRoleTemplateToUser(userId: number, templateId: number) {
+  const template = await getRoleTemplateById(templateId);
+  if (!template) throw new Error("Template not found");
+
+  const permissions = {
+    canManageUsers: template.canManageUsers,
+    canBulkUploadUsers: template.canBulkUploadUsers,
+    canEditContent: template.canEditContent,
+    canManageProperties: template.canManageProperties,
+    canReviewKYC: template.canReviewKYC,
+    canApproveInvestments: template.canApproveInvestments,
+    canManageTransactions: template.canManageTransactions,
+    canViewFinancials: template.canViewFinancials,
+    canAccessCRM: template.canAccessCRM,
+    canViewAnalytics: template.canViewAnalytics,
+    canManageSettings: template.canManageSettings,
+  };
+
+  return await upsertAdminPermissions(userId, permissions);
+}

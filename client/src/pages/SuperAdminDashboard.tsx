@@ -1,0 +1,317 @@
+import { useAuth } from "@/_core/hooks/useAuth";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
+import {
+  Settings,
+  Users,
+  FileText,
+  BarChart3,
+  Shield,
+  Edit,
+  Database,
+  TrendingUp,
+  Mail,
+} from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import UserManagement from "@/components/UserManagement";
+import AdminPermissionsManager from "@/components/AdminPermissionsManager";
+import RoleTemplateManager from "@/components/RoleTemplateManager";
+import AuditLogViewer from "@/components/AuditLogViewer";
+
+export default function SuperAdminDashboard() {
+  const { user, loading } = useAuth();
+  const { language, t } = useLanguage();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">
+            {language === "en" ? "Loading..." : "جاري التحميل..."}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (user?.role !== "super_admin") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-muted/30">
+        <Card className="max-w-md">
+          <CardHeader>
+            <CardTitle>
+              {language === "en" ? "Access Denied" : "تم رفض الوصول"}
+            </CardTitle>
+            <CardDescription>
+              {language === "en"
+                ? "You need super admin privileges to access this page"
+                : "تحتاج إلى صلاحيات المسؤول الأعلى للوصول إلى هذه الصفحة"}
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    );
+  }
+
+  const adminSections = [
+    {
+      title: language === "en" ? "Admin Dashboard" : "لوحة الإدارة",
+      description: language === "en" 
+        ? "View platform statistics, user analytics, and system health" 
+        : "عرض إحصائيات المنصة وتحليلات المستخدمين وصحة النظام",
+      icon: BarChart3,
+      link: "/admin/dashboard",
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
+    },
+    {
+      title: language === "en" ? "CRM Dashboard" : "لوحة إدارة العملاء",
+      description: language === "en"
+        ? "Manage customer relationships, leads, and communications"
+        : "إدارة علاقات العملاء والعملاء المحتملين والاتصالات",
+      icon: Users,
+      link: "/crm",
+      color: "text-green-600",
+      bgColor: "bg-green-50",
+    },
+    {
+      title: language === "en" ? "KYC Review" : "مراجعة التحقق من الهوية",
+      description: language === "en"
+        ? "Review and approve KYC submissions and documents"
+        : "مراجعة والموافقة على طلبات التحقق من الهوية والمستندات",
+      icon: Shield,
+      link: "/admin/kyc-review",
+      color: "text-purple-600",
+      bgColor: "bg-purple-50",
+    },
+    {
+      title: language === "en" ? "Platform Content" : "محتوى المنصة",
+      description: language === "en"
+        ? "Edit homepage, about page, and other platform content"
+        : "تحرير الصفحة الرئيسية وصفحة حول وغيرها من محتوى المنصة",
+      icon: Edit,
+      link: "#content",
+      color: "text-orange-600",
+      bgColor: "bg-orange-50",
+      action: () => {
+        document.getElementById("content-management")?.scrollIntoView({ behavior: "smooth" });
+      },
+    },
+    {
+      title: language === "en" ? "Platform Settings" : "إعدادات المنصة",
+      description: language === "en"
+        ? "Configure platform settings, features, and integrations"
+        : "تكوين إعدادات المنصة والميزات والتكاملات",
+      icon: Settings,
+      link: "/admin/settings",
+      color: "text-gray-600",
+      bgColor: "bg-gray-50",
+    },
+    {
+      title: language === "en" ? "Email Notifications" : "إشعارات البريد الإلكتروني",
+      description: language === "en"
+        ? "Configure email notifications for security alerts"
+        : "تكوين إشعارات البريد الإلكتروني لتنبيهات الأمان",
+      icon: Mail,
+      link: "/admin/email-settings",
+      color: "text-indigo-600",
+      bgColor: "bg-indigo-50",
+    },
+    {
+      title: language === "en" ? "Database Management" : "إدارة قاعدة البيانات",
+      description: language === "en"
+        ? "View and manage database records directly"
+        : "عرض وإدارة سجلات قاعدة البيانات مباشرة",
+      icon: Database,
+      link: "#",
+      color: "text-red-600",
+      bgColor: "bg-red-50",
+      external: true,
+      externalNote: language === "en" 
+        ? "Access via Management UI → Database panel" 
+        : "الوصول عبر واجهة الإدارة ← لوحة قاعدة البيانات",
+    },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2">
+            {language === "en" ? "Super Admin Control Center" : "مركز التحكم للمسؤول الأعلى"}
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            {language === "en"
+              ? "Manage all aspects of the Emtelaak platform from one central location"
+              : "إدارة جميع جوانب منصة إمتلاك من موقع مركزي واحد"}
+          </p>
+        </div>
+
+        {/* Quick Access Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {adminSections.map((section, index) => (
+            <Card key={index} className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className={`w-12 h-12 rounded-lg ${section.bgColor} flex items-center justify-center mb-4`}>
+                  <section.icon className={`h-6 w-6 ${section.color}`} />
+                </div>
+                <CardTitle className="text-xl">{section.title}</CardTitle>
+                <CardDescription>{section.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {section.external ? (
+                  <div className="text-sm text-muted-foreground italic">
+                    {section.externalNote}
+                  </div>
+                ) : section.action ? (
+                  <Button
+                    onClick={section.action}
+                    className="w-full"
+                    variant="default"
+                  >
+                    {language === "en" ? "Open" : "فتح"}
+                  </Button>
+                ) : (
+                  <Link href={section.link}>
+                    <Button className="w-full" variant="default">
+                      {language === "en" ? "Open" : "فتح"}
+                    </Button>
+                  </Link>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* User Management Section */}
+        <div className="mb-12">
+          <UserManagement />
+        </div>
+
+        {/* Admin Permissions Section */}
+        <div className="mb-12">
+          <AdminPermissionsManager />
+        </div>
+
+        {/* Role Templates Section */}
+        <div className="mb-12">
+          <RoleTemplateManager />
+        </div>
+
+        {/* Audit Logs Section */}
+        <div className="mb-12">
+          <AuditLogViewer />
+        </div>
+
+        {/* Platform Content Management Section */}
+        <div id="content-management" className="scroll-mt-8">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-lg bg-orange-50 flex items-center justify-center">
+                  <Edit className="h-6 w-6 text-orange-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl">
+                    {language === "en" ? "Platform Content Management" : "إدارة محتوى المنصة"}
+                  </CardTitle>
+                  <CardDescription>
+                    {language === "en"
+                      ? "Edit and customize platform content, pages, and messaging"
+                      : "تحرير وتخصيص محتوى المنصة والصفحات والرسائل"}
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card className="border-2">
+                  <CardHeader>
+                    <CardTitle className="text-lg">
+                      {language === "en" ? "Homepage Content" : "محتوى الصفحة الرئيسية"}
+                    </CardTitle>
+                    <CardDescription>
+                      {language === "en"
+                        ? "Edit hero section, features, and call-to-action"
+                        : "تحرير قسم البطل والميزات والدعوة إلى اتخاذ إجراء"}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button variant="outline" className="w-full" disabled>
+                      {language === "en" ? "Coming Soon" : "قريباً"}
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2">
+                  <CardHeader>
+                    <CardTitle className="text-lg">
+                      {language === "en" ? "About Page" : "صفحة حول"}
+                    </CardTitle>
+                    <CardDescription>
+                      {language === "en"
+                        ? "Update company information and mission statement"
+                        : "تحديث معلومات الشركة وبيان المهمة"}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button variant="outline" className="w-full" disabled>
+                      {language === "en" ? "Coming Soon" : "قريباً"}
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2">
+                  <CardHeader>
+                    <CardTitle className="text-lg">
+                      {language === "en" ? "Email Templates" : "قوالب البريد الإلكتروني"}
+                    </CardTitle>
+                    <CardDescription>
+                      {language === "en"
+                        ? "Customize automated email notifications"
+                        : "تخصيص إشعارات البريد الإلكتروني التلقائية"}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button variant="outline" className="w-full" disabled>
+                      {language === "en" ? "Coming Soon" : "قريباً"}
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2">
+                  <CardHeader>
+                    <CardTitle className="text-lg">
+                      {language === "en" ? "Legal Documents" : "المستندات القانونية"}
+                    </CardTitle>
+                    <CardDescription>
+                      {language === "en"
+                        ? "Update terms of service and privacy policy"
+                        : "تحديث شروط الخدمة وسياسة الخصوصية"}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button variant="outline" className="w-full" disabled>
+                      {language === "en" ? "Coming Soon" : "قريباً"}
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="mt-6 p-4 bg-muted rounded-lg">
+                <p className="text-sm text-muted-foreground">
+                  {language === "en"
+                    ? "💡 Tip: Content management features are being developed. For now, you can edit content directly in the codebase or use the database panel in the Management UI."
+                    : "💡 نصيحة: يتم تطوير ميزات إدارة المحتوى. في الوقت الحالي، يمكنك تحرير المحتوى مباشرة في قاعدة التعليمات البرمجية أو استخدام لوحة قاعدة البيانات في واجهة الإدارة."}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}

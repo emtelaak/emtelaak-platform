@@ -3,6 +3,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ChevronDown, ChevronUp, TrendingUp, DollarSign, Calendar, BarChart3, RefreshCw } from "lucide-react";
@@ -13,6 +21,7 @@ import {
   formatCurrency as formatCurrencyWithSymbol,
   getLastUpdated,
   refreshExchangeRates,
+  getHistoricalRates,
 } from "@/lib/currency";
 import {
   PROPERTY_TYPES,
@@ -55,6 +64,11 @@ export default function ROICalculator({
   const [convertedValues, setConvertedValues] = useState<Record<string, number>>({});
   const [isConverting, setIsConverting] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [useCustomRate, setUseCustomRate] = useState(false);
+  const [customRate, setCustomRate] = useState<number>(0);
+  const [currentAutoRate, setCurrentAutoRate] = useState<number>(0);
+  const [historicalRates, setHistoricalRates] = useState<Array<{ date: string; rate: number }>>([]);
+  const [showRateChart, setShowRateChart] = useState(false);
 
   // Calculate ROI for selected property type
   const calculation = useMemo(() => {
@@ -71,15 +85,21 @@ export default function ROICalculator({
       
       setIsConverting(true);
       try {
+        // Get current automatic rate for display
+        const rates = await import("@/lib/currency").then(m => m.getExchangeRates());
+        const autoRate = rates[selectedCurrency] || 1;
+        setCurrentAutoRate(autoRate);
+        
+        const rateToUse = useCustomRate ? customRate : undefined;
         const converted = {
-          monthlyIncome: await convertCurrency(calculation.monthlyIncome, selectedCurrency),
-          investorAnnualIncome: await convertCurrency(calculation.investorAnnualIncome, selectedCurrency),
-          totalReturn5Year: await convertCurrency(calculation.totalReturn5Year, selectedCurrency),
-          totalReturn10Year: await convertCurrency(calculation.totalReturn10Year, selectedCurrency),
-          annualGrossRent: await convertCurrency(calculation.annualGrossRent, selectedCurrency),
-          annualManagementFee: await convertCurrency(calculation.annualManagementFee, selectedCurrency),
-          annualOtherCosts: await convertCurrency(calculation.annualOtherCosts, selectedCurrency),
-          annualNetRent: await convertCurrency(calculation.annualNetRent, selectedCurrency),
+          monthlyIncome: await convertCurrency(calculation.monthlyIncome, selectedCurrency, rateToUse),
+          investorAnnualIncome: await convertCurrency(calculation.investorAnnualIncome, selectedCurrency, rateToUse),
+          totalReturn5Year: await convertCurrency(calculation.totalReturn5Year, selectedCurrency, rateToUse),
+          totalReturn10Year: await convertCurrency(calculation.totalReturn10Year, selectedCurrency, rateToUse),
+          annualGrossRent: await convertCurrency(calculation.annualGrossRent, selectedCurrency, rateToUse),
+          annualManagementFee: await convertCurrency(calculation.annualManagementFee, selectedCurrency, rateToUse),
+          annualOtherCosts: await convertCurrency(calculation.annualOtherCosts, selectedCurrency, rateToUse),
+          annualNetRent: await convertCurrency(calculation.annualNetRent, selectedCurrency, rateToUse),
         };
         setConvertedValues(converted);
         setLastUpdated(getLastUpdated());
@@ -90,7 +110,7 @@ export default function ROICalculator({
       }
     }
     convertValues();
-  }, [calculation, selectedCurrency]);
+  }, [calculation, selectedCurrency, useCustomRate, customRate]);
 
   const handleRefreshRates = async () => {
     setIsConverting(true);
@@ -257,6 +277,116 @@ export default function ROICalculator({
               )}
             </div>
           </div>
+
+          {/* Custom Exchange Rate */}
+          {selectedCurrency !== "USD" && (
+            <div className="border border-border rounded-lg p-4 space-y-3 bg-muted/30">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="use-custom-rate" className="cursor-pointer">
+                  {language === "en" ? "Use Custom Exchange Rate" : "استخدام سعر صرف مخصص"}
+                </Label>
+                <input
+                  type="checkbox"
+                  id="use-custom-rate"
+                  checked={useCustomRate}
+                  onChange={(e) => setUseCustomRate(e.target.checked)}
+                  className="h-4 w-4 cursor-pointer"
+                />
+              </div>
+              
+              {useCustomRate && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="custom-rate">
+                      {language === "en" 
+                        ? `Custom Rate (1 USD = ? ${selectedCurrency})` 
+                        : `سعر مخصص (1 دولار = ? ${selectedCurrency})`}
+                    </Label>
+                    <Dialog open={showRateChart} onOpenChange={setShowRateChart}>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={async () => {
+                            const data = await getHistoricalRates(selectedCurrency, 30);
+                            setHistoricalRates(data);
+                            setShowRateChart(true);
+                          }}
+                          className="h-8 px-2"
+                        >
+                          <TrendingUp className="h-4 w-4" />
+                          <span className="ml-1 text-xs">
+                            {language === "en" ? "Trend" : "الاتجاه"}
+                          </span>
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-2xl">
+                        <DialogHeader>
+                          <DialogTitle>
+                            {language === "en" 
+                              ? `USD to ${selectedCurrency} - 30 Day Trend` 
+                              : `دولار إلى ${selectedCurrency} - اتجاه 30 يوم`}
+                          </DialogTitle>
+                          <DialogDescription>
+                            {language === "en"
+                              ? "Historical exchange rate trends for the past 30 days"
+                              : "اتجاهات سعر الصرف التاريخية للـ 30 يومًا الماضية"}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="h-80 w-full">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={historicalRates}>
+                              <CartesianGrid strokeDasharray="3 3" />
+                              <XAxis 
+                                dataKey="date" 
+                                tick={{ fontSize: 12 }}
+                                tickFormatter={(value) => {
+                                  const date = new Date(value);
+                                  return `${date.getMonth() + 1}/${date.getDate()}`;
+                                }}
+                              />
+                              <YAxis 
+                                tick={{ fontSize: 12 }}
+                                domain={['auto', 'auto']}
+                              />
+                              <Tooltip 
+                                formatter={(value: number) => value.toFixed(4)}
+                                labelFormatter={(label) => {
+                                  const date = new Date(label);
+                                  return date.toLocaleDateString(language === "en" ? "en-US" : "ar-SA");
+                                }}
+                              />
+                              <Line 
+                                type="monotone" 
+                                dataKey="rate" 
+                                stroke="hsl(var(--primary))" 
+                                strokeWidth={2}
+                                dot={false}
+                                name={language === "en" ? "Exchange Rate" : "سعر الصرف"}
+                              />
+                            </LineChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                  <Input
+                    id="custom-rate"
+                    type="number"
+                    value={customRate || ""}
+                    onChange={(e) => setCustomRate(Number(e.target.value))}
+                    min={0}
+                    step={0.01}
+                    placeholder={language === "en" ? "Enter custom rate" : "أدخل السعر المخصص"}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {language === "en" ? "Current automatic rate: " : "السعر التلقائي الحالي: "}
+                    <span className="font-medium">1 USD = {currentAutoRate.toFixed(4)} {selectedCurrency}</span>
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Validation Message */}
           {investmentAmount > propertyValue && (

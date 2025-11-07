@@ -284,6 +284,11 @@ export const en = {
       completeDesc: "Complete your KYC questionnaire to unlock full investment features and start building your property portfolio.",
       completeButton: "Complete KYC Questionnaire",
     },
+    recentActivity: {
+      title: "Recent Activity",
+      subtitle: "Your latest actions and transactions",
+      noActivity: "No recent activity to display",
+    },
   },
 
   // Contact Page

@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, decimal, boolean, index, unique } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, decimal, boolean, index, unique, json } from "drizzle-orm/mysql-core";
 
 /**
  * Emtelaak Platform Database Schema
@@ -18,9 +18,60 @@ export const users = mysqlTable("users", {
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "investor", "fundraiser", "admin", "super_admin"]).default("user").notNull(),
   status: mysqlEnum("status", ["active", "suspended", "pending_verification"]).default("pending_verification").notNull(),
+  preferredLanguage: varchar("preferredLanguage", { length: 10 }).default("en"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
+});
+
+export const adminPermissions = mysqlTable("admin_permissions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique().references(() => users.id, { onDelete: "cascade" }),
+  // User Management
+  canManageUsers: boolean("canManageUsers").default(false).notNull(),
+  canBulkUploadUsers: boolean("canBulkUploadUsers").default(false).notNull(),
+  // Content Management
+  canEditContent: boolean("canEditContent").default(false).notNull(),
+  canManageProperties: boolean("canManageProperties").default(false).notNull(),
+  // KYC & Verification
+  canReviewKYC: boolean("canReviewKYC").default(false).notNull(),
+  canApproveInvestments: boolean("canApproveInvestments").default(false).notNull(),
+  // Financial
+  canManageTransactions: boolean("canManageTransactions").default(false).notNull(),
+  canViewFinancials: boolean("canViewFinancials").default(false).notNull(),
+  // System
+  canAccessCRM: boolean("canAccessCRM").default(false).notNull(),
+  canViewAnalytics: boolean("canViewAnalytics").default(false).notNull(),
+  canManageSettings: boolean("canManageSettings").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("user_id_idx").on(table.userId),
+}));
+
+export const permissionRoleTemplates = mysqlTable("permission_role_templates", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull().unique(),
+  description: text("description"),
+  // User Management
+  canManageUsers: boolean("canManageUsers").default(false).notNull(),
+  canBulkUploadUsers: boolean("canBulkUploadUsers").default(false).notNull(),
+  // Content Management
+  canEditContent: boolean("canEditContent").default(false).notNull(),
+  canManageProperties: boolean("canManageProperties").default(false).notNull(),
+  // KYC & Verification
+  canReviewKYC: boolean("canReviewKYC").default(false).notNull(),
+  canApproveInvestments: boolean("canApproveInvestments").default(false).notNull(),
+  // Financial
+  canManageTransactions: boolean("canManageTransactions").default(false).notNull(),
+  canViewFinancials: boolean("canViewFinancials").default(false).notNull(),
+  // System
+  canAccessCRM: boolean("canAccessCRM").default(false).notNull(),
+  canViewAnalytics: boolean("canViewAnalytics").default(false).notNull(),
+  canManageSettings: boolean("canManageSettings").default(false).notNull(),
+  isSystem: boolean("isSystem").default(false).notNull(), // System templates cannot be deleted
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
 export const userProfiles = mysqlTable("user_profiles", {
@@ -779,3 +830,186 @@ export type CrmCaseComment = typeof crmCaseComments.$inferSelect;
 export type InsertCrmCaseComment = typeof crmCaseComments.$inferInsert;
 export type CrmActivity = typeof crmActivities.$inferSelect;
 export type InsertCrmActivity = typeof crmActivities.$inferInsert;
+
+
+// ============================================
+// CURRENCY EXCHANGE RATES
+// ============================================
+
+export const exchangeRates = mysqlTable("exchange_rates", {
+  id: int("id").autoincrement().primaryKey(),
+  baseCurrency: varchar("baseCurrency", { length: 3 }).notNull().default("USD"),
+  targetCurrency: varchar("targetCurrency", { length: 3 }).notNull(),
+  rate: decimal("rate", { precision: 18, scale: 8 }).notNull(),
+  source: varchar("source", { length: 100 }).default("exchangerate-api.com"),
+  fetchedAt: timestamp("fetchedAt").defaultNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  currencyPairIdx: index("currency_pair_idx").on(table.baseCurrency, table.targetCurrency),
+  fetchedAtIdx: index("fetched_at_idx").on(table.fetchedAt),
+}));
+
+export type ExchangeRate = typeof exchangeRates.$inferSelect;
+export type InsertExchangeRate = typeof exchangeRates.$inferInsert;
+
+
+// ============================================
+// HELP DESK & CUSTOMER SUPPORT
+// ============================================
+
+export const ticketCategories = mysqlTable("ticket_categories", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(),
+  nameAr: varchar("nameAr", { length: 100 }),
+  description: text("description"),
+  departmentType: mysqlEnum("departmentType", ["customer_support", "technical", "billing", "kyc", "investment", "internal"]).notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const supportTickets = mysqlTable("support_tickets", {
+  id: int("id").autoincrement().primaryKey(),
+  ticketNumber: varchar("ticketNumber", { length: 20 }).notNull().unique(), // e.g., TKT-2024-00001
+  userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+  categoryId: int("categoryId").references(() => ticketCategories.id),
+  subject: varchar("subject", { length: 255 }).notNull(),
+  description: text("description").notNull(),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "urgent"]).default("medium").notNull(),
+  status: mysqlEnum("status", ["open", "in_progress", "waiting_customer", "waiting_internal", "resolved", "closed"]).default("open").notNull(),
+  assignedToId: int("assignedToId").references(() => users.id), // Support agent
+  departmentType: mysqlEnum("departmentType", ["customer_support", "technical", "billing", "kyc", "investment", "internal"]).notNull(),
+  source: mysqlEnum("source", ["web", "email", "chat", "phone"]).default("web").notNull(),
+  customerSatisfactionRating: int("customerSatisfactionRating"), // 1-5 stars
+  customerFeedback: text("customerFeedback"),
+  firstResponseAt: timestamp("firstResponseAt"),
+  resolvedAt: timestamp("resolvedAt"),
+  closedAt: timestamp("closedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("user_id_idx").on(table.userId),
+  assignedToIdx: index("assigned_to_idx").on(table.assignedToId),
+  statusIdx: index("status_idx").on(table.status),
+  priorityIdx: index("priority_idx").on(table.priority),
+  categoryIdx: index("category_idx").on(table.categoryId),
+  departmentIdx: index("department_idx").on(table.departmentType),
+}));
+
+export const ticketMessages = mysqlTable("ticket_messages", {
+  id: int("id").autoincrement().primaryKey(),
+  ticketId: int("ticketId").notNull().references(() => supportTickets.id, { onDelete: "cascade" }),
+  userId: int("userId").notNull().references(() => users.id),
+  message: text("message").notNull(),
+  isInternal: boolean("isInternal").default(false).notNull(), // Internal notes not visible to customer
+  attachments: json("attachments").$type<Array<{ url: string; filename: string; size: number }>>(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  ticketIdIdx: index("ticket_id_idx").on(table.ticketId),
+  userIdIdx: index("user_id_idx").on(table.userId),
+}));
+
+export const chatConversations = mysqlTable("chat_conversations", {
+  id: int("id").autoincrement().primaryKey(),
+  conversationId: varchar("conversationId", { length: 50 }).notNull().unique(), // e.g., CHAT-2024-00001
+  userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+  assignedAgentId: int("assignedAgentId").references(() => users.id),
+  status: mysqlEnum("status", ["waiting", "active", "resolved", "closed"]).default("waiting").notNull(),
+  departmentType: mysqlEnum("departmentType", ["customer_support", "technical", "billing", "kyc", "investment", "internal"]).default("customer_support").notNull(),
+  customerSatisfactionRating: int("customerSatisfactionRating"), // 1-5 stars
+  lastMessageAt: timestamp("lastMessageAt"),
+  closedAt: timestamp("closedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("user_id_idx").on(table.userId),
+  assignedAgentIdx: index("assigned_agent_idx").on(table.assignedAgentId),
+  statusIdx: index("status_idx").on(table.status),
+}));
+
+export const chatMessages = mysqlTable("chat_messages", {
+  id: int("id").autoincrement().primaryKey(),
+  conversationId: int("conversationId").notNull().references(() => chatConversations.id, { onDelete: "cascade" }),
+  senderId: int("senderId").notNull().references(() => users.id),
+  message: text("message").notNull(),
+  messageType: mysqlEnum("messageType", ["text", "file", "system"]).default("text").notNull(),
+  attachments: json("attachments").$type<Array<{ url: string; filename: string; size: number }>>(),
+  detectedLanguage: varchar("detectedLanguage", { length: 10 }),
+  translations: json("translations").$type<Record<string, string>>(),
+  isRead: boolean("isRead").default(false).notNull(),
+  readAt: timestamp("readAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  conversationIdIdx: index("conversation_id_idx").on(table.conversationId),
+  senderIdIdx: index("sender_id_idx").on(table.senderId),
+}));
+
+export const knowledgeBaseCategories = mysqlTable("knowledge_base_categories", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(),
+  nameAr: varchar("nameAr", { length: 100 }),
+  description: text("description"),
+  icon: varchar("icon", { length: 50 }), // Icon name for UI
+  displayOrder: int("displayOrder").default(0).notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const knowledgeBaseArticles = mysqlTable("knowledge_base_articles", {
+  id: int("id").autoincrement().primaryKey(),
+  categoryId: int("categoryId").notNull().references(() => knowledgeBaseCategories.id, { onDelete: "cascade" }),
+  title: varchar("title", { length: 255 }).notNull(),
+  titleAr: varchar("titleAr", { length: 255 }),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  content: text("content").notNull(),
+  contentAr: text("contentAr"),
+  excerpt: text("excerpt"),
+  authorId: int("authorId").notNull().references(() => users.id),
+  viewCount: int("viewCount").default(0).notNull(),
+  helpfulCount: int("helpfulCount").default(0).notNull(),
+  notHelpfulCount: int("notHelpfulCount").default(0).notNull(),
+  isPublished: boolean("isPublished").default(false).notNull(),
+  publishedAt: timestamp("publishedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  categoryIdIdx: index("category_id_idx").on(table.categoryId),
+  slugIdx: index("slug_idx").on(table.slug),
+  isPublishedIdx: index("is_published_idx").on(table.isPublished),
+}));
+
+export const cannedResponses = mysqlTable("canned_responses", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 100 }).notNull(),
+  shortcut: varchar("shortcut", { length: 20 }).notNull().unique(), // e.g., /welcome, /refund
+  content: text("content").notNull(),
+  contentAr: text("contentAr"),
+  categoryId: int("categoryId").references(() => ticketCategories.id),
+  isActive: boolean("isActive").default(true).notNull(),
+  usageCount: int("usageCount").default(0).notNull(),
+  createdById: int("createdById").notNull().references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  shortcutIdx: index("shortcut_idx").on(table.shortcut),
+  categoryIdx: index("category_idx").on(table.categoryId),
+}));
+
+// Type exports
+export type TicketCategory = typeof ticketCategories.$inferSelect;
+export type InsertTicketCategory = typeof ticketCategories.$inferInsert;
+export type SupportTicket = typeof supportTickets.$inferSelect;
+export type InsertSupportTicket = typeof supportTickets.$inferInsert;
+export type TicketMessage = typeof ticketMessages.$inferSelect;
+export type InsertTicketMessage = typeof ticketMessages.$inferInsert;
+export type ChatConversation = typeof chatConversations.$inferSelect;
+export type InsertChatConversation = typeof chatConversations.$inferInsert;
+export type ChatMessage = typeof chatMessages.$inferSelect;
+export type InsertChatMessage = typeof chatMessages.$inferInsert;
+export type KnowledgeBaseCategory = typeof knowledgeBaseCategories.$inferSelect;
+export type InsertKnowledgeBaseCategory = typeof knowledgeBaseCategories.$inferInsert;
+export type KnowledgeBaseArticle = typeof knowledgeBaseArticles.$inferSelect;
+export type InsertKnowledgeBaseArticle = typeof knowledgeBaseArticles.$inferInsert;
+export type CannedResponse = typeof cannedResponses.$inferSelect;
+export type InsertCannedResponse = typeof cannedResponses.$inferInsert;

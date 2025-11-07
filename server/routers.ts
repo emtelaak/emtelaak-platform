@@ -4,11 +4,13 @@ import { systemRouter } from "./_core/systemRouter";
 import { adminRouter } from "./adminRouters";
 import { adminPermissionsRouter } from "./adminPermissionsRouter";
 import { crmRouter } from "./crm-router";
+import { helpDeskRouter } from "./routes/helpDesk";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import {
   getUserProfile,
   createOrUpdateUserProfile,
+  getUserRecentActivity,
   getVerificationStatus,
   updateVerificationStatus,
   createKycDocument,
@@ -35,6 +37,14 @@ import {
   getUserNotifications,
   markNotificationAsRead,
   createNotification,
+  getAllUsers,
+  updateUserById,
+  deleteUserById,
+  createUser,
+  bulkCreateUsers,
+  getAdminPermissions,
+  upsertAdminPermissions,
+  getAllAdminPermissions,
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import { storagePut } from './storage';
@@ -46,6 +56,7 @@ export const appRouter = router({
   admin: adminRouter,
   adminPermissions: adminPermissionsRouter,
   crm: crmRouter,
+  helpDesk: helpDeskRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
@@ -122,6 +133,14 @@ export const appRouter = router({
     getVerificationStatus: protectedProcedure.query(async ({ ctx }) => {
       return await getVerificationStatus(ctx.user.id);
     }),
+    
+    getRecentActivity: protectedProcedure
+      .input(z.object({
+        limit: z.number().min(1).max(50).optional().default(10),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        return await getUserRecentActivity(ctx.user.id, input?.limit || 10);
+      }),
   }),
 
   // KYC/AML Verification
@@ -399,6 +418,77 @@ export const appRouter = router({
         });
         
         return { success: true };
+      }),
+  }),
+
+  // Super Admin User Management
+  userManagement: router({
+    list: protectedProcedure.query(async ({ ctx }) => {
+      if (ctx.user.role !== 'super_admin') {
+        throw new TRPCError({ code: 'FORBIDDEN', message: 'Super admin access required' });
+      }
+      return await getAllUsers();
+    }),
+
+    create: protectedProcedure
+      .input(z.object({
+        openId: z.string(),
+        name: z.string().optional(),
+        email: z.string().email().optional(),
+        phone: z.string().optional(),
+        role: z.enum(['user', 'admin', 'super_admin']).default('user'),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== 'super_admin') {
+          throw new TRPCError({ code: 'FORBIDDEN', message: 'Super admin access required' });
+        }
+        return await createUser(input);
+      }),
+
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        email: z.string().email().optional(),
+        phone: z.string().optional(),
+        role: z.enum(['user', 'admin', 'super_admin']).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== 'super_admin') {
+          throw new TRPCError({ code: 'FORBIDDEN', message: 'Super admin access required' });
+        }
+        const { id, ...updates } = input;
+        await updateUserById(id, updates);
+        return { success: true };
+      }),
+
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== 'super_admin') {
+          throw new TRPCError({ code: 'FORBIDDEN', message: 'Super admin access required' });
+        }
+        await deleteUserById(input.id);
+        return { success: true };
+      }),
+
+    bulkImport: protectedProcedure
+      .input(z.object({
+        users: z.array(z.object({
+          openId: z.string(),
+          name: z.string().optional(),
+          email: z.string().email().optional(),
+          phone: z.string().optional(),
+          role: z.enum(['user', 'admin', 'super_admin']).default('user'),
+        })),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        // Check permissions
+        const permissions = await getAdminPermissions(ctx.user.id);
+        if (ctx.user.role !== 'super_admin' && !permissions?.canBulkUploadUsers) {
+          throw new TRPCError({ code: 'FORBIDDEN', message: 'Bulk upload users permission required' });
+        }
+        return await bulkCreateUsers(input.users);
       }),
   }),
 

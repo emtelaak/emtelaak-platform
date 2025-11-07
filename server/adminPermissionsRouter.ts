@@ -5,6 +5,7 @@
 import { router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { notifySuperAdmins } from "./_core/emailNotification";
 import {
   getAllPermissions,
   getAllRoles,
@@ -22,8 +23,17 @@ import {
   createAuditLog,
   getAuditLogs,
 } from "./permissionsDb";
-import { getDb, getUserByOpenId } from "./db";
-import { users } from "../drizzle/schema";
+import {
+  getDb,
+  getUserByOpenId,
+  getAllRoleTemplates,
+  getRoleTemplateById,
+  createRoleTemplate,
+  updateRoleTemplate,
+  deleteRoleTemplate,
+  applyRoleTemplateToUser,
+} from "./db";
+import { users, permissionRoleTemplates } from "../drizzle/schema";
 import { eq, like, or, desc } from "drizzle-orm";
 
 // Super admin procedure
@@ -135,6 +145,13 @@ export const adminPermissionsRouter = router({
         const db = await getDb();
         if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
 
+        // Get target user info before update
+        const targetUserResult = await db.select().from(users).where(eq(users.id, input.userId)).limit(1);
+        const targetUser = targetUserResult[0];
+        if (!targetUser) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+        }
+
         await db.update(users).set({ role: input.role }).where(eq(users.id, input.userId));
 
         // Create audit log
@@ -145,6 +162,25 @@ export const adminPermissionsRouter = router({
           targetId: input.userId,
           details: JSON.stringify({ newRole: input.role }),
         });
+
+        // Send email notification to super admins for critical role changes
+        if (input.role === "super_admin" || input.role === "admin") {
+          const superAdminEmails = await getSuperAdminEmails();
+          await notifySuperAdmins({
+            subject: `User Role Changed to ${input.role}`,
+            action: "User Role Changed",
+            performedBy: {
+              name: ctx.user.name || "Unknown",
+              email: ctx.user.email || "unknown@emtelaak.com",
+            },
+            targetUser: {
+              name: targetUser.name || "Unknown",
+              email: targetUser.email || "unknown@emtelaak.com",
+            },
+            details: `User role was changed to ${input.role}`,
+            superAdminEmails,
+          });
+        }
 
         return { success: true };
       }),
@@ -342,6 +378,153 @@ export const adminPermissionsRouter = router({
       }),
   }),
 
+  // Role Templates
+  roleTemplates: router({
+    list: adminProcedure.query(async () => {
+      return await getAllRoleTemplates();
+    }),
+
+    getById: adminProcedure
+      .input(z.object({ templateId: z.number() }))
+      .query(async ({ input }) => {
+        const template = await getRoleTemplateById(input.templateId);
+        if (!template) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Template not found" });
+        }
+        return template;
+      }),
+
+    create: superAdminProcedure
+      .input(z.object({
+        name: z.string().min(1).max(100),
+        description: z.string().optional(),
+        canManageUsers: z.boolean().default(false),
+        canBulkUploadUsers: z.boolean().default(false),
+        canEditContent: z.boolean().default(false),
+        canManageProperties: z.boolean().default(false),
+        canReviewKYC: z.boolean().default(false),
+        canApproveInvestments: z.boolean().default(false),
+        canManageTransactions: z.boolean().default(false),
+        canViewFinancials: z.boolean().default(false),
+        canAccessCRM: z.boolean().default(false),
+        canViewAnalytics: z.boolean().default(false),
+        canManageSettings: z.boolean().default(false),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const template = await createRoleTemplate(input);
+        
+        await createAuditLog({
+          userId: ctx.user.id,
+          action: "role_template.created",
+          targetType: "role_template",
+          targetId: template?.id || 0,
+          details: JSON.stringify({ name: input.name }),
+        });
+
+        return template;
+      }),
+
+    update: superAdminProcedure
+      .input(z.object({
+        templateId: z.number(),
+        name: z.string().min(1).max(100).optional(),
+        description: z.string().optional(),
+        canManageUsers: z.boolean().optional(),
+        canBulkUploadUsers: z.boolean().optional(),
+        canEditContent: z.boolean().optional(),
+        canManageProperties: z.boolean().optional(),
+        canReviewKYC: z.boolean().optional(),
+        canApproveInvestments: z.boolean().optional(),
+        canManageTransactions: z.boolean().optional(),
+        canViewFinancials: z.boolean().optional(),
+        canAccessCRM: z.boolean().optional(),
+        canViewAnalytics: z.boolean().optional(),
+        canManageSettings: z.boolean().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { templateId, ...updates } = input;
+        const template = await updateRoleTemplate(templateId, updates);
+
+        await createAuditLog({
+          userId: ctx.user.id,
+          action: "role_template.updated",
+          targetType: "role_template",
+          targetId: templateId,
+          details: JSON.stringify(updates),
+        });
+
+        return template;
+      }),
+
+    delete: superAdminProcedure
+      .input(z.object({ templateId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        await deleteRoleTemplate(input.templateId);
+
+        await createAuditLog({
+          userId: ctx.user.id,
+          action: "role_template.deleted",
+          targetType: "role_template",
+          targetId: input.templateId,
+          details: undefined,
+        });
+
+        return { success: true };
+      }),
+
+    applyRoleTemplate: superAdminProcedure
+      .input(z.object({
+        userId: z.number(),
+        templateId: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const db = await getDb();
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+
+        // Get target user and template info
+        const targetUserResult = await db.select().from(users).where(eq(users.id, input.userId)).limit(1);
+        const targetUser = targetUserResult[0];
+        if (!targetUser) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+        }
+
+        const templateResult = await db.select().from(permissionRoleTemplates).where(eq(permissionRoleTemplates.id, input.templateId)).limit(1);
+        const template = templateResult[0];
+        if (!template) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Template not found" });
+        }
+
+        await applyRoleTemplateToUser(input.userId, input.templateId);
+
+        await createAuditLog({
+          userId: ctx.user.id,
+          action: "role_template.applied",
+          targetType: "user",
+          targetId: input.userId,
+          details: JSON.stringify({ templateId: input.templateId }),
+        });
+
+        // Send email notification to super admins for bulk permission changes
+        const superAdminEmails = await getSuperAdminEmails();
+        await notifySuperAdmins({
+          subject: `Bulk Permissions Applied via Template: ${template.name}`,
+          action: "Role Template Applied",
+          performedBy: {
+            name: ctx.user.name || "Unknown",
+            email: ctx.user.email || "unknown@emtelaak.com",
+          },
+          targetUser: {
+            name: targetUser.name || "Unknown",
+            email: targetUser.email || "unknown@emtelaak.com",
+          },
+          details: `Applied role template "${template.name}" with ${template.permissionIds?.length || 0} permissions`,
+          superAdminEmails,
+        });
+
+        return { success: true };
+      }),
+  }),
+
   // Export Data
   export: router({
     users: superAdminProcedure
@@ -415,3 +598,19 @@ export const adminPermissionsRouter = router({
       }),
   }),
 });
+
+
+// Helper function to get all super admin emails for notifications
+async function getSuperAdminEmails(): Promise<string[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const superAdmins = await db
+    .select({ email: users.email })
+    .from(users)
+    .where(eq(users.role, "super_admin"));
+  
+  return superAdmins
+    .map(admin => admin.email)
+    .filter((email): email is string => email !== null && email !== undefined);
+}

@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import KYCProgressIndicator from "@/components/KYCProgressIndicator";
 import ProfilePictureUpload from "@/components/ProfilePictureUpload";
+import RecentActivity from "@/components/RecentActivity";
 import { APP_LOGO, APP_TITLE } from "@/const";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,10 @@ export default function Profile() {
     undefined,
     { enabled: isAuthenticated }
   );
+  const { data: recentActivity, isLoading: isLoadingActivity } = trpc.profile.getRecentActivity.useQuery(
+    { limit: 10 },
+    { enabled: isAuthenticated }
+  );
 
   const updateProfileMutation = trpc.profile.update.useMutation({
     onSuccess: () => {
@@ -50,8 +55,8 @@ export default function Profile() {
     const formData = new FormData(e.currentTarget);
 
     updateProfileMutation.mutate({
-      firstNameEn: formData.get("firstNameEn") as string,
-      lastNameEn: formData.get("lastNameEn") as string,
+      firstNameEn: formData.get("firstNameEn") as string || undefined,
+      lastNameEn: formData.get("lastNameEn") as string || undefined,
       firstNameAr: formData.get("firstNameAr") as string || undefined,
       lastNameAr: formData.get("lastNameAr") as string || undefined,
       nationality: formData.get("nationality") as string || undefined,
@@ -295,6 +300,12 @@ export default function Profile() {
                 </CardContent>
               </Card>
             )}
+
+            {/* Recent Activity */}
+            <RecentActivity 
+              activities={recentActivity || []} 
+              isLoading={isLoadingActivity}
+            />
           </TabsContent>
 
           {/* Personal Info Tab */}

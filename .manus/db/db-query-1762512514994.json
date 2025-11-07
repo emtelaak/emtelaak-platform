@@ -1,0 +1,17 @@
+{
+  "query": "SELECT id, email, name, role, status FROM users WHERE email = 'waleed@emtelaak.com';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT id, email, name, role, status FROM users WHERE email = 'waleed@emtelaak.com';",
+  "rows": [
+    {
+      "id": "750038",
+      "email": "waleed@emtelaak.com",
+      "name": "Waleed Shaarawy",
+      "role": "admin",
+      "status": "pending_verification"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\temail\tname\trole\tstatus\n750038\twaleed@emtelaak.com\tWaleed Shaarawy\tadmin\tpending_verification\n",
+  "stderr": "",
+  "execution_time_ms": 421
+}

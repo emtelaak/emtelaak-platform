@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -9,20 +10,38 @@ import Home from "./pages/Home";
 import Properties from "./pages/Properties";
 import Portfolio from "./pages/Portfolio";
 import Profile from "./pages/Profile";
-import AdminSettings from "./pages/AdminSettings";
-import AdminKYCReview from "./pages/AdminKYCReview";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminRoles from "./pages/AdminRoles";
-import AdminPermissions from "./pages/AdminPermissions";
 import FAQ from "./pages/FAQ";
 import About from "./pages/About";
 import HowItWorks from "./pages/HowItWorks";
-import CRMDashboard from "./pages/CRMDashboard";
-import CRMLeads from "./pages/CRMLeads";
-import CRMCases from "./pages/CRMCases";
-import LeadCapture from "./pages/LeadCapture";
 import PropertyDetail from "./pages/PropertyDetail";
 import KYCQuestionnaire from "./pages/KYCQuestionnaire";
+import LeadCapture from "./pages/LeadCapture";
+
+// Lazy load admin pages (only loaded when accessed)
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const AdminSettings = lazy(() => import("./pages/AdminSettings"));
+const AdminKYCReview = lazy(() => import("./pages/AdminKYCReview"));
+const AdminRoles = lazy(() => import("./pages/AdminRoles"));
+const AdminPermissions = lazy(() => import("./pages/AdminPermissions"));
+const SuperAdminDashboard = lazy(() => import("./pages/SuperAdminDashboard"));
+const EmailSettings = lazy(() => import("./pages/EmailSettings"));
+
+// Lazy load CRM pages
+const CRMDashboard = lazy(() => import("./pages/CRMDashboard"));
+const CRMLeads = lazy(() => import("./pages/CRMLeads"));
+const CRMCases = lazy(() => import("./pages/CRMCases"));
+
+// Lazy load help desk system
+const HelpDesk = lazy(() => import("./pages/HelpDesk"));
+const AgentDashboard = lazy(() => import("./pages/AgentDashboard"));
+const KnowledgeBase = lazy(() => import("./pages/KnowledgeBase"));
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+  </div>
+);
 
 function Router() {
   return (
@@ -37,15 +56,20 @@ function Router() {
       <Route path={"/faq"} component={FAQ} />
       <Route path={"/about"} component={About} />
       <Route path={"/how-it-works"} component={HowItWorks} />
+      <Route path="/super-admin" component={SuperAdminDashboard} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/roles" component={AdminRoles} />
       <Route path="/admin/permissions" component={AdminPermissions} />
       <Route path="/admin/settings" component={AdminSettings} />
+      <Route path="/admin/email-settings" component={EmailSettings} />
       <Route path="/admin/kyc-review" component={AdminKYCReview} />
       <Route path="/crm" component={CRMDashboard} />
       <Route path="/crm/leads" component={CRMLeads} />
       <Route path="/crm/cases" component={CRMCases} />
       <Route path="/lead-capture" component={LeadCapture} />
+      <Route path="/help" component={HelpDesk} />
+      <Route path="/agent" component={AgentDashboard} />
+      <Route path="/knowledge-base" component={KnowledgeBase} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
@@ -67,7 +91,9 @@ function App() {
       >
         <TooltipProvider>
           <Toaster />
-          <Router />
+          <Suspense fallback={<PageLoader />}>
+            <Router />
+          </Suspense>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
