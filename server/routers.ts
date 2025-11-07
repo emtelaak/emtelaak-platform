@@ -48,6 +48,16 @@ import {
   createUser,
   bulkCreateUsers,
   getAdminPermissions,
+  getOrCreateUserWallet,
+  getWalletBalance,
+  addBankAccount,
+  getUserBankAccounts,
+  setDefaultBankAccount,
+  deleteBankAccount,
+  createWalletTransaction,
+  getWalletTransactions,
+  completeDepositTransaction,
+  completeWithdrawalTransaction,
   upsertAdminPermissions,
   getAllAdminPermissions,
 } from "./db";
@@ -526,6 +536,151 @@ export const appRouter = router({
           throw new TRPCError({ code: 'FORBIDDEN', message: 'Bulk upload users permission required' });
         }
         return await bulkCreateUsers(input.users);
+      }),
+  }),
+
+  // Wallet Management
+  wallet: router({
+    // Get wallet balance
+    getBalance: protectedProcedure.query(async ({ ctx }) => {
+      const wallet = await getOrCreateUserWallet(ctx.user.id);
+      return {
+        balance: wallet?.balance || 0,
+        currency: wallet?.currency || "EGP",
+        balanceEGP: (wallet?.balance || 0) / 100, // Convert cents to EGP
+      };
+    }),
+
+    // Get transaction history
+    getTransactions: protectedProcedure
+      .input(z.object({ limit: z.number().optional().default(50) }))
+      .query(async ({ ctx, input }) => {
+        return await getWalletTransactions(ctx.user.id, input.limit);
+      }),
+
+    // Bank Account Management
+    addBankAccount: protectedProcedure
+      .input(z.object({
+        bankName: z.string().min(1),
+        accountNumber: z.string().min(1),
+        iban: z.string().optional(),
+        accountHolderName: z.string().min(1),
+        isDefault: z.boolean().optional().default(false),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        await addBankAccount({
+          userId: ctx.user.id,
+          ...input,
+        });
+        return { success: true };
+      }),
+
+    getBankAccounts: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserBankAccounts(ctx.user.id);
+    }),
+
+    setDefaultBankAccount: protectedProcedure
+      .input(z.object({ accountId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        await setDefaultBankAccount(ctx.user.id, input.accountId);
+        return { success: true };
+      }),
+
+    deleteBankAccount: protectedProcedure
+      .input(z.object({ accountId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        await deleteBankAccount(ctx.user.id, input.accountId);
+        return { success: true };
+      }),
+
+    // Deposit Operations
+    depositBankTransfer: protectedProcedure
+      .input(z.object({
+        amount: z.number().positive(),
+        receiptUrl: z.string().url(),
+        reference: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const amountCents = Math.round(input.amount * 100);
+        await createWalletTransaction({
+          userId: ctx.user.id,
+          type: "deposit",
+          amount: amountCents,
+          status: "pending",
+          paymentMethod: "bank_transfer",
+          receiptUrl: input.receiptUrl,
+          reference: input.reference,
+          description: `Bank transfer deposit of EGP ${input.amount}`,
+        });
+        return { success: true, message: "Deposit request submitted. Pending admin approval." };
+      }),
+
+    depositFawry: protectedProcedure
+      .input(z.object({
+        amount: z.number().positive(),
+        reference: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const amountCents = Math.round(input.amount * 100);
+        await createWalletTransaction({
+          userId: ctx.user.id,
+          type: "deposit",
+          amount: amountCents,
+          status: "pending",
+          paymentMethod: "fawry",
+          reference: input.reference,
+          description: `Fawry deposit of EGP ${input.amount}`,
+        });
+        return { success: true, message: "Fawry payment pending verification." };
+      }),
+
+    depositCard: protectedProcedure
+      .input(z.object({
+        amount: z.number().positive(),
+        reference: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const amountCents = Math.round(input.amount * 100);
+        await createWalletTransaction({
+          userId: ctx.user.id,
+          type: "deposit",
+          amount: amountCents,
+          status: "pending",
+          paymentMethod: "card",
+          reference: input.reference,
+          description: `Card deposit of EGP ${input.amount}`,
+        });
+        return { success: true, message: "Card payment processing." };
+      }),
+
+    // Withdrawal Operations
+    requestWithdrawal: protectedProcedure
+      .input(z.object({
+        amount: z.number().positive(),
+        bankAccountId: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const balance = await getWalletBalance(ctx.user.id);
+        const amountCents = Math.round(input.amount * 100);
+
+        if (balance < amountCents) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Insufficient balance",
+          });
+        }
+
+        await createWalletTransaction({
+          userId: ctx.user.id,
+          type: "withdrawal",
+          amount: amountCents,
+          status: "pending",
+          paymentMethod: "bank_transfer",
+          reference: `Bank Account ID: ${input.bankAccountId}`,
+          description: `Withdrawal of EGP ${input.amount} to bank account`,
+        });
+
+        return { success: true, message: "Withdrawal request submitted. Pending admin approval." };
       }),
   }),
 

@@ -42,6 +42,12 @@ import {
   type User,
   type Property,
   type Investment,
+  userWallets,
+  userBankAccounts,
+  walletTransactions,
+  InsertUserWallet,
+  InsertUserBankAccount,
+  InsertWalletTransaction,
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -1179,4 +1185,138 @@ export async function applyRoleTemplateToUser(userId: number, templateId: number
   };
 
   return await upsertAdminPermissions(userId, permissions);
+}
+
+
+// ============================================
+// WALLET OPERATIONS
+// ============================================
+
+export async function getOrCreateUserWallet(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  // Try to get existing wallet
+  const existing = await db.select().from(userWallets).where(eq(userWallets.userId, userId)).limit(1);
+  if (existing.length > 0) return existing[0];
+
+  // Create new wallet if doesn't exist
+  await db.insert(userWallets).values({ userId, balance: 0, currency: "EGP" });
+  const newWallet = await db.select().from(userWallets).where(eq(userWallets.userId, userId)).limit(1);
+  return newWallet[0];
+}
+
+export async function getWalletBalance(userId: number) {
+  const wallet = await getOrCreateUserWallet(userId);
+  return wallet ? wallet.balance : 0;
+}
+
+export async function updateWalletBalance(userId: number, amount: number) {
+  const db = await getDb();
+  if (!db) return;
+
+  await db.update(userWallets)
+    .set({ balance: sql`balance + ${amount}` })
+    .where(eq(userWallets.userId, userId));
+}
+
+export async function addBankAccount(account: InsertUserBankAccount) {
+  const db = await getDb();
+  if (!db) return null;
+
+  // If this is set as default, unset other defaults
+  if (account.isDefault) {
+    await db.update(userBankAccounts)
+      .set({ isDefault: false })
+      .where(eq(userBankAccounts.userId, account.userId));
+  }
+
+  const result = await db.insert(userBankAccounts).values(account);
+  return result;
+}
+
+export async function getUserBankAccounts(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db.select().from(userBankAccounts).where(eq(userBankAccounts.userId, userId));
+}
+
+export async function setDefaultBankAccount(userId: number, accountId: number) {
+  const db = await getDb();
+  if (!db) return;
+
+  // Unset all defaults for this user
+  await db.update(userBankAccounts)
+    .set({ isDefault: false })
+    .where(eq(userBankAccounts.userId, userId));
+
+  // Set the specified account as default
+  await db.update(userBankAccounts)
+    .set({ isDefault: true })
+    .where(and(eq(userBankAccounts.id, accountId), eq(userBankAccounts.userId, userId)));
+}
+
+export async function deleteBankAccount(userId: number, accountId: number) {
+  const db = await getDb();
+  if (!db) return;
+
+  await db.delete(userBankAccounts)
+    .where(and(eq(userBankAccounts.id, accountId), eq(userBankAccounts.userId, userId)));
+}
+
+export async function createWalletTransaction(transaction: InsertWalletTransaction) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const result = await db.insert(walletTransactions).values(transaction);
+  return result;
+}
+
+export async function getWalletTransactions(userId: number, limit: number = 50) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db.select()
+    .from(walletTransactions)
+    .where(eq(walletTransactions.userId, userId))
+    .orderBy(desc(walletTransactions.createdAt))
+    .limit(limit);
+}
+
+export async function updateTransactionStatusWallet(transactionId: number, status: "pending" | "completed" | "failed" | "cancelled") {
+  const db = await getDb();
+  if (!db) return;
+
+  await db.update(walletTransactions)
+    .set({ status })
+    .where(eq(walletTransactions.id, transactionId));
+}
+
+export async function completeDepositTransaction(transactionId: number, userId: number, amount: number) {
+  const db = await getDb();
+  if (!db) return;
+
+  // Update transaction status
+  await updateTransactionStatusWallet(transactionId, "completed");
+
+  // Update wallet balance
+  await updateWalletBalance(userId, amount);
+}
+
+export async function completeWithdrawalTransaction(transactionId: number, userId: number, amount: number) {
+  const db = await getDb();
+  if (!db) return;
+
+  // Check if user has sufficient balance
+  const balance = await getWalletBalance(userId);
+  if (balance < amount) {
+    throw new Error("Insufficient balance");
+  }
+
+  // Update transaction status
+  await updateTransactionStatusWallet(transactionId, "completed");
+
+  // Deduct from wallet balance
+  await updateWalletBalance(userId, -amount);
 }

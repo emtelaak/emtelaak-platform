@@ -157,3 +157,36 @@
 - [x] Implement language-aware video display
 - [x] Add responsive video container
 - [x] Test video playback and responsiveness
+
+
+## Phase 55: Wallet Page Implementation
+- [x] Create user_wallets table (userId, balance, currency, createdAt, updatedAt)
+- [x] Create user_bank_accounts table (userId, bankName, accountNumber, iban, accountHolderName, isDefault)
+- [x] Create wallet_transactions table (userId, type, amount, status, paymentMethod, receiptUrl, reference, createdAt)
+- [x] Add database migrations for wallet tables
+- [x] Implement getWalletBalance tRPC query
+- [x] Implement getTransactionHistory tRPC query
+- [x] Implement addBankAccount tRPC mutation
+- [x] Implement getBankAccounts tRPC query
+- [x] Implement setDefaultBankAccount tRPC mutation
+- [x] Implement deleteBankAccount tRPC mutation
+- [x] Implement depositRequest tRPC mutation (bank transfer with receipt upload)
+- [x] Implement depositFawry tRPC mutation
+- [x] Implement depositCard tRPC mutation (Visa, Mastercard, Meeza)
+- [x] Implement withdrawRequest tRPC mutation
+- [ ] Create Wallet page UI with balance card
+- [ ] Add transaction history table with filters
+- [ ] Create bank account management section
+- [ ] Create deposit modal with payment method selection
+- [ ] Create withdrawal modal with bank account selection
+- [ ] Add InstaPay receipt upload for bank transfers
+- [ ] Add Fawry payment integration
+- [ ] Add card payment integration (Visa, Mastercard, Meeza)
+- [ ] Add bilingual support for all wallet UI
+- [ ] Test wallet balance display
+- [ ] Test bank account CRUD operations
+- [ ] Test deposit with bank transfer and receipt upload
+- [ ] Test deposit with Fawry
+- [ ] Test deposit with credit/debit cards
+- [ ] Test withdrawal functionality
+- [ ] Test transaction history and filtering

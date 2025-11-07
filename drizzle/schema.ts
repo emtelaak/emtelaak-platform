@@ -1020,3 +1020,57 @@ export type KnowledgeBaseArticle = typeof knowledgeBaseArticles.$inferSelect;
 export type InsertKnowledgeBaseArticle = typeof knowledgeBaseArticles.$inferInsert;
 export type CannedResponse = typeof cannedResponses.$inferSelect;
 export type InsertCannedResponse = typeof cannedResponses.$inferInsert;
+
+// ============================================
+// WALLET AND PAYMENT SYSTEM
+// ============================================
+
+export const userWallets = mysqlTable("user_wallets", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique().references(() => users.id, { onDelete: "cascade" }),
+  balance: int("balance").default(0).notNull(), // Balance in EGP cents (e.g., 10000 = EGP 100.00)
+  currency: varchar("currency", { length: 3 }).default("EGP").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("user_id_idx").on(table.userId),
+}));
+
+export const userBankAccounts = mysqlTable("user_bank_accounts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+  bankName: varchar("bankName", { length: 100 }).notNull(),
+  accountNumber: varchar("accountNumber", { length: 50 }).notNull(),
+  iban: varchar("iban", { length: 34 }),
+  accountHolderName: varchar("accountHolderName", { length: 200 }).notNull(),
+  isDefault: boolean("isDefault").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("user_id_idx").on(table.userId),
+}));
+
+export const walletTransactions = mysqlTable("wallet_transactions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+  type: mysqlEnum("type", ["deposit", "withdrawal", "investment", "distribution", "refund"]).notNull(),
+  amount: int("amount").notNull(), // Amount in EGP cents
+  status: mysqlEnum("status", ["pending", "completed", "failed", "cancelled"]).default("pending").notNull(),
+  paymentMethod: mysqlEnum("paymentMethod", ["bank_transfer", "instapay", "fawry", "card", "wallet"]),
+  receiptUrl: text("receiptUrl"), // S3 URL for uploaded receipt (for bank transfers)
+  reference: varchar("reference", { length: 100 }), // External payment reference (Fawry code, card transaction ID, etc.)
+  description: text("description"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("user_id_idx").on(table.userId),
+  statusIdx: index("status_idx").on(table.status),
+  typeIdx: index("type_idx").on(table.type),
+}));
+
+export type UserWallet = typeof userWallets.$inferSelect;
+export type InsertUserWallet = typeof userWallets.$inferInsert;
+export type UserBankAccount = typeof userBankAccounts.$inferSelect;
+export type InsertUserBankAccount = typeof userBankAccounts.$inferInsert;
+export type WalletTransaction = typeof walletTransactions.$inferSelect;
+export type InsertWalletTransaction = typeof walletTransactions.$inferInsert;
