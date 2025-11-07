@@ -29,6 +29,10 @@ import {
   getPropertyMedia,
   joinPropertyWaitlist,
   isUserOnWaitlist,
+  saveProperty,
+  unsaveProperty,
+  getSavedProperties,
+  isPropertySaved,
   getUserInvestments,
   getUserPortfolioSummary,
   getUserIncomeHistory,
@@ -308,6 +312,31 @@ export const appRouter = router({
       .query(async ({ ctx, input }) => {
         const isOnWaitlist = await isUserOnWaitlist(input.propertyId, ctx.user.id);
         return { isOnWaitlist };
+      }),
+    
+    saveProperty: protectedProcedure
+      .input(z.object({ propertyId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        await saveProperty(ctx.user.id, input.propertyId);
+        return { success: true };
+      }),
+    
+    unsaveProperty: protectedProcedure
+      .input(z.object({ propertyId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        await unsaveProperty(ctx.user.id, input.propertyId);
+        return { success: true };
+      }),
+    
+    getSavedProperties: protectedProcedure.query(async ({ ctx }) => {
+      return await getSavedProperties(ctx.user.id);
+    }),
+    
+    checkSavedStatus: protectedProcedure
+      .input(z.object({ propertyId: z.number() }))
+      .query(async ({ ctx, input }) => {
+        const isSaved = await isPropertySaved(ctx.user.id, input.propertyId);
+        return { isSaved };
       }),
   }),
 

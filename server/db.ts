@@ -18,6 +18,7 @@ import {
   propertyMedia,
   InsertPropertyMedia,
   propertyWaitlist,
+  userSavedProperties,
   investments,
   InsertInvestment,
   incomeDistributions,
@@ -355,6 +356,50 @@ export async function isUserOnWaitlist(propertyId: number, userId: number) {
   if (!db) return false;
   const result = await db.select().from(propertyWaitlist)
     .where(and(eq(propertyWaitlist.propertyId, propertyId), eq(propertyWaitlist.userId, userId)))
+    .limit(1);
+  return result.length > 0;
+}
+
+export async function saveProperty(userId: number, propertyId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  try {
+    await db.insert(userSavedProperties).values({ userId, propertyId });
+  } catch (error) {
+    // Ignore duplicate entry errors
+    if (!(error as any).message?.includes('Duplicate entry')) {
+      throw error;
+    }
+  }
+}
+
+export async function unsaveProperty(userId: number, propertyId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(userSavedProperties)
+    .where(and(eq(userSavedProperties.userId, userId), eq(userSavedProperties.propertyId, propertyId)));
+}
+
+export async function getSavedProperties(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const result = await db
+    .select({ property: properties })
+    .from(userSavedProperties)
+    .innerJoin(properties, eq(userSavedProperties.propertyId, properties.id))
+    .where(eq(userSavedProperties.userId, userId))
+    .orderBy(desc(userSavedProperties.savedAt));
+  
+  return result.map(r => r.property);
+}
+
+export async function isPropertySaved(userId: number, propertyId: number) {
+  const db = await getDb();
+  if (!db) return false;
+  const result = await db.select().from(userSavedProperties)
+    .where(and(eq(userSavedProperties.userId, userId), eq(userSavedProperties.propertyId, propertyId)))
     .limit(1);
   return result.length > 0;
 }

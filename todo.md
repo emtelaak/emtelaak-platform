@@ -92,3 +92,19 @@
 - [x] Implement Saved properties filter (requires saved properties feature) - Placeholder added, full implementation deferred
 - [x] Test all status filters with different property types
 - [x] Verify card labels display correctly for all properties
+
+
+## Phase 50: Saved Properties Feature (Current)
+- [x] Create user_saved_properties table in database schema
+- [x] Add database migration for saved properties table
+- [x] Implement saveProperty tRPC mutation (protected)
+- [x] Implement unsaveProperty tRPC mutation (protected)
+- [x] Implement getSavedProperties tRPC query (protected)
+- [x] Implement isSaved tRPC query to check if property is saved
+- [x] Add heart icon to property cards in Properties page
+- [x] Implement heart icon toggle with optimistic updates
+- [x] Update Saved filter tab to show saved properties
+- [x] Add bilingual support for saved properties UI
+- [x] Test save/unsave functionality with authentication
+- [x] Test Saved filter tab integration
+- [x] Verify optimistic updates work correctly

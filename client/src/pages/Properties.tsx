@@ -7,7 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PROPERTY_TYPES, INVESTMENT_TYPES, APP_LOGO, APP_TITLE } from "@/const";
-import { Building2, MapPin, TrendingUp, Calendar, ArrowRight, Search, Bookmark } from "lucide-react";
+import { Building2, MapPin, TrendingUp, Calendar, ArrowRight, Search, Bookmark, Heart } from "lucide-react";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "wouter";
 import ROICalculator from "@/components/ROICalculator";
@@ -17,6 +18,7 @@ import { formatCurrency as formatCurrencyUtil } from "@/lib/currency";
 
 export default function Properties() {
   const { language } = useLanguage();
+  const { user, isAuthenticated } = useAuth();
   const [statusFilter, setStatusFilter] = useState<string>("available");
   const [filters, setFilters] = useState({
     propertyType: undefined as string | undefined,
@@ -26,19 +28,85 @@ export default function Properties() {
   });
 
   const { data: allProperties, isLoading } = trpc.properties.list.useQuery(filters);
+  const { data: savedProperties } = trpc.properties.getSavedProperties.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
+  const utils = trpc.useUtils();
+  const savePropertyMutation = trpc.properties.saveProperty.useMutation({
+    onMutate: async ({ propertyId }) => {
+      // Cancel outgoing refetches
+      await utils.properties.getSavedProperties.cancel();
+      
+      // Snapshot the previous value
+      const previousSaved = utils.properties.getSavedProperties.getData();
+      
+      // Optimistically update to the new value
+      const property = allProperties?.find(p => p.id === propertyId);
+      if (property) {
+        utils.properties.getSavedProperties.setData(undefined, (old) => {
+          return old ? [...old, property] : [property];
+        });
+      }
+      
+      return { previousSaved };
+    },
+    onError: (err, variables, context) => {
+      // Rollback on error
+      if (context?.previousSaved) {
+        utils.properties.getSavedProperties.setData(undefined, context.previousSaved);
+      }
+    },
+    onSettled: () => {
+      utils.properties.getSavedProperties.invalidate();
+    },
+  });
+  
+  const unsavePropertyMutation = trpc.properties.unsaveProperty.useMutation({
+    onMutate: async ({ propertyId }) => {
+      await utils.properties.getSavedProperties.cancel();
+      const previousSaved = utils.properties.getSavedProperties.getData();
+      
+      utils.properties.getSavedProperties.setData(undefined, (old) => {
+        return old ? old.filter(p => p.id !== propertyId) : [];
+      });
+      
+      return { previousSaved };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousSaved) {
+        utils.properties.getSavedProperties.setData(undefined, context.previousSaved);
+      }
+    },
+    onSettled: () => {
+      utils.properties.getSavedProperties.invalidate();
+    },
+  });
+  
+  const handleToggleSave = (propertyId: number) => {
+    if (!isAuthenticated) {
+      // Redirect to login if not authenticated
+      window.location.href = `/login?redirect=/properties`;
+      return;
+    }
+    
+    const isSaved = savedProperties?.some(p => p.id === propertyId);
+    if (isSaved) {
+      unsavePropertyMutation.mutate({ propertyId });
+    } else {
+      savePropertyMutation.mutate({ propertyId });
+    }
+  };
 
   // Filter properties based on status
   const properties = useMemo(() => {
     if (!allProperties) return [];
     
     if (statusFilter === "saved") {
-      // TODO: Implement saved properties feature
-      // For now, return empty array
-      return [];
+      return savedProperties || [];
     }
     
     return allProperties.filter(property => property.status === statusFilter);
-  }, [allProperties, statusFilter]);
+  }, [allProperties, savedProperties, statusFilter]);
 
   const formatCurrency = (cents: number) => {
     return formatCurrencyUtil(cents / 100, 'EGP', language);
@@ -195,7 +263,25 @@ export default function Properties() {
                       <div className="absolute inset-0 flex items-center justify-center">
                         <Building2 className="h-16 w-16 text-muted-foreground/30" />
                       </div>
-                      <div className="absolute top-4 right-4">
+                      <div className="absolute top-4 right-4 flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 rounded-full bg-background/90 hover:bg-background"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleToggleSave(property.id);
+                          }}
+                        >
+                          <Heart
+                            className={`h-4 w-4 ${
+                              savedProperties?.some(p => p.id === property.id)
+                                ? "fill-red-500 text-red-500"
+                                : "text-muted-foreground"
+                            }`}
+                          />
+                        </Button>
                         <Badge variant="secondary" className="bg-background/90">
                           {PROPERTY_TYPES[property.propertyType as keyof typeof PROPERTY_TYPES]}
                         </Badge>

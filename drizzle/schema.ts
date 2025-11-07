@@ -291,6 +291,17 @@ export const propertyWaitlist = mysqlTable("property_waitlist", {
   propertyUserUnique: unique("property_user_unique").on(table.propertyId, table.userId),
 }));
 
+export const userSavedProperties = mysqlTable("user_saved_properties", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+  propertyId: int("propertyId").notNull().references(() => properties.id, { onDelete: "cascade" }),
+  savedAt: timestamp("savedAt").defaultNow().notNull(),
+}, (table) => ({
+  userPropertyUnique: unique("user_property_unique").on(table.userId, table.propertyId),
+  userIdIdx: index("user_id_idx").on(table.userId),
+  propertyIdIdx: index("property_id_idx").on(table.propertyId),
+}));
+
 // ============================================
 // INVESTMENTS
 // ============================================
