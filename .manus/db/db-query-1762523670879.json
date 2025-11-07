@@ -1,0 +1,106 @@
+{
+  "query": "SHOW TABLES",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SHOW TABLES",
+  "rows": [
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "__drizzle_migrations"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "admin_permissions"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "audit_logs"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "developer_profiles"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "exchange_rates"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "fee_settings"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "income_distributions"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "investments"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "kyc_documents"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "kyc_progress"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "kyc_questionnaires"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "notifications"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "offering_documents"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "offerings"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "permission_role_templates"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "permissions"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "platform_settings"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "platform_wallet"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "properties"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "property_documents"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "property_media"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "property_waitlist"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "referrals"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "role_permissions"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "roles"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "secondary_market_deals"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "secondary_market_listings"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "transactions"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "user_permissions"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "user_profiles"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "users"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78": "verification_status"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_VvJGXt6mJVC6petxtZ2P78\n__drizzle_migrations\nadmin_permissions\naudit_logs\ndeveloper_profiles\nexchange_rates\nfee_settings\nincome_distributions\ninvestments\nkyc_documents\nkyc_progress\nkyc_questionnaires\nnotifications\noffering_documents\nofferings\npermission_role_templates\npermissions\nplatform_settings\nplatform_wallet\nproperties\nproperty_documents\nproperty_media\nproperty_waitlist\nreferrals\nrole_permissions\nroles\nsecondary_market_deals\nsecondary_market_listings\ntransactions\nuser_permissions\nuser_profiles\nusers\nverification_status\n",
+  "stderr": "",
+  "execution_time_ms": 384
+}
