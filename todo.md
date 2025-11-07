@@ -1000,3 +1000,17 @@
 - [x] Test admin-only routes protection
 - [x] Document user permissions and access levels
 - [x] Provide recommendations for role assignment if needed
+
+
+## Fix KYC Questionnaire Query Error
+- [x] Locate kyc_questionnaires query with invalid ORDER BY clause
+- [x] Fix ORDER BY to include column name (likely submittedAt or createdAt)
+- [x] Test query executes successfully
+- [x] Verify KYC data loads on homepage
+
+
+## Fix Missing adminPermissions Router
+- [x] Check if adminPermissionsRouter exists in server files
+- [x] Register adminPermissions router in main routers.ts
+- [x] Verify all adminPermissions procedures are accessible
+- [x] Test homepage loads without tRPC errors

@@ -253,6 +253,33 @@ export const adminPermissionsRouter = router({
 
         return { success: true };
       }),
+
+    updatePermissions: superAdminProcedure
+      .input(z.object({
+        userId: z.number(),
+        permissions: z.record(z.boolean()),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const db = await getDb();
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+
+        // Update user permissions in admin_permissions table
+        const existingPerms = await getAdminPermissions(input.userId);
+        const updatedPerms = { ...existingPerms, ...input.permissions };
+        
+        await upsertAdminPermissions(input.userId, updatedPerms);
+
+        // Create audit log
+        await createAuditLog({
+          userId: ctx.user.id,
+          action: "user.permissions.updated",
+          targetType: "user",
+          targetId: input.userId,
+          details: JSON.stringify({ permissions: input.permissions }),
+        });
+
+        return { success: true };
+      }),
   }),
 
   // Permissions

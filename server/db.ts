@@ -769,7 +769,7 @@ export async function getUserRecentActivity(userId: number, limit: number = 10) 
     .select()
     .from(kycQuestionnaires)
     .where(eq(kycQuestionnaires.userId, userId))
-    .orderBy(desc(kycQuestionnaires.updatedAt))
+    .orderBy(desc(kycQuestionnaires.submittedAt))
     .limit(2);
 
   for (const kyc of kycUpdates) {

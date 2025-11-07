@@ -27,7 +27,7 @@ export default function AdminPermissionsManager() {
   const { language } = useLanguage();
   const [updatingUserId, setUpdatingUserId] = useState<number | null>(null);
 
-  const { data: permissionsList, isLoading, refetch } = trpc.adminPermissions.list.useQuery();
+  const { data: permissionsList, isLoading, refetch } = trpc.adminPermissions.users.list.useQuery({});
   const { data: roleTemplates } = trpc.adminPermissions.roleTemplates.list.useQuery();
   const applyTemplateMutation = trpc.adminPermissions.roleTemplates.applyToUser.useMutation({
     onSuccess: () => {
@@ -42,7 +42,7 @@ export default function AdminPermissionsManager() {
       toast.error(error.message);
     },
   });
-  const updatePermissionsMutation = trpc.adminPermissions.update.useMutation({
+  const updatePermissionsMutation = trpc.adminPermissions.users.updatePermissions.useMutation({
     onSuccess: () => {
       toast.success(
         language === "en"
