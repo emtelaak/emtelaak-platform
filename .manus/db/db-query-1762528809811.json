@@ -1,0 +1,35 @@
+{
+  "query": "SELECT id, name, nameAr FROM knowledge_base_categories ORDER BY id",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT id, name, nameAr FROM knowledge_base_categories ORDER BY id",
+  "rows": [
+    {
+      "id": "24",
+      "name": "Getting Started",
+      "nameAr": "البدء"
+    },
+    {
+      "id": "25",
+      "name": "KYC & Verification",
+      "nameAr": "التحقق من الهوية"
+    },
+    {
+      "id": "26",
+      "name": "Investments",
+      "nameAr": "الاستثمارات"
+    },
+    {
+      "id": "27",
+      "name": "Payments & Withdrawals",
+      "nameAr": "المدفوعات والسحوبات"
+    },
+    {
+      "id": "28",
+      "name": "Platform Features",
+      "nameAr": "ميزات المنصة"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tnameAr\n24\tGetting Started\tالبدء\n25\tKYC & Verification\tالتحقق من الهوية\n26\tInvestments\tالاستثمارات\n27\tPayments & Withdrawals\tالمدفوعات والسحوبات\n28\tPlatform Features\tميزات المنصة\n",
+  "stderr": "",
+  "execution_time_ms": 403
+}

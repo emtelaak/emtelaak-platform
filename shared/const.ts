@@ -11,8 +11,8 @@ export const BRAND_COLORS = {
 } as const;
 
 // Investment constants
-export const MIN_INVESTMENT_USD = 100; // $100 minimum
-export const MIN_INVESTMENT_CENTS = MIN_INVESTMENT_USD * 100; // in cents
+export const MIN_SHARES = 1; // Minimum 1 share
+export const DEFAULT_CURRENCY = "EGP"; // Egyptian Pound as default
 
 // Property types
 export const PROPERTY_TYPES = {
@@ -49,8 +49,12 @@ export const KYC_DOCUMENT_TYPES = {
 
 // Currency codes
 export const CURRENCIES = {
-  USD: "USD",
   EGP: "EGP",
+  USD: "USD",
+  EUR: "EUR",
+  GBP: "GBP",
+  SAR: "SAR",
+  AED: "AED",
 } as const;
 
 // Language codes

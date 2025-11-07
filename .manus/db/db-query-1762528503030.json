@@ -1,0 +1,58 @@
+{
+  "query": "SELECT id, title, slug, categoryId FROM knowledge_base_articles ORDER BY id",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT id, title, slug, categoryId FROM knowledge_base_articles ORDER BY id",
+  "rows": [
+    {
+      "id": "1",
+      "title": "What is Emtelaak?",
+      "slug": "what-is-emtelaak",
+      "categoryId": "1"
+    },
+    {
+      "id": "2",
+      "title": "KYC Verification",
+      "slug": "kyc-verification",
+      "categoryId": "2"
+    },
+    {
+      "id": "3",
+      "title": "First Investment",
+      "slug": "first-investment",
+      "categoryId": "3"
+    },
+    {
+      "id": "4",
+      "title": "Understanding Returns",
+      "slug": "understanding-returns",
+      "categoryId": "4"
+    },
+    {
+      "id": "5",
+      "title": "Get Support",
+      "slug": "get-support",
+      "categoryId": "5"
+    },
+    {
+      "id": "6",
+      "title": "Property Selection",
+      "slug": "property-selection",
+      "categoryId": "3"
+    },
+    {
+      "id": "7",
+      "title": "Withdrawing Funds",
+      "slug": "withdrawing-funds",
+      "categoryId": "4"
+    },
+    {
+      "id": "8",
+      "title": "Account Security",
+      "slug": "account-security",
+      "categoryId": "5"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\ttitle\tslug\tcategoryId\n1\tWhat is Emtelaak?\twhat-is-emtelaak\t1\n2\tKYC Verification\tkyc-verification\t2\n3\tFirst Investment\tfirst-investment\t3\n4\tUnderstanding Returns\tunderstanding-returns\t4\n5\tGet Support\tget-support\t5\n6\tProperty Selection\tproperty-selection\t3\n7\tWithdrawing Funds\twithdrawing-funds\t4\n8\tAccount Security\taccount-security\t5\n",
+  "stderr": "",
+  "execution_time_ms": 386
+}

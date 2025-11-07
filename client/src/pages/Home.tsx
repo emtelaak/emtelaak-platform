@@ -84,13 +84,13 @@ export default function Home() {
         <div className="container">
           <div className="mx-auto max-w-5xl text-center">
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 md:p-16 shadow-xl">
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6" style={{ color: '#002B49' }}>
+              <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6" style={{ color: '#032941' }}>
                 {language === "en" ? "Own today" : "امتلك اليوم"}
                 <br />
                 {language === "en" ? "Invest for tomorrow." : "استثمر للغد."}
               </h1>
-              <div className="inline-block px-6 py-3 rounded-full mb-8" style={{ backgroundColor: '#D4FF00' }}>
-                <span className="font-semibold" style={{ color: '#002B49' }}>
+              <div className="inline-block px-6 py-3 rounded-full mb-8" style={{ backgroundColor: '#CDE428' }}>
+                <span className="font-semibold" style={{ color: '#032941' }}>
                   {language === "en" ? "Application Coming Soon" : "التطبيق قريباً"}
                 </span>
               </div>
@@ -172,26 +172,26 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Browse Card - Dark Teal */}
-            <div className="rounded-3xl p-8 text-white" style={{ backgroundColor: '#003D4F' }}>
+            {/* Browse Card - Oxford Blue */}
+            <div className="rounded-3xl p-8 text-white" style={{ backgroundColor: '#032941' }}>
               <h3 className="text-2xl font-bold mb-6">{t.home.howItWorks.step1.title}</h3>
               <p className="text-white/90 leading-relaxed">{t.home.howItWorks.step1.description}</p>
             </div>
 
             {/* Calculate Card - Lime Yellow */}
-            <div className="rounded-3xl p-8" style={{ backgroundColor: '#D4FF00' }}>
-              <h3 className="text-2xl font-bold mb-6 text-gray-900">{t.home.howItWorks.step2.title}</h3>
-              <p className="text-gray-800 leading-relaxed">{t.home.howItWorks.step2.description}</p>
+            <div className="rounded-3xl p-8" style={{ backgroundColor: '#CDE428' }}>
+              <h3 className="text-2xl font-bold mb-6" style={{ color: '#032941' }}>{t.home.howItWorks.step2.title}</h3>
+              <p className="leading-relaxed" style={{ color: '#333333' }}>{t.home.howItWorks.step2.description}</p>
             </div>
 
-            {/* Own Card - Dark Green */}
-            <div className="rounded-3xl p-8 text-white" style={{ backgroundColor: '#006B5E' }}>
+            {/* Own Card - Bangladesh Green */}
+            <div className="rounded-3xl p-8 text-white" style={{ backgroundColor: '#085C52' }}>
               <h3 className="text-2xl font-bold mb-6">{t.home.howItWorks.step3.title}</h3>
               <p className="text-white/90 leading-relaxed">{t.home.howItWorks.step3.description}</p>
             </div>
 
             {/* Track Card - Orange */}
-            <div className="rounded-3xl p-8 text-white" style={{ backgroundColor: '#FF6B35' }}>
+            <div className="rounded-3xl p-8 text-white" style={{ backgroundColor: '#FF7F00' }}>
               <h3 className="text-2xl font-bold mb-6">{t.home.howItWorks.step4.title}</h3>
               <p className="text-white/90 leading-relaxed">{t.home.howItWorks.step4.description}</p>
             </div>

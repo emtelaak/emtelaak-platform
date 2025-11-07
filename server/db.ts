@@ -350,6 +350,15 @@ export async function getPropertyWaitlist(propertyId: number) {
   return await db.select().from(propertyWaitlist).where(eq(propertyWaitlist.propertyId, propertyId)).orderBy(desc(propertyWaitlist.joinedAt));
 }
 
+export async function isUserOnWaitlist(propertyId: number, userId: number) {
+  const db = await getDb();
+  if (!db) return false;
+  const result = await db.select().from(propertyWaitlist)
+    .where(and(eq(propertyWaitlist.propertyId, propertyId), eq(propertyWaitlist.userId, userId)))
+    .limit(1);
+  return result.length > 0;
+}
+
 // ============================================
 // INVESTMENTS
 // ============================================

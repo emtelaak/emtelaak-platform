@@ -12,7 +12,7 @@ export interface Currency {
 
 export const SUPPORTED_CURRENCIES: Record<string, Currency> = {
   USD: { code: "USD", name: "US Dollar", symbol: "$", nameAr: "دولار أمريكي" },
-  EGP: { code: "EGP", name: "Egyptian Pound", symbol: "ج.م", nameAr: "جنيه مصري" },
+  EGP: { code: "EGP", name: "Egyptian Pound", symbol: "EGP", nameAr: "جنيه مصري" },
   EUR: { code: "EUR", name: "Euro", symbol: "€", nameAr: "يورو" },
   GBP: { code: "GBP", name: "British Pound", symbol: "£", nameAr: "جنيه إسترليني" },
   AED: { code: "AED", name: "UAE Dirham", symbol: "د.إ", nameAr: "درهم إماراتي" },
@@ -23,7 +23,7 @@ export const SUPPORTED_CURRENCIES: Record<string, Currency> = {
   OMR: { code: "OMR", name: "Omani Rial", symbol: "ر.ع", nameAr: "ريال عماني" },
 };
 
-// Exchange rates cache (base: USD)
+// Exchange rates cache (base: EGP)
 let exchangeRatesCache: Record<string, number> | null = null;
 let lastUpdated: Date | null = null;
 const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
@@ -34,7 +34,7 @@ const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
  */
 async function fetchExchangeRates(): Promise<Record<string, number>> {
   try {
-    const response = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+    const response = await fetch("https://api.exchangerate-api.com/v4/latest/EGP");
     if (!response.ok) {
       throw new Error("Failed to fetch exchange rates");
     }
@@ -53,16 +53,16 @@ async function fetchExchangeRates(): Promise<Record<string, number>> {
  */
 function getFallbackRates(): Record<string, number> {
   return {
-    USD: 1.0,
-    EGP: 49.50, // Egyptian Pound (approximate rate)
-    EUR: 0.92,
-    GBP: 0.79,
-    AED: 3.67,
-    SAR: 3.75,
-    KWD: 0.31,
-    QAR: 3.64,
-    BHD: 0.38,
-    OMR: 0.38,
+    EGP: 1.0,
+    USD: 0.0202, // 1 EGP = ~0.02 USD
+    EUR: 0.0186,
+    GBP: 0.0160,
+    AED: 0.0741,
+    SAR: 0.0758,
+    KWD: 0.0063,
+    QAR: 0.0735,
+    BHD: 0.0077,
+    OMR: 0.0078,
   };
 }
 
@@ -90,32 +90,32 @@ export async function getExchangeRates(): Promise<Record<string, number>> {
 }
 
 /**
- * Convert amount from USD to target currency
+ * Convert amount from EGP to target currency
  * @param customRate Optional custom exchange rate to override automatic rate
  */
 export async function convertCurrency(
-  amountUSD: number,
+  amountEGP: number,
   targetCurrency: string,
   customRate?: number
 ): Promise<number> {
-  if (targetCurrency === "USD") {
-    return amountUSD;
+  if (targetCurrency === "EGP") {
+    return amountEGP;
   }
 
   // Use custom rate if provided
   if (customRate !== undefined && customRate > 0) {
-    return amountUSD * customRate;
+    return amountEGP * customRate;
   }
 
   const rates = await getExchangeRates();
   const rate = rates[targetCurrency];
   
   if (!rate) {
-    console.warn(`Exchange rate not found for ${targetCurrency}, using USD`);
-    return amountUSD;
+    console.warn(`Exchange rate not found for ${targetCurrency}, using EGP`);
+    return amountEGP;
   }
 
-  return amountUSD * rate;
+  return amountEGP * rate;
 }
 
 /**
@@ -140,10 +140,17 @@ export function formatCurrency(
     }).format(value);
 
     // For Arabic, put symbol after number; for English, before
+    // Use Arabic symbol for EGP in Arabic mode
+    const displaySymbol = language === "ar" && currencyCode === "EGP" ? "ج.م." : currency.symbol;
+    
     if (language === "ar") {
-      return `${formatted} ${currency.symbol}`;
+      return `${formatted} ${displaySymbol}`;
     } else {
-      return `${currency.symbol}${formatted}`;
+      // For EGP in English, show as "EGP X" instead of "EGPX"
+      if (currencyCode === "EGP") {
+        return `${displaySymbol} ${formatted}`;
+      }
+      return `${displaySymbol}${formatted}`;
     }
   } catch (error) {
     console.error("Error formatting currency:", error);
@@ -175,7 +182,7 @@ export async function getHistoricalRates(
   targetCurrency: string,
   days: number = 30
 ): Promise<Array<{ date: string; rate: number }>> {
-  if (targetCurrency === "USD") {
+  if (targetCurrency === "EGP") {
     return [];
   }
 

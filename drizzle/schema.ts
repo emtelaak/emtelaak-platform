@@ -94,7 +94,7 @@ export const userProfiles = mysqlTable("user_profiles", {
   annualIncomeRange: varchar("annualIncomeRange", { length: 50 }),
   investorType: mysqlEnum("investorType", ["individual", "institutional"]),
   preferredLanguage: mysqlEnum("preferredLanguage", ["en", "ar"]).default("en"),
-  preferredCurrency: mysqlEnum("preferredCurrency", ["USD", "EGP"]).default("USD"),
+  preferredCurrency: mysqlEnum("preferredCurrency", ["USD", "EGP", "EUR", "GBP", "SAR", "AED"]).default("EGP"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 }, (table) => ({
@@ -185,7 +185,7 @@ export const properties = mysqlTable("properties", {
   descriptionAr: text("descriptionAr"),
   propertyType: mysqlEnum("propertyType", ["residential", "commercial", "administrative", "hospitality", "education", "logistics", "medical"]).notNull(),
   investmentType: mysqlEnum("investmentType", ["buy_to_let", "buy_to_sell"]).notNull(),
-  status: mysqlEnum("status", ["draft", "available", "funded", "exited", "cancelled"]).default("draft").notNull(),
+  status: mysqlEnum("status", ["draft", "coming_soon", "available", "funded", "exited", "cancelled"]).default("draft").notNull(),
   
   // Location
   addressLine1: text("addressLine1"),
@@ -949,11 +949,9 @@ export const knowledgeBaseCategories = mysqlTable("knowledge_base_categories", {
   name: varchar("name", { length: 100 }).notNull(),
   nameAr: varchar("nameAr", { length: 100 }),
   description: text("description"),
-  icon: varchar("icon", { length: 50 }), // Icon name for UI
   displayOrder: int("displayOrder").default(0).notNull(),
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
 export const knowledgeBaseArticles = mysqlTable("knowledge_base_articles", {
@@ -961,16 +959,14 @@ export const knowledgeBaseArticles = mysqlTable("knowledge_base_articles", {
   categoryId: int("categoryId").notNull().references(() => knowledgeBaseCategories.id, { onDelete: "cascade" }),
   title: varchar("title", { length: 255 }).notNull(),
   titleAr: varchar("titleAr", { length: 255 }),
-  slug: varchar("slug", { length: 255 }).notNull().unique(),
   content: text("content").notNull(),
   contentAr: text("contentAr"),
-  excerpt: text("excerpt"),
-  authorId: int("authorId").notNull().references(() => users.id),
-  viewCount: int("viewCount").default(0).notNull(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  tags: json("tags"),
+  views: int("views").default(0).notNull(),
   helpfulCount: int("helpfulCount").default(0).notNull(),
   notHelpfulCount: int("notHelpfulCount").default(0).notNull(),
-  isPublished: boolean("isPublished").default(false).notNull(),
-  publishedAt: timestamp("publishedAt"),
+  isPublished: boolean("isPublished").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 }, (table) => ({

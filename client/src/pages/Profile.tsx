@@ -68,7 +68,7 @@ export default function Profile() {
       employmentStatus: formData.get("employmentStatus") as string || undefined,
       annualIncomeRange: formData.get("annualIncomeRange") as string || undefined,
       preferredLanguage: formData.get("preferredLanguage") as "en" | "ar" || undefined,
-      preferredCurrency: formData.get("preferredCurrency") as "USD" | "EGP" || undefined,
+      preferredCurrency: formData.get("preferredCurrency") as "USD" | "EGP" | "EUR" | "GBP" | "SAR" | "AED" || undefined,
     });
   };
 
@@ -197,7 +197,7 @@ export default function Profile() {
                     </div>
                     <div className="flex items-center gap-3 text-sm">
                       <DollarSign className="h-4 w-4 text-muted-foreground" />
-                      <span>{profile?.preferredCurrency || "USD"}</span>
+                      <span>{profile?.preferredCurrency || "EGP"}</span>
                     </div>
                   </div>
                 </CardContent>
@@ -541,7 +541,7 @@ export default function Profile() {
                       <Label htmlFor="preferredCurrency">{t.profile.preferences.currency}</Label>
                       <Select
                         name="preferredCurrency"
-                        defaultValue={profile?.preferredCurrency || "USD"}
+                        defaultValue={profile?.preferredCurrency || "EGP"}
                       >
                         <SelectTrigger>
                           <SelectValue />

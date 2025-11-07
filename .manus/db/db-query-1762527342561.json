@@ -1,0 +1,80 @@
+{
+  "query": "SELECT id, name, email, role, status FROM users ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT id, name, email, role, status FROM users ORDER BY id;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Waleed Shaarawy",
+      "email": "waleed@uptown6october.com",
+      "role": "super_admin",
+      "status": "pending_verification"
+    },
+    {
+      "id": "750038",
+      "name": "Waleed Shaarawy",
+      "email": "waleed@emtelaak.com",
+      "role": "admin",
+      "status": "active"
+    },
+    {
+      "id": "990010",
+      "name": "Ahmed Hassan",
+      "email": "ahmed.hassan@example.com",
+      "role": "user",
+      "status": "active"
+    },
+    {
+      "id": "990011",
+      "name": "Sarah Johnson",
+      "email": "sarah.johnson@example.com",
+      "role": "user",
+      "status": "active"
+    },
+    {
+      "id": "990012",
+      "name": "Mohamed Ali",
+      "email": "mohamed.ali@example.com",
+      "role": "user",
+      "status": "pending_verification"
+    },
+    {
+      "id": "990013",
+      "name": "Emily Chen",
+      "email": "emily.chen@example.com",
+      "role": "user",
+      "status": "active"
+    },
+    {
+      "id": "990014",
+      "name": "Omar Ibrahim",
+      "email": "omar.ibrahim@example.com",
+      "role": "user",
+      "status": "active"
+    },
+    {
+      "id": "990015",
+      "name": "Fatima El-Sayed",
+      "email": "fatima.elsayed@emtelaak.com",
+      "role": "admin",
+      "status": "active"
+    },
+    {
+      "id": "990016",
+      "name": "John Smith",
+      "email": "john.smith@emtelaak.com",
+      "role": "admin",
+      "status": "active"
+    },
+    {
+      "id": "990017",
+      "name": "Layla Ahmed",
+      "email": "layla.ahmed@emtelaak.com",
+      "role": "admin",
+      "status": "active"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\trole\tstatus\n1\tWaleed Shaarawy\twaleed@uptown6october.com\tsuper_admin\tpending_verification\n750038\tWaleed Shaarawy\twaleed@emtelaak.com\tadmin\tactive\n990010\tAhmed Hassan\tahmed.hassan@example.com\tuser\tactive\n990011\tSarah Johnson\tsarah.johnson@example.com\tuser\tactive\n990012\tMohamed Ali\tmohamed.ali@example.com\tuser\tpending_verification\n990013\tEmily Chen\temily.chen@example.com\tuser\tactive\n990014\tOmar Ibrahim\tomar.ibrahim@example.com\tuser\tactive\n990015\tFatima El-Sayed\tfatima.elsayed@emtelaak.com\tadmin\tactive\n990016\tJohn Smith\tjohn.smith@emtelaak.com\tadmin\tactive\n990017\tLayla Ahmed\tlayla.ahmed@emtelaak.com\tadmin\tactive\n",
+  "stderr": "",
+  "execution_time_ms": 384
+}

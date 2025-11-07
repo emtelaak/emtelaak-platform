@@ -22,6 +22,7 @@ import {
   getLastUpdated,
   refreshExchangeRates,
   getHistoricalRates,
+  getExchangeRates,
 } from "@/lib/currency";
 import {
   PROPERTY_TYPES,
@@ -60,7 +61,7 @@ export default function ROICalculator({
   const [investmentAmount, setInvestmentAmount] = useState(defaultInvestmentAmount);
   const [propertyValue, setPropertyValue] = useState(defaultPropertyValue);
   const [selectedPropertyType, setSelectedPropertyType] = useState(defaultPropertyType);
-  const [selectedCurrency, setSelectedCurrency] = useState("USD");
+  const [selectedCurrency, setSelectedCurrency] = useState("EGP");
   const [convertedValues, setConvertedValues] = useState<Record<string, number>>({});
   const [isConverting, setIsConverting] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -86,7 +87,7 @@ export default function ROICalculator({
       setIsConverting(true);
       try {
         // Get current automatic rate for display
-        const rates = await import("@/lib/currency").then(m => m.getExchangeRates());
+        const rates = await getExchangeRates();
         const autoRate = rates[selectedCurrency] || 1;
         setCurrentAutoRate(autoRate);
         
@@ -279,7 +280,7 @@ export default function ROICalculator({
           </div>
 
           {/* Custom Exchange Rate */}
-          {selectedCurrency !== "USD" && (
+          {selectedCurrency !== "EGP" && (
             <div className="border border-border rounded-lg p-4 space-y-3 bg-muted/30">
               <div className="flex items-center justify-between">
                 <Label htmlFor="use-custom-rate" className="cursor-pointer">

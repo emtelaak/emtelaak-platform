@@ -18,13 +18,16 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import ROICalculator from "@/components/ROICalculator";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { formatCurrency as formatCurrencyUtil } from "@/lib/currency";
 
 export default function PropertyDetail() {
   const { id } = useParams();
   const [, setLocation] = useLocation();
   const { user, isAuthenticated } = useAuth();
+  const { language } = useLanguage();
   const [investModalOpen, setInvestModalOpen] = useState(false);
-  const [investmentAmount, setInvestmentAmount] = useState("");
+  const [numberOfShares, setNumberOfShares] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("bank_transfer");
   const [distributionFrequency, setDistributionFrequency] = useState<"monthly" | "quarterly" | "annual">("monthly");
 
@@ -34,11 +37,25 @@ export default function PropertyDetail() {
     { enabled: propertyId > 0 }
   );
 
+  const { data: waitlistStatus } = trpc.properties.checkWaitlistStatus.useQuery(
+    { propertyId },
+    { enabled: propertyId > 0 && isAuthenticated }
+  );
+
+  const joinWaitlistMutation = trpc.properties.joinWaitlist.useMutation({
+    onSuccess: () => {
+      toast.success(language === "en" ? "Successfully joined the waitlist!" : "تم الانضمام إلى قائمة الانتظار بنجاح!");
+    },
+    onError: (error) => {
+      toast.error(error.message || (language === "en" ? "Failed to join waitlist" : "فشل الانضمام إلى قائمة الانتظار"));
+    },
+  });
+
   const createInvestmentMutation = trpc.investments.create.useMutation({
     onSuccess: () => {
       toast.success("Investment created successfully! Awaiting payment confirmation.");
       setInvestModalOpen(false);
-      setInvestmentAmount("");
+      setNumberOfShares("");
       setLocation("/portfolio");
     },
     onError: (error) => {
@@ -47,26 +64,20 @@ export default function PropertyDetail() {
   });
 
   const formatCurrency = (cents: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(cents / 100);
+    return formatCurrencyUtil(cents / 100, 'EGP', language);
   };
 
   const formatPercentage = (value: number) => {
     return `${(value / 100).toFixed(2)}%`;
   };
 
-  const calculateShares = (amount: number) => {
+  const calculateAmount = (shares: number) => {
     if (!property) return 0;
-    return Math.floor(amount / property.sharePrice);
+    return shares * property.sharePrice;
   };
 
-  const calculateOwnership = (amount: number) => {
+  const calculateOwnership = (shares: number) => {
     if (!property) return 0;
-    const shares = calculateShares(amount);
     return ((shares / property.totalShares) * 100).toFixed(4);
   };
 
@@ -76,17 +87,18 @@ export default function PropertyDetail() {
       return;
     }
 
-    const amount = parseInt(investmentAmount) * 100; // Convert to cents
-    if (!property || amount < property.minimumInvestment) {
-      toast.error(`Minimum investment is ${formatCurrency(property?.minimumInvestment || 0)}`);
+    const shares = parseInt(numberOfShares);
+    if (!property || shares < 1) {
+      toast.error("Minimum investment is 1 share");
       return;
     }
 
-    const shares = calculateShares(amount);
     if (shares > property.availableShares) {
       toast.error("Not enough shares available");
       return;
     }
+
+    const amount = calculateAmount(shares);
 
     createInvestmentMutation.mutate({
       propertyId: property.id,
@@ -186,34 +198,44 @@ export default function PropertyDetail() {
             <CardContent className="space-y-6">
               <div>
                 <div className="flex justify-between items-baseline mb-2">
-                  <span className="text-sm text-muted-foreground">Total Value</span>
+                  <span className="text-sm text-muted-foreground">
+                    {language === "en" ? "Total Value" : "القيمة الإجمالية"}
+                  </span>
                   <span className="text-2xl font-bold">{formatCurrency(property.totalValue)}</span>
                 </div>
                 <div className="flex justify-between items-baseline">
-                  <span className="text-sm text-muted-foreground">Minimum Investment</span>
+                  <span className="text-sm text-muted-foreground">
+                    {language === "en" ? "Price per Share" : "سعر الحصة"}
+                  </span>
                   <span className="text-lg font-semibold text-primary">
-                    {formatCurrency(property.minimumInvestment)}
+                    {formatCurrency(property.sharePrice)}
                   </span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Expected Yield</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    {language === "en" ? "Expected Yield" : "العائد المتوقع"}
+                  </p>
                   <p className="text-xl font-bold text-primary flex items-center gap-1">
                     <TrendingUp className="h-4 w-4" />
                     {formatPercentage(yieldValue || 0)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Share Price</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    {language === "en" ? "Share Price" : "سعر الحصة"}
+                  </p>
                   <p className="text-xl font-bold">{formatCurrency(property.sharePrice)}</p>
                 </div>
               </div>
 
               <div>
                 <div className="flex justify-between text-sm mb-2">
-                  <span className="text-muted-foreground">Funding Progress</span>
+                  <span className="text-muted-foreground">
+                    {language === "en" ? "Funding Progress" : "تقدم التمويل"}
+                  </span>
                   <span className="font-medium">{fundingProgress.toFixed(1)}%</span>
                 </div>
                 <div className="h-3 bg-muted rounded-full overflow-hidden">
@@ -223,8 +245,12 @@ export default function PropertyDetail() {
                   />
                 </div>
                 <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>{formatCurrency(property.totalValue - property.availableValue)} raised</span>
-                  <span>{property.availableShares.toLocaleString()} shares left</span>
+                  <span>
+                    {formatCurrency(property.totalValue - property.availableValue)} {language === "en" ? "raised" : "تم جمعه"}
+                  </span>
+                  <span>
+                    {property.availableShares.toLocaleString()} {language === "en" ? "shares left" : "حصة متبقية"}
+                  </span>
                 </div>
               </div>
 
@@ -235,10 +261,30 @@ export default function PropertyDetail() {
                 </div>
               )}
 
-              <Button onClick={() => setInvestModalOpen(true)} className="w-full" size="lg">
-                <DollarSign className="mr-2 h-5 w-5" />
-                Invest in This Property
-              </Button>
+              {property.status === "coming_soon" && property.waitlistEnabled ? (
+                <Button 
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      window.location.href = getLoginUrl();
+                      return;
+                    }
+                    joinWaitlistMutation.mutate({ propertyId });
+                  }} 
+                  className="w-full" 
+                  size="lg"
+                  disabled={waitlistStatus?.isOnWaitlist || joinWaitlistMutation.isPending}
+                  variant={waitlistStatus?.isOnWaitlist ? "outline" : "default"}
+                >
+                  {waitlistStatus?.isOnWaitlist 
+                    ? (language === "en" ? "On Waitlist" : "في قائمة الانتظار")
+                    : (language === "en" ? "Join the Waitlist" : "انضم إلى قائمة الانتظار")
+                  }
+                </Button>
+              ) : (
+                <Button onClick={() => setInvestModalOpen(true)} className="w-full" size="lg">
+                  {language === "en" ? "Invest in This Property" : "استثمر في هذا العقار"}
+                </Button>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -246,10 +292,10 @@ export default function PropertyDetail() {
         {/* Tabs Section */}
         <Tabs defaultValue="overview" className="mb-8">
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="financials">Financials</TabsTrigger>
-            <TabsTrigger value="documents">Documents</TabsTrigger>
-            <TabsTrigger value="calculator">ROI Calculator</TabsTrigger>
+            <TabsTrigger value="overview">{language === "en" ? "Overview" : "نظرة عامة"}</TabsTrigger>
+            <TabsTrigger value="financials">{language === "en" ? "Financials" : "البيانات المالية"}</TabsTrigger>
+            <TabsTrigger value="documents">{language === "en" ? "Documents" : "المستندات"}</TabsTrigger>
+            <TabsTrigger value="calculator">{language === "en" ? "ROI Calculator" : "حاسبة العوائد"}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6 mt-6">
@@ -390,70 +436,75 @@ export default function PropertyDetail() {
       <Dialog open={investModalOpen} onOpenChange={setInvestModalOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Invest in {property.name}</DialogTitle>
+            <DialogTitle>
+              {language === "en" ? `Invest in ${property.name}` : `استثمر في ${property.name}`}
+            </DialogTitle>
             <DialogDescription>
-              Enter your investment amount and payment details
+              {language === "en" ? "Enter your investment amount and payment details" : "أدخل مبلغ الاستثمار وتفاصيل الدفع"}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="amount">Investment Amount (USD)</Label>
+              <Label htmlFor="shares">{language === "en" ? "Number of Shares" : "عدد الحصص"}</Label>
               <Input
-                id="amount"
+                id="shares"
                 type="number"
-                placeholder={`Min: $${property.minimumInvestment / 100}`}
-                value={investmentAmount}
-                onChange={(e) => setInvestmentAmount(e.target.value)}
-                min={property.minimumInvestment / 100}
-                step={100}
+                placeholder={language === "en" ? "Minimum: 1 share" : "الحد الأدنى: حصة واحدة"}
+                value={numberOfShares}
+                onChange={(e) => setNumberOfShares(e.target.value)}
+                min={1}
+                step={1}
               />
               <p className="text-xs text-muted-foreground">
-                Minimum: {formatCurrency(property.minimumInvestment)}
+                {language === "en" 
+                  ? `Minimum: 1 share • Price per share: ${formatCurrency(property.sharePrice)}`
+                  : `الحد الأدنى: حصة واحدة • سعر الحصة: ${formatCurrency(property.sharePrice)}`
+                }
               </p>
             </div>
 
-            {investmentAmount && parseInt(investmentAmount) >= property.minimumInvestment / 100 && (
+            {numberOfShares && parseInt(numberOfShares) >= 1 && (
               <div className="bg-muted/50 p-4 rounded-lg space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Shares</span>
-                  <span className="font-medium">{calculateShares(parseInt(investmentAmount) * 100)}</span>
+                  <span className="text-muted-foreground">{language === "en" ? "Total Investment" : "إجمالي الاستثمار"}</span>
+                  <span className="font-medium text-lg">{formatCurrency(calculateAmount(parseInt(numberOfShares)))}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Ownership</span>
-                  <span className="font-medium">{calculateOwnership(parseInt(investmentAmount) * 100)}%</span>
+                  <span className="text-muted-foreground">{language === "en" ? "Ownership" : "نسبة الملكية"}</span>
+                  <span className="font-medium">{calculateOwnership(parseInt(numberOfShares))}%</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Share Price</span>
-                  <span className="font-medium">{formatCurrency(property.sharePrice)}</span>
+                  <span className="text-muted-foreground">{language === "en" ? "Number of Shares" : "عدد الحصص"}</span>
+                  <span className="font-medium">{parseInt(numberOfShares).toLocaleString()}</span>
                 </div>
               </div>
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="frequency">Distribution Frequency</Label>
+              <Label htmlFor="frequency">{language === "en" ? "Distribution Frequency" : "تكرار التوزيع"}</Label>
               <Select value={distributionFrequency} onValueChange={(v: any) => setDistributionFrequency(v)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="monthly">Monthly</SelectItem>
-                  <SelectItem value="quarterly">Quarterly</SelectItem>
-                  <SelectItem value="annual">Annual</SelectItem>
+                  <SelectItem value="monthly">{language === "en" ? "Monthly" : "شهري"}</SelectItem>
+                  <SelectItem value="quarterly">{language === "en" ? "Quarterly" : "ربع سنوي"}</SelectItem>
+                  <SelectItem value="annual">{language === "en" ? "Annual" : "سنوي"}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="payment">Payment Method</Label>
+              <Label htmlFor="payment">{language === "en" ? "Payment Method" : "طريقة الدفع"}</Label>
               <Select value={paymentMethod} onValueChange={setPaymentMethod}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
-                  <SelectItem value="credit_card">Credit Card</SelectItem>
-                  <SelectItem value="wire_transfer">Wire Transfer</SelectItem>
+                  <SelectItem value="bank_transfer">{language === "en" ? "Bank Transfer" : "تحويل بنكي"}</SelectItem>
+                  <SelectItem value="credit_card">{language === "en" ? "Credit Card" : "بطاقة ائتمان"}</SelectItem>
+                  <SelectItem value="wire_transfer">{language === "en" ? "Wire Transfer" : "تحويل بنكي دولي"}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -461,9 +512,13 @@ export default function PropertyDetail() {
             <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg flex gap-3">
               <AlertCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-blue-900 dark:text-blue-100">
-                <p className="font-medium mb-1">KYC Verification Required</p>
+                <p className="font-medium mb-1">
+                  {language === "en" ? "KYC Verification Required" : "مطلوب التحقق من الهوية"}
+                </p>
                 <p className="text-blue-700 dark:text-blue-200">
-                  You must complete KYC verification before investing. Payment instructions will be sent after submission.
+                  {language === "en" 
+                    ? "You must complete KYC verification before investing. Payment instructions will be sent after submission."
+                    : "يجب إكمال التحقق من الهوية قبل الاستثمار. سيتم إرسال تعليمات الدفع بعد التقديم."}
                 </p>
               </div>
             </div>
@@ -471,13 +526,15 @@ export default function PropertyDetail() {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setInvestModalOpen(false)}>
-              Cancel
+              {language === "en" ? "Cancel" : "إلغاء"}
             </Button>
             <Button 
               onClick={handleInvest}
-              disabled={!investmentAmount || parseInt(investmentAmount) < property.minimumInvestment / 100 || createInvestmentMutation.isPending}
+              disabled={!numberOfShares || parseInt(numberOfShares) < 1 || createInvestmentMutation.isPending}
             >
-              {createInvestmentMutation.isPending ? "Processing..." : "Confirm Investment"}
+              {createInvestmentMutation.isPending 
+                ? (language === "en" ? "Processing..." : "جاري المعالجة...") 
+                : (language === "en" ? "Confirm Investment" : "تأكيد الاستثمار")}
             </Button>
           </DialogFooter>
         </DialogContent>

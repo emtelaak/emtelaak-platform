@@ -1,0 +1,8 @@
+{
+  "query": "INSERT INTO knowledge_base_categories (name, name_ar, description, display_order, is_active) VALUES \n('Getting Started', 'البدء', 'Learn the basics of investing with Emtelaak', 1, 1),\n('KYC & Verification', 'التحقق من الهوية', 'Understanding our verification process', 2, 1),\n('Investments', 'الاستثمارات', 'How to invest and manage your portfolio', 3, 1),\n('Payments & Withdrawals', 'المدفوعات والسحوبات', 'Managing your funds', 4, 1),\n('Platform Features', 'ميزات المنصة', 'Explore platform capabilities', 5, 1)",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute INSERT INTO knowledge_base_categories (name, name_ar, description, display_order, is_active) VALUES \n('Getting Started', 'البدء', 'Learn the basics of investing with Emtelaak', 1, 1),\n('KYC & Verification', 'التحقق من الهوية', 'Understanding our verification process', 2, 1),\n('Investments', 'الاستثمارات', 'How to invest and manage your portfolio', 3, 1),\n('Payments & Withdrawals', 'المدفوعات والسحوبات', 'Managing your funds', 4, 1),\n('Platform Features', 'ميزات المنصة', 'Explore platform capabilities', 5, 1)",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'name_ar' in 'field list'"
+  ]
+}

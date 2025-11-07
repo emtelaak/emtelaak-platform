@@ -1,0 +1,178 @@
+{
+  "query": "SELECT id, name, nameAr, displayOrder FROM knowledge_base_categories ORDER BY displayOrder, id",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT id, name, nameAr, displayOrder FROM knowledge_base_categories ORDER BY displayOrder, id",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Getting Started",
+      "nameAr": "NULL",
+      "displayOrder": "1"
+    },
+    {
+      "id": "9",
+      "name": "Getting Started",
+      "nameAr": "NULL",
+      "displayOrder": "1"
+    },
+    {
+      "id": "14",
+      "name": "Getting Started",
+      "nameAr": "NULL",
+      "displayOrder": "1"
+    },
+    {
+      "id": "19",
+      "name": "Getting Started",
+      "nameAr": "NULL",
+      "displayOrder": "1"
+    },
+    {
+      "id": "24",
+      "name": "Getting Started",
+      "nameAr": "البدء",
+      "displayOrder": "1"
+    },
+    {
+      "id": "2",
+      "name": "KYC & Verification",
+      "nameAr": "NULL",
+      "displayOrder": "2"
+    },
+    {
+      "id": "10",
+      "name": "KYC",
+      "nameAr": "NULL",
+      "displayOrder": "2"
+    },
+    {
+      "id": "15",
+      "name": "KYC",
+      "nameAr": "NULL",
+      "displayOrder": "2"
+    },
+    {
+      "id": "20",
+      "name": "KYC",
+      "nameAr": "NULL",
+      "displayOrder": "2"
+    },
+    {
+      "id": "25",
+      "name": "KYC & Verification",
+      "nameAr": "التحقق من الهوية",
+      "displayOrder": "2"
+    },
+    {
+      "id": "3",
+      "name": "Investments",
+      "nameAr": "NULL",
+      "displayOrder": "3"
+    },
+    {
+      "id": "11",
+      "name": "Investments",
+      "nameAr": "NULL",
+      "displayOrder": "3"
+    },
+    {
+      "id": "16",
+      "name": "Investments",
+      "nameAr": "NULL",
+      "displayOrder": "3"
+    },
+    {
+      "id": "21",
+      "name": "Investments",
+      "nameAr": "NULL",
+      "displayOrder": "3"
+    },
+    {
+      "id": "26",
+      "name": "Investments",
+      "nameAr": "الاستثمارات",
+      "displayOrder": "3"
+    },
+    {
+      "id": "4",
+      "name": "Returns & Distributions",
+      "nameAr": "NULL",
+      "displayOrder": "4"
+    },
+    {
+      "id": "12",
+      "name": "Returns",
+      "nameAr": "NULL",
+      "displayOrder": "4"
+    },
+    {
+      "id": "17",
+      "name": "Returns",
+      "nameAr": "NULL",
+      "displayOrder": "4"
+    },
+    {
+      "id": "22",
+      "name": "Returns",
+      "nameAr": "NULL",
+      "displayOrder": "4"
+    },
+    {
+      "id": "27",
+      "name": "Payments & Withdrawals",
+      "nameAr": "المدفوعات والسحوبات",
+      "displayOrder": "4"
+    },
+    {
+      "id": "5",
+      "name": "Account & Security",
+      "nameAr": "NULL",
+      "displayOrder": "5"
+    },
+    {
+      "id": "13",
+      "name": "Support",
+      "nameAr": "NULL",
+      "displayOrder": "5"
+    },
+    {
+      "id": "18",
+      "name": "Support",
+      "nameAr": "NULL",
+      "displayOrder": "5"
+    },
+    {
+      "id": "23",
+      "name": "Support",
+      "nameAr": "NULL",
+      "displayOrder": "5"
+    },
+    {
+      "id": "28",
+      "name": "Platform Features",
+      "nameAr": "ميزات المنصة",
+      "displayOrder": "5"
+    },
+    {
+      "id": "6",
+      "name": "Withdrawals & Transfers",
+      "nameAr": "NULL",
+      "displayOrder": "6"
+    },
+    {
+      "id": "7",
+      "name": "Property Management",
+      "nameAr": "NULL",
+      "displayOrder": "7"
+    },
+    {
+      "id": "8",
+      "name": "Legal & Compliance",
+      "nameAr": "NULL",
+      "displayOrder": "8"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tnameAr\tdisplayOrder\n1\tGetting Started\tNULL\t1\n9\tGetting Started\tNULL\t1\n14\tGetting Started\tNULL\t1\n19\tGetting Started\tNULL\t1\n24\tGetting Started\tالبدء\t1\n2\tKYC & Verification\tNULL\t2\n10\tKYC\tNULL\t2\n15\tKYC\tNULL\t2\n20\tKYC\tNULL\t2\n25\tKYC & Verification\tالتحقق من الهوية\t2\n3\tInvestments\tNULL\t3\n11\tInvestments\tNULL\t3\n16\tInvestments\tNULL\t3\n21\tInvestments\tNULL\t3\n26\tInvestments\tالاستثمارات\t3\n4\tReturns & Distributions\tNULL\t4\n12\tReturns\tNULL\t4\n17\tReturns\tNULL\t4\n22\tReturns\tNULL\t4\n27\tPayments & Withdrawals\tالمدفوعات والسحوبات\t4\n5\tAccount & Security\tNULL\t5\n13\tSupport\tNULL\t5\n18\tSupport\tNULL\t5\n23\tSupport\tNULL\t5\n28\tPlatform Features\tميزات المنصة\t5\n6\tWithdrawals & Transfers\tNULL\t6\n7\tProperty Management\tNULL\t7\n8\tLegal & Compliance\tNULL\t8\n",
+  "stderr": "",
+  "execution_time_ms": 383
+}

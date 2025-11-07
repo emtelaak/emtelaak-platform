@@ -10,8 +10,12 @@ import { PROPERTY_TYPES, INVESTMENT_TYPES, APP_LOGO, APP_TITLE } from "@/const";
 import { Building2, MapPin, TrendingUp, Calendar, ArrowRight, Search } from "lucide-react";
 import { Link } from "wouter";
 import ROICalculator from "@/components/ROICalculator";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { formatCurrency as formatCurrencyUtil } from "@/lib/currency";
 
 export default function Properties() {
+  const { language } = useLanguage();
   const [filters, setFilters] = useState({
     propertyType: undefined as string | undefined,
     investmentType: undefined as string | undefined,
@@ -22,12 +26,7 @@ export default function Properties() {
   const { data: properties, isLoading } = trpc.properties.list.useQuery(filters);
 
   const formatCurrency = (cents: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(cents / 100);
+    return formatCurrencyUtil(cents / 100, 'EGP', language);
   };
 
   const formatPercentage = (value: number) => {
@@ -48,14 +47,21 @@ export default function Properties() {
               <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-auto cursor-pointer" />
             </Link>
             <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2">Investment Properties</h1>
+              <h1 className="text-3xl font-bold mb-2">
+                {language === "en" ? "Investment Properties" : "العقارات الاستثمارية"}
+              </h1>
               <p className="text-muted-foreground">
-                Browse our curated selection of premium real estate opportunities
+                {language === "en" 
+                  ? "Browse our curated selection of premium real estate opportunities"
+                  : "تصفح مجموعتنا المختارة من فرص العقارات المميزة"}
               </p>
             </div>
-            <Link href="/">
-              <Button variant="outline">Back to Home</Button>
-            </Link>
+            <div className="flex items-center gap-3">
+              <LanguageSwitcher />
+              <Link href="/">
+                <Button variant="outline">{language === "en" ? "Back to Home" : "العودة للرئيسية"}</Button>
+              </Link>
+            </div>
           </div>
 
           {/* Filters */}
@@ -157,7 +163,12 @@ export default function Properties() {
                           {PROPERTY_TYPES[property.propertyType as keyof typeof PROPERTY_TYPES]}
                         </Badge>
                       </div>
-                      <div className="absolute top-4 left-4">
+                      <div className="absolute top-4 left-4 flex flex-col gap-2">
+                        {property.status === "coming_soon" && (
+                          <Badge className="bg-yellow-500 text-black font-semibold">
+                            {language === "en" ? "Coming Soon" : "قريباً"}
+                          </Badge>
+                        )}
                         <Badge className="bg-primary text-primary-foreground">
                           {property.investmentType === "buy_to_let" ? "High Yield" : "Capital Growth"}
                         </Badge>
@@ -175,11 +186,32 @@ export default function Properties() {
                     <CardContent className="space-y-4">
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <p className="text-muted-foreground">Total Value</p>
+                          <p className="text-muted-foreground">
+                            {language === "en" ? "Total Value" : "القيمة الإجمالية"}
+                          </p>
                           <p className="font-semibold">{formatCurrency(property.totalValue)}</p>
                         </div>
                         <div>
-                          <p className="text-muted-foreground">Expected Yield</p>
+                          <p className="text-muted-foreground">
+                            {language === "en" ? "Price per Share" : "سعر الحصة"}
+                          </p>
+                          <p className="font-semibold text-primary">
+                            {formatCurrency(property.sharePrice)}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p className="text-muted-foreground">
+                            {language === "en" ? "Available Shares" : "الحصص المتاحة"}
+                          </p>
+                          <p className="font-semibold">{property.availableShares.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground">
+                            {language === "en" ? "Expected Yield" : "العائد المتوقع"}
+                          </p>
                           <p className="font-semibold text-primary flex items-center gap-1">
                             <TrendingUp className="h-3 w-3" />
                             {formatPercentage(yieldValue)}
@@ -189,7 +221,9 @@ export default function Properties() {
 
                       <div>
                         <div className="flex justify-between text-sm mb-2">
-                          <span className="text-muted-foreground">Funding Progress</span>
+                          <span className="text-muted-foreground">
+                            {language === "en" ? "Funding Progress" : "تقدم التمويل"}
+                          </span>
                           <span className="font-medium">{fundingProgress.toFixed(0)}%</span>
                         </div>
                         <div className="h-2 bg-muted rounded-full overflow-hidden">

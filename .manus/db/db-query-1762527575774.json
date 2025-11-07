@@ -1,0 +1,45 @@
+{
+  "query": "SELECT id, name, propertyType, totalValue, status FROM properties;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT id, name, propertyType, totalValue, status FROM properties;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Modern Residential Tower - New Cairo",
+      "propertyType": "residential",
+      "totalValue": "1000000000",
+      "status": "available"
+    },
+    {
+      "id": "2",
+      "name": "Premium Residential Complex - 6th October",
+      "propertyType": "residential",
+      "totalValue": "700000000",
+      "status": "available"
+    },
+    {
+      "id": "3",
+      "name": "Class A Office Tower - Smart Village",
+      "propertyType": "commercial",
+      "totalValue": "1500000000",
+      "status": "available"
+    },
+    {
+      "id": "4",
+      "name": "Upscale Retail & Office Complex",
+      "propertyType": "commercial",
+      "totalValue": "1200000000",
+      "status": "available"
+    },
+    {
+      "id": "5",
+      "name": "Premium Administrative Headquarters",
+      "propertyType": "administrative",
+      "totalValue": "2000000000",
+      "status": "available"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tpropertyType\ttotalValue\tstatus\n1\tModern Residential Tower - New Cairo\tresidential\t1000000000\tavailable\n2\tPremium Residential Complex - 6th October\tresidential\t700000000\tavailable\n3\tClass A Office Tower - Smart Village\tcommercial\t1500000000\tavailable\n4\tUpscale Retail & Office Complex\tcommercial\t1200000000\tavailable\n5\tPremium Administrative Headquarters\tadministrative\t2000000000\tavailable\n",
+  "stderr": "",
+  "execution_time_ms": 421
+}

@@ -1,0 +1,55 @@
+{
+  "query": "SELECT id, name, totalValue, sharePrice, totalShares, availableShares, minimumInvestment FROM properties LIMIT 5",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT id, name, totalValue, sharePrice, totalShares, availableShares, minimumInvestment FROM properties LIMIT 5",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Modern Residential Tower - New Cairo",
+      "totalValue": "1000000000",
+      "sharePrice": "50000",
+      "totalShares": "20000",
+      "availableShares": "15000",
+      "minimumInvestment": "50000"
+    },
+    {
+      "id": "2",
+      "name": "Premium Residential Complex - 6th October",
+      "totalValue": "700000000",
+      "sharePrice": "50000",
+      "totalShares": "14000",
+      "availableShares": "10000",
+      "minimumInvestment": "25000"
+    },
+    {
+      "id": "3",
+      "name": "Class A Office Tower - Smart Village",
+      "totalValue": "1500000000",
+      "sharePrice": "50000",
+      "totalShares": "30000",
+      "availableShares": "24000",
+      "minimumInvestment": "100000"
+    },
+    {
+      "id": "4",
+      "name": "Upscale Retail & Office Complex",
+      "totalValue": "1200000000",
+      "sharePrice": "50000",
+      "totalShares": "24000",
+      "availableShares": "18000",
+      "minimumInvestment": "75000"
+    },
+    {
+      "id": "5",
+      "name": "Premium Administrative Headquarters",
+      "totalValue": "2000000000",
+      "sharePrice": "50000",
+      "totalShares": "40000",
+      "availableShares": "30000",
+      "minimumInvestment": "150000"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\ttotalValue\tsharePrice\ttotalShares\tavailableShares\tminimumInvestment\n1\tModern Residential Tower - New Cairo\t1000000000\t50000\t20000\t15000\t50000\n2\tPremium Residential Complex - 6th October\t700000000\t50000\t14000\t10000\t25000\n3\tClass A Office Tower - Smart Village\t1500000000\t50000\t30000\t24000\t100000\n4\tUpscale Retail & Office Complex\t1200000000\t50000\t24000\t18000\t75000\n5\tPremium Administrative Headquarters\t2000000000\t50000\t40000\t30000\t150000\n",
+  "stderr": "",
+  "execution_time_ms": 2784
+}

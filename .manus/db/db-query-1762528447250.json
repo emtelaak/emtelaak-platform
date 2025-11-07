@@ -1,0 +1,26 @@
+{
+  "query": "SELECT * FROM knowledge_base_articles LIMIT 1",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT * FROM knowledge_base_articles LIMIT 1",
+  "rows": [
+    {
+      "id": "1",
+      "categoryId": "1",
+      "title": "What is Emtelaak?",
+      "titleAr": "NULL",
+      "content": "Egypt leading fractional real estate platform. Invest from $250.",
+      "contentAr": "NULL",
+      "slug": "what-is-emtelaak",
+      "tags": "NULL",
+      "views": "0",
+      "helpfulCount": "0",
+      "notHelpfulCount": "0",
+      "isPublished": "1",
+      "createdAt": "2025-11-07 15:06:31",
+      "updatedAt": "2025-11-07 15:06:31"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tcategoryId\ttitle\ttitleAr\tcontent\tcontentAr\tslug\ttags\tviews\thelpfulCount\tnotHelpfulCount\tisPublished\tcreatedAt\tupdatedAt\n1\t1\tWhat is Emtelaak?\tNULL\tEgypt leading fractional real estate platform. Invest from $250.\tNULL\twhat-is-emtelaak\tNULL\t0\t0\t0\t1\t2025-11-07 15:06:31\t2025-11-07 15:06:31\n",
+  "stderr": "",
+  "execution_time_ms": 387
+}

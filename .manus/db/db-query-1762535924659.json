@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO properties (name, nameAr, description, descriptionAr, propertyType, investmentType, status, city, country, totalValue, availableValue, sharePrice, totalShares, availableShares, waitlistEnabled, rentalYield, projectedNetYield, distributionFrequency, createdAt, updatedAt) VALUES ('Luxury Apartments - New Cairo', 'شقق فاخرة - القاهرة الجديدة', 'Premium residential apartments in the heart of New Cairo. Coming soon for investment. Join the waitlist to be notified when this property becomes available.', 'شقق سكنية فاخرة في قلب القاهرة الجديدة. قريباً متاحة للاستثمار. انضم إلى قائمة الانتظار ليتم إخطارك عندما تصبح هذه العقار متاحاً.', 'residential', 'buy_to_let', 'coming_soon', 'New Cairo', 'Egypt', 800000000, 800000000, 10000, 80000, 80000, 1, 1250, 1000, 'quarterly', NOW(), NOW())",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute INSERT INTO properties (name, nameAr, description, descriptionAr, propertyType, investmentType, status, city, country, totalValue, availableValue, sharePrice, totalShares, availableShares, waitlistEnabled, rentalYield, projectedNetYield, distributionFrequency, createdAt, updatedAt) VALUES ('Luxury Apartments - New Cairo', 'شقق فاخرة - القاهرة الجديدة', 'Premium residential apartments in the heart of New Cairo. Coming soon for investment. Join the waitlist to be notified when this property becomes available.', 'شقق سكنية فاخرة في قلب القاهرة الجديدة. قريباً متاحة للاستثمار. انضم إلى قائمة الانتظار ليتم إخطارك عندما تصبح هذه العقار متاحاً.', 'residential', 'buy_to_let', 'coming_soon', 'New Cairo', 'Egypt', 800000000, 800000000, 10000, 80000, 80000, 1, 1250, 1000, 'quarterly', NOW(), NOW())",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 387
+}

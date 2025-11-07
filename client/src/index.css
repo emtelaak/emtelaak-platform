@@ -1,6 +1,137 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Emtelaak Custom Fonts */
+/* Arabic Font: GE Dinar One */
+@font-face {
+  font-family: 'GE Dinar One';
+  src: url('/fonts/ArbFONTS-GE-Dinar-One-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GE Dinar One';
+  src: url('/fonts/ArbFONTS-GE-Dinar-One-Light-Italic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GE Dinar One';
+  src: url('/fonts/ArbFONTS-GE-Dinar-One-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GE Dinar One';
+  src: url('/fonts/ArbFONTS-GE-Dinar-One-Medium-Italic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* English Font: Lab Grotesque */
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -43,76 +174,103 @@
 }
 
 :root {
-  /* Emtelaak Brand Colors: Lime Yellow (#D4FF00) and Oxford Blue (#002B49) */
-  --primary: oklch(0.95 0.25 110); /* Lime Yellow #D4FF00 */
-  --primary-foreground: oklch(0.2 0.05 230); /* Oxford Blue for text on yellow */
-  --sidebar-primary: oklch(0.95 0.25 110);
-  --sidebar-primary-foreground: oklch(0.2 0.05 230);
-  --chart-1: oklch(0.95 0.25 110);
-  --chart-2: oklch(0.2 0.05 230);
-  --chart-3: oklch(0.5 0.15 230);
-  --chart-4: oklch(0.7 0.1 230);
-  --chart-5: oklch(0.85 0.2 110);
+  /* Emtelaak Official Brand Colors */
+  /* PRIMARY: Oxford Blue #032941 and Lime Yellow #CDE428 */
+  /* SECONDARY: Bangladesh Green #085C52, Ateneo Blue #064B66, Orange #FF7F00, Platinum #E4E4E4, Dark Charcoal #333333 */
+  
+  --primary: oklch(0.20 0.08 240); /* Oxford Blue #032941 - main brand color */
+  --primary-foreground: oklch(1 0 0); /* White text on Oxford Blue */
+  
+  --secondary: oklch(0.88 0.15 110); /* Lime Yellow #CDE428 - accent color */
+  --secondary-foreground: oklch(0.20 0.08 240); /* Oxford Blue text on Lime Yellow */
+  
+  --accent: oklch(0.88 0.15 110); /* Lime Yellow #CDE428 for highlights */
+  --accent-foreground: oklch(0.20 0.08 240); /* Oxford Blue on Lime Yellow */
+  
+  --muted: oklch(0.92 0.002 0); /* Platinum #E4E4E4 for muted backgrounds */
+  --muted-foreground: oklch(0.35 0.01 0); /* Dark Charcoal #333333 for muted text */
+  
+  --destructive: oklch(0.62 0.25 30); /* Orange #FF7F00 for warnings/destructive */
+  --destructive-foreground: oklch(1 0 0); /* White on orange */
+  
+  --border: oklch(0.85 0.005 240); /* Light border based on Oxford Blue */
+  --input: oklch(0.92 0.002 0); /* Platinum for inputs */
+  --ring: oklch(0.88 0.15 110); /* Lime Yellow for focus rings */
+  
   --radius: 0.65rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.2 0.05 230); /* Oxford Blue for text */
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2 0.05 230);
+  --background: oklch(1 0 0); /* White background */
+  --foreground: oklch(0.35 0.01 0); /* Dark Charcoal #333333 for text */
+  
+  --card: oklch(1 0 0); /* White cards */
+  --card-foreground: oklch(0.35 0.01 0); /* Dark Charcoal text */
+  
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.05 230);
-  --secondary: oklch(0.2 0.05 230); /* Oxford Blue */
-  --secondary-foreground: oklch(1 0 0); /* White text on Oxford Blue */
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.95 0.25 110); /* Lime Yellow for accents */
-  --accent-foreground: oklch(0.2 0.05 230);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.95 0.25 110); /* Lime Yellow focus ring */
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.2 0.05 230);
-  --sidebar-accent: oklch(0.95 0.25 110);
-  --sidebar-accent-foreground: oklch(0.2 0.05 230);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.95 0.25 110);
+  --popover-foreground: oklch(0.35 0.01 0);
+  
+  /* Chart colors using brand palette */
+  --chart-1: oklch(0.20 0.08 240); /* Oxford Blue */
+  --chart-2: oklch(0.88 0.15 110); /* Lime Yellow */
+  --chart-3: oklch(0.35 0.12 170); /* Bangladesh Green #085C52 */
+  --chart-4: oklch(0.30 0.10 230); /* Ateneo Blue #064B66 */
+  --chart-5: oklch(0.62 0.25 30); /* Orange #FF7F00 */
+  
+  /* Sidebar colors */
+  --sidebar: oklch(0.20 0.08 240); /* Oxford Blue sidebar */
+  --sidebar-foreground: oklch(1 0 0); /* White text */
+  --sidebar-primary: oklch(0.88 0.15 110); /* Lime Yellow for active items */
+  --sidebar-primary-foreground: oklch(0.20 0.08 240); /* Oxford Blue text on Lime Yellow */
+  --sidebar-accent: oklch(0.88 0.15 110); /* Lime Yellow accent */
+  --sidebar-accent-foreground: oklch(0.20 0.08 240);
+  --sidebar-border: oklch(0.30 0.06 240); /* Darker Oxford Blue for borders */
+  --sidebar-ring: oklch(0.88 0.15 110); /* Lime Yellow focus ring */
 }
 
 .dark {
-  /* Dark theme with Oxford Blue background */
-  --primary: oklch(0.95 0.25 110); /* Lime Yellow */
-  --primary-foreground: oklch(0.2 0.05 230); /* Oxford Blue */
-  --sidebar-primary: oklch(0.95 0.25 110);
-  --sidebar-primary-foreground: oklch(0.2 0.05 230);
-  --background: oklch(0.2 0.05 230); /* Oxford Blue background */
+  /* Dark theme with Oxford Blue background and brand colors */
+  --primary: oklch(0.88 0.15 110); /* Lime Yellow #CDE428 */
+  --primary-foreground: oklch(0.20 0.08 240); /* Oxford Blue text */
+  
+  --secondary: oklch(0.30 0.10 230); /* Ateneo Blue #064B66 */
+  --secondary-foreground: oklch(1 0 0); /* White text */
+  
+  --accent: oklch(0.88 0.15 110); /* Lime Yellow */
+  --accent-foreground: oklch(0.20 0.08 240);
+  
+  --background: oklch(0.20 0.08 240); /* Oxford Blue #032941 background */
   --foreground: oklch(0.98 0 0); /* White text */
-  --card: oklch(0.25 0.05 230);
+  
+  --card: oklch(0.25 0.08 240); /* Slightly lighter Oxford Blue for cards */
   --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.25 0.05 230);
+  
+  --popover: oklch(0.25 0.08 240);
   --popover-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.3 0.05 230);
-  --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.3 0.05 230);
-  --muted-foreground: oklch(0.7 0.02 230);
-  --accent: oklch(0.95 0.25 110); /* Lime Yellow */
-  --accent-foreground: oklch(0.2 0.05 230);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
+  
+  --muted: oklch(0.30 0.06 240); /* Muted Oxford Blue */
+  --muted-foreground: oklch(0.75 0.02 0); /* Light gray text */
+  
+  --destructive: oklch(0.62 0.25 30); /* Orange #FF7F00 */
+  --destructive-foreground: oklch(1 0 0);
+  
+  --border: oklch(1 0 0 / 12%); /* Subtle white borders */
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.95 0.25 110); /* Lime Yellow focus ring */
-  --chart-1: oklch(0.95 0.25 110);
-  --chart-2: oklch(0.5 0.15 230);
-  --chart-3: oklch(0.7 0.1 230);
-  --chart-4: oklch(0.85 0.2 110);
-  --chart-5: oklch(0.6 0.2 110);
-  --sidebar: oklch(0.25 0.05 230);
+  --ring: oklch(0.88 0.15 110); /* Lime Yellow focus ring */
+  
+  /* Chart colors for dark theme */
+  --chart-1: oklch(0.88 0.15 110); /* Lime Yellow */
+  --chart-2: oklch(0.35 0.12 170); /* Bangladesh Green */
+  --chart-3: oklch(0.30 0.10 230); /* Ateneo Blue */
+  --chart-4: oklch(0.62 0.25 30); /* Orange */
+  --chart-5: oklch(0.92 0.002 0); /* Platinum */
+  
+  /* Sidebar for dark theme */
+  --sidebar: oklch(0.25 0.08 240); /* Slightly lighter Oxford Blue */
   --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.95 0.25 110);
-  --sidebar-accent-foreground: oklch(0.2 0.05 230);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.95 0.25 110);
+  --sidebar-primary: oklch(0.88 0.15 110); /* Lime Yellow */
+  --sidebar-primary-foreground: oklch(0.20 0.08 240);
+  --sidebar-accent: oklch(0.88 0.15 110);
+  --sidebar-accent-foreground: oklch(0.20 0.08 240);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.88 0.15 110);
 }
 
 @layer base {
@@ -121,13 +279,13 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: 'Lab Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   }
 
   /* Arabic font support */
   [lang="ar"] body,
   [dir="rtl"] body {
-    font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: 'GE Dinar One', 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),

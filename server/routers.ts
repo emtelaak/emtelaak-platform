@@ -28,6 +28,7 @@ import {
   getPropertyDocuments,
   getPropertyMedia,
   joinPropertyWaitlist,
+  isUserOnWaitlist,
   getUserInvestments,
   getUserPortfolioSummary,
   getUserIncomeHistory,
@@ -93,7 +94,7 @@ export const appRouter = router({
         annualIncomeRange: z.string().optional(),
         investorType: z.enum(["individual", "institutional"]).optional(),
         preferredLanguage: z.enum(["en", "ar"]).optional(),
-        preferredCurrency: z.enum(["USD", "EGP"]).optional(),
+        preferredCurrency: z.enum(["USD", "EGP", "EUR", "GBP", "SAR", "AED"]).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         await createOrUpdateUserProfile({
@@ -300,6 +301,13 @@ export const appRouter = router({
         });
         
         return { success: true };
+      }),
+    
+    checkWaitlistStatus: protectedProcedure
+      .input(z.object({ propertyId: z.number() }))
+      .query(async ({ ctx, input }) => {
+        const isOnWaitlist = await isUserOnWaitlist(input.propertyId, ctx.user.id);
+        return { isOnWaitlist };
       }),
   }),
 
