@@ -148,3 +148,12 @@
 - [x] Check logo display on Properties page
 - [x] Check logo display on Portfolio page
 - [x] Ensure logo displays correctly on all pages
+
+
+## Phase 54: Promotional Videos Integration
+- [x] Add video section to homepage after hero section
+- [x] Embed English promotional video (YouTube)
+- [x] Embed Arabic promotional video (YouTube)
+- [x] Implement language-aware video display
+- [x] Add responsive video container
+- [x] Test video playback and responsiveness

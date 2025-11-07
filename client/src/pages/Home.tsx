@@ -115,6 +115,36 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Promotional Video Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#032941' }}>
+              {language === "en" ? "Discover Emtelaak" : "اكتشف إمتلاك"}
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              {language === "en" 
+                ? "Watch our video to learn how Emtelaak is revolutionizing real estate investment in Egypt"
+                : "شاهد الفيديو لتتعرف على كيفية إحداث إمتلاك ثورة في الاستثمار العقاري في مصر"}
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl" style={{ paddingBottom: '56.25%' }}>
+              <iframe
+                className="absolute top-0 left-0 w-full h-full"
+                src={language === "en" 
+                  ? "https://www.youtube.com/embed/P9K-VUdc0SA"
+                  : "https://www.youtube.com/embed/w7hmsuFkrmg"}
+                title={language === "en" ? "Emtelaak Platform Introduction" : "مقدمة منصة إمتلاك"}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Why Choose Emtelaak */}
       <section className="py-20 bg-background">
         <div className="container">
