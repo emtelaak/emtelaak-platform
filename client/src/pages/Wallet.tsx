@@ -29,7 +29,7 @@ export default function Wallet() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Link href="/">
-                  <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-auto cursor-pointer" />
+                  <img src={APP_LOGO} alt={APP_TITLE} className="h-20 w-auto cursor-pointer" />
                 </Link>
               </div>
               <div className="flex items-center gap-3">
@@ -73,7 +73,7 @@ export default function Wallet() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Link href="/">
-                <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-auto cursor-pointer" />
+                <img src={APP_LOGO} alt={APP_TITLE} className="h-20 w-auto cursor-pointer" />
               </Link>
               <h1 className="text-2xl font-bold">{language === "en" ? "Wallet" : "المحفظة المالية"}</h1>
             </div>

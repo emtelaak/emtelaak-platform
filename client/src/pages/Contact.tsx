@@ -63,7 +63,7 @@ export default function Contact() {
         <div className="container flex h-16 items-center justify-between">
           <Link href="/">
             <div className="flex items-center gap-3 cursor-pointer">
-              <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-auto" />
+              <img src={APP_LOGO} alt={APP_TITLE} className="h-20 w-auto" />
             </div>
           </Link>
           <Link href="/">

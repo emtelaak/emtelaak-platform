@@ -49,7 +49,7 @@ export default function FAQ() {
       <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container flex h-16 items-center justify-between">
           <Link href="/">
-            <img src={APP_LOGO} alt="Emtelaak" className="h-10 w-auto cursor-pointer" />
+            <img src={APP_LOGO} alt="Emtelaak" className="h-20 w-auto cursor-pointer" />
           </Link>
           
           <div className="hidden md:flex items-center gap-6">

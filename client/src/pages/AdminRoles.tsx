@@ -168,7 +168,7 @@ export default function AdminRoles() {
               </Button>
             </Link>
             <Link href="/">
-              <img src={APP_LOGO} alt="Emtelaak" className="h-10 w-auto cursor-pointer" />
+              <img src={APP_LOGO} alt="Emtelaak" className="h-20 w-auto cursor-pointer" />
             </Link>
             <div className="flex-1">
               <h1 className="text-3xl font-bold">Role Management</h1>

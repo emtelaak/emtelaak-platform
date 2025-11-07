@@ -152,7 +152,7 @@ export default function PropertyDetail() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link href="/">
-                <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-auto cursor-pointer" />
+                <img src={APP_LOGO} alt={APP_TITLE} className="h-20 w-auto cursor-pointer" />
               </Link>
               <Link href="/properties">
                 <Button variant="ghost" size="sm">

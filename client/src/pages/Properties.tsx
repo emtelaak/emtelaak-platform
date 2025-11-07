@@ -128,7 +128,7 @@ export default function Properties() {
         <div className="container py-6">
           <div className="flex items-center gap-4 mb-6">
             <Link href="/">
-              <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-auto cursor-pointer" />
+              <img src={APP_LOGO} alt={APP_TITLE} className="h-20 w-auto cursor-pointer" />
             </Link>
             <div className="flex-1">
               <h1 className="text-3xl font-bold mb-2">
