@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Mail, Phone, MapPin, Send, CheckCircle2, ChevronDown } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CheckCircle2, ChevronDown, TrendingUp } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -16,6 +16,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Footer from "@/components/Footer";
+import { InvestorLeadForm } from "@/components/InvestorLeadForm";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -149,6 +150,38 @@ export default function Contact() {
                 </p>
               </CardContent>
             </Card>
+          </div>
+
+          {/* Investor Lead Generation Form */}
+          <div className="mb-12">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-3">Interested in Investing?</h2>
+              <p className="text-muted-foreground">
+                Tell us about your investment goals and we'll help you get started
+              </p>
+            </div>
+            <Card className="max-w-3xl mx-auto border-2 border-primary/20">
+              <CardHeader className="bg-primary/5">
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                  Investor Inquiry Form
+                </CardTitle>
+                <CardDescription>
+                  Complete this form and our investment team will contact you within 24 hours
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <InvestorLeadForm />
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center my-12">
+            <div className="inline-flex items-center gap-3 text-muted-foreground">
+              <div className="h-px w-20 bg-border" />
+              <span>or send us a general message</span>
+              <div className="h-px w-20 bg-border" />
+            </div>
           </div>
 
           {/* Contact Form */}

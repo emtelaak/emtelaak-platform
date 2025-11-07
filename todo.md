@@ -665,3 +665,14 @@
 - [x] Ensure consistent typography and spacing across both pages
 - [x] Test About and Contact pages
 - [x] Save checkpoint with updated pages
+
+
+## Phase 52: Add Lead Generation Form to Contact Page (COMPLETED)
+- [x] Design investor-focused lead generation form
+- [x] Add investment interest fields (property type, investment amount, timeline)
+- [x] Add investor profile fields (investor type, experience level)
+- [x] Integrate form with CRM leads router
+- [x] Add automatic lead creation on form submission
+- [x] Add success message and follow-up information
+- [x] Test lead generation flow from Contact page to CRM
+- [x] Save checkpoint with lead generation form
