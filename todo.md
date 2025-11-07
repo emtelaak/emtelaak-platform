@@ -1014,3 +1014,10 @@
 - [x] Register adminPermissions router in main routers.ts
 - [x] Verify all adminPermissions procedures are accessible
 - [x] Test homepage loads without tRPC errors
+
+
+## Fix Super Admin Page Errors
+- [x] Fix invalid time value error in AuditLogViewer date formatting
+- [x] Add null/undefined check for timestamp before formatting
+- [x] Fix missing key prop in AdminPermissionsManager table rows
+- [x] Test super-admin page loads without errors

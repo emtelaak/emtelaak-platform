@@ -55,6 +55,7 @@ export default function AuditLogViewer() {
   };
 
   const getActionBadgeVariant = (action: string): "default" | "secondary" | "destructive" | "outline" => {
+    if (!action) return "outline";
     if (action.includes("created")) return "default";
     if (action.includes("updated")) return "secondary";
     if (action.includes("deleted")) return "destructive";
@@ -86,6 +87,7 @@ export default function AuditLogViewer() {
       "content.updated": { en: "Content Updated", ar: "تحديث المحتوى" },
     };
 
+    if (!action) return "N/A";
     const mapped = actionMap[action];
     return mapped ? (language === "en" ? mapped.en : mapped.ar) : action;
   };
@@ -93,10 +95,10 @@ export default function AuditLogViewer() {
   const filteredLogs = auditLogs?.filter((log) => {
     const matchesSearch =
       searchQuery === "" ||
-      log.action.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      log.action?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       log.userName?.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesAction = actionFilter === "all" || log.action.startsWith(actionFilter);
+    const matchesAction = actionFilter === "all" || log.action?.startsWith(actionFilter);
 
     return matchesSearch && matchesAction;
   });
@@ -221,7 +223,7 @@ export default function AuditLogViewer() {
                 {filteredLogs.map((log) => (
                   <TableRow key={log.id}>
                     <TableCell className="text-sm text-muted-foreground">
-                      {format(new Date(log.createdAt), "MMM dd, yyyy HH:mm:ss")}
+                      {log.createdAt ? format(new Date(log.createdAt), "MMM dd, yyyy HH:mm:ss") : "N/A"}
                     </TableCell>
                     <TableCell>
                       <div>

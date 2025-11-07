@@ -135,8 +135,8 @@ export default function AdminPermissionsManager() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {permissionsList.map((userPerm) => (
-                  <TableRow key={userPerm.userId}>
+                {permissionsList.map((userPerm, index) => (
+                  <TableRow key={`user-${userPerm.userId}-${index}`}>
                     <TableCell>
                       <div>
                         <p className="font-medium">{userPerm.userName || "Unknown"}</p>
