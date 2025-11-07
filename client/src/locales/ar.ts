@@ -281,6 +281,11 @@ export const ar: Translation = {
     messages: {
       updateSuccess: "تم تحديث الملف الشخصي بنجاح",
     },
+    kyc: {
+      completeTitle: "أكمل التحقق من الهوية",
+      completeDesc: "أكمل استبيان التحقق لفتح جميع ميزات الاستثمار والبدء في بناء محفظتك العقارية.",
+      completeButton: "إكمال استبيان التحقق",
+    },
   },
 
   // Contact Page
@@ -383,8 +388,6 @@ export const ar: Translation = {
       additionalDesc: "معلومات الامتثال التنظيمي",
       pepDetails: "تفاصيل الشخص المعرض سياسياً",
       notes: "ملاحظات إضافية",
-      progress: "تقدم الإكمال",
-      progressHint: "املأ جميع الحقول المطلوبة لتقديم الاستبيان",
     },
     review: {
       title: "المراجعة والإرسال",

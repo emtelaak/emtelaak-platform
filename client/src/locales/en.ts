@@ -279,6 +279,11 @@ export const en = {
     messages: {
       updateSuccess: "Profile updated successfully",
     },
+    kyc: {
+      completeTitle: "Complete Your KYC Verification",
+      completeDesc: "Complete your KYC questionnaire to unlock full investment features and start building your property portfolio.",
+      completeButton: "Complete KYC Questionnaire",
+    },
   },
 
   // Contact Page
@@ -381,8 +386,6 @@ export const en = {
       additionalDesc: "Regulatory compliance information",
       pepDetails: "PEP Details",
       notes: "Additional Notes",
-      progress: "Completion Progress",
-      progressHint: "Fill in all required fields to submit your questionnaire",
     },
     review: {
       title: "Review & Submit",
