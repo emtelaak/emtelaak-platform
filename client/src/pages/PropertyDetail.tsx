@@ -240,7 +240,9 @@ export default function PropertyDetail() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">
-                    {language === "en" ? "Expected Yield" : "العائد المتوقع"}
+                    {property.investmentType === "buy_to_sell"
+                      ? (language === "en" ? "Expected ROI" : "العائد المتوقع على الاسثمار")
+                      : (language === "en" ? "Expected Yield" : "العائد المتوقع")}
                   </p>
                   <p className="text-xl font-bold text-primary flex items-center gap-1">
                     <TrendingUp className="h-4 w-4" />

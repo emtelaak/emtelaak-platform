@@ -108,3 +108,12 @@
 - [x] Test save/unsave functionality with authentication
 - [x] Test Saved filter tab integration
 - [x] Verify optimistic updates work correctly
+
+
+## Phase 51: Expected ROI Label and Homepage Demos
+-- [x] Update PropertyDetail page to show "Expected ROI" for buy_to_sell properties- [x] Update Properties page cards to show "Expected ROI" for buy_to_sell properties
+- [x] Add bilingual support for "Expected ROI" label
+- [x] Create Buy to Sell demo section on homepage
+- [x] Create Buy to Let demo section on homepage
+- [x] Add sample properties to demo sections
+- [x] Test all label changes and homepage demos

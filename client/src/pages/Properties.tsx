@@ -335,7 +335,9 @@ export default function Properties() {
                         </div>
                         <div>
                           <p className="text-muted-foreground">
-                            {language === "en" ? "Expected Yield" : "العائد المتوقع"}
+                            {property.investmentType === "buy_to_sell"
+                              ? (language === "en" ? "Expected ROI" : "العائد المتوقع على الاستثمار")
+                              : (language === "en" ? "Expected Yield" : "العائد المتوقع")}
                           </p>
                           <p className="font-semibold text-primary flex items-center gap-1">
                             <TrendingUp className="h-3 w-3" />
