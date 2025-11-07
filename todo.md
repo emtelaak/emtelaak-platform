@@ -74,3 +74,10 @@
 - [x] Add automatic notification when user joins waitlist
 - [x] Test waitlist join functionality
 - [x] Add coming_soon status badge on property cards
+
+
+## Phase 48: Fix Header Button for Waitlist Properties (Current)
+- [x] Update PropertyDetail header "Invest Now" button to check property status
+- [x] Show "Join Waitlist" button in header for coming_soon properties
+- [x] Ensure both header button and card button have consistent behavior
+- [x] Test the fix with the demo coming_soon property

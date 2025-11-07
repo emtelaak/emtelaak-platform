@@ -161,9 +161,33 @@ export default function PropertyDetail() {
                 </Button>
               </Link>
             </div>
-            <Button onClick={() => setInvestModalOpen(true)} size="lg">
-              Invest Now
-            </Button>
+            {property.status === "coming_soon" ? (
+              waitlistStatus?.isOnWaitlist ? (
+                <Button disabled size="lg">
+                  {language === "en" ? "On Waitlist" : "في قائمة الانتظار"}
+                </Button>
+              ) : (
+                <Button 
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      window.location.href = getLoginUrl();
+                      return;
+                    }
+                    joinWaitlistMutation.mutate({ propertyId });
+                  }} 
+                  size="lg"
+                  disabled={joinWaitlistMutation.isPending}
+                >
+                  {joinWaitlistMutation.isPending 
+                    ? (language === "en" ? "Joining..." : "جاري الانضمام...") 
+                    : (language === "en" ? "Join Waitlist" : "انضم لقائمة الانتظار")}
+                </Button>
+              )
+            ) : (
+              <Button onClick={() => setInvestModalOpen(true)} size="lg">
+                {language === "en" ? "Invest Now" : "استثمر الآن"}
+              </Button>
+            )}
           </div>
         </div>
       </div>
