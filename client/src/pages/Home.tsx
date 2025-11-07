@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import ROICalculator from "@/components/ROICalculator";
+import KYCStatusBanner from "@/components/KYCStatusBanner";
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
@@ -68,6 +69,11 @@ export default function Home() {
           </div>
         </div>
       </nav>
+
+      {/* KYC Status Banner */}
+      <div className="container mt-6">
+        <KYCStatusBanner />
+      </div>
 
       {/* Hero Section - Matching emtelaak.com design */}
       <section className="relative overflow-hidden py-32 md:py-40" style={{

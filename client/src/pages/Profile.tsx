@@ -272,6 +272,29 @@ export default function Profile() {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Complete KYC Call-to-Action */}
+            {verificationStatus && !verificationStatus.kycCompleted && (
+              <Card className="border-primary/50 bg-primary/5">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-primary" />
+                    {t.profile.kyc.completeTitle || "Complete Your KYC Verification"}
+                  </CardTitle>
+                  <CardDescription>
+                    {t.profile.kyc.completeDesc || "Complete your KYC questionnaire to unlock full investment features and start building your property portfolio."}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Link href="/kyc-questionnaire">
+                    <Button className="w-full md:w-auto">
+                      <Shield className="h-4 w-4 mr-2" />
+                      {t.profile.kyc.completeButton || "Complete KYC Now"}
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           {/* Personal Info Tab */}
