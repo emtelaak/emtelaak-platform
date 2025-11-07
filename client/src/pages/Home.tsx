@@ -10,6 +10,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import ROICalculator from "@/components/ROICalculator";
 import KYCStatusBanner from "@/components/KYCStatusBanner";
+import MobileBottomNav from "@/components/MobileBottomNav";
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
@@ -24,7 +25,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-16 md:pb-0">
       {/* Navigation */}
       <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container flex h-16 items-center justify-between">
@@ -75,24 +76,37 @@ export default function Home() {
         <KYCStatusBanner />
       </div>
 
-      {/* Hero Section - Matching emtelaak.com design */}
+      {/* Hero Section - With Brand Background */}
       <section className="relative overflow-hidden py-32 md:py-40" style={{
-        backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80")',
+        backgroundImage: 'linear-gradient(rgba(3, 41, 65, 0.7), rgba(3, 41, 65, 0.7)), url("/brand/backgrounds/hero-bg.jpg")',
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}>
         <div className="container">
           <div className="mx-auto max-w-5xl text-center">
-            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 md:p-16 shadow-xl">
+            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-12 md:p-16 shadow-2xl border border-white/20">
               <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6" style={{ color: '#032941' }}>
                 {language === "en" ? "Own today" : "امتلك اليوم"}
                 <br />
                 {language === "en" ? "Invest for tomorrow." : "استثمر للغد."}
               </h1>
-              <div className="inline-block px-6 py-3 rounded-full mb-8" style={{ backgroundColor: '#CDE428' }}>
-                <span className="font-semibold" style={{ color: '#032941' }}>
-                  {language === "en" ? "Application Coming Soon" : "التطبيق قريباً"}
-                </span>
+              <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                {language === "en" 
+                  ? "Invest in fractional real estate ownership and build your property portfolio with as little as EGP 100"
+                  : "استثمر في ملكية عقارية جزئية وابني محفظتك العقارية بدءًا من 100 جنيه مصري"}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link href="/properties">
+                  <Button size="lg" className="text-lg px-8 py-6 h-auto" style={{ backgroundColor: '#CDE428', color: '#032941' }}>
+                    {language === "en" ? "Explore Properties" : "استكشف العقارات"}
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+                <Link href="/how-it-works">
+                  <Button size="lg" variant="outline" className="text-lg px-8 py-6 h-auto border-2">
+                    {language === "en" ? "How It Works" : "كيف يعمل"}
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -476,6 +490,9 @@ export default function Home() {
       </section>
 
       <Footer />
+      
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav />
     </div>
   );
 }

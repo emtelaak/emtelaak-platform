@@ -16,6 +16,8 @@ import HowItWorks from "./pages/HowItWorks";
 import PropertyDetail from "./pages/PropertyDetail";
 import KYCQuestionnaire from "./pages/KYCQuestionnaire";
 import LeadCapture from "./pages/LeadCapture";
+import Wallet from "./pages/Wallet";
+import Menu from "./pages/Menu";
 
 // Lazy load admin pages (only loaded when accessed)
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
@@ -50,6 +52,8 @@ function Router() {
       <Route path="/properties" component={Properties} />
       <Route path="/properties/:id" component={PropertyDetail} />
       <Route path="/portfolio" component={Portfolio} />
+      <Route path="/wallet" component={Wallet} />
+      <Route path="/menu" component={Menu} />
       <Route path="/profile" component={Profile} />
       <Route path="/kyc-questionnaire" component={KYCQuestionnaire} />
       <Route path={"/contact"} component={Contact} />

@@ -15,6 +15,7 @@ import ROICalculator from "@/components/ROICalculator";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { formatCurrency as formatCurrencyUtil } from "@/lib/currency";
+import MobileBottomNav from "@/components/MobileBottomNav";
 
 export default function Properties() {
   const { language } = useLanguage();
@@ -121,7 +122,7 @@ export default function Properties() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-16 md:pb-0">
       {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container py-6">
@@ -149,24 +150,26 @@ export default function Properties() {
 
           {/* Status Filter Tabs */}
           <Tabs value={statusFilter} onValueChange={setStatusFilter} className="mb-6">
-            <TabsList className="grid grid-cols-5 w-full max-w-3xl">
-              <TabsTrigger value="available">
-                {language === "en" ? "Available" : "متاح"}
-              </TabsTrigger>
-              <TabsTrigger value="funded">
-                {language === "en" ? "Funded" : "ممول"}
-              </TabsTrigger>
-              <TabsTrigger value="exited">
-                {language === "en" ? "Exited" : "خرج"}
-              </TabsTrigger>
-              <TabsTrigger value="coming_soon">
-                {language === "en" ? "Coming Soon" : "قريباً"}
-              </TabsTrigger>
-              <TabsTrigger value="saved">
-                <Bookmark className="h-4 w-4 mr-1" />
-                {language === "en" ? "Saved" : "محفوظ"}
-              </TabsTrigger>
-            </TabsList>
+            <div className="overflow-x-auto scrollbar-hide">
+              <TabsList className="inline-flex w-auto min-w-full md:grid md:grid-cols-5 md:max-w-3xl">
+                <TabsTrigger value="available">
+                  {language === "en" ? "Available" : "متاح"}
+                </TabsTrigger>
+                <TabsTrigger value="funded">
+                  {language === "en" ? "Funded" : "ممول"}
+                </TabsTrigger>
+                <TabsTrigger value="exited">
+                  {language === "en" ? "Exited" : "خرج"}
+                </TabsTrigger>
+                <TabsTrigger value="coming_soon">
+                  {language === "en" ? "Coming Soon" : "قريباً"}
+                </TabsTrigger>
+                <TabsTrigger value="saved">
+                  <Bookmark className="h-4 w-4 mr-1" />
+                  {language === "en" ? "Saved" : "محفوظ"}
+                </TabsTrigger>
+              </TabsList>
+            </div>
           </Tabs>
 
           {/* Filters */}
@@ -402,6 +405,9 @@ export default function Properties() {
           </div>
         )}
       </div>
+      
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav />
     </div>
   );
 }
