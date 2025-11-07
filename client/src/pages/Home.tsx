@@ -69,27 +69,25 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-background to-muted/20 py-20 md:py-32">
+      {/* Hero Section - Matching emtelaak.com design */}
+      <section className="relative overflow-hidden py-32 md:py-40" style={{
+        backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+      }}>
         <div className="container">
-          <div className="mx-auto max-w-4xl text-center">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl mb-6">
-              {t.home.hero.title}
-              <br />
-              <span className="text-primary">{t.home.hero.subtitle} {t.home.hero.amount}</span>
-            </h1>
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              {t.home.hero.description}
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <a href={getLoginUrl()}>
-                <Button size="lg" className="gap-2">
-                  {t.home.hero.startInvesting} <ArrowRight className="h-4 w-4" />
-                </Button>
-              </a>
-              <Link href="/how-it-works">
-                <Button size="lg" variant="outline">{t.home.hero.learnMore}</Button>
-              </Link>
+          <div className="mx-auto max-w-5xl text-center">
+            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 md:p-16 shadow-xl">
+              <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6" style={{ color: '#002B49' }}>
+                {language === "en" ? "Own today" : "امتلك اليوم"}
+                <br />
+                {language === "en" ? "Invest for tomorrow." : "استثمر للغد."}
+              </h1>
+              <div className="inline-block px-6 py-3 rounded-full mb-8" style={{ backgroundColor: '#D4FF00' }}>
+                <span className="font-semibold" style={{ color: '#002B49' }}>
+                  {language === "en" ? "Application Coming Soon" : "التطبيق قريباً"}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -157,31 +155,40 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-20 bg-muted/30">
+      {/* How It Works - Matching emtelaak.com design */}
+      <section className="py-20 bg-background">
         <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">{t.home.howItWorks.title}</h2>
-            <p className="text-muted-foreground">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">{t.home.howItWorks.title}</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               {t.home.howItWorks.subtitle}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { num: "1", ...t.home.howItWorks.step1 },
-              { num: "2", ...t.home.howItWorks.step2 },
-              { num: "3", ...t.home.howItWorks.step3 },
-              { num: "4", ...t.home.howItWorks.step4 },
-            ].map((step) => (
-              <div key={step.num} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground font-bold text-xl mb-4">
-                  {step.num}
-                </div>
-                <h3 className="font-semibold mb-2">{step.title}</h3>
-                <p className="text-sm text-muted-foreground">{step.description}</p>
-              </div>
-            ))}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Browse Card - Dark Teal */}
+            <div className="rounded-3xl p-8 text-white" style={{ backgroundColor: '#003D4F' }}>
+              <h3 className="text-2xl font-bold mb-6">{t.home.howItWorks.step1.title}</h3>
+              <p className="text-white/90 leading-relaxed">{t.home.howItWorks.step1.description}</p>
+            </div>
+
+            {/* Calculate Card - Lime Yellow */}
+            <div className="rounded-3xl p-8" style={{ backgroundColor: '#D4FF00' }}>
+              <h3 className="text-2xl font-bold mb-6 text-gray-900">{t.home.howItWorks.step2.title}</h3>
+              <p className="text-gray-800 leading-relaxed">{t.home.howItWorks.step2.description}</p>
+            </div>
+
+            {/* Own Card - Dark Green */}
+            <div className="rounded-3xl p-8 text-white" style={{ backgroundColor: '#006B5E' }}>
+              <h3 className="text-2xl font-bold mb-6">{t.home.howItWorks.step3.title}</h3>
+              <p className="text-white/90 leading-relaxed">{t.home.howItWorks.step3.description}</p>
+            </div>
+
+            {/* Track Card - Orange */}
+            <div className="rounded-3xl p-8 text-white" style={{ backgroundColor: '#FF6B35' }}>
+              <h3 className="text-2xl font-bold mb-6">{t.home.howItWorks.step4.title}</h3>
+              <p className="text-white/90 leading-relaxed">{t.home.howItWorks.step4.description}</p>
+            </div>
           </div>
         </div>
       </section>
