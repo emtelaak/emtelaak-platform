@@ -203,3 +203,18 @@
 - [x] Test deposit flow with receipt upload
 - [x] Test withdrawal flow with bank account selection
 - [x] Test bank account CRUD operations
+
+
+## Phase 57: Admin Wallet Management Dashboard
+- [x] Add adminProcedure middleware for role-based access control
+- [x] Implement getPendingTransactions tRPC query (admin only)
+- [x] Implement getAllTransactions tRPC query with filters (admin only)
+- [x] Implement approveTransaction tRPC mutation (admin only)
+- [x] Implement rejectTransaction tRPC mutation (admin only)
+- [x] Create AdminWallet page with pending transactions table
+- [x] Add transaction review modal with receipt image viewer
+- [x] Implement approve/reject buttons with confirmation dialogs
+- [x] Add transaction filters (status, type, date range)
+- [x] Add transaction analytics (total pending, approved, rejected)
+- [x] Test admin approval flow with balance updates
+- [x] Test admin rejection flow with user notifications

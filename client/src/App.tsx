@@ -27,6 +27,7 @@ const AdminRoles = lazy(() => import("./pages/AdminRoles"));
 const AdminPermissions = lazy(() => import("./pages/AdminPermissions"));
 const SuperAdminDashboard = lazy(() => import("./pages/SuperAdminDashboard"));
 const EmailSettings = lazy(() => import("./pages/EmailSettings"));
+const AdminWallet = lazy(() => import("./pages/AdminWallet"));
 
 // Lazy load CRM pages
 const CRMDashboard = lazy(() => import("./pages/CRMDashboard"));
@@ -53,6 +54,7 @@ function Router() {
       <Route path="/properties/:id" component={PropertyDetail} />
       <Route path="/portfolio" component={Portfolio} />
       <Route path="/wallet" component={Wallet} />
+      <Route path="/admin/wallet" component={AdminWallet} />
       <Route path="/menu" component={Menu} />
       <Route path="/profile" component={Profile} />
       <Route path="/kyc-questionnaire" component={KYCQuestionnaire} />

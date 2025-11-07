@@ -1320,3 +1320,154 @@ export async function completeWithdrawalTransaction(transactionId: number, userI
   // Deduct from wallet balance
   await updateWalletBalance(userId, -amount);
 }
+
+
+// Admin Wallet Management Functions
+export async function getPendingWalletTransactions() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const transactions = await db
+    .select({
+      id: walletTransactions.id,
+      userId: walletTransactions.userId,
+      type: walletTransactions.type,
+      amount: walletTransactions.amount,
+      status: walletTransactions.status,
+      paymentMethod: walletTransactions.paymentMethod,
+      receiptUrl: walletTransactions.receiptUrl,
+      reference: walletTransactions.reference,
+      description: walletTransactions.description,
+      createdAt: walletTransactions.createdAt,
+      userName: users.name,
+      userEmail: users.email,
+    })
+    .from(walletTransactions)
+    .leftJoin(users, eq(walletTransactions.userId, users.id))
+    .where(eq(walletTransactions.status, "pending"))
+    .orderBy(desc(walletTransactions.createdAt));
+  
+  return transactions;
+}
+
+export async function getAllWalletTransactions(filters: {
+  status?: "pending" | "approved" | "rejected" | "all";
+  type?: "deposit" | "withdrawal" | "all";
+  limit?: number;
+}) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  let query = db
+    .select({
+      id: walletTransactions.id,
+      userId: walletTransactions.userId,
+      type: walletTransactions.type,
+      amount: walletTransactions.amount,
+      status: walletTransactions.status,
+      paymentMethod: walletTransactions.paymentMethod,
+      receiptUrl: walletTransactions.receiptUrl,
+      reference: walletTransactions.reference,
+      description: walletTransactions.description,
+      createdAt: walletTransactions.createdAt,
+      userName: users.name,
+      userEmail: users.email,
+    })
+    .from(walletTransactions)
+    .leftJoin(users, eq(walletTransactions.userId, users.id))
+    .$dynamic();
+  
+  const conditions = [];
+  if (filters.status && filters.status !== "all") {
+    conditions.push(eq(walletTransactions.status, filters.status));
+  }
+  if (filters.type && filters.type !== "all") {
+    conditions.push(eq(walletTransactions.type, filters.type));
+  }
+  
+  if (conditions.length > 0) {
+    query = query.where(and(...conditions));
+  }
+  
+  const transactions = await query
+    .orderBy(desc(walletTransactions.createdAt))
+    .limit(filters.limit || 100);
+  
+  return transactions;
+}
+
+export async function approveWalletTransaction(transactionId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Get transaction details
+  const [transaction] = await db
+    .select()
+    .from(walletTransactions)
+    .where(eq(walletTransactions.id, transactionId))
+    .limit(1);
+  
+  if (!transaction) {
+    throw new Error("Transaction not found");
+  }
+  
+  if (transaction.status !== "pending") {
+    throw new Error("Transaction is not pending");
+  }
+  
+  // Update transaction status
+  await db
+    .update(walletTransactions)
+    .set({ status: "approved" })
+    .where(eq(walletTransactions.id, transactionId));
+  
+  // Update wallet balance
+  if (transaction.type === "deposit") {
+    // Add to balance
+    await db.execute(sql`
+      UPDATE user_wallets 
+      SET balance = balance + ${transaction.amount}
+      WHERE userId = ${transaction.userId}
+    `);
+  } else if (transaction.type === "withdrawal") {
+    // Subtract from balance
+    await db.execute(sql`
+      UPDATE user_wallets 
+      SET balance = balance - ${transaction.amount}
+      WHERE userId = ${transaction.userId}
+    `);
+  }
+  
+  return { success: true };
+}
+
+export async function rejectWalletTransaction(transactionId: number, reason?: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Get transaction details
+  const [transaction] = await db
+    .select()
+    .from(walletTransactions)
+    .where(eq(walletTransactions.id, transactionId))
+    .limit(1);
+  
+  if (!transaction) {
+    throw new Error("Transaction not found");
+  }
+  
+  if (transaction.status !== "pending") {
+    throw new Error("Transaction is not pending");
+  }
+  
+  // Update transaction status
+  await db
+    .update(walletTransactions)
+    .set({ 
+      status: "rejected",
+      description: reason ? `${transaction.description} (Rejected: ${reason})` : transaction.description,
+    })
+    .where(eq(walletTransactions.id, transactionId));
+  
+  return { success: true };
+}

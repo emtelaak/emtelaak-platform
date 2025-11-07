@@ -5,7 +5,7 @@ import { adminRouter } from "./adminRouters";
 import { adminPermissionsRouter } from "./adminPermissionsRouter";
 import { crmRouter } from "./crm-router";
 import { helpDeskRouter } from "./routes/helpDesk";
-import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
+import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import {
   getUserProfile,
@@ -682,6 +682,40 @@ export const appRouter = router({
 
         return { success: true, message: "Withdrawal request submitted. Pending admin approval." };
       }),
+
+    // Admin Operations
+    admin: router({
+      getPendingTransactions: adminProcedure.query(async () => {
+        return await getPendingWalletTransactions();
+      }),
+
+      getAllTransactions: adminProcedure
+        .input(z.object({
+          status: z.enum(["pending", "approved", "rejected", "all"]).optional().default("all"),
+          type: z.enum(["deposit", "withdrawal", "all"]).optional().default("all"),
+          limit: z.number().optional().default(100),
+        }))
+        .query(async ({ input }) => {
+          return await getAllWalletTransactions(input);
+        }),
+
+      approveTransaction: adminProcedure
+        .input(z.object({ transactionId: z.number() }))
+        .mutation(async ({ input }) => {
+          await approveWalletTransaction(input.transactionId);
+          return { success: true, message: "Transaction approved successfully" };
+        }),
+
+      rejectTransaction: adminProcedure
+        .input(z.object({
+          transactionId: z.number(),
+          reason: z.string().optional(),
+        }))
+        .mutation(async ({ input }) => {
+          await rejectWalletTransaction(input.transactionId, input.reason);
+          return { success: true, message: "Transaction rejected" };
+        }),
+    }),
   }),
 
   // Admin routes moved to adminRouters.ts
