@@ -431,6 +431,78 @@ export const adminRouter = router({
       }),
   }),
 
+  // Invoice Management
+  invoices: router({
+    list: adminProcedure.query(async () => {
+      const { getAllInvoices } = await import("./db");
+      return await getAllInvoices();
+    }),
+    
+    updateStatus: adminProcedure
+      .input(z.object({
+        id: z.number(),
+        status: z.enum(["pending", "paid", "cancelled", "expired"]),
+        notes: z.string().optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const { getInvoiceById, updateInvoiceStatus, updateInvestmentStatus, createNotification } = await import("./db");
+        
+        const invoice = await getInvoiceById(input.id);
+        if (!invoice) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Invoice not found" });
+        }
+        
+        // Update invoice status
+        const paidAt = input.status === "paid" ? new Date() : undefined;
+        await updateInvoiceStatus(input.id, input.status, paidAt);
+        
+        // Update related investment status
+        if (invoice.investmentId) {
+          if (input.status === "paid") {
+            await updateInvestmentStatus(invoice.investmentId, "confirmed");
+          } else if (input.status === "cancelled") {
+            await updateInvestmentStatus(invoice.investmentId, "cancelled");
+          }
+        }
+        
+        // Create notification for user
+        const notificationMessages: Record<string, { title: string; message: string }> = {
+          paid: {
+            title: "Payment Confirmed",
+            message: `Your payment for invoice ${invoice.invoiceNumber} has been confirmed by admin.`,
+          },
+          cancelled: {
+            title: "Invoice Cancelled",
+            message: `Invoice ${invoice.invoiceNumber} has been cancelled. ${input.notes || ''}`
+          },
+          expired: {
+            title: "Invoice Expired",
+            message: `Invoice ${invoice.invoiceNumber} has expired.`,
+          },
+        };
+        
+        if (notificationMessages[input.status]) {
+          await createNotification({
+            userId: invoice.userId,
+            type: "payment",
+            ...notificationMessages[input.status],
+          });
+        }
+        
+        // Create audit log
+        const { createAuditLog } = await import("./db");
+        await createAuditLog({
+          userId: ctx.user.id,
+          action: "invoice_status_update",
+          entityType: "invoice",
+          entityId: input.id,
+          details: `Updated invoice ${invoice.invoiceNumber} status to ${input.status}. ${input.notes || ''}`,
+        });
+        
+        return { success: true };
+      }),
+  }),
+
   // Platform Settings Management
   settings: router({
     uploadLogo: adminProcedure

@@ -28,6 +28,8 @@ import {
   InsertIncomeDistribution,
   transactions,
   InsertTransaction,
+  invoices,
+  InsertInvoice,
   offerings,
   InsertOffering,
   offeringDocuments,
@@ -624,6 +626,113 @@ export async function updateTransactionStatus(transactionId: number, status: str
     status: status as any,
     completedAt: status === "completed" ? new Date() : undefined
   }).where(eq(transactions.id, transactionId));
+}
+
+// ============================================
+// INVOICES
+// ============================================
+
+export async function generateInvoiceNumber(): Promise<string> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Get the last invoice number
+  const lastInvoice = await db.select({ invoiceNumber: invoices.invoiceNumber })
+    .from(invoices)
+    .orderBy(desc(invoices.id))
+    .limit(1);
+  
+  if (lastInvoice.length === 0) {
+    return "INV-00001";
+  }
+  
+  const lastNumber = parseInt(lastInvoice[0].invoiceNumber.split("-")[1]);
+  const nextNumber = lastNumber + 1;
+  return `INV-${nextNumber.toString().padStart(5, "0")}`;
+}
+
+export async function createInvoice(invoice: InsertInvoice) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Generate invoice number if not provided
+  if (!invoice.invoiceNumber) {
+    invoice.invoiceNumber = await generateInvoiceNumber();
+  }
+  
+  const result = await db.insert(invoices).values(invoice);
+  return result;
+}
+
+export async function getInvoiceById(invoiceId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(invoices).where(eq(invoices.id, invoiceId)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getInvoiceByNumber(invoiceNumber: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(invoices).where(eq(invoices.invoiceNumber, invoiceNumber)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getUserInvoices(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(invoices).where(eq(invoices.userId, userId)).orderBy(desc(invoices.createdAt));
+}
+
+export async function updateInvoiceStatus(invoiceId: number, status: string, paidAt?: Date, transactionId?: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const updateData: any = { status };
+  if (paidAt) updateData.paidAt = paidAt;
+  if (transactionId) updateData.transactionId = transactionId;
+  
+  await db.update(invoices).set(updateData).where(eq(invoices.id, invoiceId));
+}
+
+export async function getInvoiceWithDetails(invoiceId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const invoice = await getInvoiceById(invoiceId);
+  if (!invoice) return null;
+  
+  const user = await getUserByOpenId(invoice.userId.toString());
+  const property = await getPropertyById(invoice.propertyId);
+  
+  return {
+    invoice,
+    user,
+    property,
+  };
+}
+
+export async function getAllInvoices() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  // Get all invoices with user and property details
+  const allInvoices = await db.select().from(invoices).orderBy(desc(invoices.createdAt));
+  
+  const invoicesWithDetails = await Promise.all(
+    allInvoices.map(async (invoice) => {
+      const user = await getUserById(invoice.userId);
+      const property = await getPropertyById(invoice.propertyId);
+      return {
+        ...invoice,
+        userName: user?.name || 'Unknown',
+        userEmail: user?.email || 'N/A',
+        propertyName: property?.name || 'Unknown',
+      };
+    })
+  );
+  
+  return invoicesWithDetails;
 }
 
 // ============================================

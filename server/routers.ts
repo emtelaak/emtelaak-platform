@@ -67,6 +67,10 @@ import {
   getAllWalletTransactions,
   approveWalletTransaction,
   rejectWalletTransaction,
+  getUserInvoices,
+  getInvoiceById,
+  updateInvoiceStatus,
+  getInvoiceWithDetails,
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import { storagePut } from './storage';
@@ -489,13 +493,61 @@ export const appRouter = router({
         });
         
         // Create transaction record
-        await createTransaction({
+        const transactionResult = await createTransaction({
           userId: ctx.user.id,
           type: "investment",
           amount: input.amount,
           status: "pending",
           paymentMethod: input.paymentMethod,
+          relatedInvestmentId: result.insertId,
         });
+        
+        // Generate proforma invoice
+        const { createInvoice } = await import("./db");
+        const dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + 7); // 7 days to pay
+        
+        const invoiceResult = await createInvoice({
+          userId: ctx.user.id,
+          investmentId: result.insertId,
+          propertyId: input.propertyId,
+          amount: input.amount,
+          shares: input.shares,
+          sharePrice: input.sharePrice,
+          currency: "USD",
+          status: "pending",
+          dueDate,
+          invoiceNumber: "", // Will be auto-generated
+        });
+        
+        // Send invoice notification email
+        try {
+          const { sendEmail } = await import("./_core/email");
+          const userProfile = await import("./db").then(m => m.getUserProfile(ctx.user.id));
+          
+          if (userProfile?.email) {
+            await sendEmail({
+              to: userProfile.email,
+              subject: "Proforma Invoice - Investment Request",
+              html: `
+                <h2>Investment Invoice</h2>
+                <p>Dear ${ctx.user.name || "Investor"},</p>
+                <p>Thank you for your investment request. Please find your proforma invoice details below:</p>
+                <ul>
+                  <li><strong>Invoice Number:</strong> Will be generated</li>
+                  <li><strong>Property:</strong> ${property.name}</li>
+                  <li><strong>Shares:</strong> ${input.shares}</li>
+                  <li><strong>Amount:</strong> $${(input.amount / 100).toLocaleString()}</li>
+                  <li><strong>Due Date:</strong> ${dueDate.toLocaleDateString()}</li>
+                </ul>
+                <p>Please complete the payment within 7 days to confirm your investment.</p>
+              `,
+            });
+          }
+        } catch (emailError) {
+          console.error("Failed to send invoice email:", emailError);
+          // Don't fail the investment creation if email fails
+        }
         
         // Create notification
         await createNotification({
@@ -526,6 +578,72 @@ export const appRouter = router({
     transactions: protectedProcedure.query(async ({ ctx }) => {
       return await getUserTransactions(ctx.user.id);
     }),
+  }),
+
+  // Invoices
+  invoices: router({  
+    list: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserInvoices(ctx.user.id);
+    }),
+    
+    getById: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ ctx, input }) => {
+        const invoice = await getInvoiceById(input.id);
+        if (!invoice || invoice.userId !== ctx.user.id) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Invoice not found" });
+        }
+        return await getInvoiceWithDetails(input.id);
+      }),
+    
+    markAsPaid: protectedProcedure
+      .input(z.object({ 
+        id: z.number(),
+        transactionId: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const invoice = await getInvoiceById(input.id);
+        if (!invoice || invoice.userId !== ctx.user.id) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Invoice not found" });
+        }
+        
+        await updateInvoiceStatus(input.id, "paid", new Date(), input.transactionId);
+        
+        // Update related investment status
+        if (invoice.investmentId) {
+          const { updateInvestmentStatus } = await import("./db");
+          await updateInvestmentStatus(invoice.investmentId, "confirmed");
+        }
+        
+        // Create notification
+        await createNotification({
+          userId: ctx.user.id,
+          type: "payment",
+          title: "Payment Confirmed",
+          message: `Your payment for invoice ${invoice.invoiceNumber} has been confirmed.`,
+        });
+        
+        return { success: true };
+      }),
+    
+    downloadPdf: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ ctx, input }) => {
+        const invoice = await getInvoiceById(input.id);
+        if (!invoice || invoice.userId !== ctx.user.id) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Invoice not found" });
+        }
+        
+        const invoiceDetails = await getInvoiceWithDetails(input.id);
+        if (!invoiceDetails) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Invoice details not found" });
+        }
+        
+        const { generateInvoiceHTML } = await import("./invoicePdf");
+        const html = generateInvoiceHTML(invoiceDetails);
+        
+        return { html, invoiceNumber: invoice.invoiceNumber };
+      }),
   }),
 
   // Notifications

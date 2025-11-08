@@ -795,3 +795,58 @@
 - [x] Fix useRouter import in AddProperty.tsx (changed to useLocation from wouter)
 - [x] Test AddProperty page loads correctly
 - [x] Verify form submission works
+
+
+## Phase 94: Proforma Invoice System (Completed)
+- [x] Create invoices table in database schema
+- [x] Add invoice number generation logic (INV-00001 format)
+- [x] Create createInvoice function in db.ts
+- [x] Create getInvoiceById and getUserInvoices queries
+- [x] Create getInvoiceByNumber and getInvoiceWithDetails queries
+- [x] Create updateInvoiceStatus function
+- [x] Add invoice status tracking (pending, paid, cancelled, expired)
+- [x] Integrate invoice generation in investment creation flow
+- [x] Auto-generate invoice when user creates investment
+- [x] Set due date to 7 days from issue date
+- [x] Create invoice PDF HTML generation function
+- [x] Add professional invoice template with company branding
+- [x] Add invoice email notification on investment creation
+- [x] Create invoices router with list, getById, markAsPaid, downloadPdf endpoints
+- [x] Create Invoices list page for users at /invoices
+- [x] Add invoice summary cards (total, pending, amount)
+- [x] Add invoice table with all details
+- [x] Add invoice preview dialog with HTML rendering
+- [x] Add download/print functionality
+- [x] Add status badges with color coding
+- [x] Link invoice to investment and update investment status on payment
+- [x] Create notification when invoice is paid
+- [x] Add route to App.tsx for /invoices
+- [ ] Add admin invoice management interface
+- [ ] Add automatic invoice expiry updates (cron job)
+- [ ] Add bilingual support for invoice content
+- [ ] Test complete invoice flow from investment to payment
+
+
+## Phase 95: Admin Invoice Management (Completed)
+- [x] Add getAllInvoices query to db.ts with user and property details
+- [x] Add getUserById helper function (reused existing)
+- [x] Add admin invoice endpoints (list all, updateStatus)
+- [x] Create AdminInvoices page component at /admin/invoices
+- [x] Add summary cards (total, pending, paid, total amount)
+- [x] Add invoice table with user info (name, email) and property details
+- [x] Add search by invoice number, user name, email, property
+- [x] Add filter by status dropdown (all, pending, paid, cancelled, expired)
+- [x] Add manual mark as paid action with confirmation dialog
+- [x] Add manual mark as cancelled action with confirmation dialog
+- [x] Add notes field in confirmation dialog
+- [x] Update related investment status on invoice status change
+- [x] Send notification to user when status changes
+- [x] Add audit logging for admin actions
+- [x] Add success/error toast notifications
+- [x] Add route to App.tsx for /admin/invoices
+- [x] Add status badges with color coding
+- [x] Add loading states during mutations
+- [ ] Add navigation link in admin dashboard sidebar
+- [ ] Add invoice preview/download for admins
+- [ ] Add date range filter
+- [ ] Test complete admin invoice management flow

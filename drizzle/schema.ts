@@ -393,6 +393,46 @@ export const transactions = mysqlTable("transactions", {
   statusIdx: index("status_idx").on(table.status),
 }));
 
+export const invoices = mysqlTable("invoices", {
+  id: int("id").autoincrement().primaryKey(),
+  invoiceNumber: varchar("invoiceNumber", { length: 50 }).notNull().unique(),
+  userId: int("userId").notNull().references(() => users.id),
+  investmentId: int("investmentId").references(() => investments.id, { onDelete: "set null" }),
+  propertyId: int("propertyId").notNull().references(() => properties.id),
+  
+  // Invoice Details
+  amount: int("amount").notNull(), // in cents
+  shares: int("shares").notNull(),
+  sharePrice: int("sharePrice").notNull(),
+  currency: mysqlEnum("currency", ["USD", "EGP"]).default("USD").notNull(),
+  
+  // Status
+  status: mysqlEnum("status", ["pending", "paid", "cancelled", "expired"]).default("pending").notNull(),
+  
+  // Dates
+  issueDate: timestamp("issueDate").defaultNow().notNull(),
+  dueDate: timestamp("dueDate").notNull(),
+  paidAt: timestamp("paidAt"),
+  
+  // Payment Details
+  paymentMethod: varchar("paymentMethod", { length: 50 }),
+  transactionId: varchar("transactionId", { length: 255 }),
+  
+  // Additional Info
+  notes: text("notes"),
+  pdfUrl: text("pdfUrl"),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("user_id_idx").on(table.userId),
+  statusIdx: index("status_idx").on(table.status),
+  investmentIdIdx: index("investment_id_idx").on(table.investmentId),
+}));
+
+export type Invoice = typeof invoices.$inferSelect;
+export type InsertInvoice = typeof invoices.$inferInsert;
+
 // ============================================
 // OFFERINGS (FUNDRAISER)
 // ============================================
