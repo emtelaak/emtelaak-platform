@@ -704,3 +704,34 @@
 - [ ] Test password reset flow end-to-end
 - [ ] Create password reset page (/reset-password?token=xxx)
 - [ ] Add token validation and password update functionality
+
+
+## Phase 90: Password Reset Page (Completed)
+- [x] Add password field to users table schema
+- [x] Push database schema changes (password column added)
+- [x] Install bcrypt package for password hashing
+- [x] Create validateResetToken query in auth router
+- [x] Create resetPassword mutation in auth router
+- [x] Validate token exists and not expired
+- [x] Validate token not already used
+- [x] Hash new password with bcrypt
+- [x] Update user password in database
+- [x] Mark token as used
+- [x] Create audit log entry for password reset completion
+- [x] Create ResetPassword page component at /reset-password
+- [x] Add route to App.tsx for /reset-password
+- [x] Extract token from URL query parameter
+- [x] Add password strength indicator with visual progress bar
+- [x] Add password and confirm password fields with show/hide toggle
+- [x] Validate passwords match with real-time feedback
+- [x] Validate password strength (min 8 chars, uppercase, lowercase, number)
+- [x] Show success message after reset with redirect
+- [x] Redirect to home page after successful reset (3 second delay)
+- [x] Handle expired/invalid token errors with user-friendly messages
+- [x] Add bilingual support (English/Arabic) with RTL layout
+- [x] Add password reset translations to en.ts
+- [x] Add password reset translations to ar.ts
+- [x] Loading state during token validation
+- [x] Loading state during password reset submission
+- [x] Disabled form fields during submission
+- [ ] Test complete password reset flow end-to-end

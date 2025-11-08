@@ -651,6 +651,48 @@ export const en = {
     admin: "Admin",
     superAdmin: "Super Admin",
   },
+
+  // Password Reset
+  resetPassword: {
+    title: "Reset Your Password",
+    subtitle: "Enter your new password below",
+    newPassword: "New Password",
+    confirmPassword: "Confirm Password",
+    newPasswordPlaceholder: "Enter new password",
+    confirmPasswordPlaceholder: "Confirm new password",
+    passwordStrength: "Password Strength:",
+    weak: "Weak",
+    medium: "Medium",
+    strong: "Strong",
+    requirements: {
+      length: "At least 8 characters",
+      uppercase: "Contains uppercase letter",
+      lowercase: "Contains lowercase letter",
+      number: "Contains number",
+    },
+    passwordsMatch: "Passwords match",
+    passwordsDontMatch: "Passwords do not match",
+    resetButton: "Reset Password",
+    resetting: "Resetting Password...",
+    backToHome: "Back to Home",
+    invalidToken: {
+      title: "Invalid Reset Link",
+      message: "The password reset link is invalid or has expired.",
+      description: "This reset link may have expired or already been used. Please request a new password reset link.",
+      returnHome: "Return to Home",
+    },
+    success: {
+      title: "Password Reset Successful!",
+      message: "Your password has been successfully reset.",
+      description: "You can now log in with your new password. Redirecting to home page...",
+    },
+    validating: "Validating reset token...",
+    errors: {
+      requirementsFailed: "Please meet all password requirements",
+      passwordMismatch: "Passwords do not match",
+      resetFailed: "Failed to reset password. Please try again.",
+    },
+  },
 };
 
 export type Translation = typeof en;

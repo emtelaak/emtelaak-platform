@@ -92,6 +92,91 @@ export const appRouter = router({
         success: true,
       } as const;
     }),
+    
+    // Password Reset
+    validateResetToken: publicProcedure
+      .input(z.object({ token: z.string() }))
+      .query(async ({ input }) => {
+        const db = await import("./db").then(m => m.getDb());
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+        
+        const { passwordResetTokens } = await import("../drizzle/schema");
+        const { eq, and, gt } = await import("drizzle-orm");
+        
+        const tokens = await db.select()
+          .from(passwordResetTokens)
+          .where(
+            and(
+              eq(passwordResetTokens.token, input.token),
+              eq(passwordResetTokens.used, false),
+              gt(passwordResetTokens.expiresAt, new Date())
+            )
+          )
+          .limit(1);
+        
+        if (tokens.length === 0) {
+          return { valid: false, message: "Token is invalid or expired" };
+        }
+        
+        return { valid: true };
+      }),
+    
+    resetPassword: publicProcedure
+      .input(z.object({
+        token: z.string(),
+        newPassword: z.string().min(8),
+      }))
+      .mutation(async ({ input }) => {
+        const db = await import("./db").then(m => m.getDb());
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+        
+        const { passwordResetTokens, users } = await import("../drizzle/schema");
+        const { eq, and, gt } = await import("drizzle-orm");
+        const bcrypt = await import("bcrypt");
+        
+        // Validate token
+        const tokens = await db.select()
+          .from(passwordResetTokens)
+          .where(
+            and(
+              eq(passwordResetTokens.token, input.token),
+              eq(passwordResetTokens.used, false),
+              gt(passwordResetTokens.expiresAt, new Date())
+            )
+          )
+          .limit(1);
+        
+        if (tokens.length === 0) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Token is invalid or expired" });
+        }
+        
+        const tokenRecord = tokens[0];
+        
+        // Hash new password
+        const hashedPassword = await bcrypt.hash(input.newPassword, 10);
+        
+        // Update user password
+        await db.update(users)
+          .set({ password: hashedPassword })
+          .where(eq(users.id, tokenRecord.userId));
+        
+        // Mark token as used
+        await db.update(passwordResetTokens)
+          .set({ used: true })
+          .where(eq(passwordResetTokens.id, tokenRecord.id));
+        
+        // Create audit log
+        const { createAuditLog } = await import("./db");
+        await createAuditLog({
+          userId: tokenRecord.userId,
+          action: "password_reset_completed",
+          targetType: "user",
+          targetId: tokenRecord.userId.toString(),
+          details: "User completed password reset",
+        });
+        
+        return { success: true };
+      }),
   }),
 
   // User Profile Management

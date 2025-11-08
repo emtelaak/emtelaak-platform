@@ -18,6 +18,7 @@ import KYCQuestionnaire from "./pages/KYCQuestionnaire";
 import LeadCapture from "./pages/LeadCapture";
 import Wallet from "./pages/Wallet";
 import Menu from "./pages/Menu";
+import ResetPassword from "./pages/ResetPassword";
 
 // Lazy load admin pages (only loaded when accessed)
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
@@ -62,6 +63,7 @@ function Router() {
       <Route path="/menu" component={Menu} />
       <Route path="/profile" component={Profile} />
       <Route path="/kyc-questionnaire" component={KYCQuestionnaire} />
+      <Route path="/reset-password" component={ResetPassword} />
       <Route path={"/contact"} component={Contact} />
       <Route path={"/faq"} component={FAQ} />
       <Route path={"/about"} component={About} />

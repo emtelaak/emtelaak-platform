@@ -653,4 +653,46 @@ export const ar: Translation = {
     admin: "مسؤول",
     superAdmin: "مسؤول رئيسي",
   },
+
+  // Password Reset
+  resetPassword: {
+    title: "إعادة تعيين كلمة المرور",
+    subtitle: "أدخل كلمة المرور الجديدة أدناه",
+    newPassword: "كلمة المرور الجديدة",
+    confirmPassword: "تأكيد كلمة المرور",
+    newPasswordPlaceholder: "أدخل كلمة المرور الجديدة",
+    confirmPasswordPlaceholder: "أكد كلمة المرور الجديدة",
+    passwordStrength: "قوة كلمة المرور:",
+    weak: "ضعيفة",
+    medium: "متوسطة",
+    strong: "قوية",
+    requirements: {
+      length: "8 أحرف على الأقل",
+      uppercase: "يحتوي على حرف كبير",
+      lowercase: "يحتوي على حرف صغير",
+      number: "يحتوي على رقم",
+    },
+    passwordsMatch: "كلمات المرور متطابقة",
+    passwordsDontMatch: "كلمات المرور غير متطابقة",
+    resetButton: "إعادة تعيين كلمة المرور",
+    resetting: "جاري إعادة تعيين كلمة المرور...",
+    backToHome: "العودة للصفحة الرئيسية",
+    invalidToken: {
+      title: "رابط إعادة التعيين غير صالح",
+      message: "رابط إعادة تعيين كلمة المرور غير صالح أو منتهي الصلاحية.",
+      description: "قد يكون هذا الرابط منتهي الصلاحية أو تم استخدامه بالفعل. يرجى طلب رابط جديد لإعادة تعيين كلمة المرور.",
+      returnHome: "العودة للصفحة الرئيسية",
+    },
+    success: {
+      title: "تم إعادة تعيين كلمة المرور بنجاح!",
+      message: "تم إعادة تعيين كلمة المرور الخاصة بك بنجاح.",
+      description: "يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة. جاري التوجيه إلى الصفحة الرئيسية...",
+    },
+    validating: "جاري التحقق من رمز إعادة التعيين...",
+    errors: {
+      requirementsFailed: "يرجى استيفاء جميع متطلبات كلمة المرور",
+      passwordMismatch: "كلمات المرور غير متطابقة",
+      resetFailed: "فشل إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى.",
+    },
+  },
 };
