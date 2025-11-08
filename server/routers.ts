@@ -523,7 +523,32 @@ export const appRouter = router({
           invoiceNumber: "", // Will be auto-generated
         });
         
-        // TODO: Send invoice notification email when email service is configured
+        // Send invoice notification email
+        try {
+          const { sendInvoiceEmail } = await import("./_core/emailService");
+          const { getInvoiceByNumber } = await import("./db");
+          
+          // Get the generated invoice number
+          const createdInvoice = await getInvoiceByNumber(invoiceResult.invoiceNumber);
+          
+          if (createdInvoice && ctx.user.email) {
+            const invoiceUrl = `${process.env.VITE_APP_URL || "https://emtelaak.com"}/invoices`;
+            
+            await sendInvoiceEmail({
+              to: ctx.user.email,
+              userName: ctx.user.name || "Investor",
+              invoiceNumber: createdInvoice.invoiceNumber,
+              propertyName: property.name,
+              amount: input.amount,
+              shares: input.shares,
+              dueDate,
+              invoiceUrl,
+            });
+          }
+        } catch (emailError) {
+          console.error("Failed to send invoice email:", emailError);
+          // Don't fail the investment creation if email fails
+        }
         
         // Create notification
         await createNotification({

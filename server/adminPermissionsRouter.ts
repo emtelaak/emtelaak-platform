@@ -286,10 +286,11 @@ export const adminPermissionsRouter = router({
         const resetUrl = `${process.env.VITE_APP_URL || "https://emtelaak.com"}/reset-password?token=${token}`;
         
         try {
-          await notifySuperAdmins({
-            subject: "Password Reset Request",
-            message: `Password reset requested for user: ${user.name} (${user.email})\n\nReset link: ${resetUrl}\n\nThis link expires in 24 hours.`,
-            priority: "normal",
+          const { sendPasswordResetEmail } = await import("./_core/emailService");
+          await sendPasswordResetEmail({
+            to: user.email,
+            userName: user.name || "User",
+            resetLink: resetUrl,
           });
         } catch (emailError) {
           console.error("Failed to send password reset email:", emailError);
