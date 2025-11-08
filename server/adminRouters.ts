@@ -284,6 +284,19 @@ export const adminRouter = router({
 
   // Property Management
   properties: router({
+    // Analytics
+    getAnalytics: adminProcedure
+      .input(z.object({ propertyId: z.number() }))
+      .query(async ({ input }) => {
+        const { getPropertyAnalytics } = await import("./db");
+        return await getPropertyAnalytics(input.propertyId);
+      }),
+    
+    getAllAnalytics: adminProcedure.query(async () => {
+      const { getAllPropertiesAnalytics } = await import("./db");
+      return await getAllPropertiesAnalytics();
+    }),
+    
     create: adminProcedure
       .input(z.object({
         // Basic Info

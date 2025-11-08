@@ -315,6 +315,19 @@ export const userSavedProperties = mysqlTable("user_saved_properties", {
   propertyIdIdx: index("property_id_idx").on(table.propertyId),
 }));
 
+export const propertyViews = mysqlTable("property_views", {
+  id: int("id").autoincrement().primaryKey(),
+  propertyId: int("propertyId").notNull().references(() => properties.id, { onDelete: "cascade" }),
+  userId: int("userId").references(() => users.id, { onDelete: "set null" }), // null for anonymous views
+  viewedAt: timestamp("viewedAt").defaultNow().notNull(),
+  sessionId: varchar("sessionId", { length: 255 }), // for tracking unique anonymous users
+  userAgent: text("userAgent"),
+  ipAddress: varchar("ipAddress", { length: 45 }),
+}, (table) => ({
+  propertyIdIdx: index("property_id_idx").on(table.propertyId),
+  viewedAtIdx: index("viewed_at_idx").on(table.viewedAt),
+}));
+
 // ============================================
 // INVESTMENTS
 // ============================================

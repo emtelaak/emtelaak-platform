@@ -337,6 +337,111 @@ export async function createPropertyMedia(media: InsertPropertyMedia) {
   return result;
 }
 
+// Property Analytics
+export async function trackPropertyView(propertyId: number, userId?: number, sessionId?: string) {
+  const db = await getDb();  
+  if (!db) return;
+  
+  const { propertyViews } = await import("../drizzle/schema");
+  await db.insert(propertyViews).values({
+    propertyId,
+    userId: userId || null,
+    sessionId: sessionId || null,
+  });
+}
+
+export async function getPropertyAnalytics(propertyId: number) {
+  const db = await getDb();  
+  if (!db) return null;
+  
+  const { propertyViews, propertyWaitlist, investments } = await import("../drizzle/schema");
+  const { count, sql: sqlFunc } = await import("drizzle-orm");
+  
+  // Get property details
+  const property = await getPropertyById(propertyId);
+  if (!property) return null;
+  
+  // Get view count
+  const [viewsResult] = await db.select({ count: count() })
+    .from(propertyViews)
+    .where(eq(propertyViews.propertyId, propertyId));
+  
+  // Get unique viewers (by userId and sessionId)
+  const [uniqueViewersResult] = await db.select({ 
+    count: sqlFunc<number>`COUNT(DISTINCT COALESCE(${propertyViews.userId}, ${propertyViews.sessionId}))`
+  })
+    .from(propertyViews)
+    .where(eq(propertyViews.propertyId, propertyId));
+  
+  // Get waitlist count
+  const [waitlistResult] = await db.select({ count: count() })
+    .from(propertyWaitlist)
+    .where(eq(propertyWaitlist.propertyId, propertyId));
+  
+  // Get investor count
+  const [investorsResult] = await db.select({ count: count(sqlFunc`DISTINCT ${investments.userId}`) })
+    .from(investments)
+    .where(eq(investments.propertyId, propertyId));
+  
+  // Calculate funding progress
+  const fundedAmount = property.totalValue - property.availableValue;
+  const fundingPercentage = (fundedAmount / property.totalValue) * 100;
+  
+  return {
+    property,
+    views: viewsResult.count,
+    uniqueViewers: uniqueViewersResult.count,
+    waitlistCount: waitlistResult.count,
+    investorCount: investorsResult.count,
+    fundedAmount,
+    fundingPercentage: Math.round(fundingPercentage * 100) / 100,
+  };
+}
+
+export async function getAllPropertiesAnalytics() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const { propertyViews, propertyWaitlist, investments } = await import("../drizzle/schema");
+  const { count, sql: sqlFunc } = await import("drizzle-orm");
+  
+  // Get all properties
+  const allProperties = await db.select().from(properties).orderBy(desc(properties.createdAt));
+  
+  // Get analytics for each property
+  const analyticsPromises = allProperties.map(async (property) => {
+    // Get view count
+    const [viewsResult] = await db.select({ count: count() })
+      .from(propertyViews)
+      .where(eq(propertyViews.propertyId, property.id));
+    
+    // Get waitlist count
+    const [waitlistResult] = await db.select({ count: count() })
+      .from(propertyWaitlist)
+      .where(eq(propertyWaitlist.propertyId, property.id));
+    
+    // Get investor count
+    const [investorsResult] = await db.select({ count: count(sqlFunc`DISTINCT ${investments.userId}`) })
+      .from(investments)
+      .where(eq(investments.propertyId, property.id));
+    
+    // Calculate funding progress
+    const fundedAmount = property.totalValue - property.availableValue;
+    const fundingPercentage = (fundedAmount / property.totalValue) * 100;
+    
+    return {
+      ...property,
+      views: viewsResult.count,
+      waitlistCount: waitlistResult.count,
+      investorCount: investorsResult.count,
+      fundedAmount,
+      fundingPercentage: Math.round(fundingPercentage * 100) / 100,
+    };
+  });
+  
+  return await Promise.all(analyticsPromises);
+}
+
 export async function joinPropertyWaitlist(propertyId: number, userId: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");

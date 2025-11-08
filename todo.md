@@ -764,3 +764,28 @@
 - [x] Display human-readable currency values with formatting
 - [ ] Add bilingual translations for form labels
 - [ ] Test complete property creation flow with images
+
+
+## Phase 92: Property Analytics Dashboard (Completed)
+- [x] Create property_views table for tracking page views
+- [x] Add analytics queries to get property metrics
+- [x] Create trackPropertyView function for logging views
+- [x] Create getPropertyAnalytics query for individual property stats
+- [x] Create getAllPropertiesAnalytics query for overview dashboard
+- [x] Add analytics endpoints to admin router (getAnalytics, getAllAnalytics)
+- [x] Create PropertyAnalytics page component at /admin/property-analytics
+- [x] Add overview cards (total properties, total funding, total investors, avg funding rate)
+- [x] Add properties table with key metrics (name, status, funding %, views, waitlist, investors)
+- [x] Add funding progress bars for each property
+- [x] Add status badges with color coding (draft, coming_soon, available, funded, exited, cancelled)
+- [x] Add search functionality for property names
+- [x] Add filter by status dropdown
+- [x] Add sort by different metrics (funding %, views, waitlist, investors)
+- [x] Add export to CSV functionality with download
+- [x] Add route to App.tsx for /admin/property-analytics (lazy loaded)
+- [x] Calculate funding percentage and funded amounts
+- [x] Display bilingual property names (English/Arabic)
+- [x] Add icons for better visual clarity
+- [ ] Add navigation link in admin dashboard sidebar
+- [ ] Add time-based filtering (last 7 days, 30 days, all time)
+- [ ] Test analytics dashboard with real property data

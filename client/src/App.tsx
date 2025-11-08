@@ -31,6 +31,7 @@ const SuperAdminDashboard = lazy(() => import("./pages/SuperAdminDashboard"));
 const EmailSettings = lazy(() => import("./pages/EmailSettings"));
 const AdminWallet = lazy(() => import("./pages/AdminWallet"));
 const AddProperty = lazy(() => import("./pages/AddProperty"));
+const PropertyAnalytics = lazy(() => import("./pages/PropertyAnalytics"));
 const HomepageContentEditor = lazy(() => import("@/pages/HomepageContentEditor"));
 const ImageLibrary = lazy(() => import("@/pages/ImageLibrary"));
 const AboutPageEditor = lazy(() => import("@/pages/AboutPageEditor"));
@@ -62,6 +63,7 @@ function Router() {
       <Route path="/wallet" component={Wallet} />
       <Route path="/admin/wallet" component={AdminWallet} />
       <Route path="/admin/add-property" component={AddProperty} />
+      <Route path="/admin/property-analytics" component={PropertyAnalytics} />
       <Route path="/menu" component={Menu} />
       <Route path="/profile" component={Profile} />
       <Route path="/kyc-questionnaire" component={KYCQuestionnaire} />
