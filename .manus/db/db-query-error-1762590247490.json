@@ -1,0 +1,8 @@
+{
+  "query": "ALTER TABLE audit_logs \nADD COLUMN performedBy INT NULL AFTER userId,\nADD INDEX audit_performed_by_idx (performedBy),\nADD INDEX audit_target_idx (targetType, targetId),\nADD INDEX audit_created_at_idx (createdAt);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute ALTER TABLE audit_logs \nADD COLUMN performedBy INT NULL AFTER userId,\nADD INDEX audit_performed_by_idx (performedBy),\nADD INDEX audit_target_idx (targetType, targetId),\nADD INDEX audit_created_at_idx (createdAt);",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1072 (42000) at line 1: column does not exist: performedBy"
+  ]
+}

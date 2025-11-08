@@ -247,7 +247,7 @@ export default function CRMCases() {
                     <SelectValue placeholder="All statuses" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All statuses</SelectItem>
+                    <SelectItem value="all">All statuses</SelectItem>
                     <SelectItem value="new">New</SelectItem>
                     <SelectItem value="in_progress">In Progress</SelectItem>
                     <SelectItem value="pending_customer">Pending Customer</SelectItem>
@@ -263,7 +263,7 @@ export default function CRMCases() {
                     <SelectValue placeholder="All priorities" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All priorities</SelectItem>
+                    <SelectItem value="all">All priorities</SelectItem>
                     <SelectItem value="low">Low</SelectItem>
                     <SelectItem value="medium">Medium</SelectItem>
                     <SelectItem value="high">High</SelectItem>

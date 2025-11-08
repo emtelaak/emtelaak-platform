@@ -580,7 +580,6 @@ export async function getArticleBySlug(slug: string) {
     })
     .from(knowledgeBaseArticles)
     .leftJoin(knowledgeBaseCategories, eq(knowledgeBaseArticles.categoryId, knowledgeBaseCategories.id))
-    .leftJoin(users, eq(knowledgeBaseArticles.authorId, users.id))
     .where(eq(knowledgeBaseArticles.slug, slug))
     .limit(1);
 

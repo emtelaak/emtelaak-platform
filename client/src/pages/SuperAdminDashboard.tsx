@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -90,6 +91,16 @@ export default function SuperAdminDashboard() {
       link: "/admin/kyc-review",
       color: "text-purple-600",
       bgColor: "bg-purple-50",
+    },
+    {
+      title: language === "en" ? "Invoice Management" : "إدارة الفواتير",
+      description: language === "en"
+        ? "View, manage, and track all platform invoices and payments"
+        : "عرض وإدارة وتتبع جميع فواتير ومدفوعات المنصة",
+      icon: FileText,
+      link: "/admin/invoices",
+      color: "text-emerald-600",
+      bgColor: "bg-emerald-50",
     },
     {
       title: language === "en" ? "Platform Content" : "محتوى المنصة",

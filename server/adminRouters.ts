@@ -490,15 +490,81 @@ export const adminRouter = router({
         }
         
         // Create audit log
-        const { createAuditLog } = await import("./db");
+        const { createAuditLog } = await import("./permissionsDb");
         await createAuditLog({
-          userId: ctx.user.id,
-          action: "invoice_status_update",
-          entityType: "invoice",
-          entityId: input.id,
-          details: `Updated invoice ${invoice.invoiceNumber} status to ${input.status}. ${input.notes || ''}`,
+          userId: invoice.userId, // The user affected
+          performedBy: ctx.user.id, // The admin who performed the action
+          action: "invoice.status_updated",
+          targetType: "invoice",
+          targetId: input.id,
+          details: JSON.stringify({
+            invoiceNumber: invoice.invoiceNumber,
+            oldStatus: invoice.status,
+            newStatus: input.status,
+            notes: input.notes || '',
+            adminName: ctx.user.name,
+            adminEmail: ctx.user.email,
+          }),
         });
         
+        return { success: true };
+      }),
+    getAuditLogs: adminProcedure
+      .input(z.object({ invoiceId: z.number() }))
+      .query(async ({ input }) => {
+        const { getInvoiceAuditLogs } = await import("./permissionsDb");
+        return await getInvoiceAuditLogs(input.invoiceId);
+      }),
+    deleteInvoice: adminProcedure
+      .input(z.object({ 
+        id: z.number(),
+        reason: z.string().optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        // Check permission
+        const { getAdminPermissions } = await import("./db");
+        const permissions = await getAdminPermissions(ctx.user.id);
+        
+        if (!permissions?.canDeleteInvoices && ctx.user.role !== "super_admin") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "You don't have permission to delete invoices",
+          });
+        }
+
+        const { getInvoiceById, db: getDb } = await import("./db");
+        const invoice = await getInvoiceById(input.id);
+        
+        if (!invoice) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Invoice not found",
+          });
+        }
+
+        // Delete invoice
+        const db = await getDb();
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+        
+        await db.delete(invoices).where(eq(invoices.id, input.id));
+
+        // Create audit log
+        const { createAuditLog } = await import("./permissionsDb");
+        await createAuditLog({
+          userId: invoice.userId,
+          performedBy: ctx.user.id,
+          action: "invoice.deleted",
+          targetType: "invoice",
+          targetId: input.id,
+          details: JSON.stringify({
+            invoiceNumber: invoice.invoiceNumber,
+            amount: invoice.amount,
+            reason: input.reason || '',
+            adminName: ctx.user.name,
+            adminEmail: ctx.user.email,
+          }),
+        });
+
         return { success: true };
       }),
   }),

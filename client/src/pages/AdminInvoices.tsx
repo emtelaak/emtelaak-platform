@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,27 +29,50 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Search, FileText, DollarSign, Calendar, CheckCircle2, XCircle } from "lucide-react";
+import { Loader2, Search, FileText, DollarSign, Calendar, CheckCircle2, XCircle, Download, History, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function AdminInvoices() {
+  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
   const [actionType, setActionType] = useState<"paid" | "cancelled" | null>(null);
   const [notes, setNotes] = useState("");
+  const [auditLogInvoiceId, setAuditLogInvoiceId] = useState<number | null>(null);
+  const [deleteInvoiceId, setDeleteInvoiceId] = useState<number | null>(null);
+  const [deleteReason, setDeleteReason] = useState("");
+
+  const { data: auditLogs, isLoading: auditLogsLoading } = trpc.admin.invoices.getAuditLogs.useQuery(
+    { invoiceId: auditLogInvoiceId! },
+    { enabled: !!auditLogInvoiceId }
+  );
+
+  const { data: adminPermissions } = trpc.adminPermissions.getMyPermissions.useQuery();
 
   const { data: invoices, isLoading, refetch } = trpc.admin.invoices.list.useQuery();
   const updateStatusMutation = trpc.admin.invoices.updateStatus.useMutation({
     onSuccess: () => {
       toast.success("Invoice status updated successfully");
       refetch();
-      setSelectedInvoice(null);
       setActionType(null);
+      setSelectedInvoice(null);
       setNotes("");
     },
     onError: (error) => {
       toast.error(error.message || "Failed to update invoice status");
+    },
+  });
+
+  const deleteInvoiceMutation = trpc.admin.invoices.deleteInvoice.useMutation({
+    onSuccess: () => {
+      toast.success("Invoice deleted successfully");
+      refetch();
+      setDeleteInvoiceId(null);
+      setDeleteReason("");
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to delete invoice");
     },
   });
 
@@ -93,6 +117,67 @@ export default function AdminInvoices() {
       status: actionType,
       notes: notes || undefined,
     });
+  };
+
+  const handleExportCSV = () => {
+    if (!filteredInvoices || filteredInvoices.length === 0) {
+      toast.error("No invoices to export");
+      return;
+    }
+
+    // CSV headers
+    const headers = [
+      "Invoice Number",
+      "User Name",
+      "User Email",
+      "Property Name",
+      "Issue Date",
+      "Due Date",
+      "Paid Date",
+      "Shares",
+      "Amount (USD)",
+      "Currency",
+      "Status",
+    ];
+
+    // CSV rows
+    const rows = filteredInvoices.map((invoice) => [
+      invoice.invoiceNumber,
+      invoice.userName,
+      invoice.userEmail,
+      invoice.propertyName,
+      formatDate(invoice.issueDate),
+      formatDate(invoice.dueDate),
+      invoice.paidAt ? formatDate(invoice.paidAt) : "N/A",
+      invoice.shares.toString(),
+      (invoice.amount / 100).toFixed(2),
+      invoice.currency,
+      invoice.status,
+    ]);
+
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) =>
+        row.map((cell) => `"${cell}"`).join(",")
+      ),
+    ].join("\n");
+
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    const timestamp = new Date().toISOString().split("T")[0];
+    const filename = `invoices_export_${timestamp}.csv`;
+
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast.success(`Exported ${filteredInvoices.length} invoice(s) to ${filename}`);
   };
 
   // Filter invoices
@@ -176,7 +261,7 @@ export default function AdminInvoices() {
         </Card>
       </div>
 
-      {/* Filters */}
+      {/* Filters and Export */}
       <Card className="mb-6">
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-4">
@@ -201,6 +286,15 @@ export default function AdminInvoices() {
                 <SelectItem value="expired">Expired</SelectItem>
               </SelectContent>
             </Select>
+            <Button
+              onClick={handleExportCSV}
+              variant="outline"
+              className="w-full md:w-auto"
+              disabled={!filteredInvoices || filteredInvoices.length === 0}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export CSV
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -250,6 +344,15 @@ export default function AdminInvoices() {
                       <TableCell>{getStatusBadge(invoice.status)}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setAuditLogInvoiceId(invoice.id)}
+                            className="text-blue-600 hover:text-blue-700"
+                          >
+                            <History className="h-4 w-4 mr-1" />
+                            Audit Log
+                          </Button>
                           {invoice.status === "pending" && (
                             <>
                               <Button
@@ -272,8 +375,16 @@ export default function AdminInvoices() {
                               </Button>
                             </>
                           )}
-                          {invoice.status !== "pending" && (
-                            <span className="text-sm text-muted-foreground">No actions</span>
+                          {(adminPermissions?.canDeleteInvoices || user?.role === "super_admin") && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setDeleteInvoiceId(invoice.id)}
+                              className="text-red-600 hover:text-red-700"
+                            >
+                              <Trash2 className="h-4 w-4 mr-1" />
+                              Delete
+                            </Button>
                           )}
                         </div>
                       </TableCell>
@@ -367,6 +478,146 @@ export default function AdminInvoices() {
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
               )}
               {actionType === "paid" ? "Confirm Payment" : "Cancel Invoice"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Audit Log Dialog */}
+      <Dialog open={!!auditLogInvoiceId} onOpenChange={() => setAuditLogInvoiceId(null)}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Invoice Audit Log</DialogTitle>
+            <DialogDescription>
+              Complete history of all actions performed on this invoice
+            </DialogDescription>
+          </DialogHeader>
+
+          {auditLogsLoading ? (
+            <div className="flex justify-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : auditLogs && auditLogs.length > 0 ? (
+            <div className="space-y-4">
+              {auditLogs.map((entry, index) => {
+                const details = entry.log.details ? JSON.parse(entry.log.details) : {};
+                return (
+                  <div key={entry.log.id} className="border rounded-lg p-4 space-y-2">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="font-medium text-sm">{entry.log.action}</div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {new Date(entry.log.createdAt).toLocaleString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                            hour12: true,
+                          })}
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="ml-2">
+                        #{index + 1}
+                      </Badge>
+                    </div>
+
+                    {entry.performedByUser && (
+                      <div className="bg-muted/50 rounded p-2 text-sm">
+                        <div className="font-medium">Performed by:</div>
+                        <div>{entry.performedByUser.name}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {entry.performedByUser.email}
+                        </div>
+                      </div>
+                    )}
+
+                    {details && Object.keys(details).length > 0 && (
+                      <div className="bg-muted/30 rounded p-2 text-sm space-y-1">
+                        <div className="font-medium">Details:</div>
+                        {details.invoiceNumber && (
+                          <div>Invoice: {details.invoiceNumber}</div>
+                        )}
+                        {details.oldStatus && details.newStatus && (
+                          <div>
+                            Status: {details.oldStatus} → {details.newStatus}
+                          </div>
+                        )}
+                        {details.notes && (
+                          <div className="text-xs">
+                            <span className="font-medium">Notes:</span> {details.notes}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-muted-foreground">
+              <History className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>No audit log entries found for this invoice</p>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAuditLogInvoiceId(null)}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Invoice Dialog */}
+      <Dialog open={!!deleteInvoiceId} onOpenChange={() => setDeleteInvoiceId(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Invoice</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this invoice? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Reason for deletion (optional)</label>
+              <Textarea
+                placeholder="Explain why this invoice is being deleted..."
+                value={deleteReason}
+                onChange={(e) => setDeleteReason(e.target.value)}
+                rows={3}
+              />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setDeleteInvoiceId(null);
+                setDeleteReason("");
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (deleteInvoiceId) {
+                  deleteInvoiceMutation.mutate({
+                    id: deleteInvoiceId,
+                    reason: deleteReason,
+                  });
+                }
+              }}
+              disabled={deleteInvoiceMutation.isPending}
+            >
+              {deleteInvoiceMutation.isPending && (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              )}
+              Delete Invoice
             </Button>
           </DialogFooter>
         </DialogContent>

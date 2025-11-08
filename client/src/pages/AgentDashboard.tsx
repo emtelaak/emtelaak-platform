@@ -329,7 +329,7 @@ export default function AgentDashboard() {
                     <SelectValue placeholder={language === "en" ? "All Statuses" : "جميع الحالات"} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">{language === "en" ? "All Statuses" : "جميع الحالات"}</SelectItem>
+                    <SelectItem value="all">{language === "en" ? "All Statuses" : "جميع الحالات"}</SelectItem>
                     <SelectItem value="open">{language === "en" ? "Open" : "مفتوح"}</SelectItem>
                     <SelectItem value="in_progress">{language === "en" ? "In Progress" : "قيد المعالجة"}</SelectItem>
                     <SelectItem value="resolved">{language === "en" ? "Resolved" : "تم الحل"}</SelectItem>
@@ -341,7 +341,7 @@ export default function AgentDashboard() {
                     <SelectValue placeholder={language === "en" ? "All Priorities" : "جميع الأولويات"} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">{language === "en" ? "All Priorities" : "جميع الأولويات"}</SelectItem>
+                    <SelectItem value="all">{language === "en" ? "All Priorities" : "جميع الأولويات"}</SelectItem>
                     <SelectItem value="urgent">{language === "en" ? "Urgent" : "عاجل"}</SelectItem>
                     <SelectItem value="high">{language === "en" ? "High" : "عالي"}</SelectItem>
                     <SelectItem value="medium">{language === "en" ? "Medium" : "متوسط"}</SelectItem>

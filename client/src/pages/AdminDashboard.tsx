@@ -44,6 +44,7 @@ import {
   UserCog,
   Eye,
   Key,
+  FileText,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -210,6 +211,12 @@ export default function AdminDashboard() {
                     <Button variant="outline">
                       <UserCog className="mr-2 h-4 w-4" />
                       Permissions
+                    </Button>
+                  </Link>
+                  <Link href="/admin/invoices">
+                    <Button variant="outline">
+                      <FileText className="mr-2 h-4 w-4" />
+                      Invoices
                     </Button>
                   </Link>
                   <Link href="/admin/settings">

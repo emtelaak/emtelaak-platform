@@ -170,12 +170,12 @@ export const appRouter = router({
           .where(eq(passwordResetTokens.id, tokenRecord.id));
         
         // Create audit log
-        const { createAuditLog } = await import("./db");
+        const { createAuditLog } = await import("./permissionsDb");
         await createAuditLog({
           userId: tokenRecord.userId,
           action: "password_reset_completed",
           targetType: "user",
-          targetId: tokenRecord.userId.toString(),
+          targetId: tokenRecord.userId,
           details: "User completed password reset",
         });
         
@@ -492,6 +492,9 @@ export const appRouter = router({
           paymentStatus: "pending",
         });
         
+        // Get the inserted investment ID
+        const investmentId = (result as any).insertId as number;
+        
         // Create transaction record
         const transactionResult = await createTransaction({
           userId: ctx.user.id,
@@ -499,7 +502,7 @@ export const appRouter = router({
           amount: input.amount,
           status: "pending",
           paymentMethod: input.paymentMethod,
-          relatedInvestmentId: result.insertId,
+          relatedInvestmentId: investmentId,
         });
         
         // Generate proforma invoice
@@ -509,7 +512,7 @@ export const appRouter = router({
         
         const invoiceResult = await createInvoice({
           userId: ctx.user.id,
-          investmentId: result.insertId,
+          investmentId: investmentId,
           propertyId: input.propertyId,
           amount: input.amount,
           shares: input.shares,
@@ -520,34 +523,7 @@ export const appRouter = router({
           invoiceNumber: "", // Will be auto-generated
         });
         
-        // Send invoice notification email
-        try {
-          const { sendEmail } = await import("./_core/email");
-          const userProfile = await import("./db").then(m => m.getUserProfile(ctx.user.id));
-          
-          if (userProfile?.email) {
-            await sendEmail({
-              to: userProfile.email,
-              subject: "Proforma Invoice - Investment Request",
-              html: `
-                <h2>Investment Invoice</h2>
-                <p>Dear ${ctx.user.name || "Investor"},</p>
-                <p>Thank you for your investment request. Please find your proforma invoice details below:</p>
-                <ul>
-                  <li><strong>Invoice Number:</strong> Will be generated</li>
-                  <li><strong>Property:</strong> ${property.name}</li>
-                  <li><strong>Shares:</strong> ${input.shares}</li>
-                  <li><strong>Amount:</strong> $${(input.amount / 100).toLocaleString()}</li>
-                  <li><strong>Due Date:</strong> ${dueDate.toLocaleDateString()}</li>
-                </ul>
-                <p>Please complete the payment within 7 days to confirm your investment.</p>
-              `,
-            });
-          }
-        } catch (emailError) {
-          console.error("Failed to send invoice email:", emailError);
-          // Don't fail the investment creation if email fails
-        }
+        // TODO: Send invoice notification email when email service is configured
         
         // Create notification
         await createNotification({
@@ -618,7 +594,7 @@ export const appRouter = router({
         // Create notification
         await createNotification({
           userId: ctx.user.id,
-          type: "payment",
+          type: "system",
           title: "Payment Confirmed",
           message: `Your payment for invoice ${invoice.invoiceNumber} has been confirmed.`,
         });

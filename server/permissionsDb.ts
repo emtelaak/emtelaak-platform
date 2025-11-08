@@ -224,6 +224,7 @@ export async function getAllUserPermissions(userId: number) {
 // Audit Logs
 export async function createAuditLog(data: {
   userId: number;
+  performedBy?: number; // The admin/user who performed the action
   action: string;
   targetType?: string;
   targetId?: number;
@@ -268,4 +269,58 @@ export async function getUserAuditLogs(userId: number, limit: number = 50) {
     .where(eq(auditLogs.userId, userId))
     .orderBy(auditLogs.createdAt)
     .limit(limit);
+}
+
+export async function getInvoiceAuditLogs(invoiceId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const result = await db
+    .select({
+      log: auditLogs,
+      affectedUser: {
+        id: users.id,
+        name: users.name,
+        email: users.email,
+      },
+      performedByUser: {
+        id: users.id,
+        name: users.name,
+        email: users.email,
+      },
+    })
+    .from(auditLogs)
+    .leftJoin(users, eq(auditLogs.userId, users.id))
+    .where(
+      and(
+        eq(auditLogs.targetType, "invoice"),
+        eq(auditLogs.targetId, invoiceId)
+      )
+    )
+    .orderBy(auditLogs.createdAt);
+  
+  // Manually fetch performedBy user details
+  const logsWithPerformedBy = await Promise.all(
+    result.map(async (item) => {
+      let performedByUser = null;
+      if (item.log.performedBy) {
+        const performedBy = await db
+          .select({
+            id: users.id,
+            name: users.name,
+            email: users.email,
+          })
+          .from(users)
+          .where(eq(users.id, item.log.performedBy))
+          .limit(1);
+        performedByUser = performedBy[0] || null;
+      }
+      return {
+        ...item,
+        performedByUser,
+      };
+    })
+  );
+  
+  return logsWithPerformedBy;
 }

@@ -40,6 +40,8 @@ export const adminPermissions = mysqlTable("admin_permissions", {
   // Financial
   canManageTransactions: boolean("canManageTransactions").default(false).notNull(),
   canViewFinancials: boolean("canViewFinancials").default(false).notNull(),
+  canEditInvoices: boolean("canEditInvoices").default(false).notNull(),
+  canDeleteInvoices: boolean("canDeleteInvoices").default(false).notNull(),
   // System
   canAccessCRM: boolean("canAccessCRM").default(false).notNull(),
   canViewAnalytics: boolean("canViewAnalytics").default(false).notNull(),
@@ -880,14 +882,20 @@ export const crmActivities = mysqlTable("crm_activities", {
 
 export const auditLogs = mysqlTable("audit_logs", {
   id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull().references(() => users.id),
-  action: varchar("action", { length: 100 }).notNull(), // e.g., "user.role.changed", "kyc.approved"
-  targetType: varchar("targetType", { length: 50 }), // e.g., "user", "property", "kyc_document"
+  userId: int("userId").notNull().references(() => users.id), // The user affected by the action
+  performedBy: int("performedBy").references(() => users.id), // The admin/user who performed the action
+  action: varchar("action", { length: 100 }).notNull(), // e.g., "user.role.changed", "kyc.approved", "invoice.marked_paid"
+  targetType: varchar("targetType", { length: 50 }), // e.g., "user", "property", "kyc_document", "invoice"
   targetId: int("targetId"),
   details: text("details"), // JSON string with additional details
   ipAddress: varchar("ipAddress", { length: 45 }),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+  createdAt: timestamp("createdAt", { mode: 'string', fsp: 3 }).defaultNow().notNull(), // Millisecond precision
+}, (table) => ({
+  userIdIdx: index("audit_user_id_idx").on(table.userId),
+  performedByIdx: index("audit_performed_by_idx").on(table.performedBy),
+  targetIdx: index("audit_target_idx").on(table.targetType, table.targetId),
+  createdAtIdx: index("audit_created_at_idx").on(table.createdAt),
+}));
 
 export type Permission = typeof permissions.$inferSelect;
 export type InsertPermission = typeof permissions.$inferInsert;
