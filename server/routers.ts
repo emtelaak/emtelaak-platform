@@ -3,8 +3,11 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { adminRouter } from "./adminRouters";
 import { adminPermissionsRouter } from "./adminPermissionsRouter";
+import { adminRolesRouter } from "./adminRolesRouter";
 import { crmRouter } from "./crm-router";
 import { helpDeskRouter } from "./routes/helpDesk";
+import { contentRouter } from "./contentRouter";
+import { mediaLibraryRouter } from "./mediaLibraryRouter";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import {
@@ -60,6 +63,10 @@ import {
   completeWithdrawalTransaction,
   upsertAdminPermissions,
   getAllAdminPermissions,
+  getPendingWalletTransactions,
+  getAllWalletTransactions,
+  approveWalletTransaction,
+  rejectWalletTransaction,
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import { storagePut } from './storage';
@@ -70,8 +77,11 @@ export const appRouter = router({
   system: systemRouter,
   admin: adminRouter,
   adminPermissions: adminPermissionsRouter,
+  adminRoles: adminRolesRouter,
   crm: crmRouter,
   helpDesk: helpDeskRouter,
+  content: contentRouter,
+  mediaLibrary: mediaLibraryRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

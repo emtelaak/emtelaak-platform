@@ -19,9 +19,9 @@ export default function KYCStatusBanner() {
 
   // Don't show banner if:
   // - User is not authenticated
-  // - KYC is already completed
+  // - KYC is already completed (canInvest means fully verified)
   // - User has dismissed the banner
-  if (!isAuthenticated || !verificationStatus || verificationStatus.kycCompleted || dismissed) {
+  if (!isAuthenticated || !verificationStatus || verificationStatus.canInvest || dismissed) {
     return null;
   }
 
@@ -29,7 +29,7 @@ export default function KYCStatusBanner() {
     <Alert className="border-primary/50 bg-primary/10 mb-6">
       <Shield className="h-4 w-4 text-primary" />
       <AlertTitle className="flex items-center justify-between">
-        <span>{t.kyc?.banner?.title || "Complete Your KYC Verification"}</span>
+        <span>{(t.kyc as any)?.banner?.title || "Complete Your KYC Verification"}</span>
         <Button
           variant="ghost"
           size="icon"
@@ -41,11 +41,11 @@ export default function KYCStatusBanner() {
       </AlertTitle>
       <AlertDescription className="mt-2 flex items-center justify-between gap-4">
         <span className="text-sm">
-          {t.kyc?.banner?.description || "Complete your KYC questionnaire to unlock full investment features and start building your property portfolio."}
+          {(t.kyc as any)?.banner?.description || "Complete your KYC questionnaire to unlock full investment features and start building your property portfolio."}
         </span>
         <Link href="/kyc-questionnaire">
           <Button size="sm" className="whitespace-nowrap">
-            {t.kyc?.banner?.button || "Complete KYC"}
+            {(t.kyc as any)?.banner?.button || "Complete KYC"}
           </Button>
         </Link>
       </AlertDescription>

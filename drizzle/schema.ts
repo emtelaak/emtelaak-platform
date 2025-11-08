@@ -49,6 +49,18 @@ export const adminPermissions = mysqlTable("admin_permissions", {
   userIdIdx: index("user_id_idx").on(table.userId),
 }));
 
+export const passwordResetTokens = mysqlTable("password_reset_tokens", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+  token: varchar("token", { length: 255 }).notNull().unique(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  used: boolean("used").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("password_reset_user_id_idx").on(table.userId),
+  tokenIdx: index("password_reset_token_idx").on(table.token),
+}));
+
 export const permissionRoleTemplates = mysqlTable("permission_role_templates", {
   id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 100 }).notNull().unique(),
@@ -616,6 +628,14 @@ export const userPermissions = mysqlTable("user_permissions", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
+export const userRoles = mysqlTable("user_roles", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+  roleId: int("roleId").notNull().references(() => roles.id, { onDelete: "cascade" }),
+  assignedBy: int("assignedBy").references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
 // ============================================
 // CRM - SALES CLOUD
 // ============================================
@@ -1074,3 +1094,41 @@ export type UserBankAccount = typeof userBankAccounts.$inferSelect;
 export type InsertUserBankAccount = typeof userBankAccounts.$inferInsert;
 export type WalletTransaction = typeof walletTransactions.$inferSelect;
 export type InsertWalletTransaction = typeof walletTransactions.$inferInsert;
+
+export const platformContent = mysqlTable("platform_content", {
+  id: int("id").autoincrement().primaryKey(),
+  key: varchar("key", { length: 100 }).notNull().unique(), // e.g., "homepage_hero", "homepage_features"
+  content: json("content").notNull(), // JSON object with content data
+  contentAr: json("contentAr"), // Arabic version of content
+  updatedBy: int("updatedBy").references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  keyIdx: index("key_idx").on(table.key),
+}));
+
+export type PlatformContent = typeof platformContent.$inferSelect;
+export type InsertPlatformContent = typeof platformContent.$inferInsert;
+
+export const mediaLibrary = mysqlTable("media_library", {
+  id: int("id").autoincrement().primaryKey(),
+  fileName: varchar("fileName", { length: 255 }).notNull(),
+  fileKey: varchar("fileKey", { length: 500 }).notNull().unique(), // S3 key
+  url: text("url").notNull(), // Public S3 URL
+  mimeType: varchar("mimeType", { length: 100 }).notNull(),
+  fileSize: int("fileSize").notNull(), // Size in bytes
+  width: int("width"), // Image width in pixels
+  height: int("height"), // Image height in pixels
+  title: varchar("title", { length: 255 }),
+  altText: text("altText"),
+  tags: json("tags"), // Array of tags for categorization
+  uploadedBy: int("uploadedBy").notNull().references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  uploadedByIdx: index("uploaded_by_idx").on(table.uploadedBy),
+  createdAtIdx: index("created_at_idx").on(table.createdAt),
+}));
+
+export type MediaLibraryItem = typeof mediaLibrary.$inferSelect;
+export type InsertMediaLibraryItem = typeof mediaLibrary.$inferInsert;

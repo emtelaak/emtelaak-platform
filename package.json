@@ -10,6 +10,9 @@
     "check": "tsc --noEmit",
     "format": "prettier --write .",
     "test": "vitest run",
+    "test:e2e": "vitest run tests/e2e",
+    "test:e2e:watch": "vitest tests/e2e",
+    "test:e2e:coverage": "vitest run tests/e2e --coverage",
     "db:push": "drizzle-kit generate && drizzle-kit migrate"
   },
   "dependencies": {
@@ -36,6 +39,10 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@sendgrid/mail": "^8.1.6",
     "@tanstack/react-query": "^5.90.2",
+    "@tiptap/extension-link": "^3.10.3",
+    "@tiptap/extension-placeholder": "^3.10.3",
+    "@tiptap/react": "^3.10.3",
+    "@tiptap/starter-kit": "^3.10.3",
     "@trpc/client": "^11.6.0",
     "@trpc/react-query": "^11.6.0",
     "@trpc/server": "^11.6.0",

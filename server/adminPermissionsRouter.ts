@@ -32,9 +32,12 @@ import {
   updateRoleTemplate,
   deleteRoleTemplate,
   applyRoleTemplateToUser,
+  getAdminPermissions,
+  upsertAdminPermissions,
 } from "./db";
-import { users, permissionRoleTemplates } from "../drizzle/schema";
-import { eq, like, or, desc } from "drizzle-orm";
+import { users, permissionRoleTemplates, passwordResetTokens } from "../drizzle/schema";
+import { eq, like, or, desc, and, gt } from "drizzle-orm";
+import crypto from "crypto";
 
 // Super admin procedure
 const superAdminProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -119,7 +122,18 @@ export const adminPermissionsRouter = router({
             .offset(input.offset);
         }
 
-        return result;
+        // Fetch admin permissions for each user
+        const usersWithPermissions = await Promise.all(
+          result.map(async (user) => {
+            const permissions = await getAdminPermissions(user.id);
+            return {
+              ...user,
+              ...permissions,
+            };
+          })
+        );
+
+        return usersWithPermissions;
       }),
 
     getById: adminProcedure
@@ -183,6 +197,115 @@ export const adminPermissionsRouter = router({
         }
 
         return { success: true };
+      }),
+
+    createUser: adminProcedure
+      .input(z.object({
+        name: z.string().min(1, "Name is required"),
+        email: z.string().email("Invalid email address"),
+        phone: z.string().optional(),
+        role: z.enum(["user", "investor", "fundraiser", "admin", "super_admin"]),
+        status: z.enum(["active", "suspended", "pending_verification"]),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const db = await getDb();
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+
+        // Check if email already exists
+        const existingUser = await db.select().from(users).where(eq(users.email, input.email)).limit(1);
+        if (existingUser.length > 0) {
+          throw new TRPCError({ code: "CONFLICT", message: "User with this email already exists" });
+        }
+
+        // Generate a unique openId for the user (using email as base)
+        const openId = `manual_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+
+        // Create the user
+        const result = await db.insert(users).values({
+          openId,
+          name: input.name,
+          email: input.email,
+          phone: input.phone || null,
+          role: input.role,
+          status: input.status,
+          loginMethod: "manual",
+        });
+
+        // Create audit log
+        await createAuditLog({
+          userId: ctx.user.id,
+          action: "create_user",
+          targetType: "user",
+          targetId: result[0].insertId.toString(),
+          details: `Created user ${input.name} (${input.email}) with role ${input.role}`,
+        });
+
+        return { success: true, userId: result[0].insertId };
+      }),
+
+    sendPasswordReset: adminProcedure
+      .input(z.object({
+        userId: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const db = await getDb();
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+
+        // Get user details
+        const userResult = await db.select().from(users).where(eq(users.id, input.userId)).limit(1);
+        if (userResult.length === 0) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+        }
+        const user = userResult[0];
+
+        if (!user.email) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "User does not have an email address" });
+        }
+
+        // Generate secure reset token
+        const token = crypto.randomBytes(32).toString("hex");
+        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+        // Invalidate any existing unused tokens for this user
+        await db.update(passwordResetTokens)
+          .set({ used: true })
+          .where(and(
+            eq(passwordResetTokens.userId, input.userId),
+            eq(passwordResetTokens.used, false)
+          ));
+
+        // Store new token
+        await db.insert(passwordResetTokens).values({
+          userId: input.userId,
+          token,
+          expiresAt,
+          used: false,
+        });
+
+        // Send password reset email
+        const resetUrl = `${process.env.VITE_APP_URL || "https://emtelaak.com"}/reset-password?token=${token}`;
+        
+        try {
+          await notifySuperAdmins({
+            subject: "Password Reset Request",
+            message: `Password reset requested for user: ${user.name} (${user.email})\n\nReset link: ${resetUrl}\n\nThis link expires in 24 hours.`,
+            priority: "normal",
+          });
+        } catch (emailError) {
+          console.error("Failed to send password reset email:", emailError);
+          // Don't throw error, just log it
+        }
+
+        // Create audit log
+        await createAuditLog({
+          userId: ctx.user.id,
+          action: "send_password_reset",
+          targetType: "user",
+          targetId: input.userId.toString(),
+          details: `Sent password reset email to ${user.email}`,
+        });
+
+        return { success: true, message: "Password reset email sent" };
       }),
 
     updateStatus: adminProcedure
@@ -257,7 +380,12 @@ export const adminPermissionsRouter = router({
     updatePermissions: superAdminProcedure
       .input(z.object({
         userId: z.number(),
-        permissions: z.record(z.boolean()),
+        permissions: z.record(z.string(), z.preprocess((val) => {
+          if (typeof val === 'string') {
+            return val === 'true' || val === '1';
+          }
+          return val;
+        }, z.boolean())),
       }))
       .mutation(async ({ ctx, input }) => {
         const db = await getDb();

@@ -7,7 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Upload, Image as ImageIcon, Loader2, Settings } from "lucide-react";
+import { Upload, Image as ImageIcon, Loader2, Settings, ArrowLeft } from "lucide-react";
+import { Breadcrumb } from "@/components/Breadcrumb";
 import { toast } from "sonner";
 
 export default function AdminSettings() {
@@ -18,7 +19,7 @@ export default function AdminSettings() {
 
   const { data: currentLogo, refetch: refetchLogo } = trpc.admin.settings.getLogo.useQuery(
     undefined,
-    { enabled: isAuthenticated && user?.role === "admin" }
+    { enabled: isAuthenticated && (user?.role === "admin" || user?.role === "super_admin") }
   );
 
   const uploadLogoMutation = trpc.admin.settings.uploadLogo.useMutation({
@@ -94,7 +95,7 @@ export default function AdminSettings() {
     );
   }
 
-  if (user?.role !== "admin") {
+  if (user?.role !== "admin" && user?.role !== "super_admin") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-muted/30">
         <Card className="max-w-md">
@@ -141,6 +142,12 @@ export default function AdminSettings() {
 
       <div className="container py-8">
         <div className="max-w-4xl mx-auto space-y-6">
+          <Breadcrumb 
+            items={[
+              { label: "Admin", labelAr: "الإدارة", href: "/admin/dashboard" },
+              { label: "Settings", labelAr: "الإعدادات" }
+            ]} 
+          />
           {/* Logo Management */}
           <Card>
             <CardHeader>

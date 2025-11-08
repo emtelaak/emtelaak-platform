@@ -10,7 +10,9 @@ import { eq, and } from "drizzle-orm";
 const defaultPermissions = [
   // User Management
   { name: "view_users", description: "View user list and details", category: "users" },
-  { name: "manage_users", description: "Create, edit, and delete users", category: "users" },
+  { name: "create_user", description: "Create new users", category: "users" },
+  { name: "edit_user", description: "Edit existing users", category: "users" },
+  { name: "delete_user", description: "Delete users", category: "users" },
   { name: "change_user_roles", description: "Assign roles to users", category: "users" },
   { name: "manage_permissions", description: "Assign individual permissions to users", category: "users" },
   
@@ -28,7 +30,9 @@ const defaultPermissions = [
   
   // Investment Management
   { name: "view_investments", description: "View all investments", category: "investments" },
-  { name: "manage_investments", description: "Modify investment records", category: "investments" },
+  { name: "create_investment", description: "Create new investment records", category: "investments" },
+  { name: "edit_investment", description: "Edit existing investment records", category: "investments" },
+  { name: "delete_investment", description: "Delete investment records", category: "investments" },
   { name: "process_distributions", description: "Process income distributions", category: "investments" },
   
   // Analytics & Reports
@@ -57,7 +61,7 @@ const defaultRoles = [
     description: "Standard administrator with most permissions",
     isSystem: true,
     permissions: [
-      "view_users", "manage_users",
+      "view_users", "create_user", "edit_user", "delete_user",
       "view_kyc", "approve_kyc",
       "view_properties", "create_properties", "edit_properties", "manage_property_documents",
       "view_investments", "process_distributions",

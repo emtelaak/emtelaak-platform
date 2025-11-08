@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CheckCircle2, XCircle, Clock, FileText, User, Building2 } from "lucide-react";
+import { CheckCircle2, XCircle, Clock, FileText, User, Building2, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Link } from "wouter";
@@ -13,6 +13,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { APP_LOGO } from "@/const";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminKYCReview() {
   const { user, isAuthenticated } = useAuth();
@@ -106,6 +107,12 @@ export default function AdminKYCReview() {
       </header>
 
       <div className="container mx-auto px-4 py-8">
+        <Breadcrumb 
+          items={[
+            { label: "Admin", labelAr: "الإدارة", href: "/admin/dashboard" },
+            { label: "KYC Review", labelAr: "مراجعة التحقق من الهوية" }
+          ]} 
+        />
         <div className="mb-8">
           <h1 className="text-3xl font-bold">KYC Review</h1>
           <p className="text-muted-foreground">Review and approve pending KYC submissions</p>

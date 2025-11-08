@@ -1,9 +1,12 @@
-import { eq, and, desc, asc, sql, gte, lte, inArray } from "drizzle-orm";
+import { eq, and, desc, asc, sql, gte, lte, inArray, like, or } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   InsertUser, users, adminPermissions, permissionRoleTemplates, kycProgress, InsertKycProgress,
   userProfiles,
   platformSettings,
+  platformContent,
+  mediaLibrary,
+  InsertMediaLibraryItem,
   InsertUserProfile,
   kycDocuments,
   InsertKycDocument,
@@ -1071,10 +1074,23 @@ export async function upsertAdminPermissions(userId: number, permissions: Partia
       .set({ ...permissions, updatedAt: new Date() })
       .where(eq(adminPermissions.userId, userId));
   } else {
-    await db.insert(adminPermissions).values({
+    // Provide default false values for all permission fields
+    const permissionValues = {
       userId,
-      ...permissions,
-    });
+      canManageUsers: (permissions as any).canManageUsers ?? false,
+      canBulkUploadUsers: (permissions as any).canBulkUploadUsers ?? false,
+      canEditContent: (permissions as any).canEditContent ?? false,
+      canManageProperties: (permissions as any).canManageProperties ?? false,
+      canReviewKYC: (permissions as any).canReviewKYC ?? false,
+      canApproveInvestments: (permissions as any).canApproveInvestments ?? false,
+      canManageTransactions: (permissions as any).canManageTransactions ?? false,
+      canViewFinancials: (permissions as any).canViewFinancials ?? false,
+      canAccessCRM: (permissions as any).canAccessCRM ?? false,
+      canViewAnalytics: (permissions as any).canViewAnalytics ?? false,
+      canManageSettings: (permissions as any).canManageSettings ?? false,
+    };
+    
+    await db.insert(adminPermissions).values(permissionValues);
   }
 
   return await getAdminPermissions(userId);
@@ -1469,5 +1485,125 @@ export async function rejectWalletTransaction(transactionId: number, reason?: st
     })
     .where(eq(walletTransactions.id, transactionId));
   
+  return { success: true };
+}
+
+
+// Platform Content Management
+export async function getPlatformContent(key: string) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const result = await db.select().from(platformContent).where(eq(platformContent.key, key)).limit(1);
+  return result[0] || null;
+}
+
+export async function upsertPlatformContent(data: { key: string; content: any; contentAr?: any; updatedBy?: number }) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const existing = await getPlatformContent(data.key);
+
+  if (existing) {
+    await db
+      .update(platformContent)
+      .set({
+        content: data.content,
+        contentAr: data.contentAr,
+        updatedBy: data.updatedBy,
+        updatedAt: new Date(),
+      })
+      .where(eq(platformContent.key, data.key));
+  } else {
+    await db.insert(platformContent).values({
+      key: data.key,
+      content: data.content,
+      contentAr: data.contentAr,
+      updatedBy: data.updatedBy,
+    });
+  }
+
+  return getPlatformContent(data.key);
+}
+
+
+// ===== Media Library Functions =====
+
+export async function getMediaLibraryItems(options: {
+  limit?: number;
+  offset?: number;
+  search?: string;
+  tags?: string[];
+}) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const { limit = 50, offset = 0, search, tags } = options;
+
+  let query = db.select().from(mediaLibrary);
+
+  // Apply search filter
+  if (search) {
+    query = query.where(
+      or(
+        like(mediaLibrary.fileName, `%${search}%`),
+        like(mediaLibrary.title, `%${search}%`)
+      )
+    ) as any;
+  }
+
+  // Apply pagination
+  const results = await query.limit(limit).offset(offset).orderBy(desc(mediaLibrary.createdAt));
+
+  // Filter by tags if provided (JSON search is complex, so we filter in memory)
+  if (tags && tags.length > 0) {
+    return results.filter((item) => {
+      const itemTags = (item.tags as string[]) || [];
+      return tags.some((tag) => itemTags.includes(tag));
+    });
+  }
+
+  return results;
+}
+
+export async function addMediaLibraryItem(item: InsertMediaLibraryItem) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(mediaLibrary).values(item);
+  
+  // Fetch and return the inserted item
+  const insertedItem = await db
+    .select()
+    .from(mediaLibrary)
+    .where(eq(mediaLibrary.id, result[0].insertId))
+    .limit(1);
+
+  return insertedItem[0];
+}
+
+export async function updateMediaLibraryItem(
+  id: number,
+  updates: {
+    title?: string;
+    altText?: string;
+    tags?: string[];
+  }
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.update(mediaLibrary).set(updates).where(eq(mediaLibrary.id, id));
+
+  // Return updated item
+  const updated = await db.select().from(mediaLibrary).where(eq(mediaLibrary.id, id)).limit(1);
+  return updated[0];
+}
+
+export async function deleteMediaLibraryItem(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.delete(mediaLibrary).where(eq(mediaLibrary.id, id));
   return { success: true };
 }

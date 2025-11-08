@@ -1,4 +1,5 @@
 import { useAuth } from "@/_core/hooks/useAuth";
+import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { APP_LOGO } from "@/const";
@@ -10,7 +11,23 @@ import { Building2, Shield, TrendingUp, Users, CheckCircle2, Target, Eye } from 
 
 export default function About() {
   const { isAuthenticated } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  // Fetch about page content
+  const { data: aboutContent } = trpc.content.get.useQuery({ key: "about_page" });
+
+  // Use dynamic content if available, otherwise use translation defaults
+  const content = aboutContent
+    ? (language === "ar" && aboutContent.contentAr ? aboutContent.contentAr : aboutContent.content)
+    : null;
+
+  const heroTitle = (content as any)?.heroTitle || t.about.title;
+  const heroSubtitle = (content as any)?.heroSubtitle || t.about.subtitle;
+  const storyDescription = (content as any)?.storyDescription || t.about.ourStory.description;
+  const missionDescription = (content as any)?.missionDescription || t.about.mission.description;
+  const visionDescription = (content as any)?.visionDescription || t.about.vision.description;
+  const ctaTitle = (content as any)?.ctaTitle || t.about.cta.title;
+  const ctaDescription = (content as any)?.ctaDescription || t.about.cta.description;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -63,10 +80,10 @@ export default function About() {
         <div className="container">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
-              {t.about.title}
+              {heroTitle}
             </h1>
             <p className="text-xl text-white/90 leading-relaxed">
-              {t.about.subtitle}
+              {heroSubtitle}
             </p>
           </div>
         </div>
@@ -79,9 +96,10 @@ export default function About() {
             <h2 className="text-3xl font-bold mb-4">{t.about.ourStory.title}</h2>
           </div>
           <div className="prose prose-lg max-w-none text-center mb-12">
-            <p className="text-muted-foreground leading-relaxed">
-              {t.about.ourStory.description}
-            </p>
+            <div 
+              className="text-muted-foreground leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: storyDescription }}
+            />
           </div>
 
           {/* Value Propositions Grid */}
@@ -140,9 +158,10 @@ export default function About() {
                 </div>
                 <h2 className="text-2xl font-bold">{t.about.mission.title}</h2>
               </div>
-              <p className="text-muted-foreground leading-relaxed">
-                {t.about.mission.description}
-              </p>
+              <div 
+                className="text-muted-foreground leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: missionDescription }}
+              />
             </div>
 
             <div>
@@ -152,9 +171,10 @@ export default function About() {
                 </div>
                 <h2 className="text-2xl font-bold">{t.about.vision.title}</h2>
               </div>
-              <p className="text-muted-foreground leading-relaxed">
-                {t.about.vision.description}
-              </p>
+              <div 
+                className="text-muted-foreground leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: visionDescription }}
+              />
             </div>
           </div>
         </div>
@@ -234,8 +254,8 @@ export default function About() {
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-b from-primary/5 to-background">
         <div className="container max-w-3xl text-center">
-          <h2 className="text-3xl font-bold mb-4">{t.about.cta.title}</h2>
-          <p className="text-muted-foreground mb-8">{t.about.cta.description}</p>
+          <h2 className="text-3xl font-bold mb-4">{ctaTitle}</h2>
+          <p className="text-muted-foreground mb-8">{ctaDescription}</p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="/properties">
               <Button size="lg">{t.about.cta.browseProperties}</Button>

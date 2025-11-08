@@ -3,6 +3,7 @@ import { trpc } from "@/lib/trpc";
 import { Link } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
+import { MobileNav } from "@/components/MobileNav";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -42,10 +43,14 @@ import {
   Clock,
   UserCog,
   Eye,
+  Key,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { FloatingActionButton, adminQuickActions } from "@/components/FloatingActionButton";
+import { useLocation } from "wouter";
+import { CreateUserDialog } from "@/components/CreateUserDialog";
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
@@ -55,6 +60,7 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showUserDialog, setShowUserDialog] = useState(false);
+  const [showCreateUserDialog, setShowCreateUserDialog] = useState(false);
 
   const { data: stats, isLoading: statsLoading } = trpc.adminPermissions.dashboard.getStats.useQuery(
     undefined,
@@ -83,14 +89,22 @@ export default function AdminDashboard() {
     },
   });
 
-  const updateStatusMutation = trpc.adminPermissions.users.updateStatus.useMutation({
+    const updateStatusMutation = trpc.adminPermissions.users.updateStatus.useMutation({
     onSuccess: () => {
       toast.success("User status updated successfully");
       refetchUsers();
-      setShowUserDialog(false);
     },
     onError: (error) => {
-      toast.error(`Failed to update status: ${error.message}`);
+      toast.error(error.message);
+    },
+  });
+
+  const sendPasswordResetMutation = trpc.adminPermissions.users.sendPasswordReset.useMutation({
+    onSuccess: () => {
+      toast.success("Password reset email sent successfully");
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -169,6 +183,7 @@ export default function AdminDashboard() {
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container py-6">
           <div className="flex items-center gap-4">
+            <MobileNav />
             <Link href="/">
               <img src={APP_LOGO} alt={APP_TITLE} className="h-20 w-auto cursor-pointer" />
             </Link>
@@ -185,9 +200,15 @@ export default function AdminDashboard() {
             <div className="flex gap-2">
               {user.role === "super_admin" && (
                 <>
-                  <Link href="/admin/permissions">
+                  <Link href="/admin/role-management">
                     <Button variant="outline">
                       <Shield className="mr-2 h-4 w-4" />
+                      Role Management
+                    </Button>
+                  </Link>
+                  <Link href="/admin/permissions">
+                    <Button variant="outline">
+                      <UserCog className="mr-2 h-4 w-4" />
                       Permissions
                     </Button>
                   </Link>
@@ -453,6 +474,28 @@ export default function AdminDashboard() {
                       </SelectContent>
                     </Select>
                   </div>
+
+                  {selectedUser.email && (
+                    <div className="pt-4 border-t">
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => {
+                          if (confirm(`Send password reset email to ${selectedUser.email}?`)) {
+                            sendPasswordResetMutation.mutate({ userId: selectedUser.id });
+                          }
+                        }}
+                        disabled={sendPasswordResetMutation.isPending}
+                      >
+                        {sendPasswordResetMutation.isPending ? (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          <Key className="mr-2 h-4 w-4" />
+                        )}
+                        Send Password Reset Email
+                      </Button>
+                    </div>
+                  )}
                 </>
               )}
             </div>
@@ -464,6 +507,31 @@ export default function AdminDashboard() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Create User Dialog */}
+      <CreateUserDialog
+        open={showCreateUserDialog}
+        onOpenChange={setShowCreateUserDialog}
+        onSuccess={refetchUsers}
+      />
+
+      {/* Floating Action Button */}
+      <FloatingActionButton
+        actions={adminQuickActions({
+          onCreateUser: () => {
+            setShowCreateUserDialog(true);
+          },
+          onAddProperty: () => {
+            toast.info("Add Property feature coming soon");
+          },
+          onNewLead: () => {
+            window.location.href = "/crm/leads";
+          },
+          onNewCase: () => {
+            window.location.href = "/crm/cases";
+          },
+        })}
+      />
     </div>
   );
 }

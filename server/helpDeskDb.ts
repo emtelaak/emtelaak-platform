@@ -331,13 +331,20 @@ export async function getOrCreateChatConversation(userId: number, departmentType
 
   // Create new conversation
   const conversationId = await generateConversationId();
-  const [newConversation] = await db.insert(chatConversations).values({
+  const result = await db.insert(chatConversations).values({
     conversationId,
     userId,
     departmentType: departmentType as any,
     status: "waiting",
     lastMessageAt: new Date(),
   });
+
+  // Fetch the newly created conversation
+  const [newConversation] = await db
+    .select()
+    .from(chatConversations)
+    .where(eq(chatConversations.id, result.insertId))
+    .limit(1);
 
   return newConversation;
 }
@@ -542,20 +549,17 @@ export async function getArticlesByCategory(categoryId: number) {
   return db
     .select({
       article: knowledgeBaseArticles,
-      author: {
-        id: users.id,
-        name: users.name,
-      },
+      category: knowledgeBaseCategories,
     })
     .from(knowledgeBaseArticles)
-    .leftJoin(users, eq(knowledgeBaseArticles.authorId, users.id))
+    .leftJoin(knowledgeBaseCategories, eq(knowledgeBaseArticles.categoryId, knowledgeBaseCategories.id))
     .where(
       and(
         eq(knowledgeBaseArticles.categoryId, categoryId),
         eq(knowledgeBaseArticles.isPublished, true)
       )
     )
-    .orderBy(desc(knowledgeBaseArticles.viewCount));
+    .orderBy(desc(knowledgeBaseArticles.views));
 }
 
 /**
@@ -608,7 +612,7 @@ export async function searchKnowledgeBase(query: string) {
         )
       )
     )
-    .orderBy(desc(knowledgeBaseArticles.viewCount))
+    .orderBy(desc(knowledgeBaseArticles.views))
     .limit(20);
 }
 
@@ -622,7 +626,7 @@ export async function incrementArticleViews(articleId: number) {
   await db
     .update(knowledgeBaseArticles)
     .set({
-      viewCount: sql`${knowledgeBaseArticles.viewCount} + 1`,
+      views: sql`${knowledgeBaseArticles.views} + 1`,
     })
     .where(eq(knowledgeBaseArticles.id, articleId));
 }
@@ -650,7 +654,7 @@ export async function getPopularArticles(limit: number = 10) {
     )
     .where(eq(knowledgeBaseArticles.isPublished, true))
     .orderBy(
-      desc(knowledgeBaseArticles.viewCount),
+      desc(knowledgeBaseArticles.views),
       desc(knowledgeBaseArticles.helpfulCount)
     )
     .limit(limit);
@@ -684,7 +688,7 @@ export async function getRelatedArticles(articleId: number, categoryId: number, 
         sql`${knowledgeBaseArticles.id} != ${articleId}`
       )
     )
-    .orderBy(desc(knowledgeBaseArticles.viewCount))
+    .orderBy(desc(knowledgeBaseArticles.views))
     .limit(limit);
 }
 

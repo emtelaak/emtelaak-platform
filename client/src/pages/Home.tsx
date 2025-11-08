@@ -1,4 +1,5 @@
 import { useAuth } from "@/_core/hooks/useAuth";
+import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
@@ -15,6 +16,30 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
   const { t, language } = useLanguage();
+
+  // Fetch homepage content
+  const { data: heroContent } = trpc.content.get.useQuery({ key: "homepage_hero" });
+
+  // Default content (fallback)
+  const defaultContent = {
+    title: language === "en" ? "Own today\nInvest for tomorrow." : "امتلك اليوم\nاستثمر للغد.",
+    subtitle: language === "en" 
+      ? "Invest in fractional real estate ownership and build your property portfolio with as little as EGP 100"
+      : "استثمر في ملكية عقارية جزئية وابني محفظتك العقارية بدءًا من 100 جنيه مصري",
+    cta1: language === "en" ? "Explore Properties" : "استكشف العقارات",
+    cta2: language === "en" ? "How It Works" : "كيف يعمل",
+  };
+
+  // Use dynamic content if available, otherwise use defaults
+  const content = heroContent 
+    ? (language === "ar" && heroContent.contentAr ? heroContent.contentAr : heroContent.content)
+    : defaultContent;
+
+  const heroTitle = (content as any)?.title || defaultContent.title;
+  const heroSubtitle = (content as any)?.subtitle || defaultContent.subtitle;
+  const heroCTA1 = (content as any)?.cta1 || defaultContent.cta1;
+  const heroCTA2 = (content as any)?.cta2 || defaultContent.cta2;
+  const heroBackgroundImage = (heroContent?.content as any)?.backgroundImage || "/brand/backgrounds/hero-bg.jpg";
 
   if (loading) {
     return (
@@ -80,7 +105,7 @@ export default function Home() {
 
       {/* Hero Section - With Brand Background */}
       <section className="relative overflow-hidden py-32 md:py-40" style={{
-        backgroundImage: 'linear-gradient(rgba(3, 41, 65, 0.7), rgba(3, 41, 65, 0.7)), url("/brand/backgrounds/hero-bg.jpg")',
+        backgroundImage: `linear-gradient(rgba(3, 41, 65, 0.7), rgba(3, 41, 65, 0.7)), url("${heroBackgroundImage}")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}>
@@ -88,25 +113,27 @@ export default function Home() {
           <div className="mx-auto max-w-5xl text-center">
             <div className="bg-white/95 backdrop-blur-md rounded-3xl p-12 md:p-16 shadow-2xl border border-white/20">
               <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6" style={{ color: '#032941' }}>
-                {language === "en" ? "Own today" : "امتلك اليوم"}
-                <br />
-                {language === "en" ? "Invest for tomorrow." : "استثمر للغد."}
+                {heroTitle.split('\n').map((line: string, i: number) => (
+                  <span key={i}>
+                    {line}
+                    {i < heroTitle.split('\n').length - 1 && <br />}
+                  </span>
+                ))}
               </h1>
-              <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                {language === "en" 
-                  ? "Invest in fractional real estate ownership and build your property portfolio with as little as EGP 100"
-                  : "استثمر في ملكية عقارية جزئية وابني محفظتك العقارية بدءًا من 100 جنيه مصري"}
-              </p>
+              <div 
+                className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ __html: heroSubtitle }}
+              />
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link href="/properties">
                   <Button size="lg" className="text-lg px-8 py-6 h-auto" style={{ backgroundColor: '#CDE428', color: '#032941' }}>
-                    {language === "en" ? "Explore Properties" : "استكشف العقارات"}
+                    {heroCTA1}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <Link href="/how-it-works">
                   <Button size="lg" variant="outline" className="text-lg px-8 py-6 h-auto border-2">
-                    {language === "en" ? "How It Works" : "كيف يعمل"}
+                    {heroCTA2}
                   </Button>
                 </Link>
               </div>

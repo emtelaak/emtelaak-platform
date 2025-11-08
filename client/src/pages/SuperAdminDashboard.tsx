@@ -18,10 +18,15 @@ import UserManagement from "@/components/UserManagement";
 import AdminPermissionsManager from "@/components/AdminPermissionsManager";
 import RoleTemplateManager from "@/components/RoleTemplateManager";
 import AuditLogViewer from "@/components/AuditLogViewer";
+import { MobileNav } from "@/components/MobileNav";
+import { FloatingActionButton, adminQuickActions } from "@/components/FloatingActionButton";
+import { toast } from "sonner";
+import { CreateUserDialog } from "@/components/CreateUserDialog";
 
 export default function SuperAdminDashboard() {
   const { user, loading } = useAuth();
   const { language, t } = useLanguage();
+  const [showCreateUserDialog, setShowCreateUserDialog] = useState(false);
 
   if (loading) {
     return (
@@ -140,9 +145,12 @@ export default function SuperAdminDashboard() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">
-            {language === "en" ? "Super Admin Control Center" : "مركز التحكم للمسؤول الأعلى"}
-          </h1>
+          <div className="flex items-center gap-3 mb-2">
+            <MobileNav />
+            <h1 className="text-4xl font-bold">
+              {language === "en" ? "Super Admin Control Center" : "مركز التحكم للمسؤول الأعلى"}
+            </h1>
+          </div>
           <p className="text-muted-foreground text-lg">
             {language === "en"
               ? "Manage all aspects of the Emtelaak platform from one central location"
@@ -240,9 +248,12 @@ export default function SuperAdminDashboard() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button variant="outline" className="w-full" disabled>
-                      {language === "en" ? "Coming Soon" : "قريباً"}
-                    </Button>
+                    <Link href="/admin/content/homepage">
+                      <Button variant="outline" className="w-full">
+                        <Edit className="h-4 w-4 mr-2" />
+                        {language === "en" ? "Edit Content" : "تحرير المحتوى"}
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
 
@@ -258,9 +269,12 @@ export default function SuperAdminDashboard() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button variant="outline" className="w-full" disabled>
-                      {language === "en" ? "Coming Soon" : "قريباً"}
-                    </Button>
+                    <Link href="/admin/content/about">
+                      <Button variant="outline" className="w-full">
+                        <Edit className="h-4 w-4 mr-2" />
+                        {language === "en" ? "Edit Content" : "تحرير المحتوى"}
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
 
@@ -312,6 +326,34 @@ export default function SuperAdminDashboard() {
           </Card>
         </div>
       </div>
+
+      {/* Create User Dialog */}
+      <CreateUserDialog
+        open={showCreateUserDialog}
+        onOpenChange={setShowCreateUserDialog}
+        onSuccess={() => {
+          // Optionally refresh user data if needed
+          toast.success("User created successfully");
+        }}
+      />
+
+      {/* Floating Action Button */}
+      <FloatingActionButton
+        actions={adminQuickActions({
+          onCreateUser: () => {
+            setShowCreateUserDialog(true);
+          },
+          onAddProperty: () => {
+            toast.info("Add Property feature coming soon");
+          },
+          onNewLead: () => {
+            window.location.href = "/crm/leads";
+          },
+          onNewCase: () => {
+            window.location.href = "/crm/cases";
+          },
+        })}
+      />
     </div>
   );
 }

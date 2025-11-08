@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Ticket, Plus, ArrowLeft, MessageSquare } from "lucide-react";
+import { Breadcrumb } from "@/components/Breadcrumb";
 import { Link } from "wouter";
 import { toast } from "sonner";
 
@@ -113,7 +114,7 @@ export default function CRMCases() {
     return <Badge variant={variants[priority] || "default"}>{priority}</Badge>;
   };
   
-  if (!user || user.role !== "admin") {
+  if (!user || (user.role !== "admin" && user.role !== "super_admin")) {
     return (
       <div className="container mx-auto py-12">
         <Card>
@@ -132,19 +133,18 @@ export default function CRMCases() {
       <div className="border-b bg-card">
         <div className="container mx-auto py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link href="/crm">
-                <Button variant="ghost" size="icon">
-                  <ArrowLeft className="h-5 w-5" />
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-3xl font-bold flex items-center gap-2">
-                  <Ticket className="h-8 w-8" />
-                  Cases Management
-                </h1>
-                <p className="text-muted-foreground mt-1">Customer support and service tickets</p>
-              </div>
+            <div className="flex-1">
+              <Breadcrumb 
+                items={[
+                  { label: "CRM", labelAr: "إدارة علاقات العملاء", href: "/crm" },
+                  { label: "Cases", labelAr: "الحالات" }
+                ]} 
+              />
+              <h1 className="text-3xl font-bold flex items-center gap-2 mt-2">
+                <Ticket className="h-8 w-8" />
+                Cases Management
+              </h1>
+              <p className="text-muted-foreground mt-1">Customer support and service tickets</p>
             </div>
             <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
               <DialogTrigger asChild>

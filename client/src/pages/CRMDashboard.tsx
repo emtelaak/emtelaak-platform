@@ -6,6 +6,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, Briefcase, Building, UserCheck, Ticket, TrendingUp, DollarSign, Target } from "lucide-react";
 import { Link } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { MobileNav } from "@/components/MobileNav";
+import { FloatingActionButton, adminQuickActions } from "@/components/FloatingActionButton";
+import { toast } from "sonner";
 
 export default function CRMDashboard() {
   const { user, loading } = useAuth();
@@ -26,7 +29,7 @@ export default function CRMDashboard() {
     );
   }
   
-  if (!user || user.role !== "admin") {
+  if (!user || (user.role !== "admin" && user.role !== "super_admin")) {
     return (
       <div className="container mx-auto py-12">
         <Card>
@@ -48,11 +51,14 @@ export default function CRMDashboard() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="border-b bg-card">
-        <div className="container mx-auto py-6">
+          <div className="container mx-auto py-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold">CRM Dashboard</h1>
-              <p className="text-muted-foreground mt-1">Sales Cloud & Service Cloud</p>
+            <div className="flex items-center gap-3">
+              <MobileNav />
+              <div>
+                <h1 className="text-3xl font-bold">CRM Dashboard</h1>
+                <p className="text-muted-foreground mt-1">Sales Cloud & Service Cloud</p>
+              </div>
             </div>
             <Link href="/">
               <Button variant="outline">Back to Platform</Button>
@@ -342,6 +348,24 @@ export default function CRMDashboard() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Floating Action Button */}
+      <FloatingActionButton
+        actions={adminQuickActions({
+          onCreateUser: () => {
+            toast.info("Create User feature coming soon");
+          },
+          onAddProperty: () => {
+            toast.info("Add Property feature coming soon");
+          },
+          onNewLead: () => {
+            window.location.href = "/crm/leads";
+          },
+          onNewCase: () => {
+            window.location.href = "/crm/cases";
+          },
+        })}
+      />
     </div>
   );
 }

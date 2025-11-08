@@ -24,6 +24,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ArrowLeft, Download, Loader2, Shield, Check, X } from "lucide-react";
+import { Breadcrumb } from "@/components/Breadcrumb";
 import { toast } from "sonner";
 
 export default function AdminPermissions() {
@@ -171,15 +172,16 @@ export default function AdminPermissions() {
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container py-6">
           <div className="flex items-center gap-4">
-            <Link href="/admin/dashboard">
-              <Button variant="ghost" size="icon">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            </Link>
             <Link href="/">
               <img src={APP_LOGO} alt="Emtelaak" className="h-20 w-auto cursor-pointer" />
             </Link>
             <div className="flex-1">
+              <Breadcrumb 
+                items={[
+                  { label: "Admin", labelAr: "الإدارة", href: "/admin/dashboard" },
+                  { label: "Permissions", labelAr: "الصلاحيات" }
+                ]} 
+              />
               <h1 className="text-3xl font-bold">Permissions Management</h1>
               <p className="text-muted-foreground mt-2">
                 Visually manage user permissions and export data

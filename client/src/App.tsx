@@ -25,9 +25,13 @@ const AdminSettings = lazy(() => import("./pages/AdminSettings"));
 const AdminKYCReview = lazy(() => import("./pages/AdminKYCReview"));
 const AdminRoles = lazy(() => import("./pages/AdminRoles"));
 const AdminPermissions = lazy(() => import("./pages/AdminPermissions"));
+const RoleManagement = lazy(() => import("./pages/admin/RoleManagement"));
 const SuperAdminDashboard = lazy(() => import("./pages/SuperAdminDashboard"));
 const EmailSettings = lazy(() => import("./pages/EmailSettings"));
 const AdminWallet = lazy(() => import("./pages/AdminWallet"));
+const HomepageContentEditor = lazy(() => import("@/pages/HomepageContentEditor"));
+const ImageLibrary = lazy(() => import("@/pages/ImageLibrary"));
+const AboutPageEditor = lazy(() => import("@/pages/AboutPageEditor"));
 
 // Lazy load CRM pages
 const CRMDashboard = lazy(() => import("./pages/CRMDashboard"));
@@ -63,8 +67,18 @@ function Router() {
       <Route path={"/about"} component={About} />
       <Route path={"/how-it-works"} component={HowItWorks} />
       <Route path="/super-admin" component={SuperAdminDashboard} />
+      <Route path="/admin">
+        {() => {
+          window.location.href = "/admin/dashboard";
+          return null;
+        }}
+      </Route>
+      <Route path="/admin/content/homepage" component={HomepageContentEditor} />
+      <Route path="/admin/media-library" component={ImageLibrary} />
+        <Route path="/admin/content/about" component={AboutPageEditor} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/roles" component={AdminRoles} />
+      <Route path="/admin/role-management" component={RoleManagement} />
       <Route path="/admin/permissions" component={AdminPermissions} />
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/email-settings" component={EmailSettings} />

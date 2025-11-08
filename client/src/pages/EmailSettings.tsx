@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, Mail, CheckCircle, AlertCircle, Send } from "lucide-react";
+import { Loader2, Mail, CheckCircle, AlertCircle, Send, ArrowLeft } from "lucide-react";
+import { Breadcrumb } from "@/components/Breadcrumb";
 import { toast } from "sonner";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 
 export default function EmailSettings() {
   const { user, loading: authLoading } = useAuth();
@@ -52,7 +53,13 @@ export default function EmailSettings() {
   return (
     <div className="container max-w-4xl py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Email Notification Settings</h1>
+        <Breadcrumb 
+          items={[
+            { label: "Super Admin", labelAr: "المسؤول العام", href: "/super-admin" },
+            { label: "Email Settings", labelAr: "إعدادات البريد الإلكتروني" }
+          ]} 
+        />
+        <h1 className="text-3xl font-bold mb-2 mt-4">Email Notification Settings</h1>
         <p className="text-muted-foreground">
           Configure email notifications for critical security and permission changes
         </p>
