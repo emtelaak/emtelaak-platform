@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRouter } from "wouter";
+import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +29,7 @@ interface ImageUpload {
 
 export default function AddProperty() {
   const { t, dir } = useLanguage();
-  const [, setLocation] = useRouter();
+  const [, setLocation] = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [images, setImages] = useState<ImageUpload[]>([]);
 
