@@ -282,6 +282,142 @@ export const adminRouter = router({
       }),
   }),
 
+  // Property Management
+  properties: router({
+    create: adminProcedure
+      .input(z.object({
+        // Basic Info
+        name: z.string().min(1),
+        nameAr: z.string().optional(),
+        description: z.string().optional(),
+        descriptionAr: z.string().optional(),
+        propertyType: z.enum(["residential", "commercial", "administrative", "hospitality", "education", "logistics", "medical"]),
+        investmentType: z.enum(["buy_to_let", "buy_to_sell"]),
+        status: z.enum(["draft", "coming_soon", "available", "funded", "exited", "cancelled"]).default("draft"),
+        
+        // Location
+        addressLine1: z.string().optional(),
+        addressLine2: z.string().optional(),
+        city: z.string().optional(),
+        country: z.string().optional(),
+        gpsLatitude: z.string().optional(),
+        gpsLongitude: z.string().optional(),
+        
+        // Property Details
+        propertySize: z.number().optional(),
+        numberOfUnits: z.number().optional(),
+        constructionYear: z.number().optional(),
+        propertyCondition: z.string().optional(),
+        amenities: z.string().optional(), // JSON string
+        
+        // Financial Details
+        totalValue: z.number().min(1), // in cents
+        sharePrice: z.number().min(1), // in cents
+        totalShares: z.number().min(1),
+        minimumInvestment: z.number().default(10000), // $100 in cents
+        
+        // Buy to Let specific
+        rentalYield: z.number().optional(), // percentage * 100
+        annualYieldIncrease: z.number().optional(),
+        managementFee: z.number().optional(),
+        otherCosts: z.number().optional(),
+        projectedNetYield: z.number().optional(),
+        
+        // Buy to Sell specific
+        fundTermMonths: z.number().optional(),
+        projectedSalePrice: z.number().optional(),
+        expectedAppreciation: z.number().optional(),
+        
+        // Distribution
+        distributionFrequency: z.enum(["monthly", "quarterly", "annual"]).optional(),
+        firstDistributionDate: z.string().optional(), // ISO date string
+        
+        // Timeline
+        fundingDeadline: z.string().optional(),
+        acquisitionDate: z.string().optional(),
+        completionDate: z.string().optional(),
+        expectedExitDate: z.string().optional(),
+        
+        // Additional
+        vrTourUrl: z.string().optional(),
+        videoTourUrl: z.string().optional(),
+        waitlistEnabled: z.boolean().default(false),
+        
+        // Images
+        images: z.array(z.object({
+          imageData: z.string(), // base64
+          mimeType: z.string(),
+          caption: z.string().optional(),
+          captionAr: z.string().optional(),
+          isPrimary: z.boolean().default(false),
+        })).optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const db = await import("./db").then(m => m.getDb());
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+        
+        const { properties, propertyMedia } = await import("../drizzle/schema");
+        
+        // Extract images from input
+        const { images, ...propertyData } = input;
+        
+        // Convert date strings to Date objects
+        const dates: Record<string, Date | undefined> = {};
+        if (input.firstDistributionDate) dates.firstDistributionDate = new Date(input.firstDistributionDate);
+        if (input.fundingDeadline) dates.fundingDeadline = new Date(input.fundingDeadline);
+        if (input.acquisitionDate) dates.acquisitionDate = new Date(input.acquisitionDate);
+        if (input.completionDate) dates.completionDate = new Date(input.completionDate);
+        if (input.expectedExitDate) dates.expectedExitDate = new Date(input.expectedExitDate);
+        
+        // Calculate available values
+        const availableValue = propertyData.totalValue;
+        const availableShares = propertyData.totalShares;
+        
+        // Create property
+        const [result] = await db.insert(properties).values({
+          ...propertyData,
+          ...dates,
+          availableValue,
+          availableShares,
+          fundraiserId: ctx.user.id,
+        });
+        
+        const propertyId = Number(result.insertId);
+        
+        // Upload and save images if provided
+        if (images && images.length > 0) {
+          for (let i = 0; i < images.length; i++) {
+            const image = images[i];
+            
+            // Convert base64 to buffer
+            const base64Data = image.imageData.replace(/^data:image\/\w+;base64,/, '');
+            const buffer = Buffer.from(base64Data, 'base64');
+            
+            // Generate unique filename
+            const fileExtension = image.mimeType.split('/')[1];
+            const fileName = `property-${propertyId}-${Date.now()}-${i}.${fileExtension}`;
+            
+            // Upload to S3
+            const { url, key } = await storagePut(fileName, buffer, image.mimeType);
+            
+            // Save media record
+            await db.insert(propertyMedia).values({
+              propertyId,
+              mediaType: 'image',
+              fileUrl: url,
+              fileKey: key,
+              caption: image.caption,
+              captionAr: image.captionAr,
+              isPrimary: image.isPrimary,
+              displayOrder: i,
+            });
+          }
+        }
+        
+        return { propertyId, success: true };
+      }),
+  }),
+
   // Platform Settings Management
   settings: router({
     uploadLogo: adminProcedure

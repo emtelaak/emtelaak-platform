@@ -735,3 +735,32 @@
 - [x] Loading state during password reset submission
 - [x] Disabled form fields during submission
 - [ ] Test complete password reset flow end-to-end
+
+
+## Phase 91: Add Property Feature (Completed)
+- [x] Create createProperty mutation in admin router
+- [x] Add validation for required property fields (name, propertyType, investmentType, financials)
+- [x] Add image upload to S3 for property images
+- [x] Create property_media records for uploaded images
+- [x] Create AddProperty page component at /admin/add-property
+- [x] Add tabbed form interface (Basic Info, Details, Financial, Images)
+- [x] Add form fields for basic info (name, nameAr, description, descriptionAr)
+- [x] Add form fields for property type and investment type
+- [x] Add form fields for location (address, city, country)
+- [x] Add form fields for property details (size, units, construction year)
+- [x] Add form fields for financial details (total value, price per share, total shares, minimum investment)
+- [x] Add form fields for Buy to Let (rental yield, distribution frequency)
+- [x] Add form fields for Buy to Sell (fund term, expected appreciation)
+- [x] Add form fields for property status (draft, coming_soon, available)
+- [x] Add image upload component with drag-and-drop
+- [x] Add image preview with primary image selection
+- [x] Add image removal functionality
+- [x] Add form validation with error messages
+- [x] Add success/error notifications with toast
+- [x] Add redirect to property detail after successful creation
+- [x] Add route to App.tsx for /admin/add-property (lazy loaded)
+- [x] Update FloatingActionButton in AdminDashboard to navigate to add property
+- [x] Convert financial values to cents for storage
+- [x] Display human-readable currency values with formatting
+- [ ] Add bilingual translations for form labels
+- [ ] Test complete property creation flow with images

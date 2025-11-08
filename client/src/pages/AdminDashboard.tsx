@@ -522,7 +522,7 @@ export default function AdminDashboard() {
             setShowCreateUserDialog(true);
           },
           onAddProperty: () => {
-            toast.info("Add Property feature coming soon");
+            window.location.href = "/admin/add-property";
           },
           onNewLead: () => {
             window.location.href = "/crm/leads";
