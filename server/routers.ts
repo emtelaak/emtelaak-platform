@@ -8,6 +8,7 @@ import { crmRouter } from "./crm-router";
 import { helpDeskRouter } from "./routes/helpDesk";
 import { contentRouter } from "./contentRouter";
 import { mediaLibraryRouter } from "./mediaLibraryRouter";
+import { securityRouter } from "./securityRouter";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import {
@@ -86,6 +87,7 @@ export const appRouter = router({
   helpDesk: helpDeskRouter,
   content: contentRouter,
   mediaLibrary: mediaLibraryRouter,
+  security: securityRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

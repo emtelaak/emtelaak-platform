@@ -925,13 +925,34 @@ export type InsertUser2FA = typeof user2fa.$inferInsert;
 // Security Events
 export const securityEvents = mysqlTable("security_events", {
   id: int("id").autoincrement().primaryKey(),
-  type: mysqlEnum("type", ["failed_login", "rate_limit", "account_lockout", "2fa_failed", "suspicious_activity"]).notNull(),
-  userId: int("userId"),
+  eventType: mysqlEnum("eventType", [
+    "failed_login",
+    "account_lockout",
+    "rate_limit_hit",
+    "suspicious_activity",
+    "password_reset_request",
+    "unauthorized_access_attempt",
+    "2fa_failed"
+  ]).notNull(),
+  userId: int("userId").references(() => users.id, { onDelete: "set null" }),
   ipAddress: varchar("ipAddress", { length: 45 }),
   userAgent: text("userAgent"),
-  details: text("details"),
-  timestamp: timestamp("timestamp").defaultNow().notNull(),
-});
+  email: varchar("email", { length: 320 }),
+  endpoint: varchar("endpoint", { length: 255 }),
+  details: json("details"),
+  severity: mysqlEnum("severity", ["low", "medium", "high", "critical"]).default("medium").notNull(),
+  resolved: boolean("resolved").default(false).notNull(),
+  resolvedBy: int("resolvedBy").references(() => users.id, { onDelete: "set null" }),
+  resolvedAt: timestamp("resolvedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  eventTypeIdx: index("event_type_idx").on(table.eventType),
+  userIdIdx: index("user_id_idx").on(table.userId),
+  ipAddressIdx: index("ip_address_idx").on(table.ipAddress),
+  createdAtIdx: index("created_at_idx").on(table.createdAt),
+  severityIdx: index("severity_idx").on(table.severity),
+  resolvedIdx: index("resolved_idx").on(table.resolved),
+}));
 
 export type SecurityEvent = typeof securityEvents.$inferSelect;
 export type InsertSecurityEvent = typeof securityEvents.$inferInsert;
@@ -1241,3 +1262,5 @@ export const mediaLibrary = mysqlTable("media_library", {
 
 export type MediaLibraryItem = typeof mediaLibrary.$inferSelect;
 export type InsertMediaLibraryItem = typeof mediaLibrary.$inferInsert;
+
+

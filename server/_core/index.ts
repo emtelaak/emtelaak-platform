@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
+import { Server as SocketIOServer } from "socket.io";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
@@ -31,6 +32,21 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   const app = express();
   const server = createServer(app);
+  
+  // Initialize Socket.io
+  const io = new SocketIOServer(server, {
+    cors: {
+      origin: process.env.NODE_ENV === "development" ? "http://localhost:3000" : true,
+      credentials: true,
+    },
+  });
+  
+  // Make io available to other modules
+  (global as any).io = io;
+  
+  // Setup Socket.io handlers
+  const { setupSocketHandlers } = await import("./socket");
+  setupSocketHandlers(io);
   
   // Security headers
   app.use(configureSecurityHeaders());
@@ -67,6 +83,7 @@ async function startServer() {
 
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
+    console.log(`WebSocket server ready`);
   });
 }
 

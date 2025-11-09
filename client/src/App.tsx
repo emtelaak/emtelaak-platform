@@ -49,6 +49,7 @@ const CRMCases = lazy(() => import("./pages/CRMCases"));
 const HelpDesk = lazy(() => import("./pages/HelpDesk"));
 const AgentDashboard = lazy(() => import("./pages/AgentDashboard"));
 const KnowledgeBase = lazy(() => import("./pages/KnowledgeBase"));
+const SecurityDashboard = lazy(() => import("./pages/SecurityDashboard"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -97,6 +98,7 @@ function Router() {
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/email-settings" component={EmailSettings} />
       <Route path="/admin/kyc-review" component={AdminKYCReview} />
+      <Route path="/admin/security" component={SecurityDashboard} />
       <Route path="/crm" component={CRMDashboard} />
       <Route path="/crm/leads" component={CRMLeads} />
       <Route path="/crm/cases" component={CRMCases} />

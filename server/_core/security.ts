@@ -16,8 +16,24 @@ export const authRateLimiter = rateLimit({
   message: 'Too many authentication attempts, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
-  // Store failed attempts in memory (consider Redis for production)
   skipSuccessfulRequests: false,
+  handler: async (req, res) => {
+    // Log rate limit hit
+    try {
+      const { logSecurityEvent } = await import('../securityDb');
+      await logSecurityEvent({
+        eventType: 'rate_limit_hit',
+        ipAddress: req.ip || req.socket.remoteAddress,
+        userAgent: req.get('user-agent'),
+        endpoint: req.path,
+        severity: 'high',
+        details: { message: 'Authentication rate limit exceeded', limit: 5, window: '15 minutes' },
+      });
+    } catch (error) {
+      console.error('[Security] Failed to log rate limit event:', error);
+    }
+    res.status(429).json({ error: 'Too many authentication attempts, please try again later.' });
+  },
 });
 
 /**
@@ -30,6 +46,22 @@ export const mutationRateLimiter = rateLimit({
   message: 'Too many requests, please slow down.',
   standardHeaders: true,
   legacyHeaders: false,
+  handler: async (req, res) => {
+    try {
+      const { logSecurityEvent } = await import('../securityDb');
+      await logSecurityEvent({
+        eventType: 'rate_limit_hit',
+        ipAddress: req.ip || req.socket.remoteAddress,
+        userAgent: req.get('user-agent'),
+        endpoint: req.path,
+        severity: 'medium',
+        details: { message: 'Mutation rate limit exceeded', limit: 50, window: '15 minutes' },
+      });
+    } catch (error) {
+      console.error('[Security] Failed to log rate limit event:', error);
+    }
+    res.status(429).json({ error: 'Too many requests, please slow down.' });
+  },
 });
 
 /**
@@ -54,6 +86,22 @@ export const uploadRateLimiter = rateLimit({
   message: 'Too many file uploads, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  handler: async (req, res) => {
+    try {
+      const { logSecurityEvent } = await import('../securityDb');
+      await logSecurityEvent({
+        eventType: 'rate_limit_hit',
+        ipAddress: req.ip || req.socket.remoteAddress,
+        userAgent: req.get('user-agent'),
+        endpoint: req.path,
+        severity: 'medium',
+        details: { message: 'Upload rate limit exceeded', limit: 20, window: '1 hour' },
+      });
+    } catch (error) {
+      console.error('[Security] Failed to log rate limit event:', error);
+    }
+    res.status(429).json({ error: 'Too many file uploads, please try again later.' });
+  },
 });
 
 /**
