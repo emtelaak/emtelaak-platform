@@ -101,8 +101,15 @@ export async function getUserTickets(userId: number, status?: string) {
   const db = await getDb();
   if (!db) return [];
 
-  // Build base query
-  const baseQuery = db
+  // Build WHERE conditions
+  const conditions = [eq(supportTickets.userId, userId)];
+  if (status) {
+    conditions.push(eq(supportTickets.status, status as any));
+  }
+  const whereClause = and(...conditions);
+
+  // Execute query with all conditions
+  const query = db
     .select({
       ticket: supportTickets,
       category: ticketCategories,
@@ -114,16 +121,9 @@ export async function getUserTickets(userId: number, status?: string) {
     .from(supportTickets)
     .leftJoin(ticketCategories, eq(supportTickets.categoryId, ticketCategories.id))
     .leftJoin(users, eq(supportTickets.assignedToId, users.id));
-
-  // Apply filters based on status
-  const query = status
-    ? baseQuery.where(and(
-        eq(supportTickets.userId, userId),
-        eq(supportTickets.status, status as any)
-      ))
-    : baseQuery.where(eq(supportTickets.userId, userId));
-
-  return query.orderBy(desc(supportTickets.createdAt));
+  
+  // Apply where clause if it exists
+  return whereClause ? query.where(whereClause).orderBy(desc(supportTickets.createdAt)) : query.orderBy(desc(supportTickets.createdAt));
 }
 
 /**
@@ -155,7 +155,7 @@ export async function getAllTickets(filters?: {
 
   const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
-  return db
+  const query = db
     .select({
       ticket: supportTickets,
       user: {
@@ -172,9 +172,9 @@ export async function getAllTickets(filters?: {
     .from(supportTickets)
     .leftJoin(users, eq(supportTickets.userId, users.id))
     .leftJoin(ticketCategories, eq(supportTickets.categoryId, ticketCategories.id))
-    .leftJoin(users, eq(supportTickets.assignedToId, users.id))
-    .where(whereClause)
-    .orderBy(desc(supportTickets.createdAt));
+    .leftJoin(users, eq(supportTickets.assignedToId, users.id));
+  
+  return whereClause ? query.where(whereClause).orderBy(desc(supportTickets.createdAt)) : query.orderBy(desc(supportTickets.createdAt));
 }
 
 /**
@@ -337,15 +337,13 @@ export async function getOrCreateChatConversation(userId: number, departmentType
     departmentType: departmentType as any,
     status: "waiting",
     lastMessageAt: new Date(),
-  });
-
-  const insertedId = Number(result.insertId);
+  }).$returningId();
 
   // Fetch the newly created conversation
   const [newConversation] = await db
     .select()
     .from(chatConversations)
-    .where(eq(chatConversations.id, insertedId))
+    .where(eq(chatConversations.id, result.id))
     .limit(1);
 
   return newConversation;
@@ -398,7 +396,7 @@ export async function getAgentConversations(agentId?: number, status?: string) {
 
   const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
-  return db
+  const query = db
     .select({
       conversation: chatConversations,
       user: {
@@ -410,9 +408,9 @@ export async function getAgentConversations(agentId?: number, status?: string) {
     })
     .from(chatConversations)
     .leftJoin(users, eq(chatConversations.userId, users.id))
-    .leftJoin(chatMessages, eq(chatConversations.id, chatMessages.conversationId))
-    .where(whereClause)
-    .orderBy(desc(chatConversations.lastMessageAt));
+    .leftJoin(chatMessages, eq(chatConversations.id, chatMessages.conversationId));
+  
+  return whereClause ? query.where(whereClause).orderBy(desc(chatConversations.lastMessageAt)) : query.orderBy(desc(chatConversations.lastMessageAt));
 }
 
 /**
@@ -791,7 +789,7 @@ export async function getHelpDeskStats(departmentType?: string) {
   const conditions = departmentType ? [eq(supportTickets.departmentType, departmentType as any)] : [];
   const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
-  const [ticketStats] = await db
+  const ticketQuery = db
     .select({
       totalTickets: count(),
       openTickets: count(sql`CASE WHEN ${supportTickets.status} = 'open' THEN 1 END`),
@@ -799,8 +797,9 @@ export async function getHelpDeskStats(departmentType?: string) {
       resolvedTickets: count(sql`CASE WHEN ${supportTickets.status} = 'resolved' THEN 1 END`),
       closedTickets: count(sql`CASE WHEN ${supportTickets.status} = 'closed' THEN 1 END`),
     })
-    .from(supportTickets)
-    .where(whereClause);
+    .from(supportTickets);
+  
+  const [ticketStats] = whereClause ? await ticketQuery.where(whereClause) : await ticketQuery;
 
   const [chatStats] = await db
     .select({

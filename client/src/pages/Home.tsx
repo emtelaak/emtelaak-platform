@@ -12,10 +12,41 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import ROICalculator from "@/components/ROICalculator";
 import KYCStatusBanner from "@/components/KYCStatusBanner";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import { TwoFactorVerification } from "@/components/TwoFactorVerification";
+import { useEffect, useState } from "react";
+import { useLocation } from "wouter";
+import Cookies from "js-cookie";
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
   const { t, language } = useLanguage();
+  const [location, setLocation] = useLocation();
+  const [show2FAModal, setShow2FAModal] = useState(false);
+  const utils = trpc.useUtils();
+
+  // Check if 2FA verification is required
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const requires2FA = Cookies.get("requires_2fa") === "true";
+      const verify2FA = urlParams.get("verify2fa") === "true";
+
+      if (requires2FA && verify2FA && isAuthenticated) {
+        setShow2FAModal(true);
+      }
+    }
+  }, [isAuthenticated]);
+
+  const handle2FASuccess = async () => {
+    // Add device to trusted devices if remember was checked
+    setShow2FAModal(false);
+    
+    // Clear URL parameter
+    window.history.replaceState({}, "", "/");
+    
+    // Refresh user data
+    await utils.auth.me.invalidate();
+  };
 
   // Fetch homepage content
   const { data: heroContent } = trpc.content.get.useQuery({ key: "homepage_hero" });
@@ -50,7 +81,20 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen pb-16 md:pb-0">
+    <>
+      {/* 2FA Verification Modal */}
+      {show2FAModal && (
+        <TwoFactorVerification
+          open={show2FAModal}
+          onSuccess={handle2FASuccess}
+          onCancel={() => {
+            setShow2FAModal(false);
+            window.history.replaceState({}, "", "/");
+          }}
+        />
+      )}
+
+      <div className="min-h-screen pb-16 md:pb-0">
       {/* Navigation */}
       <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container flex h-16 items-center justify-between">
@@ -553,5 +597,6 @@ export default function Home() {
       {/* Mobile Bottom Navigation */}
       <MobileBottomNav />
     </div>
+    </>
   );
 }

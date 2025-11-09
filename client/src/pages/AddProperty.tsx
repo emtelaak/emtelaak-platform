@@ -17,6 +17,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Loader2, Upload, X, ImageIcon } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CustomFieldsForm, useSaveCustomFields } from "@/components/CustomFieldsForm";
+import type { CustomFieldValue } from "@/components/CustomFieldRenderer";
 
 interface ImageUpload {
   imageData: string;
@@ -32,6 +34,8 @@ export default function AddProperty() {
   const [, setLocation] = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [images, setImages] = useState<ImageUpload[]>([]);
+  const [customFieldValues, setCustomFieldValues] = useState<CustomFieldValue[]>([]);
+  const { saveCustomFields } = useSaveCustomFields();
 
   // Basic Info
   const [name, setName] = useState("");
@@ -68,7 +72,16 @@ export default function AddProperty() {
   const [expectedAppreciation, setExpectedAppreciation] = useState("");
 
   const createPropertyMutation = trpc.admin.properties.create.useMutation({
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      // Save custom fields if any
+      if (customFieldValues.length > 0) {
+        try {
+          await saveCustomFields("properties", data.propertyId, customFieldValues);
+        } catch (error) {
+          console.error("Failed to save custom fields:", error);
+          // Don't fail the whole operation if custom fields fail
+        }
+      }
       toast.success("Property created successfully!");
       setLocation(`/properties/${data.propertyId}`);
     },
@@ -191,11 +204,12 @@ export default function AddProperty() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <Tabs defaultValue="basic" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="basic">Basic Info</TabsTrigger>
                 <TabsTrigger value="details">Details</TabsTrigger>
                 <TabsTrigger value="financial">Financial</TabsTrigger>
                 <TabsTrigger value="images">Images</TabsTrigger>
+                <TabsTrigger value="custom">Additional</TabsTrigger>
               </TabsList>
 
               {/* Basic Info Tab */}
@@ -546,6 +560,15 @@ export default function AddProperty() {
                     ))}
                   </div>
                 )}
+              </TabsContent>
+
+              {/* Custom Fields Tab */}
+              <TabsContent value="custom" className="space-y-4">
+                <CustomFieldsForm
+                  module="properties"
+                  showInContext="admin"
+                  onValuesChange={setCustomFieldValues}
+                />
               </TabsContent>
             </Tabs>
 

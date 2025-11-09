@@ -10,6 +10,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Link } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
+import DashboardLayout from "@/components/DashboardLayout";
 import { APP_LOGO } from "@/const";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -90,7 +91,8 @@ export default function AdminKYCReview() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <DashboardLayout>
+      <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b bg-card">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -450,6 +452,7 @@ export default function AdminKYCReview() {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

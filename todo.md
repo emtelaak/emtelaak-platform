@@ -1191,3 +1191,395 @@
 - [x] Add JWT authentication middleware for Socket.io connections
 - [x] Save checkpoint with WebSocket notifications complete
 
+
+## Phase 111: IP Blocking System (Completed)
+- [x] Create blocked_ips table in database schema (via SQL)
+- [x] Add blocked_ips table to drizzle schema.ts
+- [x] Create IP blocking database helper functions (ipBlockingDb.ts)
+- [x] Implement blockIP function
+- [x] Implement unblockIP function
+- [x] Implement isIPBlocked function
+- [x] Implement getBlockedIPs function with filters
+- [x] Implement getBlockedIPByAddress function
+- [x] Implement cleanupExpiredBlocks function
+- [x] Build backend tRPC router for IP blocking management (ipBlockingRouter.ts)
+- [x] Implement blockIP mutation (manual blocking by admin)
+- [x] Implement unblockIP mutation (manual unblocking by admin)
+- [x] Implement bulkUnblockIPs mutation
+- [x] Implement getBlockedIPs query (list all blocked IPs)
+- [x] Implement isIPBlocked query (check if specific IP is blocked)
+- [x] Implement getBlockedIP query
+- [x] Implement cleanupExpired mutation
+- [x] Create IP blocking middleware for Express (ipBlockingMiddleware.ts)
+- [x] Implement getClientIP helper function
+- [x] Implement IP whitelist functionality (isIPWhitelisted, addToWhitelist, removeFromWhitelist)
+- [x] Integrate IP blocking middleware into server index.ts
+- [x] Create IPBlockingManagement page component
+- [x] Add blocked IPs table with search and filtering
+- [x] Add manual block IP form (IP address, reason, expiry in days)
+- [x] Add unblock button for each blocked IP
+- [x] Add bulk unblock functionality with checkbox selection
+- [x] Add select all/deselect all functionality
+- [x] Implement automatic blocking rules (autoIPBlocking.ts)
+- [x] Add auto-block after 5 failed logins within 15 minutes
+- [x] Add auto-block after 10 rate limit hits within 10 minutes
+- [x] Add auto-block after 3 suspicious activities within 30 minutes
+- [x] Integrate auto-blocking into security event logging
+- [x] Add IP whitelist for localhost and critical IPs
+- [x] Add navigation link to IP blocking page (DashboardLayout)
+- [x] Add route for /admin/ip-blocking in App.tsx
+- [x] Add bilingual support for IP blocking UI (English/Arabic)
+- [x] Log security events for IP blocking/unblocking actions
+- [x] Save checkpoint with IP blocking system complete
+
+
+## Phase 112: Two-Factor Authentication UI (Completed)
+- [x] Analyze existing 2FA backend API endpoints (twoFactorAuth.ts service)
+- [x] Create 2FA tRPC router (twoFactorRouter.ts)
+- [x] Implement setup mutation (generates QR code and backup codes)
+- [x] Implement enable mutation (verifies code and activates 2FA)
+- [x] Implement verify mutation (checks TOTP or backup codes)
+- [x] Implement disable mutation (deactivates 2FA)
+- [x] Implement regenerateBackupCodes mutation
+- [x] Implement getStatus query
+- [x] Create TwoFactorSetup component with QR code display
+- [x] Add 3-step setup wizard (scan QR, save backup codes, verify)
+- [x] Display backup codes after 2FA setup
+- [x] Add copy backup codes functionality
+- [x] Create TwoFactorVerification modal component
+- [x] Add 6-digit code input field with auto-format
+- [x] Add backup code fallback option (8-character codes)
+- [x] Add toggle between TOTP and backup code input
+- [x] Create TwoFactorSettings component for profile page
+- [x] Add enable/disable 2FA toggle with status badge
+- [x] Add regenerate backup codes functionality with verification
+- [x] Display remaining backup codes count
+- [x] Add 2FA status indicator (Enabled/Disabled badge)
+- [x] Integrate 2FA settings into Profile page Security tab
+- [x] Add Security tab to Profile page (5 tabs total)
+- [x] Add bilingual support for all 2FA UI components (English/Arabic)
+- [x] Add security event logging for 2FA actions
+- [x] Log 2FA enable/disable events
+- [x] Log backup code usage and regeneration
+- [x] Log failed 2FA verification attempts
+- [x] Save checkpoint with 2FA UI complete
+
+## Phase 113: 2FA Login Flow Integration (Completed)
+- [x] Analyze current authentication flow and OAuth callback (server/_core/oauth.ts)
+- [x] Create trusted_devices table in database schema (via SQL)
+- [x] Add trusted_devices table to drizzle schema
+- [x] Add device fingerprinting (SHA-256 hash of user agent + IP)
+- [x] Create tRPC endpoints for trusted device management (trustedDevicesRouter.ts)
+- [x] Implement checkTrustedDevice query
+- [x] Implement addTrustedDevice mutation (with auto device name detection)
+- [x] Implement removeTrustedDevice mutation
+- [x] Implement listTrustedDevices query
+- [x] Implement removeAllTrustedDevices mutation
+- [x] Implement cleanupExpiredDevices mutation (admin)
+- [x] Modify OAuth callback to check 2FA status
+- [x] Add 2FA verification step after password authentication
+- [x] Create intermediate authentication state (temp_session cookie, 5-minute expiry)
+- [x] Redirect to /?verify2fa=true when 2FA required
+- [x] Add 2FA verification modal to Home page
+- [x] Update TwoFactorVerification modal with remember device checkbox
+- [x] Create verifyLogin mutation (replaces verify for login flow)
+- [x] Handle remember device selection during verification
+- [x] Add device to trusted devices after successful 2FA + remember
+- [x] Upgrade temporary session to full session after 2FA success
+- [x] Add device name auto-detection (iPhone, Android, Mac, Windows, Linux)
+- [x] Add bilingual support for remember device feature (English/Arabic)
+- [x] Register trustedDevices router in main routers
+- [x] Save checkpoint with 2FA login integration complete
+
+## Phase 114: Trusted Devices Management UI (Completed)
+- [x] Create TrustedDevicesManager component
+- [x] Display list of all trusted devices for current user
+- [x] Show device details (name, IP address, last used, created date, expiry date)
+- [x] Use date-fns for relative time formatting ("2 hours ago")
+- [x] Implement remove single device functionality
+- [x] Implement revoke all devices functionality
+- [x] Add confirmation dialog for single device removal
+- [x] Add confirmation dialog for revoke all (shows device count)
+- [x] Add empty state when no trusted devices exist
+- [x] Show device count badge in card header
+- [x] Add auto-refresh after device removal (refetch query)
+- [x] Add loading state with spinner
+- [x] Add device icons (Smartphone, MapPin, Clock)
+- [x] Add hover effects on device cards
+- [x] Integrate TrustedDevicesManager into Profile Security tab
+- [x] Add bilingual support (English/Arabic with RTL support)
+- [x] Use date-fns locales for Arabic date formatting
+- [x] Save checkpoint with trusted devices UI complete
+
+## Phase 115: Trusted Device Check in OAuth Flow (Completed)
+- [x] Analyze current OAuth callback flow in server/_core/oauth.ts
+- [x] Add device fingerprint generation in OAuth callback (SHA-256 hash of user-agent + IP)
+- [x] Import trustedDevices table and crypto module
+- [x] Check if device is trusted before requiring 2FA
+- [x] Query trusted_devices table for matching fingerprint
+- [x] Check device expiry (gt(expiresAt, new Date()))
+- [x] Skip 2FA modal for trusted devices (isTrustedDevice flag)
+- [x] Update device last used timestamp on successful check
+- [x] Proceed directly to full session for trusted devices
+- [x] Keep 2FA requirement for non-trusted devices (requires2FA && !isTrustedDevice)
+- [x] Use same device fingerprint logic as trustedDevicesRouter for consistency
+- [x] Save checkpoint with trusted device check complete
+
+## Phase 116: Super Admin 2FA Control (Completed)
+- [x] Create admin 2FA management API endpoints (twoFactorRouter.ts)
+- [x] Implement adminToggleUser2FA mutation (enable/disable for any user)
+- [x] Implement adminResetUser2FA mutation (clear 2FA secret and backup codes)
+- [x] Add admin authorization check (role === 'admin' with FORBIDDEN error)
+- [x] Add TRPCError import to twoFactorRouter
+- [x] Create AdminUserManagement page component
+- [x] Display user list with 2FA status badges (Enabled/Disabled with Shield icons)
+- [x] Add 2FA toggle switch for each user
+- [x] Add reset 2FA button for users with 2FA enabled
+- [x] Add confirmation dialogs for toggle and reset actions
+- [x] Show detailed confirmation messages with consequences
+- [x] Log security events for admin 2FA changes (high/critical severity)
+- [x] Add search functionality (name, email, openId)
+- [x] Add user table with role badges
+- [x] Add loading states with spinner
+- [x] Add navigation link to user management page (DashboardLayout)
+- [x] Add route for /admin/users in App.tsx
+- [x] Save checkpoint with super admin 2FA control complete
+
+## Phase 117: Security Settings Management Interface (Current)
+- [x] Create security_settings table in database schema
+- [x] Add default security settings migration (7 settings inserted)
+- [x] Add security_settings table to drizzle schema
+- [ ] Create security settings database helper functions
+- [ ] Build backend tRPC router for security settings management
+- [ ] Implement getSecuritySettings query
+- [ ] Implement updateSecuritySettings mutation (admin only)
+- [ ] Implement resetSecuritySettings mutation (restore defaults)
+- [ ] Create SecuritySettings page component for admin dashboard
+- [ ] Display current AUTO_BLOCK_CONFIG thresholds
+- [ ] Add form to edit failed login threshold and window
+- [ ] Add form to edit rate limit threshold and window
+- [ ] Add form to edit suspicious activity threshold and window
+- [ ] Add form to edit auto-block expiry hours
+- [ ] Add validation for threshold values (min/max ranges)
+- [ ] Add reset to defaults button
+- [ ] Add save changes button with confirmation
+- [ ] Update autoIPBlocking.ts to read from database instead of hardcoded config
+- [ ] Add fallback to hardcoded config if database unavailable
+- [ ] Log security events when settings are changed
+- [ ] Add navigation link to security settings page
+- [ ] Add bilingual support (English/Arabic)
+- [ ] Test settings update functionality
+- [ ] Test auto-blocking with custom thresholds
+- [ ] Save checkpoint with security settings management complete
+
+## Phase 118: Fix Admin Navigation - Wrap All Admin Pages in DashboardLayout (Current)
+- [x] Identify pages missing DashboardLayout wrapper
+- [x] Wrap SecurityDashboard in DashboardLayout
+- [x] Wrap IPBlockingManagement in DashboardLayout
+- [x] Wrap AdminSecuritySettings in DashboardLayout
+- [x] Test that all admin pages show the sidebar navigation
+- [x] Verify menu items are visible and clickable
+- [x] Save checkpoint with fixed admin navigation
+
+
+## Phase 119: Fix X-Forwarded-For Header Warning
+- [x] Add trust proxy setting to Express app configuration
+- [x] Restart server and verify warning is resolved
+
+
+## Phase 120: Fix helpDeskDb.ts TypeScript Errors
+- [x] Fix getUserTickets query builder pattern (line 120 - where after leftJoin)
+- [x] Fix insertId type issue (line 346 - MySqlRawQueryResult)
+- [x] Verify TypeScript compilation succeeds
+
+
+## Phase 121: Add Sidebar to Admin Dashboard and Super Admin Pages
+- [x] Find admin dashboard page and check for DashboardLayout
+- [x] Find super admin page and check for DashboardLayout
+- [x] Add DashboardLayout wrapper to pages missing it
+- [x] Verify sidebar appears on all admin pages
+
+
+## Phase 122: Add All Admin Pages to Sidebar Menu
+- [x] Update DashboardLayout menuItems array to include all admin pages
+- [x] Organize menu items into logical groups (Dashboard, Users, Security, Finance, etc.)
+- [x] Test that all menu items appear and navigate correctly
+
+
+## Phase 123: Build Email Template Management Interface
+- [x] Create email_templates database schema
+- [x] Build tRPC endpoints for email template CRUD operations
+- [x] Create EmailTemplates admin page with list view
+- [x] Add template editor with rich text and variable support
+- [x] Implement email preview functionality
+- [x] Add Email Templates to sidebar menu
+- [x] Test complete workflow (list, create, edit, preview, delete)
+
+
+## Phase 124: Build Legal Documents Management with PDF Generation
+- [x] Create legal_documents database schema with version control
+- [x] Build tRPC endpoints for legal document CRUD operations
+- [x] Implement PDF generation from HTML templates
+- [x] Create LegalDocuments admin page with list and editor
+- [x] Add PDF preview and download functionality
+- [x] Implement customer distribution tracking
+- [x] Add Legal Documents to sidebar menu
+- [x] Test complete workflow (create, edit, generate PDF, send to customer)
+
+
+## Phase 126: Build Additional Content Editors
+- [x] Check existing content management infrastructure (contentRouter, platform_content table)
+- [x] Build FAQ Content Editor page with Q&A management
+- [x] Build Contact Page Content Editor with address, phone, email fields
+- [x] Build Terms - [ ] Build Terms & Privacy Content Editor Privacy Content Editor with rich text editing
+- [x] Add routes for all new editors
+- [x] Add sidebar menu items for content editors
+- [x] Test all content editors with bilingual support
+
+
+## Phase 127: Create Collapsible Content Editors Submenu
+- [x] Update DashboardLayout to support collapsible submenus
+- [x] Group FAQ, Contact, Terms editors under "Content Management" submenu
+- [x] Test submenu collapse/expand functionality
+
+
+## Phase 128: Reorganize Content Management Submenu
+- [x] Move Homepage Content, About Page, Email Templates, Legal Documents to Content Management submenu
+- [x] Organize submenu items into logical groups
+- [x] Test submenu organization and verify all links work
+
+
+## Phase 129: Fix SuperAdminDashboard Buttons
+- [x] Check SuperAdminDashboard button implementation
+- [x] Fix "Manage Templates" and "Manage Documents" button click handlers
+- [x] Test buttons navigate correctly
+
+
+## Phase 130: Add Collapsible Section Control Bar to Super Admin Dashboard
+- [x] Add section visibility state management with useState
+- [x] Create section control bar UI with toggle buttons
+- [x] Make all sections collapsible (User Management, Permissions, Roles, Audit Logs, Content Management)
+- [x] Add smooth collapse/expand animations
+- [x] Add bilingual support for control bar
+- [x] Test section visibility toggles
+
+
+## Phase 131: Add Individual Collapse/Expand to Each Section
+- [x] Add collapse state management for each section
+- [x] Add collapse/expand buttons to section card headers
+- [x] Implement collapsible content with smooth animations
+- [x] Make collapse independent of visibility control bar
+- [x] Add bilingual support for collapse buttons
+- [x] Test individual section collapse functionality
+
+
+## Phase 132: Add localStorage Persistence for Section States
+- [x] Create localStorage utility functions for reading/writing state
+- [x] Update visibleSections state initialization to load from localStorage
+- [x] Update collapsedSections state initialization to load from localStorage
+- [x] Add useEffect to save visibleSections changes to localStorage
+- [x] Add useEffect to save collapsedSections changes to localStorage
+- [x] Test persistence across page refreshes and browser restarts
+
+
+## Phase 133: Add Reset Layout Button
+- [x] Create resetLayout function to restore default states
+- [x] Clear localStorage when resetting
+- [x] Add Reset Layout button to section control bar
+- [x] Add confirmation dialog before reset
+- [x] Add success toast notification
+- [x] Add bilingual support for reset button
+- [x] Test reset functionality
+
+
+## Phase 134: Dynamic Custom Fields Management System
+- [x] Design database schema for custom fields (custom_fields, custom_field_values tables)
+- [x] Define supported field types (text, number, date, dropdown, multi-select, country, file, boolean)
+- [x] Create custom fields management backend API (CRUD operations)
+- [x] Build admin interface for managing custom fields
+- [x] Add field type selector with configuration options
+- [x] Implement field ordering and required/optional settings
+- [ ] Create dynamic form renderer component
+- [ ] Add countries field component with full country list
+- [ ] Implement custom field value storage and retrieval
+- [ ] Integrate custom fields into Properties module
+- [ ] Integrate custom fields into Users module
+- [ ] Integrate custom fields into CRM Leads module
+- [ ] Integrate custom fields into Invoices module
+- [ ] Add validation for custom fields
+- [ ] Add bilingual support for custom field labels
+- [ ] Test custom fields across all modules
+- [ ] Add import/export for custom field configurations
+
+
+## Phase 135: Dynamic Custom Field Renderer Component
+- [x] Create countries data file with full country list
+- [x] Build CountrySelector component with search and flags
+- [x] Create CustomFieldRenderer component for individual fields
+- [x] Add field type handlers (text, number, date, dropdown, etc.)
+- [x] Create CustomFieldsForm wrapper component
+- [x] Add validation support for required fields
+- [x] Add file upload handler for file type fields
+- [x] Test rendering with all 13 field types
+- [x] Add bilingual support for all field types
+
+
+## Phase 136: Custom Fields Integration & Advanced Features
+- [x] Integrate CustomFieldsForm into AddProperty page
+- [x] Add custom fields saving to property creation flow
+- [x] Create field templates system (backend API)
+- [x] Build field templates UI in CustomFieldsManagement
+- [x] Add predefined templates (Real Estate Basics, KYC Extended, etc.)
+- [x] Implement template import/apply functionality
+- [ ] Add conditional field visibility system
+- [ ] Create field dependencies configuration UI
+- [ ] Test custom fields in property creation
+- [ ] Test field templates application
+- [ ] Test conditional field visibility
+
+
+## Phase 137: Conditional Field Visibility Implementation
+- [x] Run database migration for dependencies field
+- [x] Add dependencies configuration UI to custom fields form
+- [x] Implement dependency evaluation logic
+- [x] Update CustomFieldRenderer to handle conditional visibility
+- [x] Update CustomFieldsForm to manage field dependencies
+- [ ] Add example dependencies to templates
+- [x] Test show/hide based on dropdown selection
+- [x] Test show/hide based on boolean field
+- [x] Test multiple dependency conditions
+
+
+## Phase 138: Visual Dependency Builder
+- [x] Create DependencyBuilder component with rule UI
+- [x] Add field selector dropdown
+- [x] Add operator selector (equals, notEquals, contains, etc.)
+- [x] Add value input field
+- [x] Integrate into CustomFieldsManagement form
+- [x] Add rule preview with human-readable format
+- [x] Add JSON generation from visual rules
+- [x] Test with dropdown dependencies
+- [x] Test with boolean dependencies
+- [x] Test with multiple conditions
+
+
+## Phase 139: Visual Validation Rules Builder
+- [x] Add validationRules field to custom_fields schema
+- [x] Run database migration
+- [x] Create ValidationRulesBuilder component
+- [x] Add min/max length rules for text fields
+- [x] Add min/max value rules for number fields
+- [x] Add regex pattern validation with tester
+- [x] Add custom error messages for each rule
+- [x] Integrate into CustomFieldsManagement form
+- [x] Implement validation in CustomFieldRenderer
+- [x] Test validation with various field types
+
+
+## Phase 140: Fix TypeScript Errors in helpDeskDb.ts
+- [x] Analyze TypeScript errors in helpDeskDb.ts
+- [x] Fix Drizzle ORM query type issues (where clause error)
+- [x] Fix MySqlRawQueryResult insertId property error
+- [x] Test all help desk database functions
+- [x] Verify server stability after fixes
+- [x] Save checkpoint with fixes

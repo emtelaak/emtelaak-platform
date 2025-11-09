@@ -33,6 +33,9 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
   
+  // Trust proxy - required for rate limiting behind reverse proxies
+  app.set('trust proxy', true);
+  
   // Initialize Socket.io
   const io = new SocketIOServer(server, {
     cors: {
@@ -50,6 +53,10 @@ async function startServer() {
   
   // Security headers
   app.use(configureSecurityHeaders());
+  
+  // IP blocking middleware (before all routes)
+  const { ipBlockingMiddleware } = await import("./ipBlockingMiddleware");
+  app.use(ipBlockingMiddleware);
   
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));

@@ -34,7 +34,11 @@ const AddProperty = lazy(() => import("./pages/AddProperty"));
 const PropertyAnalytics = lazy(() => import("./pages/PropertyAnalytics"));
 const Invoices = lazy(() => import("./pages/Invoices"));
 const AdminInvoices = lazy(() => import("./pages/AdminInvoices"));
-const EmailTemplates = lazy(() => import("./pages/EmailTemplates"));
+const AdminEmailTemplates = lazy(() => import("./pages/AdminEmailTemplates"));
+const AdminLegalDocuments = lazy(() => import("./pages/AdminLegalDocuments"));
+const FAQContentEditor = lazy(() => import("./pages/FAQContentEditor"));
+const ContactContentEditor = lazy(() => import("./pages/ContactContentEditor"));
+const TermsContentEditor = lazy(() => import("./pages/TermsContentEditor"));
 const EmailTemplateEditor = lazy(() => import("./pages/EmailTemplateEditor"));
 const HomepageContentEditor = lazy(() => import("@/pages/HomepageContentEditor"));
 const ImageLibrary = lazy(() => import("@/pages/ImageLibrary"));
@@ -49,7 +53,12 @@ const CRMCases = lazy(() => import("./pages/CRMCases"));
 const HelpDesk = lazy(() => import("./pages/HelpDesk"));
 const AgentDashboard = lazy(() => import("./pages/AgentDashboard"));
 const KnowledgeBase = lazy(() => import("./pages/KnowledgeBase"));
-const SecurityDashboard = lazy(() => import("./pages/SecurityDashboard"));
+const SecurityDashboard = lazy(() => import("@/pages/SecurityDashboard"));
+const IPBlockingManagement = lazy(() => import("@/pages/IPBlockingManagement"));
+const AdminUserManagement = lazy(() => import("@/pages/AdminUserManagement"));
+const SecuritySettingsManagement = lazy(() => import("@/pages/SecuritySettingsManagement"));
+const CustomFieldsManagement = lazy(() => import("@/pages/CustomFieldsManagement"));
+const CustomFieldsTest = lazy(() => import("@/pages/CustomFieldsTest"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -71,7 +80,13 @@ function Router() {
       <Route path="/admin/property-analytics" component={PropertyAnalytics} />
       <Route path="/invoices" component={Invoices} />
       <Route path="/admin/invoices" component={AdminInvoices} />
-      <Route path="/admin/email-templates" component={EmailTemplates} />
+      <Route path="/admin/email-templates" component={AdminEmailTemplates} />
+      <Route path="/admin/legal-documents" component={AdminLegalDocuments} />
+      <Route path="/admin/custom-fields" component={CustomFieldsManagement} />
+      <Route path="/test/custom-fields" component={CustomFieldsTest} />
+      <Route path="/admin/content/faq" component={FAQContentEditor} />
+      <Route path="/admin/content/contact" component={ContactContentEditor} />
+      <Route path="/admin/content/terms" component={TermsContentEditor} />
       <Route path="/admin/email-template-editor" component={EmailTemplateEditor} />
       <Route path="/menu" component={Menu} />
       <Route path="/profile" component={Profile} />
@@ -98,7 +113,10 @@ function Router() {
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/email-settings" component={EmailSettings} />
       <Route path="/admin/kyc-review" component={AdminKYCReview} />
-      <Route path="/admin/security" component={SecurityDashboard} />
+        <Route path="/admin/security" component={SecurityDashboard} />
+        <Route path="/admin/ip-blocking" component={IPBlockingManagement} />
+        <Route path="/admin/users" component={AdminUserManagement} />
+        <Route path="/admin/security-settings" component={SecuritySettingsManagement} />
       <Route path="/crm" component={CRMDashboard} />
       <Route path="/crm/leads" component={CRMLeads} />
       <Route path="/crm/cases" component={CRMCases} />

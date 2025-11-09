@@ -1,0 +1,8 @@
+{
+  "query": "ALTER TABLE blocked_ips \n  CHANGE COLUMN `createdat` `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  CHANGE COLUMN `updatedat` `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute ALTER TABLE blocked_ips \n  CHANGE COLUMN `createdat` `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  CHANGE COLUMN `updatedat` `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'createdat' in 'blocked_ips'"
+  ]
+}

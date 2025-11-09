@@ -3,6 +3,7 @@ import { trpc } from "@/lib/trpc";
 import { Link } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
+import DashboardLayout from "@/components/DashboardLayout";
 import { MobileNav } from "@/components/MobileNav";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -179,7 +180,8 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <DashboardLayout>
+      <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container py-6">
@@ -539,6 +541,7 @@ export default function AdminDashboard() {
           },
         })}
       />
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

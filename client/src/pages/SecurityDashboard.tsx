@@ -11,6 +11,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 import { useSecurityNotifications } from "@/hooks/useSocket";
 import { format } from "date-fns";
+import DashboardLayout from "@/components/DashboardLayout";
 
 export default function SecurityDashboard() {
   const { t, language } = useLanguage();
@@ -162,7 +163,8 @@ export default function SecurityDashboard() {
   };
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <DashboardLayout>
+      <div className="container mx-auto py-8 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -434,6 +436,7 @@ export default function SecurityDashboard() {
           )}
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

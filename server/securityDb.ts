@@ -36,6 +36,20 @@ export async function logSecurityEvent(event: InsertSecurityEvent) {
       }
     }
 
+    // Check automatic IP blocking rules for relevant event types
+    if (event.ipAddress && [
+      "failed_login",
+      "rate_limit_hit",
+      "suspicious_activity",
+    ].includes(event.eventType)) {
+      try {
+        const { checkAutoBlockRules } = await import("./autoIPBlocking");
+        await checkAutoBlockRules(event.ipAddress);
+      } catch (autoBlockError) {
+        console.error("[Security] Failed to check auto-block rules:", autoBlockError);
+      }
+    }
+
     return eventId;
   } catch (error) {
     console.error("[Security] Failed to log event:", error);
@@ -209,7 +223,6 @@ export async function resolveSecurityEvent(eventId: number, resolvedBy: number) 
       .set({
         resolved: true,
         resolvedBy,
-        resolvedAt: new Date(),
       })
       .where(eq(securityEvents.id, eventId));
 
@@ -241,6 +254,44 @@ export async function getTopOffendingIPs(limit: number = 10) {
       .limit(limit);
   } catch (error) {
     console.error("[Security] Failed to get top IPs:", error);
+    return [];
+  }
+}
+
+/**
+ * Get security events by IP address (for auto-blocking checks)
+ */
+export async function getSecurityEventsByIP(filters: {
+  ipAddress: string;
+  eventType?: string;
+  startDate?: Date;
+  endDate?: Date;
+}) {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    const conditions = [eq(securityEvents.ipAddress, filters.ipAddress)];
+
+    if (filters.eventType) {
+      conditions.push(eq(securityEvents.eventType, filters.eventType as any));
+    }
+    if (filters.startDate) {
+      conditions.push(gte(securityEvents.createdAt, filters.startDate));
+    }
+    if (filters.endDate) {
+      conditions.push(lte(securityEvents.createdAt, filters.endDate));
+    }
+
+    const events = await db
+      .select()
+      .from(securityEvents)
+      .where(and(...conditions))
+      .orderBy(desc(securityEvents.createdAt));
+
+    return events;
+  } catch (error) {
+    console.error("[Security] Failed to get events by IP:", error);
     return [];
   }
 }

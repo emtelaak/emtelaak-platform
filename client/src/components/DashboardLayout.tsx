@@ -16,22 +16,81 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarProvider,
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users, Shield } from "lucide-react";
+import { 
+  LayoutDashboard, 
+  LogOut, 
+  PanelLeft, 
+  Users, 
+  Shield, 
+  Ban, 
+  Settings,
+  FileText,
+  UserCheck,
+  Lock,
+  Briefcase,
+  Wallet,
+  Receipt,
+  Mail,
+  Scale,
+  HelpCircle,
+  Phone,
+  ChevronDown,
+  Edit3,
+  Home,
+  Info
+} from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
 
-const menuItems = [
+type MenuItem = {
+  icon: any;
+  label: string;
+  path: string;
+  children?: MenuItem[];
+};
+
+const menuItems: MenuItem[] = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/admin/dashboard" },
-  { icon: Users, label: "Users", path: "/admin/dashboard" },
+  { icon: Users, label: "Users", path: "/admin/users" },
   { icon: Shield, label: "Security", path: "/admin/security" },
+  { icon: Ban, label: "IP Blocking", path: "/admin/ip-blocking" },
+  { icon: Settings, label: "Security Settings", path: "/admin/security-settings" },
+  { icon: Lock, label: "Permissions", path: "/admin/permissions" },
+  { icon: Briefcase, label: "Roles", path: "/admin/roles" },
+  { icon: UserCheck, label: "KYC Review", path: "/admin/kyc-review" },
+  { icon: Receipt, label: "Invoices", path: "/admin/invoices" },
+  { icon: Wallet, label: "Wallet", path: "/admin/wallet" },
+  { 
+    icon: Edit3, 
+    label: "Content Management", 
+    path: "/admin/content",
+    children: [
+      { icon: Home, label: "Homepage Content", path: "/admin/content/homepage" },
+      { icon: Info, label: "About Page", path: "/admin/content/about" },
+      { icon: HelpCircle, label: "FAQ Editor", path: "/admin/content/faq" },
+      { icon: Phone, label: "Contact Editor", path: "/admin/content/contact" },
+      { icon: FileText, label: "Terms Editor", path: "/admin/content/terms" },
+      { icon: Mail, label: "Email Templates", path: "/admin/email-templates" },
+      { icon: Scale, label: "Legal Documents", path: "/admin/legal-documents" },
+    ]
+  },
+  { icon: FileText, label: "Settings", path: "/admin/settings" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
@@ -129,7 +188,9 @@ function DashboardLayoutContent({
   const isCollapsed = state === "collapsed";
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const activeMenuItem = menuItems.find(item => item.path === location);
+  const activeMenuItem = menuItems.find(item => 
+    item.path === location || item.children?.some(child => child.path === location)
+  );
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -218,6 +279,46 @@ function DashboardLayoutContent({
           <SidebarContent className="gap-0">
             <SidebarMenu className="px-2 py-1">
               {menuItems.map(item => {
+                if (item.children) {
+                  // Collapsible menu item with submenu
+                  const hasActiveChild = item.children.some(child => location === child.path);
+                  return (
+                    <Collapsible key={item.path} defaultOpen={hasActiveChild} className="group/collapsible">
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton
+                            tooltip={item.label}
+                            className="h-10 transition-all font-normal"
+                          >
+                            <item.icon className="h-4 w-4" />
+                            <span>{item.label}</span>
+                            <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {item.children.map(child => {
+                              const isActive = location === child.path;
+                              return (
+                                <SidebarMenuSubItem key={child.path}>
+                                  <SidebarMenuSubButton
+                                    isActive={isActive}
+                                    onClick={() => setLocation(child.path)}
+                                  >
+                                    <child.icon className={`h-4 w-4 ${isActive ? "text-primary" : ""}`} />
+                                    <span>{child.label}</span>
+                                  </SidebarMenuSubButton>
+                                </SidebarMenuSubItem>
+                              );
+                            })}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  );
+                }
+
+                // Regular menu item
                 const isActive = location === item.path;
                 return (
                   <SidebarMenuItem key={item.path}>

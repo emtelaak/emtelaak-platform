@@ -20,6 +20,8 @@ import { getLoginUrl, LANGUAGES, CURRENCIES } from "@/const";
 import KYCWizard from "@/components/KYCWizard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { TwoFactorSettings } from "@/components/TwoFactorSettings";
+import { TrustedDevicesManager } from "@/components/TrustedDevicesManager";
 
 export default function Profile() {
   const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
@@ -149,10 +151,12 @@ export default function Profile() {
         <KYCProgressIndicator />
         
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">{t.profile.tabs.overview}</TabsTrigger>
             <TabsTrigger value="personal">{t.profile.tabs.personal}</TabsTrigger>
             <TabsTrigger value="verification">{t.profile.tabs.verification}</TabsTrigger>
+            {/* @ts-expect-error - Translation key to be added */}
+            <TabsTrigger value="security">{t.profile.tabs.security || "Security"}</TabsTrigger>
             <TabsTrigger value="preferences">{t.profile.tabs.preferences}</TabsTrigger>
           </TabsList>
 
@@ -506,6 +510,13 @@ export default function Profile() {
           {/* Verification Tab */}
           <TabsContent value="verification" className="space-y-6">
             <KYCWizard />
+          </TabsContent>
+
+          {/* Preferences Tab */}
+          {/* Security Tab */}
+          <TabsContent value="security" className="space-y-6">
+            <TwoFactorSettings />
+            <TrustedDevicesManager />
           </TabsContent>
 
           {/* Preferences Tab */}

@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO security_settings (setting_key, setting_value, description) VALUES\n('failed_login_threshold', '5', 'Number of failed login attempts before auto-blocking IP'),\n('failed_login_window_minutes', '15', 'Time window in minutes for counting failed login attempts'),\n('rate_limit_threshold', '10', 'Number of rate limit hits before auto-blocking IP'),\n('rate_limit_window_minutes', '10', 'Time window in minutes for counting rate limit hits'),\n('suspicious_activity_threshold', '3', 'Number of suspicious activities before auto-blocking IP'),\n('suspicious_activity_window_minutes', '30', 'Time window in minutes for counting suspicious activities'),\n('auto_block_expiry_hours', '24', 'Default expiry time in hours for automatic IP blocks')\nON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value)",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute INSERT INTO security_settings (setting_key, setting_value, description) VALUES\n('failed_login_threshold', '5', 'Number of failed login attempts before auto-blocking IP'),\n('failed_login_window_minutes', '15', 'Time window in minutes for counting failed login attempts'),\n('rate_limit_threshold', '10', 'Number of rate limit hits before auto-blocking IP'),\n('rate_limit_window_minutes', '10', 'Time window in minutes for counting rate limit hits'),\n('suspicious_activity_threshold', '3', 'Number of suspicious activities before auto-blocking IP'),\n('suspicious_activity_window_minutes', '30', 'Time window in minutes for counting suspicious activities'),\n('auto_block_expiry_hours', '24', 'Default expiry time in hours for automatic IP blocks')\nON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value)",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 399
+}

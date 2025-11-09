@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
+import DashboardLayout from "@/components/DashboardLayout";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import {
@@ -122,7 +123,8 @@ export default function AdminWallet() {
     .reduce((sum, t) => sum + t.amount, 0) || 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
+    <DashboardLayout>
+      <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#032941]">
@@ -455,6 +457,7 @@ export default function AdminWallet() {
       </div>
 
       <MobileBottomNav />
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

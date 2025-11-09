@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, decimal, boolean, index, unique, json } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, decimal, boolean, index, unique, json, tinyint } from "drizzle-orm/mysql-core";
 
 /**
  * Emtelaak Platform Database Schema
@@ -932,7 +932,10 @@ export const securityEvents = mysqlTable("security_events", {
     "suspicious_activity",
     "password_reset_request",
     "unauthorized_access_attempt",
-    "2fa_failed"
+    "2fa_failed",
+    "ip_blocked",
+    "ip_unblocked",
+    "ip_bulk_unblock"
   ]).notNull(),
   userId: int("userId").references(() => users.id, { onDelete: "set null" }),
   ipAddress: varchar("ipAddress", { length: 45 }),
@@ -943,9 +946,12 @@ export const securityEvents = mysqlTable("security_events", {
   severity: mysqlEnum("severity", ["low", "medium", "high", "critical"]).default("medium").notNull(),
   resolved: boolean("resolved").default(false).notNull(),
   resolvedBy: int("resolvedBy").references(() => users.id, { onDelete: "set null" }),
-  resolvedAt: timestamp("resolvedAt"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (table) => ({
+  placeholderAr: text("placeholderAr"),
+  // Field dependencies for conditional visibility (JSON)
+  dependencies: text("dependencies"),
+  // Validation rules (JSON)
+  validationRules: text("validationRules"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),}, (table) => ({
   eventTypeIdx: index("event_type_idx").on(table.eventType),
   userIdIdx: index("user_id_idx").on(table.userId),
   ipAddressIdx: index("ip_address_idx").on(table.ipAddress),
@@ -1264,3 +1270,205 @@ export type MediaLibraryItem = typeof mediaLibrary.$inferSelect;
 export type InsertMediaLibraryItem = typeof mediaLibrary.$inferInsert;
 
 
+
+export const blockedIPs = mysqlTable("blocked_ips", {
+  id: int("id").autoincrement().primaryKey(),
+  ipAddress: varchar("ip_address", { length: 45 }).notNull().unique(),
+  reason: text("reason"),
+  blockedBy: int("blocked_by").references(() => users.id),
+  blockedAt: timestamp("blocked_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at"),
+  isActive: int("is_active").default(1).notNull(),
+  blockType: mysqlEnum("block_type", ["manual", "automatic"]).default("manual").notNull(),
+}, (table) => ({
+  ipAddressIdx: index("idx_ip_address").on(table.ipAddress),
+  isActiveIdx: index("idx_is_active").on(table.isActive),
+  expiresAtIdx: index("idx_expires_at").on(table.expiresAt),
+}));
+
+export type BlockedIP = typeof blockedIPs.$inferSelect;
+export type InsertBlockedIP = typeof blockedIPs.$inferInsert;
+
+export const trustedDevices = mysqlTable("trusted_devices", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  deviceFingerprint: varchar("deviceFingerprint", { length: 255 }).notNull(),
+  deviceName: varchar("deviceName", { length: 255 }),
+  userAgent: text("userAgent"),
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  lastUsed: timestamp("lastUsed").defaultNow().onUpdateNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
+});
+
+export type TrustedDevice = typeof trustedDevices.$inferSelect;
+export type InsertTrustedDevice = typeof trustedDevices.$inferInsert;
+
+// Security Settings
+export const securitySettings = mysqlTable("security_settings", {
+  id: int("id").autoincrement().primaryKey(),
+  settingKey: varchar("setting_key", { length: 100 }).notNull().unique(),
+  settingValue: text("setting_value").notNull(),
+  description: text("description"),
+  updatedBy: int("updated_by").references(() => users.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SecuritySetting = typeof securitySettings.$inferSelect;
+export type InsertSecuritySetting = typeof securitySettings.$inferInsert;
+
+
+
+// ============================================
+// LEGAL DOCUMENTS
+// ============================================
+
+export const legalDocuments = mysqlTable("legal_documents", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 200 }).notNull(),
+  slug: varchar("slug", { length: 200 }).notNull().unique(),
+  category: mysqlEnum("category", [
+    "terms_of_service",
+    "privacy_policy",
+    "investment_agreement",
+    "shareholder_agreement",
+    "subscription_agreement",
+    "risk_disclosure",
+    "kyc_consent",
+    "other"
+  ]).notNull(),
+  version: varchar("version", { length: 50 }).notNull(), // e.g., "1.0", "2.1"
+  htmlContent: text("html_content").notNull(),
+  pdfUrl: text("pdf_url"), // S3 URL to generated PDF
+  variables: text("variables"), // JSON array of available variables
+  isActive: tinyint("is_active").default(1).notNull(),
+  isPublished: tinyint("is_published").default(0).notNull(),
+  effectiveDate: timestamp("effective_date"),
+  expiryDate: timestamp("expiry_date"),
+  createdBy: int("created_by").references(() => users.id, { onDelete: "set null" }),
+  updatedBy: int("updated_by").references(() => users.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export type LegalDocument = typeof legalDocuments.$inferSelect;
+export type InsertLegalDocument = typeof legalDocuments.$inferInsert;
+
+// Track which users have accepted which legal documents
+export const legalDocumentAcceptances = mysqlTable("legal_document_acceptances", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  documentId: int("document_id").notNull().references(() => legalDocuments.id, { onDelete: "cascade" }),
+  documentVersion: varchar("document_version", { length: 50 }).notNull(),
+  ipAddress: varchar("ip_address", { length: 45 }),
+  userAgent: text("user_agent"),
+  acceptedAt: timestamp("accepted_at").defaultNow().notNull(),
+});
+
+export type LegalDocumentAcceptance = typeof legalDocumentAcceptances.$inferSelect;
+export type InsertLegalDocumentAcceptance = typeof legalDocumentAcceptances.$inferInsert;
+
+
+// ============================================
+// CUSTOM FIELDS SYSTEM
+// ============================================
+
+/**
+ * Custom Fields Definition Table
+ * Stores the configuration for custom fields that can be added to any module
+ */
+export const customFields = mysqlTable("custom_fields", {
+  id: int("id").autoincrement().primaryKey(),
+  // Module this field belongs to (e.g., 'properties', 'users', 'leads', 'invoices')
+  module: varchar("module", { length: 50 }).notNull(),
+  // Field identifier (used in code, e.g., 'property_manager_name')
+  fieldKey: varchar("fieldKey", { length: 100 }).notNull(),
+  // Display label in English
+  labelEn: varchar("labelEn", { length: 255 }).notNull(),
+  // Display label in Arabic
+  labelAr: varchar("labelAr", { length: 255 }),
+  // Field type: text, number, date, datetime, dropdown, multi_select, country, file, boolean, email, phone, url
+  fieldType: varchar("fieldType", { length: 50 }).notNull(),
+  // Configuration JSON for field (e.g., dropdown options, validation rules, file types)
+  config: text("config"),
+  // Is this field required?
+  isRequired: boolean("isRequired").default(false).notNull(),
+  // Show in admin interface?
+  showInAdmin: boolean("showInAdmin").default(true).notNull(),
+  // Show in user-facing forms?
+  showInUserForm: boolean("showInUserForm").default(true).notNull(),
+  // Display order (lower numbers appear first)
+  displayOrder: int("displayOrder").default(0).notNull(),
+  // Is this field active?
+  isActive: boolean("isActive").default(true).notNull(),
+  // Help text in English
+  helpTextEn: text("helpTextEn"),
+  // Help text in Arabic
+  helpTextAr: text("helpTextAr"),
+  // Placeholder text in English
+  placeholderEn: varchar("placeholderEn", { length: 255 }),
+  // Placeholder text in Arabic
+  placeholderAr: varchar("placeholderAr", { length: 255 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  createdBy: int("createdBy").references(() => users.id),
+});
+
+/**
+ * Custom Field Values Table
+ * Stores the actual values for custom fields
+ */
+export const customFieldValues = mysqlTable("custom_field_values", {
+  id: int("id").autoincrement().primaryKey(),
+  // Reference to the custom field definition
+  fieldId: int("fieldId").notNull().references(() => customFields.id, { onDelete: "cascade" }),
+  // ID of the record this value belongs to (e.g., property ID, user ID)
+  recordId: int("recordId").notNull(),
+  // Module this value belongs to (denormalized for faster queries)
+  module: varchar("module", { length: 50 }).notNull(),
+  // The actual value (stored as text, parsed based on field type)
+  value: text("value"),
+  // For file uploads, store the file URL
+  fileUrl: varchar("fileUrl", { length: 500 }),
+  // For file uploads, store the file name
+  fileName: varchar("fileName", { length: 255 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CustomField = typeof customFields.$inferSelect;
+export type InsertCustomField = typeof customFields.$inferInsert;
+export type CustomFieldValue = typeof customFieldValues.$inferSelect;
+export type InsertCustomFieldValue = typeof customFieldValues.$inferInsert;
+
+
+/**
+ * Custom Field Templates Table
+ * Stores predefined sets of custom fields for quick setup
+ */
+export const customFieldTemplates = mysqlTable("custom_field_templates", {
+  id: int("id").autoincrement().primaryKey(),
+  // Template name in English
+  nameEn: varchar("nameEn", { length: 255 }).notNull(),
+  // Template name in Arabic
+  nameAr: varchar("nameAr", { length: 255 }),
+  // Template description in English
+  descriptionEn: text("descriptionEn"),
+  // Template description in Arabic
+  descriptionAr: text("descriptionAr"),
+  // Module this template is for
+  module: varchar("module", { length: 50 }).notNull(),
+  // Template configuration (JSON array of field definitions)
+  fields: text("fields").notNull(),
+  // Is this a system template (cannot be deleted)?
+  isSystem: boolean("isSystem").default(false).notNull(),
+  // Is this template active?
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  createdBy: int("createdBy").references(() => users.id),
+});
+
+export type CustomFieldTemplate = typeof customFieldTemplates.$inferSelect;
+export type InsertCustomFieldTemplate = typeof customFieldTemplates.$inferInsert;

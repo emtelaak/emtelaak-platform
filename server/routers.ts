@@ -9,6 +9,14 @@ import { helpDeskRouter } from "./routes/helpDesk";
 import { contentRouter } from "./contentRouter";
 import { mediaLibraryRouter } from "./mediaLibraryRouter";
 import { securityRouter } from "./securityRouter";
+import { ipBlockingRouter } from "./ipBlockingRouter";
+import { securitySettingsRouter } from "./securitySettingsRouter";
+import { twoFactorRouter } from "./twoFactorRouter";
+import { trustedDevicesRouter } from "./trustedDevicesRouter";
+import { emailTemplatesRouter } from "./emailTemplatesRouter";
+import { legalDocumentsRouter } from "./legalDocumentsRouter";
+import { customFieldsRouter } from "./customFieldsRouter";
+import { customFieldTemplatesRouter } from "./customFieldTemplatesRouter";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import {
@@ -88,6 +96,14 @@ export const appRouter = router({
   content: contentRouter,
   mediaLibrary: mediaLibraryRouter,
   security: securityRouter,
+  ipBlocking: ipBlockingRouter,
+  securitySettings: securitySettingsRouter,
+  twoFactor: twoFactorRouter,
+  trustedDevices: trustedDevicesRouter,
+  emailTemplates: emailTemplatesRouter,
+  legalDocuments: legalDocumentsRouter,
+  customFields: customFieldsRouter,
+  customFieldTemplates: customFieldTemplatesRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

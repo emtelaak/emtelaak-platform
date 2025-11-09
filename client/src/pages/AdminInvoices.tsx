@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
+import DashboardLayout from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -210,7 +211,8 @@ export default function AdminInvoices() {
   }
 
   return (
-    <div className="container max-w-7xl py-8">
+    <DashboardLayout>
+      <div className="container max-w-7xl py-8">
       <div className="mb-6">
         <h1 className="text-3xl font-bold">Invoice Management</h1>
         <p className="text-muted-foreground mt-1">
@@ -622,6 +624,7 @@ export default function AdminInvoices() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

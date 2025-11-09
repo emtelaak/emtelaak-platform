@@ -664,4 +664,13 @@ export const adminRouter = router({
       return setting?.settingValue || null;
     }),
   }),
+
+  // User Management
+  getAllUsers: adminProcedure.query(async () => {
+    const db = await import("./db").then(m => m.getDb());
+    if (!db) return [];
+    const { users } = await import("../drizzle/schema");
+    const { desc } = await import("drizzle-orm");
+    return await db.select().from(users).orderBy(desc(users.createdAt));
+  }),
 });

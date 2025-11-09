@@ -1,0 +1,40 @@
+{
+  "query": "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'blocked_ips' AND TABLE_SCHEMA = DATABASE()",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'blocked_ips' AND TABLE_SCHEMA = DATABASE()",
+  "rows": [
+    {
+      "COLUMN_NAME": "id"
+    },
+    {
+      "COLUMN_NAME": "ip_address"
+    },
+    {
+      "COLUMN_NAME": "reason"
+    },
+    {
+      "COLUMN_NAME": "blocked_by"
+    },
+    {
+      "COLUMN_NAME": "blocked_at"
+    },
+    {
+      "COLUMN_NAME": "expires_at"
+    },
+    {
+      "COLUMN_NAME": "is_active"
+    },
+    {
+      "COLUMN_NAME": "block_type"
+    },
+    {
+      "COLUMN_NAME": "created_at"
+    },
+    {
+      "COLUMN_NAME": "updated_at"
+    }
+  ],
+  "messages": [],
+  "stdout": "COLUMN_NAME\nid\nip_address\nreason\nblocked_by\nblocked_at\nexpires_at\nis_active\nblock_type\ncreated_at\nupdated_at\n",
+  "stderr": "",
+  "execution_time_ms": 398
+}

@@ -22,7 +22,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
       }
 
       // Verify JWT token
-      const decoded = jwt.verify(token, ENV.jwtSecret) as { openId: string };
+      const decoded = jwt.verify(token, ENV.cookieSecret) as { openId: string };
       const user = await getUserByOpenId(decoded.openId);
 
       if (!user) {
