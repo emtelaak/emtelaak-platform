@@ -1472,3 +1472,165 @@ export const customFieldTemplates = mysqlTable("custom_field_templates", {
 
 export type CustomFieldTemplate = typeof customFieldTemplates.$inferSelect;
 export type InsertCustomFieldTemplate = typeof customFieldTemplates.$inferInsert;
+
+
+// Investment Transaction Tables (Enhanced)
+export const investmentTransactions = mysqlTable("investment_transactions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  propertyId: int("propertyId").notNull(),
+  
+  // Investment Details
+  investmentAmount: int("investmentAmount").notNull(), // Amount in cents
+  numberOfShares: int("numberOfShares").notNull(),
+  pricePerShare: int("pricePerShare").notNull(), // Price in cents
+  
+  // Fees
+  platformFee: int("platformFee").notNull().default(0), // In cents
+  processingFee: int("processingFee").notNull().default(0), // In cents
+  totalAmount: int("totalAmount").notNull(), // Investment + fees in cents
+  
+  // Status
+  status: mysqlEnum("status", ["pending", "reserved", "processing", "completed", "failed", "cancelled", "refunded"]).notNull().default("pending"),
+  
+  // Reservation
+  reservationExpiresAt: timestamp("reservationExpiresAt"),
+  reservedAt: timestamp("reservedAt"),
+  
+  // Payment
+  paymentMethod: varchar("paymentMethod", { length: 50 }),
+  paymentStatus: mysqlEnum("paymentStatus", ["pending", "processing", "completed", "failed", "refunded"]).default("pending"),
+  paymentReference: varchar("paymentReference", { length: 255 }),
+  paidAt: timestamp("paidAt"),
+  
+  // Completion
+  completedAt: timestamp("completedAt"),
+  certificateIssued: boolean("certificateIssued").default(false),
+  certificateIssuedAt: timestamp("certificateIssuedAt"),
+  
+  // Metadata
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  userAgent: text("userAgent"),
+  notes: text("notes"),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type InvestmentTransaction = typeof investmentTransactions.$inferSelect;
+export type InsertInvestmentTransaction = typeof investmentTransactions.$inferInsert;
+
+export const investmentDocuments = mysqlTable("investment_documents", {
+  id: int("id").autoincrement().primaryKey(),
+  investmentId: int("investmentId").notNull(),
+  
+  documentType: mysqlEnum("documentType", [
+    "subscription_agreement",
+    "ppm", // Private Placement Memorandum
+    "risk_disclosure",
+    "accreditation_proof",
+    "identity_verification",
+    "bank_statement",
+    "tax_form",
+    "other"
+  ]).notNull(),
+  
+  documentName: varchar("documentName", { length: 255 }).notNull(),
+  documentUrl: text("documentUrl").notNull(),
+  fileSize: int("fileSize"),
+  mimeType: varchar("mimeType", { length: 100 }),
+  
+  // Signature/Acceptance
+  signed: boolean("signed").default(false),
+  signedAt: timestamp("signedAt"),
+  signatureData: text("signatureData"), // Digital signature or acceptance record
+  
+  // Verification
+  verified: boolean("verified").default(false),
+  verifiedBy: int("verifiedBy"), // Admin user ID
+  verifiedAt: timestamp("verifiedAt"),
+  verificationNotes: text("verificationNotes"),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type InvestmentDocument = typeof investmentDocuments.$inferSelect;
+export type InsertInvestmentDocument = typeof investmentDocuments.$inferInsert;
+
+export const investmentEligibility = mysqlTable("investment_eligibility", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  
+  // Accreditation Status
+  isAccredited: boolean("isAccredited").default(false),
+  accreditationType: mysqlEnum("accreditationType", [
+    "income", // Annual income threshold
+    "net_worth", // Net worth threshold
+    "professional", // Licensed professional
+    "entity", // Qualified entity
+    "none"
+  ]).default("none"),
+  accreditationVerified: boolean("accreditationVerified").default(false),
+  accreditationVerifiedAt: timestamp("accreditationVerifiedAt"),
+  accreditationExpiresAt: timestamp("accreditationExpiresAt"),
+  
+  // Investment Limits
+  annualInvestmentLimit: int("annualInvestmentLimit"), // In cents, based on regulations
+  currentYearInvested: int("currentYearInvested").default(0), // In cents
+  lifetimeInvested: int("lifetimeInvested").default(0), // In cents
+  
+  // Jurisdiction
+  country: varchar("country", { length: 2 }), // ISO country code
+  state: varchar("state", { length: 50 }),
+  investmentRestrictions: text("investmentRestrictions"), // JSON of restrictions
+  
+  // KYC/AML
+  kycStatus: mysqlEnum("kycStatus", ["pending", "in_progress", "approved", "rejected", "expired"]).default("pending"),
+  kycCompletedAt: timestamp("kycCompletedAt"),
+  kycProvider: varchar("kycProvider", { length: 100 }),
+  kycReference: varchar("kycReference", { length: 255 }),
+  
+  amlStatus: mysqlEnum("amlStatus", ["pending", "clear", "flagged", "rejected"]).default("pending"),
+  amlCheckedAt: timestamp("amlCheckedAt"),
+  
+  // Risk Assessment
+  riskTolerance: mysqlEnum("riskTolerance", ["conservative", "moderate", "aggressive"]),
+  investmentExperience: mysqlEnum("investmentExperience", ["none", "limited", "moderate", "extensive"]),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type InvestmentEligibility = typeof investmentEligibility.$inferSelect;
+export type InsertInvestmentEligibility = typeof investmentEligibility.$inferInsert;
+
+export const investmentActivity = mysqlTable("investment_activity", {
+  id: int("id").autoincrement().primaryKey(),
+  investmentId: int("investmentId").notNull(),
+  
+  activityType: mysqlEnum("activityType", [
+    "created",
+    "reserved",
+    "payment_initiated",
+    "payment_completed",
+    "payment_failed",
+    "documents_signed",
+    "eligibility_verified",
+    "completed",
+    "cancelled",
+    "refunded",
+    "note_added"
+  ]).notNull(),
+  
+  description: text("description").notNull(),
+  performedBy: int("performedBy"), // User ID or null for system
+  metadata: text("metadata"), // JSON for additional data
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type InvestmentActivity = typeof investmentActivity.$inferSelect;
+export type InsertInvestmentActivity = typeof investmentActivity.$inferInsert;
+
+

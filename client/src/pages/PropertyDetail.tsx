@@ -51,7 +51,18 @@ export default function PropertyDetail() {
     },
   });
 
-  const createInvestmentMutation = trpc.investments.create.useMutation({
+  // Calculate investment with fees
+  const { data: investmentCalculation } = trpc.investmentTransactions.calculateInvestment.useQuery(
+    {
+      propertyId,
+      numberOfShares: parseInt(numberOfShares) || 0,
+    },
+    {
+      enabled: propertyId > 0 && parseInt(numberOfShares) > 0,
+    }
+  );
+
+  const createInvestmentMutation = trpc.investmentTransactions.createInvestment.useMutation({
     onSuccess: () => {
       toast.success("Investment created successfully! Awaiting payment confirmation.");
       setInvestModalOpen(false);
@@ -98,15 +109,19 @@ export default function PropertyDetail() {
       return;
     }
 
-    const amount = calculateAmount(shares);
+    if (!investmentCalculation) {
+      toast.error("Calculating investment details...");
+      return;
+    }
 
     createInvestmentMutation.mutate({
       propertyId: property.id,
-      amount,
-      shares,
-      sharePrice: property.sharePrice,
-      distributionFrequency,
-      paymentMethod,
+      investmentAmount: investmentCalculation.investmentAmount,
+      numberOfShares: investmentCalculation.numberOfShares,
+      pricePerShare: investmentCalculation.pricePerShare,
+      platformFee: investmentCalculation.platformFee,
+      processingFee: investmentCalculation.processingFee,
+      totalAmount: investmentCalculation.totalAmount,
     });
   };
 
@@ -490,20 +505,39 @@ export default function PropertyDetail() {
               </p>
             </div>
 
-            {numberOfShares && parseInt(numberOfShares) >= 1 && (
+            {numberOfShares && parseInt(numberOfShares) >= 1 && investmentCalculation && (
               <div className="bg-muted/50 p-4 rounded-lg space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{language === "en" ? "Total Investment" : "إجمالي الاستثمار"}</span>
-                  <span className="font-medium text-lg">{formatCurrency(calculateAmount(parseInt(numberOfShares)))}</span>
+                  <span className="text-muted-foreground">{language === "en" ? "Investment Amount" : "مبلغ الاستثمار"}</span>
+                  <span className="font-medium">{formatCurrency(investmentCalculation.investmentAmount)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">{language === "en" ? "Platform Fee (2.5%)" : "رسوم المنصة (2.5%)"}</span>
+                  <span className="font-medium">{formatCurrency(investmentCalculation.platformFee)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">{language === "en" ? "Processing Fee" : "رسوم المعالجة"}</span>
+                  <span className="font-medium">{formatCurrency(investmentCalculation.processingFee)}</span>
+                </div>
+                <div className="border-t pt-2 mt-2">
+                  <div className="flex justify-between">
+                    <span className="font-semibold">{language === "en" ? "Total Amount" : "المبلغ الإجمالي"}</span>
+                    <span className="font-bold text-lg">{formatCurrency(investmentCalculation.totalAmount)}</span>
+                  </div>
+                </div>
+                <div className="flex justify-between text-sm pt-2 border-t">
                   <span className="text-muted-foreground">{language === "en" ? "Ownership" : "نسبة الملكية"}</span>
-                  <span className="font-medium">{calculateOwnership(parseInt(numberOfShares))}%</span>
+                  <span className="font-medium">{investmentCalculation.percentageOfProperty.toFixed(4)}%</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">{language === "en" ? "Number of Shares" : "عدد الحصص"}</span>
-                  <span className="font-medium">{parseInt(numberOfShares).toLocaleString()}</span>
+                  <span className="font-medium">{investmentCalculation.numberOfShares.toLocaleString()}</span>
                 </div>
+              </div>
+            )}
+            {numberOfShares && parseInt(numberOfShares) >= 1 && !investmentCalculation && (
+              <div className="bg-muted/50 p-4 rounded-lg text-center text-sm text-muted-foreground">
+                {language === "en" ? "Calculating fees..." : "جاري حساب الرسوم..."}
               </div>
             )}
 

@@ -1608,3 +1608,69 @@
 - [x] Test viewing user custom fields in admin panel
 - [x] Test editing user custom fields in admin panel
 - [x] Save checkpoint with admin user management integration
+
+
+## Phase 143: Create BRD Comparison Presentation
+- [ ] Write detailed slide content for 10-slide presentation
+- [ ] Structure slides: Title, Overview, Current Status, Critical Gaps, Investment Flow, Payment & Ownership, Compliance & Legal, Roadmap, Timeline, Recommendations
+- [ ] Generate professional presentation slides
+- [ ] Review and deliver presentation
+
+
+## Phase 144: Investment Transaction Flow (CRITICAL - BRD Priority #1)
+- [ ] Design database schema for investments, reservations, and transactions
+- [ ] Create investment selection UI (amount, shares, fees calculation)
+- [ ] Implement share reservation system with expiration timers
+- [ ] Build investment checkout flow with terms acceptance
+- [ ] Add investor eligibility verification
+- [ ] Create investment confirmation and receipt generation
+- [ ] Implement investment limits enforcement
+- [ ] Add backend API for investment processing
+- [ ] Test complete investment flow (without payment)
+
+
+## Phase 145: Configurable Platform Fees
+- [ ] Add platform_settings table to database schema
+- [ ] Create backend API for managing fee settings
+- [ ] Build admin settings page for fee configuration UI
+- [ ] Update investment calculation to use dynamic fees
+- [ ] Add validation for fee ranges
+- [ ] Test fee updates and investment calculations
+
+
+## Phase 144: Investment Transaction Flow - Configurable Platform Fees (Completed)
+- [x] Review existing platformSettings table in schema (line 642)
+- [x] Create database helper functions in /server/db/platformSettingsDb.ts
+- [x] Implement getPlatformFeePercentage() with default 2.5%
+- [x] Implement getProcessingFeeCents() with default $5 (500 cents)
+- [x] Implement updatePlatformFeePercentage() with validation
+- [x] Implement updateProcessingFeeCents() with validation
+- [x] Create tRPC router in /server/routes/platformSettings.ts
+- [x] Add getFees query endpoint
+- [x] Add updatePlatformFee mutation with audit logging
+- [x] Add updateProcessingFee mutation with audit logging
+- [x] Register platformSettings router in main routers.ts
+- [x] Update investmentTransactionRouter.ts calculateInvestment procedure
+- [x] Remove hardcoded 2.5% platform fee (line 63)
+- [x] Remove hardcoded $5 processing fee (line 64)
+- [x] Integrate database fee fetching in investment calculations
+- [x] Create AdminPlatformSettings page UI at /client/src/pages/AdminPlatformSettings.tsx
+- [x] Add current fee overview cards
+- [x] Add platform fee percentage input with validation (0-100%)
+- [x] Add processing fee amount input with validation ($0+)
+- [x] Add live example calculations showing fee breakdown
+- [x] Add save buttons with loading states
+- [x] Add warning notice about immediate effect on new transactions
+- [x] Register /admin/platform-settings route in App.tsx
+- [x] Test server compilation (zero TypeScript errors)
+- [ ] Test admin UI fee configuration
+- [ ] Test investment calculation with updated fees
+- [ ] Add bilingual support for admin settings page
+
+## Phase 145: Investment Transaction Flow - PropertyDetail Modal Update (Next)
+- [ ] Review existing PropertyDetail.tsx investment modal
+- [ ] Update modal to use investmentTransactions.calculateInvestment API
+- [ ] Add fee breakdown display (investment amount + platform fee + processing fee = total)
+- [ ] Keep existing UI/UX design
+- [ ] Add bilingual support for fee breakdown
+- [ ] Test modal with configurable fees

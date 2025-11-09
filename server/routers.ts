@@ -17,6 +17,8 @@ import { emailTemplatesRouter } from "./emailTemplatesRouter";
 import { legalDocumentsRouter } from "./legalDocumentsRouter";
 import { customFieldsRouter } from "./customFieldsRouter";
 import { customFieldTemplatesRouter } from "./customFieldTemplatesRouter";
+import { investmentTransactionRouter } from "./investmentTransactionRouter";
+import { platformSettingsRouter } from "./routes/platformSettings";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import {
@@ -104,6 +106,8 @@ export const appRouter = router({
   legalDocuments: legalDocumentsRouter,
   customFields: customFieldsRouter,
   customFieldTemplates: customFieldTemplatesRouter,
+  investmentTransactions: investmentTransactionRouter,
+  platformSettings: platformSettingsRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

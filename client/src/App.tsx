@@ -23,6 +23,7 @@ import ResetPassword from "./pages/ResetPassword";
 // Lazy load admin pages (only loaded when accessed)
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const AdminSettings = lazy(() => import("./pages/AdminSettings"));
+const AdminPlatformSettings = lazy(() => import("./pages/AdminPlatformSettings"));
 const AdminKYCReview = lazy(() => import("./pages/AdminKYCReview"));
 const AdminRoles = lazy(() => import("./pages/AdminRoles"));
 const AdminPermissions = lazy(() => import("./pages/AdminPermissions"));
@@ -111,6 +112,7 @@ function Router() {
       <Route path="/admin/role-management" component={RoleManagement} />
       <Route path="/admin/permissions" component={AdminPermissions} />
       <Route path="/admin/settings" component={AdminSettings} />
+      <Route path="/admin/platform-settings" component={AdminPlatformSettings} />
       <Route path="/admin/email-settings" component={EmailSettings} />
       <Route path="/admin/kyc-review" component={AdminKYCReview} />
         <Route path="/admin/security" component={SecurityDashboard} />
