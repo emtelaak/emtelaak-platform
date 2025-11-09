@@ -41,6 +41,8 @@ import {
   platformWallet,
   notifications,
   InsertNotification,
+  emailTemplates,
+  InsertEmailTemplate,
   developerProfiles,
   InsertDeveloperProfile,
   referrals,
@@ -1055,7 +1057,7 @@ export async function getUserRecentActivity(userId: number, limit: number = 10) 
       type: 'kyc_update',
       description: `KYC questionnaire ${kyc.status}`,
       status: kyc.status,
-      timestamp: kyc.updatedAt,
+      timestamp: kyc.submittedAt || new Date(),
     });
   }
 
@@ -1235,7 +1237,7 @@ export async function createUser(user: InsertUser): Promise<User> {
 }
 
 
-export async function bulkCreateUsers(users: InsertUser[]): Promise<{ success: number; failed: number; errors: string[] }> {
+export async function bulkCreateUsers(usersData: InsertUser[]): Promise<{ success: number; failed: number; errors: string[] }> {
   const db = await getDb();
   if (!db) {
     throw new Error("Database not available");
@@ -1245,7 +1247,7 @@ export async function bulkCreateUsers(users: InsertUser[]): Promise<{ success: n
   let failed = 0;
   const errors: string[] = [];
 
-  for (const user of users) {
+  for (const user of usersData) {
     try {
       await db.insert(users).values(user);
       success++;
@@ -1368,7 +1370,7 @@ export async function createRoleTemplate(template: typeof permissionRoleTemplate
   if (!db) throw new Error("Database not available");
 
   const result = await db.insert(permissionRoleTemplates).values(template);
-  return await getRoleTemplateById(Number(result.insertId));
+  return await getRoleTemplateById(Number((result as any).insertId));
 }
 
 export async function updateRoleTemplate(id: number, template: Partial<typeof permissionRoleTemplates.$inferInsert>) {
@@ -1581,7 +1583,7 @@ export async function getPendingWalletTransactions() {
 }
 
 export async function getAllWalletTransactions(filters: {
-  status?: "pending" | "approved" | "rejected" | "all";
+  status?: "pending" | "completed" | "failed" | "cancelled" | "all";
   type?: "deposit" | "withdrawal" | "all";
   limit?: number;
 }) {
@@ -1648,7 +1650,7 @@ export async function approveWalletTransaction(transactionId: number) {
   // Update transaction status
   await db
     .update(walletTransactions)
-    .set({ status: "approved" })
+    .set({ status: "completed" })
     .where(eq(walletTransactions.id, transactionId));
   
   // Update wallet balance
@@ -1694,7 +1696,7 @@ export async function rejectWalletTransaction(transactionId: number, reason?: st
   await db
     .update(walletTransactions)
     .set({ 
-      status: "rejected",
+      status: "failed",
       description: reason ? `${transaction.description} (Rejected: ${reason})` : transaction.description,
     })
     .where(eq(walletTransactions.id, transactionId));
@@ -1819,5 +1821,66 @@ export async function deleteMediaLibraryItem(id: number) {
   if (!db) throw new Error("Database not available");
 
   await db.delete(mediaLibrary).where(eq(mediaLibrary.id, id));
+  return { success: true };
+}
+
+
+// ============================================
+// Email Templates
+// ============================================
+
+export async function getAllEmailTemplates() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(emailTemplates).orderBy(desc(emailTemplates.createdAt));
+}
+
+export async function getEmailTemplateById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.select().from(emailTemplates).where(eq(emailTemplates.id, id)).limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function getEmailTemplateByType(type: string) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  // Get active template for this type
+  const result = await db.select()
+    .from(emailTemplates)
+    .where(and(
+      eq(emailTemplates.type, type as any),
+      eq(emailTemplates.isActive, true)
+    ))
+    .orderBy(desc(emailTemplates.isDefault))
+    .limit(1);
+    
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function createEmailTemplate(template: InsertEmailTemplate) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(emailTemplates).values(template);
+  return result[0].insertId;
+}
+
+export async function updateEmailTemplate(id: number, updates: Partial<InsertEmailTemplate>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(emailTemplates).set(updates).where(eq(emailTemplates.id, id));
+  return await getEmailTemplateById(id);
+}
+
+export async function deleteEmailTemplate(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(emailTemplates).where(eq(emailTemplates.id, id));
   return { success: true };
 }

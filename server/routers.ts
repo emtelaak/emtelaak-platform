@@ -131,6 +131,13 @@ export const appRouter = router({
         newPassword: z.string().min(8),
       }))
       .mutation(async ({ input }) => {
+        // Validate password strength
+        const { validatePasswordStrength } = await import("./_core/security");
+        const passwordValidation = validatePasswordStrength(input.newPassword);
+        if (!passwordValidation.valid) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: passwordValidation.message });
+        }
+        
         const db = await import("./db").then(m => m.getDb());
         if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
         
@@ -526,10 +533,10 @@ export const appRouter = router({
         // Send invoice notification email
         try {
           const { sendInvoiceEmail } = await import("./_core/emailService");
-          const { getInvoiceByNumber } = await import("./db");
+          const { getInvoiceById } = await import("./db");
           
-          // Get the generated invoice number
-          const createdInvoice = await getInvoiceByNumber(invoiceResult.invoiceNumber);
+          // Get the created invoice by ID
+          const createdInvoice = await getInvoiceById((invoiceResult as any).insertId);
           
           if (createdInvoice && ctx.user.email) {
             const invoiceUrl = `${process.env.VITE_APP_URL || "https://emtelaak.com"}/invoices`;
@@ -559,12 +566,12 @@ export const appRouter = router({
         });
         
         return { success: true };
-      }),
+      }), // End of create mutation
     
     list: protectedProcedure.query(async ({ ctx }) => {
       return await getUserInvestments(ctx.user.id);
     }),
-  }),
+  }), // End of investments router
 
   // Portfolio
   portfolio: router({
@@ -905,7 +912,7 @@ export const appRouter = router({
 
       getAllTransactions: adminProcedure
         .input(z.object({
-          status: z.enum(["pending", "approved", "rejected", "all"]).optional().default("all"),
+          status: z.enum(["pending", "completed", "failed", "cancelled", "all"]).optional().default("all"),
           type: z.enum(["deposit", "withdrawal", "all"]).optional().default("all"),
           limit: z.number().optional().default(100),
         }))

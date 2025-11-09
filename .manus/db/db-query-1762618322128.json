@@ -1,0 +1,18 @@
+{
+  "query": "SELECT * FROM platform_settings LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT * FROM platform_settings LIMIT 1;",
+  "rows": [
+    {
+      "id": "1",
+      "settingKey": "platform_logo",
+      "settingValue": "https://forge.manus.ai/v1/storage/download/JrwM3GTSDbKLhhiKKiosgM/platform-logo-1762554890218.png",
+      "updatedBy": "1",
+      "createdAt": "2025-11-07 19:55:13",
+      "updatedAt": "2025-11-07 22:34:51"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tsettingKey\tsettingValue\tupdatedBy\tcreatedAt\tupdatedAt\n1\tplatform_logo\thttps://forge.manus.ai/v1/storage/download/JrwM3GTSDbKLhhiKKiosgM/platform-logo-1762554890218.png\t1\t2025-11-07 19:55:13\t2025-11-07 22:34:51\n",
+  "stderr": "",
+  "execution_time_ms": 405
+}

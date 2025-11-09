@@ -113,15 +113,15 @@ export async function getUserTickets(userId: number, status?: string) {
     .from(supportTickets)
     .leftJoin(ticketCategories, eq(supportTickets.categoryId, ticketCategories.id))
     .leftJoin(users, eq(supportTickets.assignedToId, users.id))
-    .where(eq(supportTickets.userId, userId))
+    .where(
+      status 
+        ? and(
+            eq(supportTickets.userId, userId),
+            eq(supportTickets.status, status as any)
+          )
+        : eq(supportTickets.userId, userId)
+    )
     .orderBy(desc(supportTickets.createdAt));
-
-  if (status) {
-    query = query.where(and(
-      eq(supportTickets.userId, userId),
-      eq(supportTickets.status, status as any)
-    ));
-  }
 
   return query;
 }
@@ -343,7 +343,7 @@ export async function getOrCreateChatConversation(userId: number, departmentType
   const [newConversation] = await db
     .select()
     .from(chatConversations)
-    .where(eq(chatConversations.id, result.insertId))
+    .where(eq(chatConversations.id, (result as any).insertId))
     .limit(1);
 
   return newConversation;

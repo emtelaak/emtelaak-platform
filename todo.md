@@ -960,3 +960,157 @@
 - [x] Add next steps instructions in invoice emails
 - [ ] Test password reset email flow end-to-end
 - [ ] Test invoice email flow end-to-end
+
+
+## Phase 104: Email Template Editor (Current)
+- [ ] Create email_templates table in database schema
+- [ ] Add template types (password_reset, invoice, etc.)
+- [ ] Add backend API for CRUD operations on templates
+- [ ] Install React WYSIWYG editor package (react-quill or similar)
+- [ ] Create EmailTemplateEditor page component
+- [ ] Add template list view with search and filter
+- [ ] Add WYSIWYG editor for HTML content
+- [ ] Add variable placeholder buttons ({{userName}}, {{resetLink}}, etc.)
+- [ ] Add subject line editor
+- [ ] Add preview functionality with sample data
+- [ ] Add save and publish functionality
+- [ ] Update email service to use custom templates from database
+- [ ] Add default templates for password reset and invoice
+- [ ] Add navigation link in admin dashboard
+- [ ] Test template customization and email sending
+
+
+## Phase 105: Platform Security Enhancements (Completed)
+- [x] Install express-rate-limit package for rate limiting
+- [x] Install helmet package for security headers
+- [x] Install express-validator for input validation
+- [x] Create security middleware module (server/_core/security.ts)
+- [x] Create rate limiting middleware for authentication endpoints (5 requests/15min)
+- [x] Create rate limiting middleware for mutation endpoints (50 requests/15min)
+- [x] Create rate limiting middleware for query endpoints (200 requests/15min)
+- [x] Create rate limiting middleware for file uploads (20 uploads/hour)
+- [x] Configure helmet middleware with security headers
+- [x] Add Content Security Policy (CSP) headers with proper directives
+- [x] Add X-Frame-Options header to prevent clickjacking (deny)
+- [x] Add X-Content-Type-Options header (noSniff)
+- [x] Add Strict-Transport-Security header for HTTPS (1 year, includeSubDomains)
+- [x] Add XSS filter protection
+- [x] Hide X-Powered-By header
+- [x] Create input sanitization function for XSS protection
+- [x] Create password strength validation function
+- [x] Add password validation to resetPassword mutation
+- [x] Create file upload validation function (type, size limits)
+- [x] Add failed login attempt tracking (in-memory store)
+- [x] Add account lockout after 5 failed attempts within 15 minutes
+- [x] Add security event logging function
+- [x] Add getClientIP helper function for IP tracking
+- [x] Integrate security headers into server index
+- [x] Integrate rate limiting into server index
+- [x] Enhance audit logging to support IP addresses
+- [ ] Add IP address tracking to all sensitive operations
+- [ ] Test rate limiting with multiple requests
+- [ ] Test security headers with security scanner
+- [ ] Test password strength validation
+- [ ] Test account lockout mechanism
+
+
+## Phase 106: Two-Factor Authentication & Security Monitoring (Current)
+- [ ] Install speakeasy package for TOTP generation
+- [ ] Install qrcode package for QR code generation
+- [ ] Create user_2fa table (userId, secret, enabled, backupCodes, createdAt)
+- [ ] Create security_events table (type, userId, ipAddress, details, timestamp)
+- [ ] Add 2FA setup endpoint (generate secret, QR code)
+- [ ] Add 2FA verification endpoint (verify TOTP code)
+- [ ] Add 2FA disable endpoint (with password confirmation)
+- [ ] Generate backup codes during 2FA setup
+- [ ] Add backup code verification
+- [ ] Create platform_settings table for global settings
+- [ ] Add 2FA enabled/disabled toggle for super admin
+- [ ] Create super admin 2FA settings page
+- [ ] Add 2FA verification step to login flow
+- [ ] Create 2FA setup page for users
+- [ ] Create security monitoring dashboard page
+- [ ] Add failed login attempts chart
+- [ ] Add rate limit violations chart
+- [ ] Add account lockouts table
+- [ ] Add recent security events table
+- [ ] Add IP address tracking and display
+- [ ] Add export security logs functionality
+- [ ] Test 2FA setup and verification flow
+- [ ] Test backup code usage
+- [ ] Test super admin 2FA toggle
+- [ ] Test security monitoring dashboard
+
+
+## Phase 107: Fix TypeScript Errors (In Progress)
+- [x] Fix adminRouters.ts notification type error (payment → system)
+- [x] Fix adminRouters.ts missing invoices import
+- [x] Fix routers.ts invoiceNumber access error
+- [x] Fix db.ts updatedAt error (use submittedAt instead)
+- [x] Fix db.ts wallet transaction status enum (approved/rejected → completed/failed)
+- [x] Fix db.ts insertId error in createRoleTemplate
+- [x] Fix db.ts variable name conflict in bulkCreateUsers
+- [x] Reduced errors from 58 to 49 (9 errors fixed)
+- [ ] Fix helpDeskDb.ts line 120 - 'where' property error (query builder type issue)
+- [ ] Fix helpDeskDb.ts line 346 - 'insertId' property error
+- [ ] Fix remaining property_media propertyId errors
+- [ ] Fix remaining TypeScript errors
+- [ ] Verify clean TypeScript compilation with zero errors
+- [ ] Test affected functionality still works
+
+## Phase 108: 2FA Backend Implementation
+- [ ] Add 2FA database functions to db.ts (create, get, update, delete)
+- [ ] Add security event logging functions to db.ts
+- [ ] Add platform settings functions to db.ts
+- [ ] Create 2FA router in routers.ts (setup, verify, disable, regenerate backup codes)
+- [ ] Add super admin endpoints for 2FA global toggle
+- [ ] Integrate 2FA verification into login flow
+- [ ] Add 2FA requirement check middleware
+- [ ] Test 2FA setup and verification flow
+
+## Phase 109: 2FA User Interface
+- [ ] Create User2FASettings page for users to enable/disable 2FA
+- [ ] Add QR code display for 2FA setup
+- [ ] Add backup codes display and download
+- [ ] Create 2FA verification dialog for login
+- [ ] Add super admin 2FA toggle in settings
+- [ ] Add route for /settings/2fa
+- [ ] Add navigation link to user settings
+- [ ] Test complete 2FA user flow
+
+## Phase 110: Security Monitoring Dashboard
+- [ ] Create SecurityDashboard page component
+- [ ] Add security metrics cards (failed logins, rate limits, lockouts)
+- [ ] Add security events table with filtering
+- [ ] Add charts for security trends over time
+- [ ] Add real-time security event updates
+- [ ] Add export security logs to CSV
+- [ ] Add route for /admin/security-dashboard
+- [ ] Add navigation link in admin dashboards
+- [ ] Test security monitoring with simulated events
+
+
+## Phase 107: Fix TypeScript Errors (In Progress - 64% Complete)
+- [x] Fix adminRouters.ts notification type error (payment → system)
+- [x] Fix adminRouters.ts missing invoices import
+- [x] Fix routers.ts invoiceNumber access error
+- [x] Fix db.ts updatedAt error (use submittedAt instead)
+- [x] Fix db.ts wallet transaction status enum (approved/rejected → completed/failed)
+- [x] Fix db.ts insertId error in createRoleTemplate
+- [x] Fix db.ts variable name conflict in bulkCreateUsers
+- [x] Fix emailService.ts notifyOwner import error
+- [x] Fix adminRolesRouter.ts details field (JSON.stringify for audit logs)
+- [x] Fix routers.ts wallet transaction status enum in getAllTransactions
+- [x] Fix adminRouters.ts property_media insert (remove captionAr, isPrimary)
+- [x] Fix AdminWallet.tsx status enum (approved/rejected → completed/failed)
+- [x] Fix AdminInvoices.tsx permissions API call path
+- [x] **Progress: Reduced from 58 to 37 errors (21 fixed - 64% reduction)**
+- [ ] Fix helpDeskDb.ts line 120 - 'where' property error (query builder type issue)
+- [ ] Fix helpDeskDb.ts line 346 - 'insertId' property error
+- [ ] Fix AddProperty.tsx distributionFrequency type error
+- [ ] Fix KnowledgeBase.tsx property name mismatches (publishedAt → isPublished, viewCount → views)
+- [ ] Fix HelpDesk.tsx refetchTickets undefined error
+- [ ] Fix ComponentShowcase.tsx missing UI component imports
+- [ ] Verify clean TypeScript compilation with zero errors
+- [ ] Test affected functionality still works
+

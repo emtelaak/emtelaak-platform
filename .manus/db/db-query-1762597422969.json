@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS email_templates (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  name VARCHAR(100) NOT NULL,\n  type ENUM('password_reset', 'invoice', 'payment_confirmation', 'kyc_approved', 'kyc_rejected', 'custom') NOT NULL,\n  subject VARCHAR(255) NOT NULL,\n  htmlContent TEXT NOT NULL,\n  textContent TEXT,\n  variables JSON,\n  isActive BOOLEAN DEFAULT TRUE NOT NULL,\n  isDefault BOOLEAN DEFAULT FALSE NOT NULL,\n  createdBy INT,\n  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,\n  FOREIGN KEY (createdBy) REFERENCES users(id)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute CREATE TABLE IF NOT EXISTS email_templates (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  name VARCHAR(100) NOT NULL,\n  type ENUM('password_reset', 'invoice', 'payment_confirmation', 'kyc_approved', 'kyc_rejected', 'custom') NOT NULL,\n  subject VARCHAR(255) NOT NULL,\n  htmlContent TEXT NOT NULL,\n  textContent TEXT,\n  variables JSON,\n  isActive BOOLEAN DEFAULT TRUE NOT NULL,\n  isDefault BOOLEAN DEFAULT FALSE NOT NULL,\n  createdBy INT,\n  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,\n  FOREIGN KEY (createdBy) REFERENCES users(id)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 663
+}

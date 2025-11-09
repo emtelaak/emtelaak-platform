@@ -64,7 +64,7 @@ export const adminRolesRouter = router({
         action: "create_role",
         targetType: "role",
         targetId: roleId,
-        details: { roleName: input.name },
+        details: JSON.stringify({ roleName: input.name }),
       });
 
       return { id: roleId };
@@ -117,7 +117,7 @@ export const adminRolesRouter = router({
         action: "update_role",
         targetType: "role",
         targetId: input.roleId,
-        details: { permissionCount: input.permissionIds?.length },
+        details: JSON.stringify({ permissionCount: input.permissionIds?.length }),
       });
 
       return { success: true };
@@ -229,7 +229,7 @@ export const adminRolesRouter = router({
         action: "assign_roles",
         targetType: "user",
         targetId: input.userId,
-        details: { roleIds: input.roleIds },
+        details: JSON.stringify({ roleIds: input.roleIds }),
       });
 
       return { success: true };

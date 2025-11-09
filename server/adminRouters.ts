@@ -416,12 +416,11 @@ export const adminRouter = router({
             // Save media record
             await db.insert(propertyMedia).values({
               propertyId,
-              mediaType: 'image',
+              mediaType: 'image' as const,
               fileUrl: url,
               fileKey: key,
-              caption: image.caption,
-              captionAr: image.captionAr,
-              isPrimary: image.isPrimary,
+              caption: image.caption || null,
+              isFeatured: image.isPrimary || false,
               displayOrder: i,
             });
           }
@@ -484,7 +483,7 @@ export const adminRouter = router({
         if (notificationMessages[input.status]) {
           await createNotification({
             userId: invoice.userId,
-            type: "payment",
+            type: "system",
             ...notificationMessages[input.status],
           });
         }
@@ -532,7 +531,9 @@ export const adminRouter = router({
           });
         }
 
-        const { getInvoiceById, db: getDb } = await import("./db");
+        const { getInvoiceById, getDb } = await import("./db");
+        const { invoices } = await import("../drizzle/schema");
+        const { eq } = await import("drizzle-orm");
         const invoice = await getInvoiceById(input.id);
         
         if (!invoice) {
@@ -566,6 +567,70 @@ export const adminRouter = router({
         });
 
         return { success: true };
+      }),
+  }),
+
+  // Email Templates Management
+  emailTemplates: router({
+    list: adminProcedure.query(async () => {
+      const { getAllEmailTemplates } = await import("./db");
+      return await getAllEmailTemplates();
+    }),
+    
+    getById: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        const { getEmailTemplateById } = await import("./db");
+        return await getEmailTemplateById(input.id);
+      }),
+    
+    create: adminProcedure
+      .input(z.object({
+        name: z.string().min(1),
+        type: z.enum(["password_reset", "invoice", "payment_confirmation", "kyc_approved", "kyc_rejected", "custom"]),
+        subject: z.string().min(1),
+        htmlContent: z.string().min(1),
+        textContent: z.string().optional(),
+        variables: z.array(z.string()).optional(),
+        isActive: z.boolean().default(true),
+        isDefault: z.boolean().default(false),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const { createEmailTemplate } = await import("./db");
+        const templateId = await createEmailTemplate({
+          ...input,
+          variables: input.variables ? JSON.stringify(input.variables) : null,
+          createdBy: ctx.user.id,
+        });
+        return { id: templateId, success: true };
+      }),
+    
+    update: adminProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().min(1).optional(),
+        subject: z.string().min(1).optional(),
+        htmlContent: z.string().min(1).optional(),
+        textContent: z.string().optional(),
+        variables: z.array(z.string()).optional(),
+        isActive: z.boolean().optional(),
+        isDefault: z.boolean().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { updateEmailTemplate } = await import("./db");
+        const { id, variables, ...updates } = input;
+        const template = await updateEmailTemplate(id, {
+          ...updates,
+          ...(variables ? { variables: JSON.stringify(variables) } : {}),
+        });
+        return template;
+      }),
+    
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        const { deleteEmailTemplate } = await import("./db");
+        return await deleteEmailTemplate(input.id);
       }),
   }),
 

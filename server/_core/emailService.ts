@@ -2,7 +2,6 @@
  * Email Service using Manus Notification API
  * Sends transactional emails for password resets, invoices, etc.
  */
-
 import { notifyOwner } from "./notification";
 
 interface EmailParams {
@@ -51,6 +50,31 @@ ${text || html.replace(/<[^>]*>/g, '')}
   } catch (error) {
     console.error("[Email] Error sending email:", error);
     return false;
+  }
+}
+
+/**
+ * Replace template variables with actual values
+ */
+function replaceVariables(template: string, variables: Record<string, string>): string {
+  let result = template;
+  Object.entries(variables).forEach(([key, value]) => {
+    const regex = new RegExp(`{{${key}}}`, 'g');
+    result = result.replace(regex, value);
+  });
+  return result;
+}
+
+/**
+ * Get email template from database or use default
+ */
+async function getTemplate(type: string): Promise<{ subject: string; htmlContent: string } | null> {
+  try {
+    const { getEmailTemplateByType } = await import("../db");
+    return await getEmailTemplateByType(type);
+  } catch (error) {
+    console.warn(`[Email] Could not load template for ${type}, using default`);
+    return null;
   }
 }
 
@@ -366,7 +390,7 @@ This is an automated message, please do not reply to this email.
 }
 
 /**
- * Send password reset email
+ * Send password reset email (with custom template support)
  */
 export async function sendPasswordResetEmail(params: {
   to: string;
@@ -374,18 +398,32 @@ export async function sendPasswordResetEmail(params: {
   resetLink: string;
 }): Promise<boolean> {
   const { to, userName, resetLink } = params;
-  const emailContent = generatePasswordResetEmail({ userName, resetLink });
   
-  return sendEmail({
-    to,
-    subject: emailContent.subject,
-    html: emailContent.html,
-    text: emailContent.text,
-  });
+  // Try to get custom template from database
+  const customTemplate = await getTemplate('password_reset');
+  
+  let subject: string;
+  let html: string;
+  let text: string;
+  
+  if (customTemplate && customTemplate.isActive) {
+    // Use custom template with variable replacement
+    subject = replaceVariables(customTemplate.subject, { userName, resetLink, expiryTime: '24 hours' });
+    html = replaceVariables(customTemplate.htmlContent, { userName, resetLink, expiryTime: '24 hours' });
+    text = html.replace(/<[^>]*>/g, ''); // Strip HTML for text version
+  } else {
+    // Use default template
+    const emailContent = generatePasswordResetEmail({ userName, resetLink });
+    subject = emailContent.subject;
+    html = emailContent.html;
+    text = emailContent.text;
+  }
+  
+  return sendEmail({ to, subject, html, text });
 }
 
 /**
- * Send invoice notification email
+ * Send invoice notification email (with custom template support)
  */
 export async function sendInvoiceEmail(params: {
   to: string;
@@ -397,12 +435,47 @@ export async function sendInvoiceEmail(params: {
   dueDate: Date;
   invoiceUrl: string;
 }): Promise<boolean> {
-  const emailContent = generateInvoiceEmail(params);
+  const { to, userName, invoiceNumber, propertyName, amount, shares, dueDate, invoiceUrl } = params;
   
-  return sendEmail({
-    to: params.to,
-    subject: emailContent.subject,
-    html: emailContent.html,
-    text: emailContent.text,
-  });
+  // Try to get custom template from database
+  const customTemplate = await getTemplate('invoice');
+  
+  let subject: string;
+  let html: string;
+  let text: string;
+  
+  if (customTemplate && customTemplate.isActive) {
+    // Format values for template
+    const formattedAmount = (amount / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    const formattedDueDate = dueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    
+    // Use custom template with variable replacement
+    subject = replaceVariables(customTemplate.subject, {
+      userName,
+      invoiceNumber,
+      propertyName,
+      amount: formattedAmount,
+      shares: shares.toString(),
+      dueDate: formattedDueDate,
+      invoiceUrl,
+    });
+    html = replaceVariables(customTemplate.htmlContent, {
+      userName,
+      invoiceNumber,
+      propertyName,
+      amount: formattedAmount,
+      shares: shares.toString(),
+      dueDate: formattedDueDate,
+      invoiceUrl,
+    });
+    text = html.replace(/<[^>]*>/g, ''); // Strip HTML for text version
+  } else {
+    // Use default template
+    const emailContent = generateInvoiceEmail(params);
+    subject = emailContent.subject;
+    html = emailContent.html;
+    text = emailContent.text;
+  }
+  
+  return sendEmail({ to, subject, html, text });
 }

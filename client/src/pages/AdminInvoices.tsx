@@ -48,7 +48,7 @@ export default function AdminInvoices() {
     { enabled: !!auditLogInvoiceId }
   );
 
-  const { data: adminPermissions } = trpc.adminPermissions.getMyPermissions.useQuery();
+  const { data: adminPermissions } = trpc.adminPermissions.users.getMyPermissions.useQuery();
 
   const { data: invoices, isLoading, refetch } = trpc.admin.invoices.list.useQuery();
   const updateStatusMutation = trpc.admin.invoices.updateStatus.useMutation({

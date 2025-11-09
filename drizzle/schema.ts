@@ -641,10 +641,10 @@ export type InsertDeveloperProfile = typeof developerProfiles.$inferInsert;
 // Platform Settings for dynamic configuration
 export const platformSettings = mysqlTable("platform_settings", {
   id: int("id").autoincrement().primaryKey(),
-  settingKey: varchar("settingKey", { length: 100 }).notNull().unique(),
-  settingValue: text("settingValue"),
-  updatedBy: int("updatedBy").references(() => users.id),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  settingKey: varchar("settingKey", { length: 255 }).notNull().unique(),
+  settingValue: text("settingValue").notNull(),
+  description: text("description"),
+  updatedBy: int("updatedBy"),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
@@ -907,6 +907,53 @@ export type UserPermission = typeof userPermissions.$inferSelect;
 export type InsertUserPermission = typeof userPermissions.$inferInsert;
 export type AuditLog = typeof auditLogs.$inferSelect;
 export type InsertAuditLog = typeof auditLogs.$inferInsert;
+
+// Two-Factor Authentication
+export const user2fa = mysqlTable("user_2fa", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  secret: varchar("secret", { length: 255 }).notNull(),
+  enabled: boolean("enabled").default(false).notNull(),
+  backupCodes: text("backupCodes"), // JSON array of backup codes
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type User2FA = typeof user2fa.$inferSelect;
+export type InsertUser2FA = typeof user2fa.$inferInsert;
+
+// Security Events
+export const securityEvents = mysqlTable("security_events", {
+  id: int("id").autoincrement().primaryKey(),
+  type: mysqlEnum("type", ["failed_login", "rate_limit", "account_lockout", "2fa_failed", "suspicious_activity"]).notNull(),
+  userId: int("userId"),
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  userAgent: text("userAgent"),
+  details: text("details"),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+});
+
+export type SecurityEvent = typeof securityEvents.$inferSelect;
+export type InsertSecurityEvent = typeof securityEvents.$inferInsert;
+
+// Email Templates
+export const emailTemplates = mysqlTable("email_templates", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(),
+  type: mysqlEnum("type", ["password_reset", "invoice", "payment_confirmation", "kyc_approved", "kyc_rejected", "custom"]).notNull(),
+  subject: varchar("subject", { length: 255 }).notNull(),
+  htmlContent: text("htmlContent").notNull(),
+  textContent: text("textContent"),
+  variables: json("variables"), // Available variables for this template
+  isActive: boolean("isActive").default(true).notNull(),
+  isDefault: boolean("isDefault").default(false).notNull(),
+  createdBy: int("createdBy").references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type EmailTemplate = typeof emailTemplates.$inferSelect;
+export type InsertEmailTemplate = typeof emailTemplates.$inferInsert;
 
 // CRM Types
 export type CrmLead = typeof crmLeads.$inferSelect;

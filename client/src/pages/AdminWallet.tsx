@@ -42,7 +42,7 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 export default function AdminWallet() {
   const { user, loading } = useAuth();
   const { language } = useLanguage();
-  const [statusFilter, setStatusFilter] = useState<"pending" | "approved" | "rejected" | "all">("pending");
+  const [statusFilter, setStatusFilter] = useState<"pending" | "completed" | "failed" | "cancelled" | "all">("pending");
   const [typeFilter, setTypeFilter] = useState<"deposit" | "withdrawal" | "all">("all");
   const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
@@ -116,9 +116,9 @@ export default function AdminWallet() {
   }
 
   const pendingCount = transactions?.filter((t) => t.status === "pending").length || 0;
-  const totalDeposits = transactions?.filter((t) => t.type === "deposit" && t.status === "approved")
+  const totalDeposits = transactions?.filter((t) => t.type === "deposit" && t.status === "completed")
     .reduce((sum, t) => sum + t.amount, 0) || 0;
-  const totalWithdrawals = transactions?.filter((t) => t.type === "withdrawal" && t.status === "approved")
+  const totalWithdrawals = transactions?.filter((t) => t.type === "withdrawal" && t.status === "completed")
     .reduce((sum, t) => sum + t.amount, 0) || 0;
 
   return (
@@ -199,8 +199,9 @@ export default function AdminWallet() {
                   <SelectContent>
                     <SelectItem value="all">{language === "ar" ? "الكل" : "All"}</SelectItem>
                     <SelectItem value="pending">{language === "ar" ? "معلق" : "Pending"}</SelectItem>
-                    <SelectItem value="approved">{language === "ar" ? "معتمد" : "Approved"}</SelectItem>
-                    <SelectItem value="rejected">{language === "ar" ? "مرفوض" : "Rejected"}</SelectItem>
+                    <SelectItem value="completed">{language === "ar" ? "مكتمل" : "Completed"}</SelectItem>
+                    <SelectItem value="failed">{language === "ar" ? "فشل" : "Failed"}</SelectItem>
+                    <SelectItem value="cancelled">{language === "ar" ? "ملغى" : "Cancelled"}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -273,16 +274,17 @@ export default function AdminWallet() {
                       <TableCell>
                         <Badge
                           variant={
-                            transaction.status === "approved"
+                            transaction.status === "completed"
                               ? "default"
-                              : transaction.status === "rejected"
+                              : transaction.status === "failed"
                               ? "destructive"
                               : "secondary"
                           }
                         >
                           {transaction.status === "pending" && (language === "ar" ? "معلق" : "Pending")}
-                          {transaction.status === "approved" && (language === "ar" ? "معتمد" : "Approved")}
-                          {transaction.status === "rejected" && (language === "ar" ? "مرفوض" : "Rejected")}
+                          {transaction.status === "completed" && (language === "ar" ? "مكتمل" : "Completed")}
+                          {transaction.status === "failed" && (language === "ar" ? "فشل" : "Failed")}
+                          {transaction.status === "cancelled" && (language === "ar" ? "ملغى" : "Cancelled")}
                         </Badge>
                       </TableCell>
                       <TableCell>

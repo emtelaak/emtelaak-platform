@@ -34,6 +34,8 @@ const AddProperty = lazy(() => import("./pages/AddProperty"));
 const PropertyAnalytics = lazy(() => import("./pages/PropertyAnalytics"));
 const Invoices = lazy(() => import("./pages/Invoices"));
 const AdminInvoices = lazy(() => import("./pages/AdminInvoices"));
+const EmailTemplates = lazy(() => import("./pages/EmailTemplates"));
+const EmailTemplateEditor = lazy(() => import("./pages/EmailTemplateEditor"));
 const HomepageContentEditor = lazy(() => import("@/pages/HomepageContentEditor"));
 const ImageLibrary = lazy(() => import("@/pages/ImageLibrary"));
 const AboutPageEditor = lazy(() => import("@/pages/AboutPageEditor"));
@@ -68,6 +70,8 @@ function Router() {
       <Route path="/admin/property-analytics" component={PropertyAnalytics} />
       <Route path="/invoices" component={Invoices} />
       <Route path="/admin/invoices" component={AdminInvoices} />
+      <Route path="/admin/email-templates" component={EmailTemplates} />
+      <Route path="/admin/email-template-editor" component={EmailTemplateEditor} />
       <Route path="/menu" component={Menu} />
       <Route path="/profile" component={Profile} />
       <Route path="/kyc-questionnaire" component={KYCQuestionnaire} />
