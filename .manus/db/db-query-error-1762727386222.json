@@ -1,0 +1,8 @@
+{
+  "query": "SELECT id, userId, propertyId, sharesPurchased, totalInvestmentAmount, platformFee, processingFee, status, distributionFrequency, ownershipPercentage, createdAt FROM investmentTransactions ORDER BY createdAt DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT id, userId, propertyId, sharesPurchased, totalInvestmentAmount, platformFee, processingFee, status, distributionFrequency, ownershipPercentage, createdAt FROM investmentTransactions ORDER BY createdAt DESC LIMIT 5;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1146 (42S02) at line 1: Table 'vvjgxt6mjvc6petxtz2p78.investmentTransactions' doesn't exist"
+  ]
+}

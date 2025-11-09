@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/collapsible";
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { 
+import {
   LayoutDashboard, 
   LogOut, 
   PanelLeft, 
@@ -41,7 +41,10 @@ import {
   FileText,
   UserCheck,
   Lock,
+  Building2,
+  DollarSign,
   Briefcase,
+  BarChart3,
   Wallet,
   Receipt,
   Mail,
@@ -51,7 +54,8 @@ import {
   ChevronDown,
   Edit3,
   Home,
-  Info
+  Info,
+  TrendingUp
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -76,6 +80,10 @@ const menuItems: MenuItem[] = [
   { icon: UserCheck, label: "KYC Review", path: "/admin/kyc-review" },
   { icon: Receipt, label: "Invoices", path: "/admin/invoices" },
   { icon: Wallet, label: "Wallet", path: "/admin/wallet" },
+  { icon: BarChart3, label: "Fundraiser Dashboard", path: "/fundraiser/dashboard" },
+  { icon: Building2, label: "Property Management", path: "/admin/property-management" },
+  { icon: DollarSign, label: "Platform Settings", path: "/admin/platform-settings" },
+  { icon: TrendingUp, label: "Income Distribution", path: "/admin/income-distribution" },
   { 
     icon: Edit3, 
     label: "Content Management", 

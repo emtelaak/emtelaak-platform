@@ -1,0 +1,35 @@
+{
+  "query": "SELECT id, name, email FROM users LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT id, name, email FROM users LIMIT 5;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Waleed Shaarawy",
+      "email": "waleed@uptown6october.com"
+    },
+    {
+      "id": "750038",
+      "name": "Waleed Shaarawy",
+      "email": "waleed@emtelaak.com"
+    },
+    {
+      "id": "990011",
+      "name": "Sarah Johnson",
+      "email": "sarah.johnson@example.com"
+    },
+    {
+      "id": "990012",
+      "name": "Mohamed Ali",
+      "email": "mohamed.ali@example.com"
+    },
+    {
+      "id": "990013",
+      "name": "Emily Chen",
+      "email": "emily.chen@example.com"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\n1\tWaleed Shaarawy\twaleed@uptown6october.com\n750038\tWaleed Shaarawy\twaleed@emtelaak.com\n990011\tSarah Johnson\tsarah.johnson@example.com\n990012\tMohamed Ali\tmohamed.ali@example.com\n990013\tEmily Chen\temily.chen@example.com\n",
+  "stderr": "",
+  "execution_time_ms": 392
+}

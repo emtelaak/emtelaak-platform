@@ -1,0 +1,31 @@
+{
+  "query": "SHOW TABLES LIKE 'offering%'",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SHOW TABLES LIKE 'offering%'",
+  "rows": [
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78 (offering%)": "offering_approvals"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78 (offering%)": "offering_documents"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78 (offering%)": "offering_fees"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78 (offering%)": "offering_financial_projections"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78 (offering%)": "offering_status_history"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78 (offering%)": "offering_timeline"
+    },
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78 (offering%)": "offerings"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_VvJGXt6mJVC6petxtZ2P78 (offering%)\noffering_approvals\noffering_documents\noffering_fees\noffering_financial_projections\noffering_status_history\noffering_timeline\nofferings\n",
+  "stderr": "",
+  "execution_time_ms": 510
+}

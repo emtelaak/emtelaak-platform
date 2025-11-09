@@ -24,6 +24,9 @@ import ResetPassword from "./pages/ResetPassword";
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const AdminSettings = lazy(() => import("./pages/AdminSettings"));
 const AdminPlatformSettings = lazy(() => import("./pages/AdminPlatformSettings"));
+const AdminPropertyManagement = lazy(() => import("@/pages/AdminPropertyManagement"));
+const AdminIncomeDistribution = lazy(() => import("@/pages/AdminIncomeDistribution"));
+const FundraiserDashboard = lazy(() => import("./pages/FundraiserDashboard"));
 const AdminKYCReview = lazy(() => import("./pages/AdminKYCReview"));
 const AdminRoles = lazy(() => import("./pages/AdminRoles"));
 const AdminPermissions = lazy(() => import("./pages/AdminPermissions"));
@@ -60,6 +63,15 @@ const AdminUserManagement = lazy(() => import("@/pages/AdminUserManagement"));
 const SecuritySettingsManagement = lazy(() => import("@/pages/SecuritySettingsManagement"));
 const CustomFieldsManagement = lazy(() => import("@/pages/CustomFieldsManagement"));
 const CustomFieldsTest = lazy(() => import("@/pages/CustomFieldsTest"));
+
+// Lazy load offering pages
+const CreateOffering = lazy(() => import("@/pages/CreateOffering"));
+const OfferingsDashboard = lazy(() => import("@/pages/OfferingsDashboard"));
+const OfferingDetail = lazy(() => import("@/pages/OfferingDetail"));
+const FinancialProjectionForm = lazy(() => import("@/pages/FinancialProjectionForm"));
+const FeeStructureEditor = lazy(() => import("@/pages/FeeStructureEditor"));
+const OfferingDocuments = lazy(() => import("@/pages/OfferingDocuments"));
+const AdminOfferingApproval = lazy(() => import("@/pages/AdminOfferingApproval"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -113,6 +125,16 @@ function Router() {
       <Route path="/admin/permissions" component={AdminPermissions} />
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/platform-settings" component={AdminPlatformSettings} />
+      <Route path="/admin/property-management" component={AdminPropertyManagement} />
+      <Route path="/admin/income-distribution" component={AdminIncomeDistribution} />
+      <Route path="/fundraiser/dashboard" component={FundraiserDashboard} />
+      <Route path="/offerings" component={OfferingsDashboard} />
+      <Route path="/offerings/create" component={CreateOffering} />
+      <Route path="/offerings/:id" component={OfferingDetail} />
+      <Route path="/offerings/:id/financial-projections" component={FinancialProjectionForm} />
+      <Route path="/offerings/:id/fee-structure" component={FeeStructureEditor} />
+      <Route path="/offerings/:id/documents" component={OfferingDocuments} />
+      <Route path="/admin/offering-approvals" component={AdminOfferingApproval} />
       <Route path="/admin/email-settings" component={EmailSettings} />
       <Route path="/admin/kyc-review" component={AdminKYCReview} />
         <Route path="/admin/security" component={SecurityDashboard} />

@@ -55,9 +55,34 @@ export const investmentTransactionRouter = router({
         });
       }
 
-      // TODO: Get property details to get actual price per share
-      // For now, assume $100 per share (10000 cents)
-      const pricePerShare = 10000;
+      // Get property details to fetch actual share price
+      const { getDb } = await import("./db");
+      const { properties } = await import("../drizzle/schema");
+      const { eq } = await import("drizzle-orm");
+      
+      const db = await getDb();
+      if (!db) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Database not available",
+        });
+      }
+      
+      const property = await db
+        .select()
+        .from(properties)
+        .where(eq(properties.id, propertyId))
+        .limit(1);
+      
+      if (!property[0]) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Property not found",
+        });
+      }
+      
+      // Use actual share price from property
+      const pricePerShare = property[0].sharePrice;
       const investmentAmount = numberOfShares * pricePerShare;
 
       // Get configurable fees from database
@@ -74,7 +99,9 @@ export const investmentTransactionRouter = router({
         pricePerShare,
         investmentAmount,
         platformFee,
+        platformFeePercentage, // Include the actual percentage for UI display
         processingFee,
+        processingFeeDollars: processingFeeCents / 100, // Convert cents to dollars for display
         totalAmount,
         availableShares: availability.availableShares,
         percentageOfProperty: availability.totalShares > 0 
@@ -123,6 +150,11 @@ export const investmentTransactionRouter = router({
         });
       }
 
+      // Calculate ownership percentage (stored as integer: percentage × 10000)
+      const ownershipPercentage = availability.totalShares > 0
+        ? Math.round((input.numberOfShares / availability.totalShares) * 1000000)
+        : 0;
+
       // Create investment
       const investmentId = await createInvestmentTransaction({
         userId,
@@ -136,6 +168,8 @@ export const investmentTransactionRouter = router({
         status: "pending",
         ipAddress: ctx.req.ip || "",
         userAgent: ctx.req.get("user-agent") || "",
+        ownershipPercentage, // Phase 2: Track ownership percentage
+        distributionFrequency: "quarterly", // Phase 2: Default to quarterly distributions
       });
 
       // Log activity

@@ -1,0 +1,40 @@
+{
+  "query": "SELECT id, name, totalShares, sharePrice / 100.0 as sharePriceDollars FROM properties LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT id, name, totalShares, sharePrice / 100.0 as sharePriceDollars FROM properties LIMIT 5;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Modern Residential Tower - New Cairo",
+      "totalShares": "50000",
+      "sharePriceDollars": "100.0000"
+    },
+    {
+      "id": "2",
+      "name": "Premium Residential Complex - 6th October",
+      "totalShares": "50000",
+      "sharePriceDollars": "150.0000"
+    },
+    {
+      "id": "3",
+      "name": "Class A Office Tower - Smart Village",
+      "totalShares": "50000",
+      "sharePriceDollars": "60.0000"
+    },
+    {
+      "id": "4",
+      "name": "Upscale Retail & Office Complex",
+      "totalShares": "50000",
+      "sharePriceDollars": "120.0000"
+    },
+    {
+      "id": "5",
+      "name": "Premium Administrative Headquarters",
+      "totalShares": "50000",
+      "sharePriceDollars": "90.0000"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\ttotalShares\tsharePriceDollars\n1\tModern Residential Tower - New Cairo\t50000\t100.0000\n2\tPremium Residential Complex - 6th October\t50000\t150.0000\n3\tClass A Office Tower - Smart Village\t50000\t60.0000\n4\tUpscale Retail & Office Complex\t50000\t120.0000\n5\tPremium Administrative Headquarters\t50000\t90.0000\n",
+  "stderr": "",
+  "execution_time_ms": 388
+}

@@ -1,0 +1,13 @@
+{
+  "query": "SHOW TABLES LIKE 'investment_transactions';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SHOW TABLES LIKE 'investment_transactions';",
+  "rows": [
+    {
+      "Tables_in_VvJGXt6mJVC6petxtZ2P78 (investment_transactions)": "investment_transactions"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_VvJGXt6mJVC6petxtZ2P78 (investment_transactions)\ninvestment_transactions\n",
+  "stderr": "",
+  "execution_time_ms": 409
+}

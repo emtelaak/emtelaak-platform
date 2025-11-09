@@ -19,6 +19,11 @@ import { customFieldsRouter } from "./customFieldsRouter";
 import { customFieldTemplatesRouter } from "./customFieldTemplatesRouter";
 import { investmentTransactionRouter } from "./investmentTransactionRouter";
 import { platformSettingsRouter } from "./routes/platformSettings";
+import { propertyManagementRouter } from "./routes/propertyManagement";
+import { fundraiserRouter } from "./routes/fundraiser";
+import { incomeDistributionRouter } from "./routes/incomeDistribution";
+import { offeringsRouter } from "./routes/offerings";
+// import { getUnifiedPortfolioSummary } from "./db/unifiedInvestmentsDb";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import {
@@ -49,7 +54,6 @@ import {
   isPropertySaved,
   getUserInvestments,
   getUserPortfolioSummary,
-  getUserIncomeHistory,
   getUserTransactions,
   createInvestment,
   createTransaction,
@@ -108,6 +112,10 @@ export const appRouter = router({
   customFieldTemplates: customFieldTemplatesRouter,
   investmentTransactions: investmentTransactionRouter,
   platformSettings: platformSettingsRouter,
+  propertyManagement: propertyManagementRouter,
+  fundraiser: fundraiserRouter,
+  incomeDistribution: incomeDistributionRouter,
+  offerings: offeringsRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
@@ -598,10 +606,13 @@ export const appRouter = router({
   // Portfolio
   portfolio: router({
     summary: protectedProcedure.query(async ({ ctx }) => {
-      return await getUserPortfolioSummary(ctx.user.id);
+      // Use unified query to show investments from BOTH old and new systems
+      const { getUnifiedPortfolioSummary } = await import("./db/unifiedInvestmentsDb");
+      return await getUnifiedPortfolioSummary(ctx.user.id);
     }),
     
     incomeHistory: protectedProcedure.query(async ({ ctx }) => {
+      const { getUserIncomeHistory } = await import("./db/incomeDistributionDb");
       return await getUserIncomeHistory(ctx.user.id);
     }),
     

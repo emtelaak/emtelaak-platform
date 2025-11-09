@@ -512,7 +512,12 @@ export default function PropertyDetail() {
                   <span className="font-medium">{formatCurrency(investmentCalculation.investmentAmount)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{language === "en" ? "Platform Fee (2.5%)" : "رسوم المنصة (2.5%)"}</span>
+                  <span className="text-muted-foreground">
+                    {language === "en" 
+                      ? `Platform Fee (${investmentCalculation.platformFeePercentage}%)` 
+                      : `رسوم المنصة (${investmentCalculation.platformFeePercentage}%)`
+                    }
+                  </span>
                   <span className="font-medium">{formatCurrency(investmentCalculation.platformFee)}</span>
                 </div>
                 <div className="flex justify-between text-sm">

@@ -1,0 +1,20 @@
+{
+  "query": "SELECT id, userId, propertyId, numberOfShares, totalAmount/100.0 as amountDollars, status, distributionFrequency, ownershipPercentage/10000.0 as ownershipPct FROM investment_transactions;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT id, userId, propertyId, numberOfShares, totalAmount/100.0 as amountDollars, status, distributionFrequency, ownershipPercentage/10000.0 as ownershipPct FROM investment_transactions;",
+  "rows": [
+    {
+      "id": "1",
+      "userId": "1",
+      "propertyId": "1",
+      "numberOfShares": "250",
+      "amountDollars": "25000.0000",
+      "status": "completed",
+      "distributionFrequency": "quarterly",
+      "ownershipPct": "25.0000"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tpropertyId\tnumberOfShares\tamountDollars\tstatus\tdistributionFrequency\townershipPct\n1\t1\t1\t250\t25000.0000\tcompleted\tquarterly\t25.0000\n",
+  "stderr": "",
+  "execution_time_ms": 402
+}

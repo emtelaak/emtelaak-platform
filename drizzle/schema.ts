@@ -360,7 +360,11 @@ export const investments = mysqlTable("investments", {
 
 export const incomeDistributions = mysqlTable("income_distributions", {
   id: int("id").autoincrement().primaryKey(),
-  investmentId: int("investmentId").notNull().references(() => investments.id, { onDelete: "cascade" }),
+  
+  // Support BOTH old and new investment systems
+  investmentId: int("investmentId").references(() => investments.id, { onDelete: "cascade" }),
+  investmentTransactionId: int("investmentTransactionId").references(() => investmentTransactions.id, { onDelete: "cascade" }),
+  
   amount: int("amount").notNull(), // in cents
   distributionType: mysqlEnum("distributionType", ["rental_income", "capital_gain", "exit_proceeds"]).notNull(),
   distributionDate: timestamp("distributionDate").notNull(),
@@ -1513,6 +1517,11 @@ export const investmentTransactions = mysqlTable("investment_transactions", {
   userAgent: text("userAgent"),
   notes: text("notes"),
   
+  // Additional Fields (Phase 2 Migration)
+  distributionFrequency: mysqlEnum("distributionFrequency", ["monthly", "quarterly", "annual"]),
+  exitedAt: timestamp("exitedAt"),
+  ownershipPercentage: int("ownershipPercentage"), // percentage * 10000 (e.g., 100 = 0.01%)
+  
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -1634,3 +1643,8 @@ export type InvestmentActivity = typeof investmentActivity.$inferSelect;
 export type InsertInvestmentActivity = typeof investmentActivity.$inferInsert;
 
 
+// ============================================
+// OFFERINGS SYSTEM (Phase 1 Roadmap)
+// ============================================
+
+export * from "./offerings-schema";
