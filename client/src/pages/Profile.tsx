@@ -22,6 +22,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { TwoFactorSettings } from "@/components/TwoFactorSettings";
 import { TrustedDevicesManager } from "@/components/TrustedDevicesManager";
+import { CustomFieldsForm } from "@/components/CustomFieldsForm";
 
 export default function Profile() {
   const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
@@ -151,13 +152,14 @@ export default function Profile() {
         <KYCProgressIndicator />
         
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">{t.profile.tabs.overview}</TabsTrigger>
             <TabsTrigger value="personal">{t.profile.tabs.personal}</TabsTrigger>
             <TabsTrigger value="verification">{t.profile.tabs.verification}</TabsTrigger>
             {/* @ts-expect-error - Translation key to be added */}
             <TabsTrigger value="security">{t.profile.tabs.security || "Security"}</TabsTrigger>
             <TabsTrigger value="preferences">{t.profile.tabs.preferences}</TabsTrigger>
+            <TabsTrigger value="additional">Additional</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -579,6 +581,27 @@ export default function Profile() {
                     )}
                   </Button>
                 </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Additional Custom Fields Tab */}
+          <TabsContent value="additional" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Additional Information</CardTitle>
+                <CardDescription>
+                  Fill in additional custom fields for your profile
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {user && (
+                  <CustomFieldsForm
+                    module="users"
+                    recordId={user.id}
+                    showInContext="user"
+                  />
+                )}
               </CardContent>
             </Card>
           </TabsContent>

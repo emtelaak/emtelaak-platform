@@ -22,8 +22,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Search, Shield, ShieldOff, RotateCcw, Loader2 } from "lucide-react";
+import { Search, Shield, ShieldOff, RotateCcw, Loader2, Edit, User } from "lucide-react";
 import { toast } from "sonner";
+import { CustomFieldsForm } from "@/components/CustomFieldsForm";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function AdminUserManagement() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,6 +36,8 @@ export default function AdminUserManagement() {
     userName: string;
     currentStatus: boolean;
   } | null>(null);
+  const [selectedUser, setSelectedUser] = useState<any | null>(null);
+  const [userDetailsOpen, setUserDetailsOpen] = useState(false);
 
   const { data: users, isLoading, refetch } = trpc.admin.getAllUsers.useQuery();
   const toggleUser2FA = trpc.twoFactor.adminToggleUser2FA.useMutation({
@@ -145,7 +149,8 @@ export default function AdminUserManagement() {
                       <TableHead>Email</TableHead>
                       <TableHead>Role</TableHead>
                       <TableHead>2FA Status</TableHead>
-                      <TableHead>Actions</TableHead>
+                      <TableHead>2FA Actions</TableHead>
+                      <TableHead>Manage</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -201,6 +206,20 @@ export default function AdminUserManagement() {
                                 </Button>
                               )}
                             </div>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setSelectedUser(user);
+                                setUserDetailsOpen(true);
+                              }}
+                              className="gap-1"
+                            >
+                              <Edit className="h-3 w-3" />
+                              Details
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -278,6 +297,81 @@ export default function AdminUserManagement() {
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
               Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* User Details Dialog */}
+      <Dialog open={userDetailsOpen} onOpenChange={setUserDetailsOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <User className="h-5 w-5" />
+              User Details: {selectedUser?.name || "Unnamed User"}
+            </DialogTitle>
+            <DialogDescription>
+              View and manage user information and custom fields
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedUser && (
+            <Tabs defaultValue="info" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="info">Basic Information</TabsTrigger>
+                <TabsTrigger value="custom">Custom Fields</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="info" className="space-y-4 mt-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">Name</label>
+                    <p className="text-sm mt-1">{selectedUser.name || "N/A"}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">Email</label>
+                    <p className="text-sm mt-1">{selectedUser.email || "N/A"}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">Role</label>
+                    <p className="text-sm mt-1">
+                      <Badge variant={selectedUser.role === 'admin' ? 'default' : 'secondary'}>
+                        {selectedUser.role}
+                      </Badge>
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">2FA Status</label>
+                    <p className="text-sm mt-1">
+                      <Badge variant={selectedUser.twoFactorEnabled ? 'default' : 'outline'}>
+                        {selectedUser.twoFactorEnabled ? 'Enabled' : 'Disabled'}
+                      </Badge>
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">User ID</label>
+                    <p className="text-sm mt-1">{selectedUser.id}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">Open ID</label>
+                    <p className="text-sm mt-1 truncate">{selectedUser.openId}</p>
+                  </div>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="custom" className="mt-4">
+                <CustomFieldsForm
+                  module="users"
+                  recordId={selectedUser.id}
+                  showInContext="admin"
+                />
+              </TabsContent>
+            </Tabs>
+          )}
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setUserDetailsOpen(false)}>
+              Close
             </Button>
           </DialogFooter>
         </DialogContent>

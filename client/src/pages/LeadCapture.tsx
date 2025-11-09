@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, Facebook, Instagram, MessageCircle } from "lucide-react";
 import { APP_LOGO, APP_TITLE } from "@/const";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CustomFieldsForm } from "@/components/CustomFieldsForm";
 
 export default function LeadCapture() {
   const { t, language } = useLanguage();
@@ -258,6 +259,17 @@ export default function LeadCapture() {
                   placeholder={language === "en"
                     ? "Tell us more about your investment goals..."
                     : "أخبرنا المزيد عن أهدافك الاستثمارية..."}
+                />
+              </div>
+
+              {/* Custom Fields */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">
+                  {language === "en" ? "Additional Information" : "معلومات إضافية"}
+                </h3>
+                <CustomFieldsForm
+                  module="leads"
+                  showInContext="user"
                 />
               </div>
               
