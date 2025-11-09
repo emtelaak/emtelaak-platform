@@ -170,7 +170,7 @@ export default function AddProperty() {
 
       // Buy to Let
       rentalYield: rentalYield ? parseInt(rentalYield) : undefined,
-      distributionFrequency: distributionFrequency || undefined,
+      distributionFrequency: (distributionFrequency as "monthly" | "quarterly" | "annual" | undefined) || undefined,
 
       // Buy to Sell
       fundTermMonths: fundTermMonths ? parseInt(fundTermMonths) : undefined,

@@ -371,16 +371,16 @@ export const adminRouter = router({
         
         const { properties, propertyMedia } = await import("../drizzle/schema");
         
-        // Extract images from input
-        const { images, ...propertyData } = input;
+        // Extract images and date fields from input
+        const { images, firstDistributionDate, fundingDeadline, acquisitionDate, completionDate, expectedExitDate, ...propertyData } = input;
         
         // Convert date strings to Date objects
         const dates: Record<string, Date | undefined> = {};
-        if (input.firstDistributionDate) dates.firstDistributionDate = new Date(input.firstDistributionDate);
-        if (input.fundingDeadline) dates.fundingDeadline = new Date(input.fundingDeadline);
-        if (input.acquisitionDate) dates.acquisitionDate = new Date(input.acquisitionDate);
-        if (input.completionDate) dates.completionDate = new Date(input.completionDate);
-        if (input.expectedExitDate) dates.expectedExitDate = new Date(input.expectedExitDate);
+        if (firstDistributionDate) dates.firstDistributionDate = new Date(firstDistributionDate);
+        if (fundingDeadline) dates.fundingDeadline = new Date(fundingDeadline);
+        if (acquisitionDate) dates.acquisitionDate = new Date(acquisitionDate);
+        if (completionDate) dates.completionDate = new Date(completionDate);
+        if (expectedExitDate) dates.expectedExitDate = new Date(expectedExitDate);
         
         // Calculate available values
         const availableValue = propertyData.totalValue;

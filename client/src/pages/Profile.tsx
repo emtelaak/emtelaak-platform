@@ -279,7 +279,7 @@ export default function Profile() {
             </div>
 
             {/* Complete KYC Call-to-Action */}
-            {verificationStatus && !verificationStatus.kycCompleted && (
+            {verificationStatus && !verificationStatus.canInvest && (
               <Card className="border-primary/50 bg-primary/5">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">

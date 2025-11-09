@@ -48,7 +48,7 @@ export default function AdminInvoices() {
     { enabled: !!auditLogInvoiceId }
   );
 
-  const { data: adminPermissions } = trpc.adminPermissions.users.getMyPermissions.useQuery();
+  const { data: adminPermissions } = trpc.adminPermissions.users.getPermissions.useQuery({ userId: user?.id || 0 }, { enabled: !!user });
 
   const { data: invoices, isLoading, refetch } = trpc.admin.invoices.list.useQuery();
   const updateStatusMutation = trpc.admin.invoices.updateStatus.useMutation({
@@ -375,7 +375,7 @@ export default function AdminInvoices() {
                               </Button>
                             </>
                           )}
-                          {(adminPermissions?.canDeleteInvoices || user?.role === "super_admin") && (
+                          {((adminPermissions && Array.isArray(adminPermissions) && adminPermissions.includes('canDeleteInvoices')) || user?.role === "super_admin") && (
                             <Button
                               variant="ghost"
                               size="sm"

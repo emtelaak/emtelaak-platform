@@ -68,7 +68,7 @@ function replaceVariables(template: string, variables: Record<string, string>): 
 /**
  * Get email template from database or use default
  */
-async function getTemplate(type: string): Promise<{ subject: string; htmlContent: string } | null> {
+async function getTemplate(type: string): Promise<{ subject: string; htmlContent: string; isActive?: boolean } | null> {
   try {
     const { getEmailTemplateByType } = await import("../db");
     return await getEmailTemplateByType(type);

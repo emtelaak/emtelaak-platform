@@ -265,7 +265,7 @@ export default function RoleManagement() {
           {selectedRole && permissions && (
             <PermissionMatrix
               roleId={selectedRole.id}
-              permissions={permissions}
+              permissions={permissions as Array<{ id: number; name: string; description: string; category: string }>}
               onSave={handleUpdateRole}
               onCancel={() => setEditDialogOpen(false)}
             />

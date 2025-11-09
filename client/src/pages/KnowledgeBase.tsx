@@ -103,15 +103,15 @@ export default function KnowledgeBase() {
                     </span>
                     <span>•</span>
                     <span>
-                      {new Date(articleDetails.article.publishedAt!).toLocaleDateString()}
+                      {new Date(articleDetails.article.createdAt).toLocaleDateString()}
                     </span>
                     <span>•</span>
                     <span>
-                      {articleDetails.article.viewCount} {language === "en" ? "views" : "مشاهدة"}
+                      {articleDetails.article.views} {language === "en" ? "views" : "مشاهدة"}
                     </span>
                   </CardDescription>
                 </div>
-                <Badge>{language === "ar" && articleDetails.category.nameAr ? articleDetails.category.nameAr : articleDetails.category.name}</Badge>
+                <Badge>{language === "ar" && articleDetails.category?.nameAr ? articleDetails.category.nameAr : articleDetails.category?.name || "Uncategorized"}</Badge>
               </div>
             </CardHeader>
             <CardContent className="prose dark:prose-invert max-w-none">

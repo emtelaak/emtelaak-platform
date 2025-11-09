@@ -101,7 +101,8 @@ export async function getUserTickets(userId: number, status?: string) {
   const db = await getDb();
   if (!db) return [];
 
-  let query = db
+  // Build base query
+  const baseQuery = db
     .select({
       ticket: supportTickets,
       category: ticketCategories,
@@ -112,18 +113,17 @@ export async function getUserTickets(userId: number, status?: string) {
     })
     .from(supportTickets)
     .leftJoin(ticketCategories, eq(supportTickets.categoryId, ticketCategories.id))
-    .leftJoin(users, eq(supportTickets.assignedToId, users.id))
-    .where(
-      status 
-        ? and(
-            eq(supportTickets.userId, userId),
-            eq(supportTickets.status, status as any)
-          )
-        : eq(supportTickets.userId, userId)
-    )
-    .orderBy(desc(supportTickets.createdAt));
+    .leftJoin(users, eq(supportTickets.assignedToId, users.id));
 
-  return query;
+  // Apply filters based on status
+  const query = status
+    ? baseQuery.where(and(
+        eq(supportTickets.userId, userId),
+        eq(supportTickets.status, status as any)
+      ))
+    : baseQuery.where(eq(supportTickets.userId, userId));
+
+  return query.orderBy(desc(supportTickets.createdAt));
 }
 
 /**
@@ -331,7 +331,7 @@ export async function getOrCreateChatConversation(userId: number, departmentType
 
   // Create new conversation
   const conversationId = await generateConversationId();
-  const result = await db.insert(chatConversations).values({
+  const [result] = await db.insert(chatConversations).values({
     conversationId,
     userId,
     departmentType: departmentType as any,
@@ -339,11 +339,13 @@ export async function getOrCreateChatConversation(userId: number, departmentType
     lastMessageAt: new Date(),
   });
 
+  const insertedId = Number(result.insertId);
+
   // Fetch the newly created conversation
   const [newConversation] = await db
     .select()
     .from(chatConversations)
-    .where(eq(chatConversations.id, (result as any).insertId))
+    .where(eq(chatConversations.id, insertedId))
     .limit(1);
 
   return newConversation;

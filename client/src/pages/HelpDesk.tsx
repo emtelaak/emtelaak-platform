@@ -44,7 +44,7 @@ export default function HelpDesk() {
   });
 
     // Get user's tickets
-  const { data: myTickets, isLoading: ticketsLoading } = trpc.helpDesk.tickets.getMyTickets.useQuery(
+  const { data: myTickets, isLoading: ticketsLoading, refetch: refetchTickets } = trpc.helpDesk.tickets.getMyTickets.useQuery(
     { status: "" },
     { enabled: !!user }
   );

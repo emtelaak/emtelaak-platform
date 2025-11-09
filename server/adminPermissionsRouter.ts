@@ -236,7 +236,7 @@ export const adminPermissionsRouter = router({
           userId: ctx.user.id,
           action: "create_user",
           targetType: "user",
-          targetId: result[0].insertId.toString(),
+          targetId: Number(result[0].insertId),
           details: `Created user ${input.name} (${input.email}) with role ${input.role}`,
         });
 
@@ -302,7 +302,7 @@ export const adminPermissionsRouter = router({
           userId: ctx.user.id,
           action: "send_password_reset",
           targetType: "user",
-          targetId: input.userId.toString(),
+          targetId: input.userId,
           details: `Sent password reset email to ${user.email}`,
         });
 
@@ -673,7 +673,7 @@ export const adminPermissionsRouter = router({
             name: targetUser.name || "Unknown",
             email: targetUser.email || "unknown@emtelaak.com",
           },
-          details: `Applied role template "${template.name}" with ${template.permissionIds?.length || 0} permissions`,
+          details: `Applied role template "${template.name}"`,
           superAdminEmails,
         });
 

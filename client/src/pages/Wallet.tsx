@@ -442,9 +442,9 @@ export default function Wallet() {
                         <Button 
                           type="submit" 
                           className="w-full" 
-                          disabled={uploadingReceipt || depositBankTransferMutation.isLoading || depositFawryMutation.isLoading || depositCardMutation.isLoading}
+                          disabled={uploadingReceipt || depositBankTransferMutation.isPending || depositFawryMutation.isPending || depositCardMutation.isPending}
                         >
-                          {(uploadingReceipt || depositBankTransferMutation.isLoading || depositFawryMutation.isLoading || depositCardMutation.isLoading)
+                          {(uploadingReceipt || depositBankTransferMutation.isPending || depositFawryMutation.isPending || depositCardMutation.isPending)
                             ? (language === "en" ? "Processing..." : "جاري المعالجة...")
                             : (language === "en" ? "Submit Deposit" : "إرسال الإيداع")}
                         </Button>
@@ -506,8 +506,8 @@ export default function Wallet() {
                           </SelectContent>
                         </Select>
                       </div>
-                      <Button type="submit" className="w-full" disabled={withdrawMutation.isLoading}>
-                        {withdrawMutation.isLoading 
+                      <Button type="submit" className="w-full" disabled={withdrawMutation.isPending}>
+                        {withdrawMutation.isPending 
                           ? (language === "en" ? "Processing..." : "جاري المعالجة...") 
                           : (language === "en" ? "Request Withdrawal" : "طلب سحب")}
                       </Button>
@@ -588,8 +588,8 @@ export default function Wallet() {
                           {language === "en" ? "Set as default account" : "تعيين كحساب افتراضي"}
                         </Label>
                       </div>
-                      <Button type="submit" className="w-full" disabled={addBankAccountMutation.isLoading}>
-                        {addBankAccountMutation.isLoading 
+                      <Button type="submit" className="w-full" disabled={addBankAccountMutation.isPending}>
+                        {addBankAccountMutation.isPending 
                           ? (language === "en" ? "Adding..." : "جاري الإضافة...") 
                           : (language === "en" ? "Add Bank Account" : "إضافة حساب بنكي")}
                       </Button>

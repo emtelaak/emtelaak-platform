@@ -151,7 +151,7 @@ export const adminRolesRouter = router({
         action: "delete_role",
         targetType: "role",
         targetId: input.roleId,
-        details: { roleName: role[0]?.name },
+        details: `Deleted role: ${role[0]?.name}`,
       });
 
       return { success: true };

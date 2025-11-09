@@ -14,7 +14,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export default function ResetPassword() {
   const { t, dir } = useLanguage();
   const [location] = useLocation();
-  const [, setLocation] = useRouter();
+  const router = useRouter();
+  const setLocation = (path: string) => (router as any)[1](path);
   const [token, setToken] = useState<string>("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

@@ -60,7 +60,8 @@ export async function detectLanguage(text: string): Promise<LanguageCode> {
       },
     });
 
-    const result = JSON.parse(response.choices[0].message.content || "{}");
+    const content = typeof response.choices[0].message.content === 'string' ? response.choices[0].message.content : '{}';
+    const result = JSON.parse(content);
     return (result.language || "en") as LanguageCode;
   } catch (error) {
     console.error("[Translation] Language detection failed:", error);
@@ -98,7 +99,8 @@ export async function translateText(
       ],
     });
 
-    return response.choices[0].message.content?.trim() || text;
+    const content = response.choices[0].message.content;
+    return (typeof content === 'string' ? content.trim() : text) || text;
   } catch (error) {
     console.error(`[Translation] Translation to ${targetLanguage} failed:`, error);
     return text; // Return original text on error
