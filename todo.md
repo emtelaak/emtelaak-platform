@@ -2186,3 +2186,186 @@
 - [x] Check if CreateProperty or AddProperty component should handle this (AddProperty)
 - [x] Add missing route to App.tsx
 - [ ] Test navigation to /properties/create
+
+
+---
+
+# PHASE 2: MULTI-STAGE APPROVAL AND COMPLIANCE
+
+## Milestone 1: Database Schema (Days 1-3)
+- [ ] Design approval_stages table
+- [ ] Design reviewer_assignments table
+- [ ] Design review_comments table
+- [ ] Design change_requests table
+- [ ] Design compliance_checks table
+- [ ] Design workflow_audit_log table
+- [ ] Create database migrations
+- [ ] Test schema integrity
+- [ ] Push schema to database
+
+## Milestone 2: Reviewer Role System (Days 4-7)
+- [ ] Extend user roles enum for reviewer types
+- [ ] Create reviewer assignment logic
+- [ ] Implement reviewer permissions system
+- [ ] Build reviewer workload tracking
+- [ ] Test role-based access control
+
+## Milestone 3: Approval Workflow Engine (Days 8-12)
+- [ ] Implement workflow state machine
+- [ ] Create stage transition validation
+- [ ] Build automatic reviewer assignment
+- [ ] Implement notification triggers
+- [ ] Create workflow history tracking
+- [ ] Test workflow progression
+
+## Milestone 4: Review Comments & Feedback (Days 13-16)
+- [ ] Design comment threading system
+- [ ] Implement inline commenting API
+- [ ] Create comment resolution tracking
+- [ ] Build comment notifications
+- [ ] Test comment functionality
+
+## Milestone 5: Change Request Management (Days 17-20)
+- [ ] Create change request data model
+- [ ] Implement change request workflow
+- [ ] Build change request tracking
+- [ ] Create impact analysis tools
+- [ ] Test change request lifecycle
+
+## Milestone 6: Compliance Validation Engine (Days 21-26)
+- [ ] Design compliance rule structure
+- [ ] Implement rule evaluation engine
+- [ ] Create Regulation D compliance checks
+- [ ] Build document verification logic
+- [ ] Create compliance scoring system
+- [ ] Test compliance validation
+
+## Milestone 7: Frontend Interfaces (Days 27-35)
+- [ ] Build reviewer dashboard page
+- [ ] Create multi-stage review interface
+- [ ] Implement inline commenting UI
+- [ ] Build change request interface
+- [ ] Create compliance dashboard
+- [ ] Design audit trail viewer
+- [ ] Test all frontend components
+
+## Milestone 8: Testing & Integration (Days 36-40)
+- [ ] End-to-end workflow testing
+- [ ] Compliance check validation
+- [ ] Performance testing
+- [ ] User acceptance testing
+- [ ] Create documentation
+- [ ] Save Phase 2 checkpoint
+
+
+---
+
+# PHASE A: COMPLETE PHASE 1 ENHANCEMENTS
+
+## Milestone 1: Database Schema Design & Implementation
+
+### 1.1 Expand Offerings Table
+- [x] Add offering type fields (regulationType, offeringType)
+- [x] Add share structure fields (totalShares, availableShares, sharePrice, minShares, maxShares)
+- [x] Add ownership structure fields (ownershipStructure, votingRights, distributionRights)
+- [x] Add holding period and exit strategy fields
+- [x] Add funding period fields (fundingStartDate, fundingEndDate)
+- [x] Add expected dates (expectedClosingDate, expectedExitDate)
+- [x] Add financial summary fields (projectedIRR, projectedROI, cashOnCashReturn, equityMultiple)
+- [x] Run migration to add new columns
+
+### 1.2 Create offering_financial_projections Table
+- [x] Design schema with all required fields
+- [x] Create table migration
+- [x] Add indexes for performance
+
+### 1.3 Create offering_fees Table
+- [x] Design schema for 6 fee types
+- [x] Create table migration
+- [x] Add indexes
+
+### 1.4 Create offering_timeline Table
+- [x] Design schema for milestones
+- [x] Create table migration
+- [x] Add indexes
+
+### 1.5 Create offering_status_history Table
+- [x] Design schema for audit trail
+- [x] Create table migration
+- [x] Add indexes
+
+### 1.6 Database Migration & Verification
+- [x] Write comprehensive migration script
+- [x] Run migration: SQL direct execution
+- [x] Verify schema integrity
+
+## Milestone 2: Backend API Development
+
+### 2.1 Financial Calculation Engine
+- [ ] Implement IRR calculator
+- [ ] Implement ROI calculator
+- [ ] Implement Cash-on-Cash calculator
+- [ ] Implement Equity Multiple calculator
+- [ ] Create unit tests
+
+### 2.2 Financial Projections API
+- [ ] Create CRUD tRPC procedures
+- [ ] Add validation logic
+- [ ] Add authorization checks
+
+### 2.3 Fee Structure Management API
+- [ ] Create CRUD tRPC procedures
+- [ ] Implement fee impact calculator
+- [ ] Add validation
+
+### 2.4 Timeline Management API
+- [ ] Create CRUD tRPC procedures
+- [ ] Add milestone notifications
+
+### 2.5 Status History API
+- [ ] Implement automatic recording
+- [ ] Add query functions
+
+### 2.6 Enhanced Offerings CRUD
+- [ ] Update create/update procedures
+- [ ] Add getWithFullDetails procedure
+
+## Milestone 3: Frontend Integration
+
+### 3.1 Update CreateOffering Component
+- [ ] Add all new fields
+- [ ] Update validation
+- [ ] Connect to backend
+
+### 3.2 Connect FinancialProjectionForm
+- [ ] Wire up to backend API
+- [ ] Test save/load
+
+### 3.3 Connect FeeStructureEditor
+- [ ] Wire up to backend API
+- [ ] Test save/load
+
+### 3.4 Create Timeline Management UI
+- [ ] Build timeline editor
+- [ ] Connect to backend
+
+### 3.5 Create Status History Viewer
+- [ ] Build audit trail component
+- [ ] Add to OfferingDetail page
+
+### 3.6 Update OfferingDetail Page
+- [ ] Update all tabs with new data
+- [ ] Test complete workflow
+
+## Milestone 4: Testing & Validation
+
+### 4.1 End-to-End Testing
+- [ ] Test complete offering creation
+- [ ] Test all data persists correctly
+- [ ] Verify calculations accurate
+
+### 4.2 Save Checkpoint
+- [ ] Mark all tasks complete
+- [ ] Save checkpoint: "Phase A Complete"
+
+---

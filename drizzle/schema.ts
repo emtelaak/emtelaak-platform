@@ -447,13 +447,60 @@ export const offerings = mysqlTable("offerings", {
   id: int("id").autoincrement().primaryKey(),
   fundraiserId: int("fundraiserId").notNull().references(() => users.id),
   propertyId: int("propertyId").references(() => properties.id),
+  
+  // Basic Information
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description"),
-  fundingGoal: int("fundingGoal").notNull(),
-  currentFunding: int("currentFunding").default(0),
+  
+  // Offering Type & Regulation
+  offeringType: mysqlEnum("offeringType", ["regulation_d_506c", "regulation_d_506b", "regulation_a_plus", "regulation_cf"]).notNull(),
+  regulationType: varchar("regulationType", { length: 100 }),
+  
+  // Funding Structure
+  totalOfferingAmount: int("totalOfferingAmount").notNull(), // in cents
+  minimumOfferingAmount: int("minimumOfferingAmount"), // in cents
+  maximumOfferingAmount: int("maximumOfferingAmount"), // in cents
+  fundingGoal: int("fundingGoal").notNull(), // in cents (for backward compatibility)
+  currentFunding: int("currentFunding").default(0), // in cents
+  
+  // Share Structure
+  totalShares: int("totalShares").notNull(),
+  availableShares: int("availableShares").notNull(),
+  pricePerShare: int("pricePerShare").notNull(), // in cents
+  minimumShares: int("minimumShares"),
+  maximumShares: int("maximumShares"),
+  
+  // Ownership Structure
+  ownershipStructure: mysqlEnum("ownershipStructure", ["llc_membership", "reit_shares", "corporation_stock", "limited_partnership", "other"]).notNull(),
+  votingRights: text("votingRights"),
+  distributionRights: text("distributionRights"),
+  
+  // Holding Period & Exit
+  holdingPeriodMonths: int("holdingPeriodMonths"),
+  exitStrategy: mysqlEnum("exitStrategy", ["property_sale", "refinance", "buyout", "ipo", "other"]),
+  exitStrategyDetails: text("exitStrategyDetails"),
+  
+  // Timeline
+  fundingStartDate: timestamp("fundingStartDate"),
+  fundingEndDate: timestamp("fundingEndDate"),
+  expectedClosingDate: timestamp("expectedClosingDate"),
+  expectedExitDate: timestamp("expectedExitDate"),
+  
+  // Financial Projections Summary (calculated from offering_financial_projections)
+  projectedIRR: int("projectedIRR"), // percentage * 100 (e.g., 12.5% = 1250)
+  projectedROI: int("projectedROI"), // percentage * 100
+  cashOnCashReturn: int("cashOnCashReturn"), // percentage * 100
+  equityMultiple: int("equityMultiple"), // multiplier * 100 (e.g., 1.85x = 185)
+  annualDistribution: int("annualDistribution"), // in cents
+  distributionFrequency: mysqlEnum("distributionFrequency", ["monthly", "quarterly", "semi_annually", "annually"]),
+  
+  // Status & Workflow
   status: mysqlEnum("status", ["draft", "pending_approval", "approved", "rejected", "active", "funded", "closed"]).default("draft").notNull(),
   rejectionReason: text("rejectionReason"),
+  
+  // Timestamps
   createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   submittedAt: timestamp("submittedAt"),
   approvedAt: timestamp("approvedAt"),
   approvedBy: int("approvedBy").references(() => users.id),
@@ -461,6 +508,7 @@ export const offerings = mysqlTable("offerings", {
 }, (table) => ({
   fundraiserIdIdx: index("fundraiser_id_idx").on(table.fundraiserId),
   statusIdx: index("status_idx").on(table.status),
+  propertyIdIdx: index("property_id_idx").on(table.propertyId),
 }));
 
 export const offeringDocuments = mysqlTable("offering_documents", {
@@ -474,6 +522,174 @@ export const offeringDocuments = mysqlTable("offering_documents", {
 }, (table) => ({
   offeringIdIdx: index("offering_id_idx").on(table.offeringId),
 }));
+
+export const offeringFinancialProjections = mysqlTable("offering_financial_projections", {
+  id: int("id").autoincrement().primaryKey(),
+  offeringId: int("offeringId").notNull().references(() => offerings.id, { onDelete: "cascade" }),
+  
+  // Return Metrics
+  projectedIRR: int("projectedIRR"), // percentage * 100
+  projectedROI: int("projectedROI"), // percentage * 100
+  cashOnCashReturn: int("cashOnCashReturn"), // percentage * 100
+  equityMultiple: int("equityMultiple"), // multiplier * 100
+  
+  // Scenario Analysis
+  bestCaseIRR: int("bestCaseIRR"), // percentage * 100
+  baseCaseIRR: int("baseCaseIRR"), // percentage * 100
+  worstCaseIRR: int("worstCaseIRR"), // percentage * 100
+  
+  // Distribution Projections
+  annualDistribution: int("annualDistribution"), // in cents
+  distributionFrequency: mysqlEnum("distributionFrequency", ["monthly", "quarterly", "semi_annually", "annually"]),
+  firstDistributionDate: timestamp("firstDistributionDate"),
+  
+  // Property Value Projections
+  initialPropertyValue: int("initialPropertyValue"), // in cents
+  projectedPropertyValue: int("projectedPropertyValue"), // in cents
+  appreciationRate: int("appreciationRate"), // percentage * 100
+  
+  // Income Projections
+  yearlyRentalIncome: int("yearlyRentalIncome"), // in cents
+  rentalYield: int("rentalYield"), // percentage * 100
+  occupancyRate: int("occupancyRate"), // percentage * 100
+  
+  // Expense Projections
+  yearlyOperatingExpenses: int("yearlyOperatingExpenses"), // in cents
+  yearlyMaintenanceExpenses: int("yearlyMaintenanceExpenses"), // in cents
+  yearlyPropertyTax: int("yearlyPropertyTax"), // in cents
+  yearlyInsurance: int("yearlyInsurance"), // in cents
+  
+  // Cash Flow
+  yearlyNetCashFlow: int("yearlyNetCashFlow"), // in cents
+  
+  // Sensitivity Analysis Data (JSON)
+  sensitivityAnalysis: text("sensitivityAnalysis"), // JSON with various scenarios
+  
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  offeringIdIdx: index("offering_id_idx").on(table.offeringId),
+}));
+
+export const offeringFees = mysqlTable("offering_fees", {
+  id: int("id").autoincrement().primaryKey(),
+  offeringId: int("offeringId").notNull().references(() => offerings.id, { onDelete: "cascade" }),
+  
+  // Platform Fee
+  platformFeePercentage: int("platformFeePercentage"), // percentage * 100
+  platformFeeAmount: int("platformFeeAmount"), // in cents (if fixed)
+  
+  // Management Fee
+  managementFeePercentage: int("managementFeePercentage"), // percentage * 100 (annual)
+  managementFeeAmount: int("managementFeeAmount"), // in cents (if fixed)
+  
+  // Performance Fee (Carried Interest)
+  performanceFeePercentage: int("performanceFeePercentage"), // percentage * 100
+  performanceHurdleRate: int("performanceHurdleRate"), // percentage * 100 (e.g., 8% hurdle)
+  
+  // Maintenance Fee
+  maintenanceFeePercentage: int("maintenanceFeePercentage"), // percentage * 100
+  maintenanceFeeAmount: int("maintenanceFeeAmount"), // in cents (if fixed)
+  
+  // Acquisition Fee (one-time)
+  acquisitionFeePercentage: int("acquisitionFeePercentage"), // percentage * 100
+  acquisitionFeeAmount: int("acquisitionFeeAmount"), // in cents
+  
+  // Disposition Fee (at exit)
+  dispositionFeePercentage: int("dispositionFeePercentage"), // percentage * 100
+  dispositionFeeAmount: int("dispositionFeeAmount"), // in cents
+  
+  // Other Fees
+  otherFeesDescription: text("otherFeesDescription"),
+  otherFeesAmount: int("otherFeesAmount"), // in cents
+  
+  // Total Fee Impact
+  totalAnnualFees: int("totalAnnualFees"), // in cents (calculated)
+  feeImpactOnReturns: int("feeImpactOnReturns"), // percentage * 100 (calculated)
+  
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  offeringIdIdx: index("offering_id_idx").on(table.offeringId),
+}));
+
+export const offeringTimeline = mysqlTable("offering_timeline", {
+  id: int("id").autoincrement().primaryKey(),
+  offeringId: int("offeringId").notNull().references(() => offerings.id, { onDelete: "cascade" }),
+  
+  // Milestone Information
+  milestoneType: mysqlEnum("milestoneType", [
+    "funding_start",
+    "funding_end",
+    "closing",
+    "first_distribution",
+    "quarterly_distribution",
+    "annual_report",
+    "property_improvement",
+    "refinance",
+    "exit",
+    "other"
+  ]).notNull(),
+  milestoneDate: timestamp("milestoneDate").notNull(),
+  milestoneTitle: varchar("milestoneTitle", { length: 255 }).notNull(),
+  milestoneDescription: text("milestoneDescription"),
+  
+  // Status
+  status: mysqlEnum("status", ["upcoming", "in_progress", "completed", "delayed", "cancelled"]).default("upcoming").notNull(),
+  completedAt: timestamp("completedAt"),
+  
+  // Notifications
+  notifyInvestors: boolean("notifyInvestors").default(false),
+  notificationSent: boolean("notificationSent").default(false),
+  notificationSentAt: timestamp("notificationSentAt"),
+  
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  offeringIdIdx: index("offering_id_idx").on(table.offeringId),
+  milestoneDateIdx: index("milestone_date_idx").on(table.milestoneDate),
+  statusIdx: index("status_idx").on(table.status),
+}));
+
+export const offeringStatusHistory = mysqlTable("offering_status_history", {
+  id: int("id").autoincrement().primaryKey(),
+  offeringId: int("offeringId").notNull().references(() => offerings.id, { onDelete: "cascade" }),
+  
+  // Status Change
+  previousStatus: varchar("previousStatus", { length: 50 }),
+  newStatus: varchar("newStatus", { length: 50 }).notNull(),
+  
+  // Change Details
+  changedBy: int("changedBy").notNull().references(() => users.id),
+  reason: text("reason"),
+  notes: text("notes"),
+  
+  // Approval/Rejection Details
+  reviewerComments: text("reviewerComments"),
+  
+  // Timestamp
+  changedAt: timestamp("changedAt").defaultNow().notNull(),
+}, (table) => ({
+  offeringIdIdx: index("offering_id_idx").on(table.offeringId),
+  changedAtIdx: index("changed_at_idx").on(table.changedAt),
+}));
+
+// Type exports for new tables
+export type Offering = typeof offerings.$inferSelect;
+export type InsertOffering = typeof offerings.$inferInsert;
+export type OfferingDocument = typeof offeringDocuments.$inferSelect;
+export type InsertOfferingDocument = typeof offeringDocuments.$inferInsert;
+export type OfferingFinancialProjection = typeof offeringFinancialProjections.$inferSelect;
+export type InsertOfferingFinancialProjection = typeof offeringFinancialProjections.$inferInsert;
+export type OfferingFee = typeof offeringFees.$inferSelect;
+export type InsertOfferingFee = typeof offeringFees.$inferInsert;
+export type OfferingTimeline = typeof offeringTimeline.$inferSelect;
+export type InsertOfferingTimeline = typeof offeringTimeline.$inferInsert;
+export type OfferingStatusHistory = typeof offeringStatusHistory.$inferSelect;
+export type InsertOfferingStatusHistory = typeof offeringStatusHistory.$inferInsert;
 
 // ============================================
 // SECONDARY MARKET

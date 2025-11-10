@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS offering_status_history (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  offeringId INT NOT NULL,\n  previousStatus VARCHAR(50),\n  newStatus VARCHAR(50) NOT NULL,\n  changedBy INT NOT NULL,\n  reason TEXT,\n  notes TEXT,\n  reviewerComments TEXT,\n  changedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  FOREIGN KEY (offeringId) REFERENCES offerings(id) ON DELETE CASCADE,\n  FOREIGN KEY (changedBy) REFERENCES users(id),\n  INDEX offering_id_idx (offeringId),\n  INDEX changed_at_idx (changedAt)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute CREATE TABLE IF NOT EXISTS offering_status_history (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  offeringId INT NOT NULL,\n  previousStatus VARCHAR(50),\n  newStatus VARCHAR(50) NOT NULL,\n  changedBy INT NOT NULL,\n  reason TEXT,\n  notes TEXT,\n  reviewerComments TEXT,\n  changedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  FOREIGN KEY (offeringId) REFERENCES offerings(id) ON DELETE CASCADE,\n  FOREIGN KEY (changedBy) REFERENCES users(id),\n  INDEX offering_id_idx (offeringId),\n  INDEX changed_at_idx (changedAt)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 384
+}
