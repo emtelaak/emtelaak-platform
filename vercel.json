@@ -6,8 +6,8 @@
   "framework": null,
   "outputDirectory": "dist/public",
   "functions": {
-    "api/index.js": {
-      "runtime": "nodejs20.x"
+    "api/*.js": {
+      "runtime": "@vercel/node@3.0.0"
     }
   },
   "rewrites": [
