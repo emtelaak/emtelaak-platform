@@ -1,0 +1,8 @@
+{
+  "query": "INSERT INTO offerings (propertyId, fundraiserId, offeringType, totalOfferingAmount, minimumOfferingAmount, maximumOfferingAmount, totalShares, pricePerShare, availableShares, minimumSharePurchase, maximumSharePurchase, ownershipStructure, holdingPeriodMonths, exitStrategy, fundingStartDate, fundingEndDate, expectedClosingDate, expectedExitDate, status, createdAt, updatedAt) VALUES (1, 750038, 'regulation_d_506c', 500000000, 2500000, 50000000, 10000, 50000, 10000, 50, 1000, 'llc_membership', 60, 'sale_of_property', '2024-12-01', '2025-03-31', '2025-04-15', '2030-04-15', 'under_review', NOW(), NOW())",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute INSERT INTO offerings (propertyId, fundraiserId, offeringType, totalOfferingAmount, minimumOfferingAmount, maximumOfferingAmount, totalShares, pricePerShare, availableShares, minimumSharePurchase, maximumSharePurchase, ownershipStructure, holdingPeriodMonths, exitStrategy, fundingStartDate, fundingEndDate, expectedClosingDate, expectedExitDate, status, createdAt, updatedAt) VALUES (1, 750038, 'regulation_d_506c', 500000000, 2500000, 50000000, 10000, 50000, 10000, 50, 1000, 'llc_membership', 60, 'sale_of_property', '2024-12-01', '2025-03-31', '2025-04-15', '2030-04-15', 'under_review', NOW(), NOW())",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1265 (01000) at line 1: Data truncated for column 'exitStrategy' at row 1"
+  ]
+}

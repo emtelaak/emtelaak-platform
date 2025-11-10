@@ -55,7 +55,9 @@ import {
   Edit3,
   Home,
   Info,
-  TrendingUp
+  TrendingUp,
+  FileCheck,
+  Layers
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -80,10 +82,27 @@ const menuItems: MenuItem[] = [
   { icon: UserCheck, label: "KYC Review", path: "/admin/kyc-review" },
   { icon: Receipt, label: "Invoices", path: "/admin/invoices" },
   { icon: Wallet, label: "Wallet", path: "/admin/wallet" },
-  { icon: BarChart3, label: "Fundraiser Dashboard", path: "/fundraiser/dashboard" },
-  { icon: Building2, label: "Property Management", path: "/admin/property-management" },
+  { 
+    icon: BarChart3, 
+    label: "Fundraiser Dashboard", 
+    path: "/fundraiser/dashboard",
+    children: [
+      { icon: BarChart3, label: "Dashboard", path: "/fundraiser/dashboard" },
+      { icon: Building2, label: "Property Management", path: "/fundraiser/property-management" },
+      { icon: Layers, label: "My Offerings", path: "/offerings" },
+    ]
+  },
   { icon: DollarSign, label: "Platform Settings", path: "/admin/platform-settings" },
   { icon: TrendingUp, label: "Income Distribution", path: "/admin/income-distribution" },
+  { 
+    icon: Layers, 
+    label: "Offering Management", 
+    path: "/offerings",
+    children: [
+      { icon: Layers, label: "My Offerings", path: "/offerings" },
+      { icon: FileCheck, label: "Offering Approvals", path: "/admin/offering-approvals" },
+    ]
+  },
   { 
     icon: Edit3, 
     label: "Content Management", 
