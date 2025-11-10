@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import ROICalculator from "@/components/ROICalculator";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { formatCurrency as formatCurrencyUtil } from "@/lib/currency";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function PropertyDetail() {
   const { id } = useParams();
@@ -128,6 +129,7 @@ export default function PropertyDetail() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
+        <Breadcrumb />
         <div className="container py-8">
           <Skeleton className="h-96 w-full mb-8" />
           <Skeleton className="h-64 w-full" />

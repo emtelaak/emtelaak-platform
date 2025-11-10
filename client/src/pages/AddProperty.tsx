@@ -19,6 +19,7 @@ import { Loader2, Upload, X, ImageIcon } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CustomFieldsForm, useSaveCustomFields } from "@/components/CustomFieldsForm";
 import type { CustomFieldValue } from "@/components/CustomFieldRenderer";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 interface ImageUpload {
   imageData: string;
@@ -196,6 +197,7 @@ export default function AddProperty() {
 
   return (
     <div className="container max-w-5xl py-8" dir={dir}>
+      <Breadcrumb />
       <Card>
         <CardHeader>
           <CardTitle>Add New Property</CardTitle>

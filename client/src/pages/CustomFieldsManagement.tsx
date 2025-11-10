@@ -34,6 +34,7 @@ import { Plus, Edit, Trash2, Save, X, Settings2, Package, Download } from "lucid
 import { DependencyBuilder } from "@/components/DependencyBuilder";
 import { ValidationRulesBuilder } from "@/components/ValidationRulesBuilder";
 import { toast } from "sonner";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 /**
  * Custom Fields Management Page
@@ -197,6 +198,7 @@ export default function CustomFieldsManagement() {
 
   return (
     <div className="container mx-auto py-8">
+      <Breadcrumb />
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">
           {language === "en" ? "Custom Fields Management" : "إدارة الحقول المخصصة"}

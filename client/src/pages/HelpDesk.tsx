@@ -26,6 +26,7 @@ import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getLoginUrl } from "@/const";
 import LiveChat from "@/components/LiveChat";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function HelpDesk() {
   const { user, loading: authLoading } = useAuth();
@@ -95,6 +96,7 @@ export default function HelpDesk() {
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
+        <Breadcrumb />
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );

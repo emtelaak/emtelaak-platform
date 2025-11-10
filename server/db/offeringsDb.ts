@@ -403,6 +403,15 @@ export async function completeTimelineMilestone(
     .where(eq(offeringTimeline.id, id));
 }
 
+export async function deleteTimelineMilestone(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db
+    .delete(offeringTimeline)
+    .where(eq(offeringTimeline.id, id));
+}
+
 // ============================================
 // APPROVAL WORKFLOW
 // ============================================

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Loader2, ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 /**
  * CREATE OFFERING WIZARD
@@ -135,6 +136,7 @@ export default function CreateOffering() {
 
   return (
     <div className="container max-w-4xl py-8">
+      <Breadcrumb />
       {/* Progress Steps */}
       <div className="mb-8">
         <div className="flex items-center justify-between">

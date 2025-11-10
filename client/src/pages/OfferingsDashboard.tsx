@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Plus, Search, TrendingUp, DollarSign, Users, Calendar } from "lucide-react";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 /**
  * OFFERINGS DASHBOARD
@@ -58,6 +59,7 @@ export default function OfferingsDashboard() {
 
   return (
     <div className="container py-8">
+      <Breadcrumb />
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>

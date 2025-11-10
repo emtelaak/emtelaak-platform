@@ -42,6 +42,7 @@ import {
   Search,
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 const CATEGORIES = [
   { value: "terms_of_service", label: "Terms of Service" },
@@ -211,6 +212,7 @@ export default function AdminLegalDocuments() {
 
   return (
     <DashboardLayout>
+      <Breadcrumb />
       <div className="container mx-auto py-8">
         <div className="flex justify-between items-center mb-6">
           <div>

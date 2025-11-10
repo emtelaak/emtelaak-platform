@@ -17,6 +17,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { CheckCircle2, AlertCircle, Clock } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function KYCQuestionnaire() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
@@ -106,6 +107,7 @@ export default function KYCQuestionnaire() {
   if (authLoading || questionnaireLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
+        <Breadcrumb />
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );

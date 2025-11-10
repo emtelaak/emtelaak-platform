@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dialog";
 import { Shield, Plus, Edit, Trash2, Loader2, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminRoles() {
   const { user, isAuthenticated } = useAuth();
@@ -92,6 +93,7 @@ export default function AdminRoles() {
   if (!isAuthenticated || user?.role !== "super_admin") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-muted/30">
+        <Breadcrumb />
         <Card className="max-w-md">
           <CardHeader>
             <CardTitle>Access Denied</CardTitle>

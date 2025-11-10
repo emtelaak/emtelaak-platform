@@ -343,12 +343,26 @@ export const investments = mysqlTable("investments", {
   sharePrice: int("sharePrice").notNull(),
   ownershipPercentage: int("ownershipPercentage").notNull(), // percentage * 10000 (e.g., 100 = 0.01%)
   status: mysqlEnum("status", ["pending", "confirmed", "active", "exited", "cancelled"]).default("pending").notNull(),
+  
+  // Reservation fields
+  reservationId: varchar("reservation_id", { length: 100 }),
+  reservationExpiresAt: timestamp("reservation_expires_at"),
+  shareQuantity: int("share_quantity"),
+  sharePriceCents: int("share_price_cents"),
+  totalCostCents: int("total_cost_cents"),
+  
   distributionFrequency: mysqlEnum("distributionFrequency", ["monthly", "quarterly", "annual"]),
   paymentMethod: varchar("paymentMethod", { length: 50 }),
   paymentStatus: mysqlEnum("paymentStatus", ["pending", "completed", "failed", "refunded"]).default("pending"),
+  
+  // Escrow status
+  escrowStatus: mysqlEnum("escrow_status", ["not_required", "pending", "held", "released", "refunded"]).default("not_required"),
+  
   transactionId: varchar("transactionId", { length: 255 }),
   investmentDate: timestamp("investmentDate").defaultNow().notNull(),
   confirmedAt: timestamp("confirmedAt"),
+  confirmationSentAt: timestamp("confirmation_sent_at"),
+  certificateGeneratedAt: timestamp("certificate_generated_at"),
   exitedAt: timestamp("exitedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
@@ -1895,3 +1909,15 @@ export type InsertInvestmentActivity = typeof investmentActivity.$inferInsert;
 // ============================================
 
 export * from "./offerings-schema";
+
+// ============================================
+// INVESTMENT FLOW SYSTEM (Phase B)
+// ============================================
+
+export * from "./investments-schema";
+
+// ============================================
+// INVESTMENT FLOW (User-Specified Tables)
+// ============================================
+
+export * from "./investment-flow-schema";

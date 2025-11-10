@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useLanguage } from "@/contexts/LanguageContext";
 import DashboardLayout from "@/components/DashboardLayout";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function SecuritySettingsManagement() {
   const { language } = useLanguage();
@@ -147,6 +148,7 @@ export default function SecuritySettingsManagement() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
+        <Breadcrumb />
         <Loader2 className="w-8 h-8 animate-spin" />
       </div>
     );

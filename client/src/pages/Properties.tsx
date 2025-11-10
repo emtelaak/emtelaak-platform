@@ -14,6 +14,7 @@ import { Link } from "wouter";
 import ROICalculator from "@/components/ROICalculator";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Breadcrumb } from "@/components/Breadcrumb";
 import { formatCurrency as formatCurrencyUtil } from "@/lib/currency";
 import MobileBottomNav from "@/components/MobileBottomNav";
 
@@ -126,6 +127,7 @@ export default function Properties() {
       {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container py-6">
+          <Breadcrumb />
           <div className="flex items-center gap-4 mb-6">
             <Link href="/">
               <img src={APP_LOGO} alt={APP_TITLE} className="h-20 w-auto cursor-pointer" />

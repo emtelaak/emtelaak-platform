@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
+import { Breadcrumb } from "@/components/Breadcrumb";
 import {
   Loader2,
   ArrowLeft,
@@ -186,6 +187,7 @@ export default function OfferingDocuments() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
+        <Breadcrumb />
         <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
       </div>
     );

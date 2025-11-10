@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2, Settings, DollarSign, Percent, Save } from "lucide-react";
 import { Link } from "wouter";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminPlatformSettings() {
   const { data: fees, isLoading, refetch } = trpc.platformSettings.getFees.useQuery();
@@ -63,6 +64,7 @@ export default function AdminPlatformSettings() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
+        <Breadcrumb />
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );

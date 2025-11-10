@@ -20,7 +20,9 @@ import {
   Clock,
   AlertCircle
 } from "lucide-react";
+import TimelineManagement from "@/components/TimelineManagement";
 import { toast } from "sonner";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 /**
  * OFFERING DETAIL VIEW
@@ -61,9 +63,11 @@ export default function OfferingDetail() {
     { enabled: offeringId > 0 }
   );
 
-  const submitForReviewMutation = trpc.offerings.submitForReview.useMutation({
+  const submitForApprovalMutation = trpc.approvals.submitForApproval.useMutation({
     onSuccess: () => {
-      toast.success("Offering submitted for review!");
+      toast.success("Offering submitted for multi-stage approval!");
+      // Refetch offering data to show updated status
+      window.location.reload();
     },
     onError: (error) => {
       toast.error(`Failed to submit: ${error.message}`);
@@ -73,6 +77,7 @@ export default function OfferingDetail() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
+        <Breadcrumb />
         <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
       </div>
     );
@@ -128,13 +133,15 @@ export default function OfferingDetail() {
           <div className="flex gap-2">
             {offering.status === "draft" && (
               <Button
-                onClick={() => submitForReviewMutation.mutate({ offeringId: offering.id })}
-                disabled={submitForReviewMutation.isPending}
+                onClick={() => submitForApprovalMutation.mutate({ offeringId: offering.id })}
+                disabled={submitForApprovalMutation.isPending}
+                className="bg-green-600 hover:bg-green-700"
               >
-                {submitForReviewMutation.isPending && (
+                {submitForApprovalMutation.isPending && (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 )}
-                Submit for Review
+                <CheckCircle2 className="w-4 h-4 mr-2" />
+                Submit for Approval
               </Button>
             )}
             <Button variant="outline" onClick={() => navigate(`/offerings/${offeringId}/edit`)}>
@@ -332,7 +339,11 @@ export default function OfferingDetail() {
 
         {/* Timeline Tab */}
         <TabsContent value="timeline">
-          <TimelineView timeline={timeline || []} />
+          <TimelineManagement 
+            offeringId={offeringId} 
+            timeline={timeline || []} 
+            isEditable={offering.status === "draft" || offering.status === "under_review" || offering.status === "approved"}
+          />
         </TabsContent>
 
         {/* History Tab */}
@@ -581,55 +592,6 @@ function DocumentsView({ documents, offeringId }: { documents: any[]; offeringId
                   Download
                 </a>
               </Button>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
-}
-
-function TimelineView({ timeline }: { timeline: any[] }) {
-  if (timeline.length === 0) {
-    return (
-      <Card>
-        <CardContent className="py-12 text-center">
-          <Clock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-          <p className="text-muted-foreground">No timeline milestones yet</p>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  return (
-    <div className="space-y-4">
-      {timeline.map((milestone, index) => (
-        <Card key={milestone.id}>
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-4">
-              <div className="mt-1">
-                {milestone.isCompleted ? (
-                  <CheckCircle2 className="w-5 h-5 text-green-600" />
-                ) : (
-                  <Clock className="w-5 h-5 text-muted-foreground" />
-                )}
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold mb-1">{milestone.milestoneName}</h3>
-                {milestone.milestoneDescription && (
-                  <p className="text-sm text-muted-foreground mb-2">
-                    {milestone.milestoneDescription}
-                  </p>
-                )}
-                <div className="flex gap-4 text-sm text-muted-foreground">
-                  {milestone.targetDate && (
-                    <span>Target: {new Date(milestone.targetDate).toLocaleDateString()}</span>
-                  )}
-                  {milestone.actualDate && (
-                    <span>Completed: {new Date(milestone.actualDate).toLocaleDateString()}</span>
-                  )}
-                </div>
-              </div>
             </div>
           </CardContent>
         </Card>

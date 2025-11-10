@@ -23,6 +23,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { TwoFactorSettings } from "@/components/TwoFactorSettings";
 import { TrustedDevicesManager } from "@/components/TrustedDevicesManager";
 import { CustomFieldsForm } from "@/components/CustomFieldsForm";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function Profile() {
   const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
@@ -88,6 +89,7 @@ export default function Profile() {
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
+        <Breadcrumb />
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );

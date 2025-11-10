@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function KnowledgeBase() {
   const { language } = useLanguage();
@@ -82,6 +83,7 @@ export default function KnowledgeBase() {
   if (selectedArticle && articleDetails) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+        <Breadcrumb />
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           <Button variant="ghost" onClick={handleBack} className="mb-6">
             <ArrowLeft className="h-4 w-4 mr-2" />

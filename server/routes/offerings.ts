@@ -504,6 +504,30 @@ export const offeringsRouter = router({
       return { success: true };
     }),
 
+  updateMilestone: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        milestoneType: z.string().optional(),
+        milestoneDate: z.date().optional(),
+        milestoneTitle: z.string().optional(),
+        milestoneDescription: z.string().optional(),
+        status: z.enum(["upcoming", "in_progress", "completed", "delayed", "cancelled"]).optional(),
+        notifyInvestors: z.boolean().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { id, ...data } = input;
+      return await offeringsDb.updateTimelineMilestone(id, data);
+    }),
+
+  deleteMilestone: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input }) => {
+      await offeringsDb.deleteTimelineMilestone(input.id);
+      return { success: true };
+    }),
+
   // ============================================
   // APPROVAL WORKFLOW
   // ============================================

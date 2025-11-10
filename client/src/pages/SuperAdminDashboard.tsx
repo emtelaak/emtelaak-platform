@@ -29,6 +29,7 @@ import { MobileNav } from "@/components/MobileNav";
 import { FloatingActionButton, adminQuickActions } from "@/components/FloatingActionButton";
 import { toast } from "sonner";
 import { CreateUserDialog } from "@/components/CreateUserDialog";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function SuperAdminDashboard() {
   const { user, loading } = useAuth();
@@ -167,6 +168,7 @@ export default function SuperAdminDashboard() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
+        <Breadcrumb />
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
           <p className="mt-4 text-muted-foreground">

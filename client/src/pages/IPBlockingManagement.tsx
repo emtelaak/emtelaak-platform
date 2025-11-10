@@ -14,6 +14,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import DashboardLayout from "@/components/DashboardLayout";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function IPBlockingManagement() {
   const { t, language } = useLanguage();
@@ -127,6 +128,7 @@ export default function IPBlockingManagement() {
 
   return (
     <DashboardLayout>
+      <Breadcrumb />
       <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">

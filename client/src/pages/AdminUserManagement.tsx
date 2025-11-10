@@ -26,6 +26,7 @@ import { Search, Shield, ShieldOff, RotateCcw, Loader2, Edit, User } from "lucid
 import { toast } from "sonner";
 import { CustomFieldsForm } from "@/components/CustomFieldsForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminUserManagement() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -108,6 +109,7 @@ export default function AdminUserManagement() {
 
   return (
     <DashboardLayout>
+      <Breadcrumb />
       <div className="container mx-auto p-6 space-y-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">User Management</h1>

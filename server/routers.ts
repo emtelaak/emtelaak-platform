@@ -24,6 +24,7 @@ import { fundraiserRouter } from "./routes/fundraiser";
 import { incomeDistributionRouter } from "./routes/incomeDistribution";
 import { offeringsRouter } from "./routes/offerings";
 import { approvalsRouter } from "./routes/approvals";
+import { investmentFlowRouter } from "./routes/investmentFlow";
 // import { getUnifiedPortfolioSummary } from "./db/unifiedInvestmentsDb";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -118,6 +119,7 @@ export const appRouter = router({
   incomeDistribution: incomeDistributionRouter,
   offerings: offeringsRouter,
   approvals: approvalsRouter,
+  investmentFlow: investmentFlowRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

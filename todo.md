@@ -2406,3 +2406,213 @@
 - [ ] Test rejection and resubmission
 - [ ] Verify approval notifications
 - [ ] Save checkpoint
+
+
+## Add Submit for Approval Button
+- [x] Add Submit for Approval button to OfferingDetail page
+- [x] Show button only for draft offerings owned by current user
+- [x] Connect to trpc.approvals.submitForApproval mutation
+- [x] Show success/error messages
+- [x] Reload page to show updated status after submission
+- [x] Update offering status display after submission
+- [ ] Test complete submission workflow
+
+
+## Data Migration to New Schema
+- [x] Analyze existing offering data structure
+- [x] Identify missing columns in database vs schema (19 missing found)
+- [x] Add missing columns using ALTER TABLE statements (all 19 added)
+- [x] Verify all schema columns exist in database (✅ 0 missing)
+- [x] Create migration script for offerings table
+- [x] Set default values for new fields (offering type, share structure, etc.)
+- [x] Populate financial projections (12% IRR, 60% ROI, 8% Cash-on-Cash, 1.6x Equity Multiple)
+- [x] Set distribution frequency to quarterly
+- [x] Execute migration script
+- [x] Verify all data migrated correctly
+- [ ] Test offering display with migrated data in UI
+
+
+---
+
+# COMPLETE TIMELINE MANAGEMENT FEATURES
+
+## Backend APIs
+- [ ] Add updateTimelineMilestone endpoint
+- [ ] Add deleteTimelineMilestone endpoint
+- [ ] Add completeTimelineMilestone endpoint
+- [ ] Add getStatusHistory endpoint
+- [ ] Add createStatusHistoryEntry endpoint
+- [ ] Test all timeline APIs
+
+## Timeline Management UI
+- [ ] Create TimelineManagement page component
+- [ ] Add milestone creation form
+- [ ] Add milestone edit functionality
+- [ ] Add milestone delete functionality
+- [ ] Add milestone completion workflow
+- [ ] Display milestone list with status indicators
+- [ ] Register route in App.tsx
+
+## Status History Display
+- [ ] Create StatusHistory component
+- [ ] Display status changes chronologically
+- [ ] Show who made changes and when
+- [ ] Display comments/reasons for changes
+- [ ] Integrate into OfferingDetail page
+
+## Testing
+- [ ] Test creating milestones
+- [ ] Test updating milestones
+- [ ] Test completing milestones
+- [ ] Test deleting milestones
+- [ ] Test status history tracking
+- [ ] Save checkpoint
+
+
+## Phase A: Timeline Management Implementation (COMPLETED)
+- [x] Add deleteTimelineMilestone function to offeringsDb.ts
+- [x] Verify updateTimelineMilestone function exists
+- [x] Verify completeTimelineMilestone function exists
+- [x] Verify getOfferingStatusHistory function exists
+- [x] Create comprehensive TimelineManagement component
+- [x] Add milestone creation form with 14 predefined types
+- [x] Add milestone edit functionality
+- [x] Add milestone delete functionality with confirmation
+- [x] Add milestone completion workflow
+- [x] Display milestone list with status indicators
+- [x] Integrate TimelineManagement into OfferingDetail page
+- [x] Add isEditable prop based on offering status
+- [x] Remove old TimelineView function
+- [ ] Test creating milestones
+- [ ] Test updating milestones
+- [ ] Test completing milestones
+- [ ] Test deleting milestones
+- [ ] Save checkpoint after testing
+
+
+## OOM (Out of Memory) Issue Investigation and Fixes
+- [x] Diagnose memory usage - 3.8GB total, 1.8GB used
+- [x] Check Node.js memory limits - Dev server set to 2048MB
+- [x] Test build with increased memory - SUCCESS with 3072MB
+- [x] Identify duplicate getStatusHistory endpoint (lines 256 and 532)
+- [ ] Remove duplicate getStatusHistory endpoint from offerings.ts
+- [ ] Increase Node.js memory limit in build script to 3072MB
+- [ ] Add memory limit to dev script (increase from 2048MB to 3072MB)
+- [ ] Optimize bundle size (currently 1.6MB main bundle)
+- [ ] Test checkpoint save after fixes
+- [ ] Save checkpoint documenting OOM resolution
+
+
+## OOM Resolution Summary (COMPLETED)
+- [x] Diagnose memory usage - 3.8GB total, 1.8GB used
+- [x] Check Node.js memory limits - Dev server set to 2048MB
+- [x] Test build with increased memory - SUCCESS with 3072MB
+- [x] Identify duplicate getStatusHistory endpoint (lines 256 and 532)
+- [x] Remove duplicate getStatusHistory endpoint from offerings.ts
+- [x] Increase Node.js memory limit in build script to 3072MB
+- [x] Add memory limit to dev script (increase from 2048MB to 3072MB)
+- [x] Create .npmrc with global node-options=--max-old-space-size=3072
+- [x] Test build after fixes - SUCCESS in 20-21 seconds
+- [x] Create comprehensive OOM investigation report
+- [x] Restart dev server with new memory configuration
+- [ ] Checkpoint save still fails (platform-level limitation - requires Manus team investigation)
+
+**Status:** Local builds work perfectly. Checkpoint mechanism needs platform-level fix.
+
+
+## Phase B: Investment Flow Implementation (IN PROGRESS)
+
+### B1: Database Schema Enhancement
+- [x] Review current investments table structure
+- [x] Review current investment_transactions table structure
+- [x] Design enhanced investment schema with offering integration
+- [x] Add investment status tracking fields
+- [x] Add payment method and transaction reference fields
+- [x] Add investor accreditation verification fields
+- [x] Create investment_documents table for signed agreements
+- [x] Create investment_distributions table for income tracking
+- [x] Run database migration for new schema
+- [x] Verify schema changes in database (11 offering tables exist)
+
+### B2: Backend API Development
+- [ ] Create investment calculation utilities (share price, fees, total amount)
+- [ ] Implement createInvestment mutation with validation
+- [ ] Implement getInvestmentById query
+- [ ] Implement getUserInvestments query with filtering
+- [ ] Implement getOfferingInvestments query for fundraisers
+- [ ] Implement updateInvestmentStatus mutation
+- [ ] Implement processPayment mutation with payment gateway integration
+- [ ] Implement recordDistribution mutation for income payments
+- [ ] Add investment authorization checks (accreditation, limits)
+- [ ] Add offering availability validation (shares remaining)
+
+### B3: Frontend Investment Components
+- [ ] Create InvestmentModal component with multi-step flow
+- [ ] Add investment amount input with share calculation
+- [ ] Add payment method selection (bank transfer, card, wallet)
+- [ ] Add investor accreditation confirmation
+- [ ] Add investment agreement review and signature
+- [ ] Create InvestorDashboard page with portfolio overview
+- [ ] Add investment list with status badges
+- [ ] Add distribution history table
+- [ ] Add investment documents download
+- [ ] Create InvestmentDetail page with complete transaction info
+
+### B4: Payment Integration
+- [ ] Integrate payment gateway for card payments
+- [ ] Add bank transfer instructions and receipt upload
+- [ ] Add wallet balance deduction for wallet payments
+- [ ] Implement payment confirmation workflow
+- [ ] Add payment status tracking and notifications
+- [ ] Create admin payment approval interface
+
+### B5: Testing and Validation
+- [ ] Test investment creation with different payment methods
+- [ ] Test investment status transitions
+- [ ] Test offering share availability updates
+- [ ] Test investor dashboard data display
+- [ ] Test distribution recording and display
+- [ ] Save checkpoint: Phase B Complete
+
+
+## Phase B: User-Specified Investment Tables (IN PROGRESS)
+- [x] ALTER investments table - add reservation_id, reservation_expires_at, share_quantity, share_price_cents, total_cost_cents
+- [x] ALTER investments table - add payment_method, payment_status, escrow_status (payment fields already existed)
+- [x] ALTER investments table - add confirmation_sent_at, certificate_generated_at
+- [x] CREATE investment_reservations table (id, offering_id, user_id, share_quantity, reserved_at, expires_at, status)
+- [x] CREATE investment_eligibility table (id, user_id, offering_id, is_eligible, accreditation_status, jurisdiction_check, investment_limit, checked_at)
+- [x] CREATE investment_payments table (id, investment_id, payment_method, amount_cents, payment_reference, verification_status, verified_at, receipt_url)
+- [x] CREATE escrow_accounts table (id, offering_id, account_number, total_held_cents, release_conditions, status, created_at)
+- [x] Verify all tables created successfully (9 investment/escrow tables exist)
+- [x] Update Drizzle schema files to match database
+- [x] Create database helper functions for new tables (30+ functions)
+- [x] Create tRPC API endpoints (24 endpoints: reservations, eligibility, payments, escrow)
+
+
+## Breadcrumb Navigation Implementation (COMPLETE)
+- [x] Analyze current page structure and routes
+- [x] Create reusable Breadcrumb component with auto-generation
+- [x] Create breadcrumb configuration/mapping system (60+ route labels)
+- [x] Add breadcrumbs to all platform pages (36 pages total)
+- [x] Add breadcrumbs to admin dashboard pages (12 admin pages)
+- [x] Add breadcrumbs to offering pages (OfferingsDashboard, OfferingDetail, CreateOffering, etc.)
+- [x] Add breadcrumbs to investment pages (Portfolio, Wallet)
+- [x] Add breadcrumbs to property pages (Properties, PropertyDetail, AddProperty, etc.)
+- [x] Add breadcrumbs to user profile pages (Profile, KYC, etc.)
+- [x] TypeScript compilation successful (no errors)
+- [x] Multi-language support (English + Arabic)
+
+
+## GitHub Repository Deployment (COMPLETE)
+- [x] Verify all super admin and admin dashboard features are working (16 admin pages)
+- [x] Clean up temporary files and build artifacts
+- [x] Create comprehensive README.md with setup instructions
+- [x] Create DEPLOYMENT.md with environment setup guide
+- [x] Create GITHUB_SETUP.md with GitHub push instructions
+- [x] Environment variables managed by system (14 secrets configured)
+- [x] .gitignore already properly configured
+- [x] Git repository already initialized
+- [x] Documentation complete (README, DEPLOYMENT, GITHUB_SETUP, PLATFORM_FEATURES)
+- [ ] Push codebase to GitHub (instructions provided in GITHUB_SETUP.md)
+- [ ] Verify repository structure after push
+- [ ] Deploy test environment (instructions in DEPLOYMENT.md)

@@ -9,6 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { MobileNav } from "@/components/MobileNav";
 import { FloatingActionButton, adminQuickActions } from "@/components/FloatingActionButton";
 import { toast } from "sonner";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function CRMDashboard() {
   const { user, loading } = useAuth();
@@ -21,6 +22,7 @@ export default function CRMDashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
+        <Breadcrumb />
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
           <p className="mt-4 text-muted-foreground">Loading CRM...</p>

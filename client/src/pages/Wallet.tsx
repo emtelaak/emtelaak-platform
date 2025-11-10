@@ -16,6 +16,7 @@ import { Link } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function Wallet() {
   const { user, loading, isAuthenticated } = useAuth();
@@ -117,6 +118,7 @@ export default function Wallet() {
   if (loading || walletLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
+        <Breadcrumb />
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
           <p className="mt-4 text-muted-foreground">

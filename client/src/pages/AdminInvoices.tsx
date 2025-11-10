@@ -32,6 +32,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Search, FileText, DollarSign, Calendar, CheckCircle2, XCircle, Download, History, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminInvoices() {
   const { user } = useAuth();
@@ -100,6 +101,7 @@ export default function AdminInvoices() {
     const config = variants[status] || variants.pending;
     return (
       <Badge variant={config.variant} className={config.className}>
+        <Breadcrumb />
         {config.label}
       </Badge>
     );

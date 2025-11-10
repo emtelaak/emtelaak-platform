@@ -14,6 +14,7 @@ import {
 import { Loader2, Download, Eye, DollarSign, Calendar, FileText } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function Invoices() {
   const { t, dir } = useLanguage();
@@ -71,6 +72,7 @@ export default function Invoices() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
+        <Breadcrumb />
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );

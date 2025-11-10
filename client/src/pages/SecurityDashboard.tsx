@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { useSecurityNotifications } from "@/hooks/useSocket";
 import { format } from "date-fns";
 import DashboardLayout from "@/components/DashboardLayout";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function SecurityDashboard() {
   const { t, language } = useLanguage();
@@ -164,6 +165,7 @@ export default function SecurityDashboard() {
 
   return (
     <DashboardLayout>
+      <Breadcrumb />
       <div className="container mx-auto py-8 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">

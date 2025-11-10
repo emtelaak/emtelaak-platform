@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DollarSign, Edit, Building2 } from "lucide-react";
 import { toast } from "sonner";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminPropertyManagement() {
   const [selectedProperty, setSelectedProperty] = useState<any>(null);
@@ -80,6 +81,7 @@ export default function AdminPropertyManagement() {
   if (isLoading) {
     return (
       <div className="container py-8 space-y-4">
+        <Breadcrumb />
         <Skeleton className="h-12 w-64" />
         <Skeleton className="h-96 w-full" />
       </div>

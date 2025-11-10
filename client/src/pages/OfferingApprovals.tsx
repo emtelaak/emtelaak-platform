@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { CheckCircle, XCircle, AlertCircle, Clock, Eye } from "lucide-react";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function OfferingApprovals() {
   const [, setLocation] = useLocation();
@@ -79,6 +80,7 @@ export default function OfferingApprovals() {
   if (isLoading) {
     return (
       <div className="container py-8">
+        <Breadcrumb />
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <Clock className="w-12 h-12 mx-auto mb-4 animate-spin text-primary" />

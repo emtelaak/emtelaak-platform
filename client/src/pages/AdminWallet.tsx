@@ -39,6 +39,7 @@ import { toast } from "sonner";
 import { CheckCircle2, XCircle, Eye, DollarSign, TrendingUp, TrendingDown } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminWallet() {
   const { user, loading } = useAuth();
@@ -96,6 +97,7 @@ export default function AdminWallet() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
+        <Breadcrumb />
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#CDE428]"></div>
       </div>
     );

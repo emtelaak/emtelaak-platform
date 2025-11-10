@@ -53,6 +53,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { FloatingActionButton, adminQuickActions } from "@/components/FloatingActionButton";
 import { useLocation } from "wouter";
 import { CreateUserDialog } from "@/components/CreateUserDialog";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
@@ -113,6 +114,7 @@ export default function AdminDashboard() {
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
+        <Breadcrumb />
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );

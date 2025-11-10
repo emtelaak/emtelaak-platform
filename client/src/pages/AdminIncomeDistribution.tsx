@@ -33,6 +33,7 @@ import { toast } from "sonner";
 import { CalendarIcon, DollarSign, Users, TrendingUp, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminIncomeDistribution() {
   const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(null);
@@ -95,6 +96,7 @@ export default function AdminIncomeDistribution() {
 
   return (
     <div className="container mx-auto py-8 space-y-8">
+      <Breadcrumb />
       <div>
         <h1 className="text-3xl font-bold">Income Distribution</h1>
         <p className="text-muted-foreground mt-2">

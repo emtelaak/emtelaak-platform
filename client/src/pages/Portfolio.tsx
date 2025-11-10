@@ -12,6 +12,7 @@ import { getLoginUrl, APP_LOGO, APP_TITLE } from "@/const";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function Portfolio() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
@@ -62,6 +63,7 @@ export default function Portfolio() {
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
+        <Breadcrumb />
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );

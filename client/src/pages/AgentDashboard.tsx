@@ -33,6 +33,7 @@ import {
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getLoginUrl } from "@/const";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AgentDashboard() {
   const { user, loading: authLoading } = useAuth();
@@ -108,6 +109,7 @@ export default function AgentDashboard() {
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
+        <Breadcrumb />
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );

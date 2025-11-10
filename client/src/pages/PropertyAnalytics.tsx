@@ -22,6 +22,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Loader2, TrendingUp, Users, Eye, ListChecks, DollarSign, Search, Download } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function PropertyAnalytics() {
   const { t, dir } = useLanguage();
@@ -106,6 +107,7 @@ export default function PropertyAnalytics() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
+        <Breadcrumb />
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );

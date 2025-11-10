@@ -140,7 +140,6 @@ function Router() {
       <Route path="/offerings/:id/fee-structure" component={FeeStructureEditor} />
       <Route path="/offerings/:id/documents" component={OfferingDocuments} />
       <Route path="/admin/offering-approvals" component={OfferingApprovals} />
-      <Route path="/admin/offering-approvals" component={AdminOfferingApproval} />
       <Route path="/admin/email-settings" component={EmailSettings} />
       <Route path="/admin/kyc-review" component={AdminKYCReview} />
         <Route path="/admin/security" component={SecurityDashboard} />
