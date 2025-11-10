@@ -19,6 +19,8 @@ import LeadCapture from "./pages/LeadCapture";
 import Wallet from "./pages/Wallet";
 import Menu from "./pages/Menu";
 import ResetPassword from "./pages/ResetPassword";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 // Lazy load admin pages (only loaded when accessed)
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
@@ -86,6 +88,8 @@ function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path="/login" component={Login} />
+      <Route path="/register" component={Register} />
       <Route path="/properties" component={Properties} />
       <Route path="/properties/create" component={AddProperty} />
       <Route path="/properties/:id" component={PropertyDetail} />

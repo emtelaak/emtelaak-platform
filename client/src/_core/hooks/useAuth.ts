@@ -1,4 +1,3 @@
-import { getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { TRPCClientError } from "@trpc/client";
 import { useCallback, useEffect, useMemo } from "react";
@@ -9,17 +8,36 @@ type UseAuthOptions = {
 };
 
 export function useAuth(options?: UseAuthOptions) {
-  const { redirectOnUnauthenticated = false, redirectPath = getLoginUrl() } =
+  const { redirectOnUnauthenticated = false, redirectPath = "/login" } =
     options ?? {};
   const utils = trpc.useUtils();
 
+  // Get auth token from localStorage
+  const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+
+  // Verify token and get user data
+  const verifyQuery = trpc.standardAuth.verifyToken.useQuery(
+    { token: token || "" },
+    {
+      enabled: Boolean(token),
+      retry: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  // Fallback to old OAuth method if no token
   const meQuery = trpc.auth.me.useQuery(undefined, {
+    enabled: !token,
     retry: false,
     refetchOnWindowFocus: false,
   });
 
   const logoutMutation = trpc.auth.logout.useMutation({
     onSuccess: () => {
+      // Clear JWT token
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("auth_token");
+      }
       utils.auth.me.setData(undefined, null);
     },
   });
@@ -36,23 +54,48 @@ export function useAuth(options?: UseAuthOptions) {
       }
       throw error;
     } finally {
+      // Clear JWT token
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("auth_token");
+      }
       utils.auth.me.setData(undefined, null);
       await utils.auth.me.invalidate();
     }
   }, [logoutMutation, utils]);
 
   const state = useMemo(() => {
-    localStorage.setItem(
-      "manus-runtime-user-info",
-      JSON.stringify(meQuery.data)
-    );
+    // Determine user from either JWT verification or OAuth
+    const user = token && verifyQuery.data?.valid 
+      ? verifyQuery.data.user 
+      : meQuery.data;
+
+    const loading = token 
+      ? verifyQuery.isLoading || logoutMutation.isPending
+      : meQuery.isLoading || logoutMutation.isPending;
+
+    const error = token
+      ? verifyQuery.error ?? logoutMutation.error ?? null
+      : meQuery.error ?? logoutMutation.error ?? null;
+
+    // Store user info in localStorage for compatibility
+    if (typeof window !== "undefined") {
+      localStorage.setItem(
+        "manus-runtime-user-info",
+        JSON.stringify(user)
+      );
+    }
+
     return {
-      user: meQuery.data ?? null,
-      loading: meQuery.isLoading || logoutMutation.isPending,
-      error: meQuery.error ?? logoutMutation.error ?? null,
-      isAuthenticated: Boolean(meQuery.data),
+      user: user ?? null,
+      loading,
+      error,
+      isAuthenticated: Boolean(user),
     };
   }, [
+    token,
+    verifyQuery.data,
+    verifyQuery.error,
+    verifyQuery.isLoading,
     meQuery.data,
     meQuery.error,
     meQuery.isLoading,
@@ -62,23 +105,28 @@ export function useAuth(options?: UseAuthOptions) {
 
   useEffect(() => {
     if (!redirectOnUnauthenticated) return;
-    if (meQuery.isLoading || logoutMutation.isPending) return;
+    if (state.loading) return;
     if (state.user) return;
     if (typeof window === "undefined") return;
     if (window.location.pathname === redirectPath) return;
 
-    window.location.href = redirectPath
+    window.location.href = redirectPath;
   }, [
     redirectOnUnauthenticated,
     redirectPath,
-    logoutMutation.isPending,
-    meQuery.isLoading,
+    state.loading,
     state.user,
   ]);
 
   return {
     ...state,
-    refresh: () => meQuery.refetch(),
+    refresh: () => {
+      if (token) {
+        verifyQuery.refetch();
+      } else {
+        meQuery.refetch();
+      }
+    },
     logout,
   };
 }

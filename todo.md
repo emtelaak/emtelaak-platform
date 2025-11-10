@@ -2616,3 +2616,24 @@
 - [ ] Push codebase to GitHub (instructions provided in GITHUB_SETUP.md)
 - [ ] Verify repository structure after push
 - [ ] Deploy test environment (instructions in DEPLOYMENT.md)
+
+
+## Standard Authentication Implementation for Vercel (IN PROGRESS)
+- [ ] Analyze current Manus OAuth dependencies
+- [ ] Design standard email/password auth system
+- [ ] Add bcrypt package for password hashing
+- [ ] Add password and emailVerified fields to users table
+- [ ] Create user registration endpoint with email validation
+- [ ] Create login endpoint with JWT token generation
+- [ ] Create password reset functionality
+- [ ] Create auth middleware for protected routes
+- [ ] Build frontend Login component
+- [ ] Build frontend Register component
+- [ ] Update auth context to use standard auth
+- [ ] Remove Manus OAuth dependencies from server
+- [ ] Remove Manus API dependencies from frontend
+- [ ] Update environment variables for Vercel
+- [ ] Test registration flow
+- [ ] Test login flow
+- [ ] Test protected routes
+- [ ] Deploy to Vercel and verify

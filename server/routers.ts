@@ -25,6 +25,7 @@ import { incomeDistributionRouter } from "./routes/incomeDistribution";
 import { offeringsRouter } from "./routes/offerings";
 import { approvalsRouter } from "./routes/approvals";
 import { investmentFlowRouter } from "./routes/investmentFlow";
+import { standardAuthRouter } from "./routes/standardAuth";
 // import { getUnifiedPortfolioSummary } from "./db/unifiedInvestmentsDb";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -120,6 +121,9 @@ export const appRouter = router({
   offerings: offeringsRouter,
   approvals: approvalsRouter,
   investmentFlow: investmentFlowRouter,
+  
+  // Standard email/password authentication
+  standardAuth: standardAuthRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
