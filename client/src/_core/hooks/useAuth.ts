@@ -69,9 +69,10 @@ export function useAuth(options?: UseAuthOptions) {
       ? verifyQuery.data.user 
       : meQuery.data;
 
+    // Fix: If no token and meQuery is disabled, don't show loading
     const loading = token 
       ? verifyQuery.isLoading || logoutMutation.isPending
-      : meQuery.isLoading || logoutMutation.isPending;
+      : (meQuery.isLoading && meQuery.fetchStatus !== 'idle') || logoutMutation.isPending;
 
     const error = token
       ? verifyQuery.error ?? logoutMutation.error ?? null
