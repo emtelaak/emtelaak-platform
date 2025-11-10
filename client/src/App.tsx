@@ -73,6 +73,7 @@ const FinancialProjectionForm = lazy(() => import("@/pages/FinancialProjectionFo
 const FeeStructureEditor = lazy(() => import("@/pages/FeeStructureEditor"));
 const OfferingDocuments = lazy(() => import("@/pages/OfferingDocuments"));
 const AdminOfferingApproval = lazy(() => import("@/pages/AdminOfferingApproval"));
+const OfferingApprovals = lazy(() => import("@/pages/OfferingApprovals"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -138,6 +139,7 @@ function Router() {
       <Route path="/offerings/:id/financial-projections" component={FinancialProjectionForm} />
       <Route path="/offerings/:id/fee-structure" component={FeeStructureEditor} />
       <Route path="/offerings/:id/documents" component={OfferingDocuments} />
+      <Route path="/admin/offering-approvals" component={OfferingApprovals} />
       <Route path="/admin/offering-approvals" component={AdminOfferingApproval} />
       <Route path="/admin/email-settings" component={EmailSettings} />
       <Route path="/admin/kyc-review" component={AdminKYCReview} />

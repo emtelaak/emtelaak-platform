@@ -2369,3 +2369,40 @@
 - [ ] Save checkpoint: "Phase A Complete"
 
 ---
+
+
+---
+
+# PHASE 2: MULTI-STAGE APPROVAL AND COMPLIANCE
+
+## Milestone 1: Approval Workflow Schema
+- [x] Create offering_approvals table with approval stages
+- [x] Add reviewer role fields to users table (role enum already exists)
+- [x] Create approval_stages enum (initial, financial, legal, compliance, executive)
+- [x] Add approval status tracking fields
+- [x] Run database migration
+
+## Milestone 2: Approval Workflow Backend
+- [x] Create approval workflow router
+- [x] Implement submit for approval endpoint
+- [x] Implement approve/reject endpoints
+- [x] Implement request changes endpoint
+- [x] Add approval assignment logic (basic version)
+- [ ] Add approval notification system (future enhancement)
+- [x] Add approval status queries
+
+## Milestone 3: Admin Approval Dashboard
+- [x] Create OfferingApprovals page
+- [x] Build pending approvals list
+- [x] Create approval detail view
+- [x] Add approve/reject action buttons
+- [x] Add change request form
+- [x] Add approval history timeline
+- [x] Connect to backend APIs
+
+## Milestone 4: Testing & Integration
+- [ ] Test complete approval workflow
+- [ ] Test multi-stage approvals
+- [ ] Test rejection and resubmission
+- [ ] Verify approval notifications
+- [ ] Save checkpoint

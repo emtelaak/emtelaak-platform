@@ -691,6 +691,37 @@ export type InsertOfferingTimeline = typeof offeringTimeline.$inferInsert;
 export type OfferingStatusHistory = typeof offeringStatusHistory.$inferSelect;
 export type InsertOfferingStatusHistory = typeof offeringStatusHistory.$inferInsert;
 
+/**
+ * Offering Approvals Table
+ * Multi-stage approval workflow tracking
+ */
+export const offeringApprovals = mysqlTable("offering_approvals", {
+  id: int("id").autoincrement().primaryKey(),
+  offeringId: int("offeringId").notNull(),
+  approvalStage: mysqlEnum("approvalStage", [
+    "initial_review",
+    "financial_review",
+    "legal_review",
+    "compliance_review",
+    "executive_approval",
+  ]).notNull(),
+  status: mysqlEnum("status", ["pending", "approved", "rejected", "changes_requested"])
+    .default("pending")
+    .notNull(),
+  assignedTo: int("assignedTo"),
+  reviewedBy: int("reviewedBy"),
+  reviewedAt: timestamp("reviewedAt"),
+  comments: text("comments"),
+  changesRequested: text("changesRequested"),
+  approvalNotes: text("approvalNotes"),
+  rejectionReason: text("rejectionReason"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type OfferingApproval = typeof offeringApprovals.$inferSelect;
+export type InsertOfferingApproval = typeof offeringApprovals.$inferInsert;
+
 // ============================================
 // SECONDARY MARKET
 // ============================================
