@@ -72,13 +72,8 @@ export default function Home() {
   const heroCTA2 = (content as any)?.cta2 || defaultContent.cta2;
   const heroBackgroundImage = (heroContent?.content as any)?.backgroundImage || "/brand/backgrounds/hero-bg.jpg";
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
+  // Don't show loading spinner on homepage - let it load immediately
+  // Only show loading for authenticated features
 
   return (
     <>
