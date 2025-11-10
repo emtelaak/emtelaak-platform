@@ -25,8 +25,10 @@ export default function FundraiserPropertyManagement() {
   }
 
   const filteredProperties = properties?.filter((property) =>
-    property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    property.location.toLowerCase().includes(searchQuery.toLowerCase())
+    (property.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    property.nameAr?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    property.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    property.country?.toLowerCase().includes(searchQuery.toLowerCase()))
   ) || [];
 
   return (
@@ -42,7 +44,7 @@ export default function FundraiserPropertyManagement() {
             Manage your properties and create new investment opportunities
           </p>
         </div>
-        <Link href="/admin/property-management/create">
+        <Link href="/admin/add-property">
           <Button size="lg">
             <Plus className="h-4 w-4 mr-2" />
             Add New Property
@@ -97,7 +99,7 @@ export default function FundraiserPropertyManagement() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">
-              ${properties?.reduce((sum, p) => sum + Number(p.price), 0).toLocaleString() || 0}
+              ${properties?.reduce((sum, p) => sum + (Number(p.totalValue) / 100), 0).toLocaleString() || 0}
             </div>
           </CardContent>
         </Card>
@@ -144,10 +146,10 @@ export default function FundraiserPropertyManagement() {
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <CardTitle className="line-clamp-1">{property.title}</CardTitle>
+                    <CardTitle className="line-clamp-1">{property.name || property.nameAr || `Property #${property.id}`}</CardTitle>
                     <CardDescription className="flex items-center gap-1 mt-1">
                       <MapPin className="h-3 w-3" />
-                      {property.location}
+                      {[property.city, property.country].filter(Boolean).join(', ') || 'Location not specified'}
                     </CardDescription>
                   </div>
                   <span
@@ -170,7 +172,7 @@ export default function FundraiserPropertyManagement() {
                       <DollarSign className="h-4 w-4" />
                       Price
                     </span>
-                    <span className="font-semibold">${Number(property.price).toLocaleString()}</span>
+                    <span className="font-semibold">${(Number(property.totalValue) / 100).toLocaleString()}</span>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">

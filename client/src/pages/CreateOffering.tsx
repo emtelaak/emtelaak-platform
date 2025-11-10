@@ -246,7 +246,7 @@ function Step1OfferingType({
             ) : (
               properties?.map((property: any) => (
                 <SelectItem key={property.id} value={property.id.toString()}>
-                  {property.titleEn || property.titleAr}
+                  {property.name || property.nameAr || `Property #${property.id}`}
                 </SelectItem>
               ))
             )}
@@ -284,7 +284,7 @@ function Step1OfferingType({
           id="totalOfferingAmount"
           type="number"
           placeholder="1000000"
-          value={formData.totalOfferingAmount || ""}
+          value={formData.totalOfferingAmount ? formData.totalOfferingAmount / 100 : ""}
           onChange={(e) =>
             updateFormData("totalOfferingAmount", parseInt(e.target.value) * 100)
           }

@@ -86,6 +86,7 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path="/properties" component={Properties} />
+      <Route path="/properties/create" component={AddProperty} />
       <Route path="/properties/:id" component={PropertyDetail} />
       <Route path="/portfolio" component={Portfolio} />
       <Route path="/wallet" component={Wallet} />
@@ -132,6 +133,7 @@ function Router() {
       <Route path="/fundraiser/property-management" component={FundraiserPropertyManagement} />
       <Route path="/offerings" component={OfferingsDashboard} />
       <Route path="/offerings/create" component={CreateOffering} />
+      <Route path="/offerings/:id/edit" component={CreateOffering} />
       <Route path="/offerings/:id" component={OfferingDetail} />
       <Route path="/offerings/:id/financial-projections" component={FinancialProjectionForm} />
       <Route path="/offerings/:id/fee-structure" component={FeeStructureEditor} />

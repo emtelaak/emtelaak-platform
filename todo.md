@@ -2129,8 +2129,60 @@
 
 
 ## Server Stability Investigation
-- [ ] Check server logs for crash errors
-- [ ] Identify root cause of recurring server stops
-- [ ] Fix the underlying issue
-- [ ] Verify server stability after fix
-- [ ] Save checkpoint with stable state
+- [x] Check server logs for crash errors
+- [x] Identify root cause of recurring server stops
+- [x] Fix the underlying issue
+- [x] Verify server stability after fix
+- [x] Save checkpoint with stable state
+
+
+## Fix Property Dropdown in CreateOffering Page
+- [ ] Diagnose why property dropdown is empty in CreateOffering component
+- [ ] Check if properties API endpoint exists and returns data
+- [ ] Fix property fetching logic in CreateOffering component
+- [ ] Ensure properties display in dropdown with proper labels
+- [ ] Test property selection works correctly
+- [ ] Verify selected property is saved with offering
+
+## Fix Offering Amount Calculation Issue
+- [x] Investigate why offering amounts are being doubled/tripled when saved
+- [x] Check currency conversion logic (dollars to cents) in CreateOffering form
+- [x] Fix the calculation to ensure amounts are saved correctly
+- [x] Update display logic to show amounts correctly
+- [ ] Test with sample values to verify fix works end-to-end
+
+## Fix Financial Projections and Fee Structure Navigation
+- [x] Investigate why "Add Financial Projections" button is not working
+- [x] Investigate why "Define Fee Structure" button is not working
+- [x] Investigate why "Upload Document" button is not working
+- [x] Check if routes are registered in App.tsx
+- [x] Check if FinancialProjectionForm and FeeStructureEditor components exist
+- [x] Fix the navigation/routing issues for all three pages
+- [ ] Test navigation from offering detail to financial projections page
+- [ ] Test navigation from offering detail to fee structure page
+- [ ] Test navigation from offering detail to documents page
+- [ ] Verify back navigation works correctly
+
+## Fix TypeError in Fundraiser Property Management
+- [x] Investigate toLowerCase() error on /fundraiser/property-management
+- [x] Find where undefined value is being used (property.title, property.location, property.price)
+- [x] Fix field names to match database schema (name, city/country, totalValue)
+- [x] Add null/undefined checks before toLowerCase()
+- [ ] Test page loads without errors
+- [ ] Verify all functionality works correctly
+
+## Fix Add New Property and Edit Offering Navigation
+- [x] Investigate why "Add New Property" button is not working
+- [x] Check if AddProperty route exists in App.tsx
+- [x] Fix Add New Property button navigation (changed /admin/property-management/create to /admin/add-property)
+- [x] Investigate why "Edit" button in offerings is not working
+- [x] Add Edit Offering route to App.tsx (/offerings/:id/edit)
+- [x] Fix Edit Offering button navigation (added onClick handler)
+- [ ] Test both navigation fixes
+- [ ] Update CreateOffering to support edit mode (load existing data)
+
+## Fix /properties/create Route
+- [x] Check if /properties/create route exists in App.tsx (it didn't)
+- [x] Check if CreateProperty or AddProperty component should handle this (AddProperty)
+- [x] Add missing route to App.tsx
+- [ ] Test navigation to /properties/create

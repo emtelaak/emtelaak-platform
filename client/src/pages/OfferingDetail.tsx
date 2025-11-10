@@ -137,7 +137,7 @@ export default function OfferingDetail() {
                 Submit for Review
               </Button>
             )}
-            <Button variant="outline">
+            <Button variant="outline" onClick={() => navigate(`/offerings/${offeringId}/edit`)}>
               <Edit className="w-4 h-4 mr-2" />
               Edit
             </Button>
@@ -303,7 +303,7 @@ export default function OfferingDetail() {
                 <p className="text-muted-foreground mb-4">
                   No financial projections have been added yet
                 </p>
-                <Button>Add Financial Projections</Button>
+                <Button onClick={() => navigate(`/offerings/${offeringId}/financial-projections`)}>Add Financial Projections</Button>
               </CardContent>
             </Card>
           )}
@@ -319,7 +319,7 @@ export default function OfferingDetail() {
                 <p className="text-muted-foreground mb-4">
                   No fee structure has been defined yet
                 </p>
-                <Button>Define Fee Structure</Button>
+                <Button onClick={() => navigate(`/offerings/${offeringId}/fee-structure`)}>Define Fee Structure</Button>
               </CardContent>
             </Card>
           )}
@@ -537,13 +537,15 @@ function FeeStructureView({ fees }: { fees: any }) {
 }
 
 function DocumentsView({ documents, offeringId }: { documents: any[]; offeringId: number }) {
+  const [, navigate] = useLocation();
+  
   if (documents.length === 0) {
     return (
       <Card>
         <CardContent className="py-12 text-center">
           <FileText className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
           <p className="text-muted-foreground mb-4">No documents uploaded yet</p>
-          <Button>Upload Document</Button>
+          <Button onClick={() => navigate(`/offerings/${offeringId}/documents`)}>Upload Document</Button>
         </CardContent>
       </Card>
     );
