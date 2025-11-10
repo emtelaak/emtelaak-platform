@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: emtelaak-platform
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: pnpm install && pnpm build
+    startCommand: pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: SMTP_HOST
+        value: smtp.sendgrid.net
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_SECURE
+        value: false
+      - key: SMTP_USER
+        value: apikey
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_FROM_EMAIL
+        value: noreply@emtelaak.com
+      - key: SMTP_FROM_NAME
+        value: Emtelaak Platform
+      - key: VITE_APP_TITLE
+        value: Emtelaak - Fractional Real Estate
+      - key: VITE_APP_LOGO
+        value: /logo.png
+      - key: FRONTEND_URL
+        sync: false
