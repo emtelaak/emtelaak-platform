@@ -2,9 +2,10 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Camera, Upload, X } from "lucide-react";
+import { Camera, Upload, X, Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
+import ImageCropperModal from "./ImageCropperModal";
 
 interface ProfilePictureUploadProps {
   currentPicture?: string | null;
@@ -18,8 +19,12 @@ export default function ProfilePictureUpload({
   onUploadSuccess,
 }: ProfilePictureUploadProps) {
   const [preview, setPreview] = useState<string | null>(currentPicture || null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [showCropper, setShowCropper] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const utils = trpc.useUtils();
 
   const uploadMutation = trpc.profile.uploadProfilePicture.useMutation({
     onSuccess: (data) => {
@@ -27,6 +32,9 @@ export default function ProfilePictureUpload({
       setPreview(data.url);
       onUploadSuccess?.(data.url);
       setIsUploading(false);
+      
+      // Invalidate profile query to refresh
+      utils.profile.get.invalidate();
     },
     onError: (error) => {
       toast.error(`Upload failed: ${error.message}`);
@@ -50,20 +58,31 @@ export default function ProfilePictureUpload({
       return;
     }
 
-    // Create preview
+    // Read file and show cropper
     const reader = new FileReader();
     reader.onloadend = () => {
       const result = reader.result as string;
-      setPreview(result);
-      
-      // Upload to server
-      setIsUploading(true);
-      uploadMutation.mutate({
-        imageData: result,
-        mimeType: file.type,
-      });
+      setSelectedImage(result);
+      setShowCropper(true);
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleCropComplete = (croppedImage: string) => {
+    // Set preview
+    setPreview(croppedImage);
+    
+    // Upload cropped image
+    setIsUploading(true);
+    
+    // Extract MIME type from base64 string
+    const mimeMatch = croppedImage.match(/^data:(image\/\w+);base64,/);
+    const mimeType = mimeMatch ? mimeMatch[1] : "image/jpeg";
+    
+    uploadMutation.mutate({
+      imageData: croppedImage,
+      mimeType: mimeType,
+    });
   };
 
   const handleRemovePicture = () => {
@@ -83,67 +102,94 @@ export default function ProfilePictureUpload({
   };
 
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative">
-            <Avatar className="h-32 w-32">
-              <AvatarImage src={preview || undefined} alt={userName || "User"} />
-              <AvatarFallback className="text-2xl bg-primary text-primary-foreground">
-                {getInitials()}
-              </AvatarFallback>
-            </Avatar>
-            
-            {preview && (
+    <>
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative">
+              <Avatar className="h-32 w-32 border-4 border-white shadow-lg">
+                <AvatarImage src={preview || undefined} alt={userName || "User"} />
+                <AvatarFallback className="text-2xl bg-gradient-to-br from-[#003366] to-[#0059b3] text-white">
+                  {getInitials()}
+                </AvatarFallback>
+              </Avatar>
+              
+              {preview && (
+                <Button
+                  size="icon"
+                  variant="destructive"
+                  className="absolute -top-2 -right-2 h-8 w-8 rounded-full shadow-lg"
+                  onClick={handleRemovePicture}
+                  disabled={isUploading}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+              
               <Button
                 size="icon"
-                variant="destructive"
-                className="absolute -top-2 -right-2 h-8 w-8 rounded-full"
-                onClick={handleRemovePicture}
+                className="absolute -bottom-2 -right-2 h-10 w-10 rounded-full shadow-lg bg-[#003366] hover:bg-[#004080]"
+                onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
               >
-                <X className="h-4 w-4" />
+                <Camera className="h-5 w-5" />
               </Button>
-            )}
-            
+            </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileSelect}
+              disabled={isUploading}
+            />
+
+            <div className="text-center">
+              <p className="text-sm font-medium">Profile Picture</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                JPG, PNG or GIF. Max size 5MB
+              </p>
+            </div>
+
             <Button
-              size="icon"
-              variant="secondary"
-              className="absolute -bottom-2 -right-2 h-10 w-10 rounded-full"
+              variant="outline"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
+              className="w-full"
             >
-              <Camera className="h-5 w-5" />
+              {isUploading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Uploading...
+                </>
+              ) : (
+                <>
+                  <Upload className="mr-2 h-4 w-4" />
+                  Upload New Picture
+                </>
+              )}
             </Button>
           </div>
+        </CardContent>
+      </Card>
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleFileSelect}
-            disabled={isUploading}
-          />
-
-          <div className="text-center">
-            <p className="text-sm font-medium">Profile Picture</p>
-            <p className="text-xs text-muted-foreground mt-1">
-              JPG, PNG or GIF. Max size 5MB
-            </p>
-          </div>
-
-          <Button
-            variant="outline"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isUploading}
-            className="w-full"
-          >
-            <Upload className="mr-2 h-4 w-4" />
-            {isUploading ? "Uploading..." : "Upload New Picture"}
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+      {/* Image Cropper Modal */}
+      {selectedImage && (
+        <ImageCropperModal
+          open={showCropper}
+          imageUrl={selectedImage}
+          onClose={() => {
+            setShowCropper(false);
+            setSelectedImage(null);
+            // Reset file input
+            if (fileInputRef.current) {
+              fileInputRef.current.value = "";
+            }
+          }}
+          onCropComplete={handleCropComplete}
+        />
+      )}
+    </>
   );
 }

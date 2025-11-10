@@ -7,6 +7,7 @@ import { getDb } from "../db";
 import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { ENV } from "../_core/env";
+import { sendPasswordResetEmail, sendWelcomeEmail } from "../_core/emailService";
 
 const SALT_ROUNDS = 10;
 const JWT_EXPIRY = "7d"; // 7 days
@@ -84,6 +85,14 @@ export const standardAuthRouter = router({
           message: "Failed to create user",
         });
       }
+
+      // Send welcome email (non-blocking)
+      sendWelcomeEmail({
+        to: newUser[0].email!,
+        userName: newUser[0].name || "User",
+      }).catch((error) => {
+        console.error("[Auth] Failed to send welcome email:", error);
+      });
 
       // Generate JWT token
       const token = jwt.sign(
@@ -291,15 +300,27 @@ export const standardAuthRouter = router({
         { expiresIn: "1h" } // Token expires in 1 hour
       );
 
-      // In a real application, you would send this token via email
-      // For now, we'll just return it (in production, remove this)
-      console.log(`Password reset token for ${input.email}: ${resetToken}`);
+      // Generate reset link
+      const resetLink = `${process.env.FRONTEND_URL || "http://localhost:3000"}/reset-password?token=${resetToken}`;
+
+      // Send password reset email
+      const emailSent = await sendPasswordResetEmail({
+        to: user.email!,
+        userName: user.name || "User",
+        resetLink,
+      });
+
+      if (emailSent) {
+        console.log(`[Auth] Password reset email sent to ${input.email}`);
+      } else {
+        console.warn(`[Auth] Failed to send password reset email to ${input.email}`);
+        // Still log token for development/testing if email fails
+        console.log(`[Auth] Password reset token: ${resetToken}`);
+      }
 
       return {
         success: true,
         message: "If an account exists with this email, a password reset link has been sent",
-        // TODO: Remove this in production - only for development
-        resetToken,
       };
     }),
 
