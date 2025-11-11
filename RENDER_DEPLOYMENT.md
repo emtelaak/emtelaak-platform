@@ -57,7 +57,7 @@ Click "Advanced" → "Add Environment Variable" and add these:
 
 ```
 DATABASE_URL
-mysql://7NZrqx5zGHHnoBb.root:MXzWNm6wesrPeBFP@gateway01.ap-northeast-1.prod.aws.tidbcloud.com:4000/emtelaak
+mysql://3mz38cEUyZ5ARDW.root:1dNEsUY91YAHQ0tT@gateway01.eu-central-1.prod.aws.tidbcloud.com:4000/emtelaak
 
 JWT_SECRET
 2784084526279ded1844e9be2a654dc1cae20a78e2be3678bb1c86cac9f656d8
