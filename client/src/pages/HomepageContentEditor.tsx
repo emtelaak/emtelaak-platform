@@ -32,6 +32,10 @@ export default function HomepageContentEditor() {
   // Hero background image
   const [heroBackgroundImage, setHeroBackgroundImage] = useState("/brand/backgrounds/hero-bg.jpg");
 
+  // Video URLs
+  const [videoUrlEn, setVideoUrlEn] = useState("https://www.youtube.com/embed/P9K-VUdc0SA");
+  const [videoUrlAr, setVideoUrlAr] = useState("https://www.youtube.com/embed/w7hmsuFkrmg");
+
   // Fetch existing content
   const { data: existingContent, isLoading, refetch } = trpc.content.get.useQuery({ key: "homepage_hero" });
 
@@ -47,6 +51,7 @@ export default function HomepageContentEditor() {
         setHeroCTA1(content.cta1 || heroCTA1);
         setHeroCTA2(content.cta2 || heroCTA2);
         setHeroBackgroundImage(content.backgroundImage || heroBackgroundImage);
+        setVideoUrlEn(content.videoUrl || videoUrlEn);
       }
 
       if (contentAr) {
@@ -54,6 +59,7 @@ export default function HomepageContentEditor() {
         setHeroSubtitleAr(contentAr.subtitle || heroSubtitleAr);
         setHeroCTA1Ar(contentAr.cta1 || heroCTA1Ar);
         setHeroCTA2Ar(contentAr.cta2 || heroCTA2Ar);
+        setVideoUrlAr(contentAr.videoUrl || videoUrlAr);
       }
     }
   }, [existingContent]);
@@ -80,12 +86,14 @@ export default function HomepageContentEditor() {
         cta1: heroCTA1,
         cta2: heroCTA2,
         backgroundImage: heroBackgroundImage,
+        videoUrl: videoUrlEn,
       },
       contentAr: {
         title: heroTitleAr,
         subtitle: heroSubtitleAr,
         cta1: heroCTA1Ar,
         cta2: heroCTA2Ar,
+        videoUrl: videoUrlAr,
       },
     });
   };
@@ -184,6 +192,45 @@ export default function HomepageContentEditor() {
               onImageUploaded={setHeroBackgroundImage}
               maxSizeMB={10}
             />
+          </CardContent>
+        </Card>
+
+        {/* Video URLs */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>{language === "en" ? "Promotional Video URLs" : "روابط الفيديو الترويجي"}</CardTitle>
+            <CardDescription>
+              {language === "en" 
+                ? "YouTube embed URLs for the promotional video section" 
+                : "روابط تضمين YouTube لقسم الفيديو الترويجي"}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="videoUrlEn">English Video URL</Label>
+              <Input
+                id="videoUrlEn"
+                value={videoUrlEn}
+                onChange={(e) => setVideoUrlEn(e.target.value)}
+                placeholder="https://www.youtube.com/embed/VIDEO_ID"
+              />
+              <p className="text-sm text-muted-foreground mt-1">
+                Use YouTube embed URL format: https://www.youtube.com/embed/VIDEO_ID
+              </p>
+            </div>
+            <div>
+              <Label htmlFor="videoUrlAr">Arabic Video URL / رابط الفيديو العربي</Label>
+              <Input
+                id="videoUrlAr"
+                value={videoUrlAr}
+                onChange={(e) => setVideoUrlAr(e.target.value)}
+                placeholder="https://www.youtube.com/embed/VIDEO_ID"
+                dir="ltr"
+              />
+              <p className="text-sm text-muted-foreground mt-1">
+                استخدم تنسيق رابط تضمين YouTube
+              </p>
+            </div>
           </CardContent>
         </Card>
 
