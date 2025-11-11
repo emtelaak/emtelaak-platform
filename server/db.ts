@@ -1,5 +1,6 @@
 import { eq, and, desc, asc, sql, gte, lte, inArray, like, or } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
+import mysql from "mysql2/promise";
 import {
   InsertUser, users, adminPermissions, permissionRoleTemplates, kycProgress, InsertKycProgress,
   userProfiles,
@@ -59,14 +60,40 @@ import {
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
+let _pool: mysql.Pool | null = null;
 
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      // Parse the DATABASE_URL
+      const dbUrl = new URL(process.env.DATABASE_URL);
+      
+      // Create mysql2 connection pool
+      _pool = mysql.createPool({
+        host: dbUrl.hostname,
+        port: parseInt(dbUrl.port) || 4000,
+        user: dbUrl.username,
+        password: dbUrl.password,
+        database: dbUrl.pathname.slice(1), // Remove leading '/'
+        ssl: {
+          rejectUnauthorized: true,
+        },
+        connectionLimit: 10,
+        enableKeepAlive: true,
+        keepAliveInitialDelay: 0,
+      });
+      
+      // Test the connection
+      const connection = await _pool.getConnection();
+      console.log("[Database] Successfully connected to TiDB Cloud");
+      connection.release();
+      
+      // Create Drizzle instance with the pool
+      _db = drizzle(_pool);
     } catch (error) {
-      console.warn("[Database] Failed to connect:", error);
+      console.error("[Database] Failed to connect:", error);
       _db = null;
+      _pool = null;
     }
   }
   return _db;
