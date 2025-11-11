@@ -200,11 +200,12 @@ export default function Home() {
               <iframe
                 className="absolute top-0 left-0 w-full h-full"
                 src={language === "en" 
-                  ? "https://www.youtube.com/embed/P9K-VUdc0SA?rel=0&modestbranding=1"
-                  : "https://www.youtube.com/embed/w7hmsuFkrmg?rel=0&modestbranding=1"}
+                  ? "https://www.youtube-nocookie.com/embed/P9K-VUdc0SA?rel=0&modestbranding=1&origin=https://emtelaak-platform.onrender.com"
+                  : "https://www.youtube-nocookie.com/embed/w7hmsuFkrmg?rel=0&modestbranding=1&origin=https://emtelaak-platform.onrender.com"}
                 title={language === "en" ? "Emtelaak Platform Introduction" : "مقدمة منصة إمتلاك"}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
                 allowFullScreen
                 loading="lazy"
               ></iframe>
