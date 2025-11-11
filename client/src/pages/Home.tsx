@@ -71,6 +71,11 @@ export default function Home() {
   const heroCTA1 = (content as any)?.cta1 || defaultContent.cta1;
   const heroCTA2 = (content as any)?.cta2 || defaultContent.cta2;
   const heroBackgroundImage = (heroContent?.content as any)?.backgroundImage || "/brand/backgrounds/hero-bg.jpg";
+  
+  // Video URLs - fetch from database or use defaults
+  const videoUrlEn = (heroContent?.content as any)?.videoUrl || "https://www.youtube.com/embed/P9K-VUdc0SA";
+  const videoUrlAr = (heroContent?.contentAr as any)?.videoUrl || "https://www.youtube.com/embed/w7hmsuFkrmg";
+  const videoUrl = language === "en" ? videoUrlEn : videoUrlAr;
 
   // Don't show loading spinner on homepage - let it load immediately
   // Only show loading for authenticated features
@@ -199,9 +204,7 @@ export default function Home() {
             <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl">
               <iframe
                 className="w-full h-full"
-                src={language === "en" 
-                  ? "https://www.youtube.com/embed/P9K-VUdc0SA"
-                  : "https://www.youtube.com/embed/w7hmsuFkrmg"}
+                src={videoUrl}
                 title={language === "en" ? "Emtelaak Platform Introduction" : "مقدمة منصة إمتلاك"}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
