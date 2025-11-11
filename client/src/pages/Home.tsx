@@ -200,11 +200,13 @@ export default function Home() {
               <iframe
                 className="absolute top-0 left-0 w-full h-full"
                 src={language === "en" 
-                  ? "https://www.youtube.com/embed/P9K-VUdc0SA"
-                  : "https://www.youtube.com/embed/w7hmsuFkrmg"}
+                  ? "https://www.youtube.com/embed/P9K-VUdc0SA?rel=0&modestbranding=1"
+                  : "https://www.youtube.com/embed/w7hmsuFkrmg?rel=0&modestbranding=1"}
                 title={language === "en" ? "Emtelaak Platform Introduction" : "مقدمة منصة إمتلاك"}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
+                loading="lazy"
               ></iframe>
             </div>
           </div>
