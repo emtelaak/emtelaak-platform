@@ -12,32 +12,15 @@ export function useAuth(options?: UseAuthOptions) {
     options ?? {};
   const utils = trpc.useUtils();
 
-  // Get auth token from localStorage
-  const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
-
-  // Verify token and get user data
-  const verifyQuery = trpc.standardAuth.verifyToken.useQuery(
-    { token: token || "" },
-    {
-      enabled: Boolean(token),
-      retry: false,
-      refetchOnWindowFocus: false,
-    }
-  );
-
-  // Fallback to old OAuth method if no token
+  // Use cookie-based authentication only (OAuth session)
+  // This works across subdomains with the .emtelaak.co domain setting
   const meQuery = trpc.auth.me.useQuery(undefined, {
-    enabled: !token,
     retry: false,
     refetchOnWindowFocus: false,
   });
 
   const logoutMutation = trpc.auth.logout.useMutation({
     onSuccess: () => {
-      // Clear JWT token
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("auth_token");
-      }
       utils.auth.me.setData(undefined, null);
     },
   });
@@ -54,47 +37,29 @@ export function useAuth(options?: UseAuthOptions) {
       }
       throw error;
     } finally {
-      // Clear JWT token
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("auth_token");
-      }
       utils.auth.me.setData(undefined, null);
       await utils.auth.me.invalidate();
     }
   }, [logoutMutation, utils]);
 
   const state = useMemo(() => {
-    // Determine user from either JWT verification or OAuth
-    const user = token && verifyQuery.data?.valid 
-      ? verifyQuery.data.user 
-      : meQuery.data;
+    const user = meQuery.data;
     
     // Debug logging
     console.log('[useAuth] Debug:', {
-      hasToken: Boolean(token),
-      verifyQuery: {
-        data: verifyQuery.data,
-        isLoading: verifyQuery.isLoading,
-        error: verifyQuery.error
-      },
       meQuery: {
         data: meQuery.data,
         isLoading: meQuery.isLoading,
-        error: meQuery.error
+        error: meQuery.error,
+        fetchStatus: meQuery.fetchStatus
       },
       finalUser: user
     });
 
-    // Fix: If no token and meQuery is disabled, don't show loading
-    const loading = token 
-      ? verifyQuery.isLoading || logoutMutation.isPending
-      : (meQuery.isLoading && meQuery.fetchStatus !== 'idle') || logoutMutation.isPending;
+    const loading = meQuery.isLoading || logoutMutation.isPending;
+    const error = meQuery.error ?? logoutMutation.error ?? null;
 
-    const error = token
-      ? verifyQuery.error ?? logoutMutation.error ?? null
-      : meQuery.error ?? logoutMutation.error ?? null;
-
-    // Store user info in localStorage for compatibility
+    // Store user info in localStorage for compatibility with other components
     if (typeof window !== "undefined") {
       localStorage.setItem(
         "manus-runtime-user-info",
@@ -107,15 +72,13 @@ export function useAuth(options?: UseAuthOptions) {
       loading,
       error,
       isAuthenticated: Boolean(user),
+      role: user?.role,
     };
   }, [
-    token,
-    verifyQuery.data,
-    verifyQuery.error,
-    verifyQuery.isLoading,
     meQuery.data,
     meQuery.error,
     meQuery.isLoading,
+    meQuery.fetchStatus,
     logoutMutation.error,
     logoutMutation.isPending,
   ]);
@@ -137,13 +100,7 @@ export function useAuth(options?: UseAuthOptions) {
 
   return {
     ...state,
-    refresh: () => {
-      if (token) {
-        verifyQuery.refetch();
-      } else {
-        meQuery.refetch();
-      }
-    },
+    refresh: () => meQuery.refetch(),
     logout,
   };
 }
