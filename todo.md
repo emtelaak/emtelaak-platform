@@ -2637,3 +2637,32 @@
 - [ ] Test login flow
 - [ ] Test protected routes
 - [ ] Deploy to Vercel and verify
+
+## Homepage Video Fix (CURRENT)
+- [x] Fix non-working video on homepage - using youtube-nocookie with origin
+
+## Add Admin Video URL Editor (CURRENT)
+- [x] Add videoUrlEn and videoUrlAr fields to platform_content table (using JSON)
+- [x] Update HomepageContentEditor to include video URL input fields
+- [x] Update Home.tsx to fetch and use dynamic video URLs from database
+- [x] Test video URL editing in admin dashboard
+- [x] Deploy feature to production
+
+## Admin Subdomain Configuration (CURRENT)
+- [x] Add middleware to detect admin subdomain
+- [x] Configure frontend routing for admin subdomain (already exists)
+- [x] Test subdomain redirect functionality
+- [x] Deploy subdomain configuration
+
+## Fix Super Admin Access (CURRENT)
+- [ ] Add console logging to SuperAdminDashboard to debug auth
+- [ ] Check if user object is being returned correctly
+- [ ] Verify role field is present in user object
+- [ ] Deploy and test fix
+
+## Create Missing Database Tables (URGENT)
+- [ ] Create kyc_progress table
+- [ ] Create user_profiles table
+- [ ] Create investments table
+- [ ] Run full database migration
+- [ ] Verify all tables exist
