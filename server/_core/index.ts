@@ -58,6 +58,19 @@ async function startServer() {
   const { ipBlockingMiddleware } = await import("./ipBlockingMiddleware");
   app.use(ipBlockingMiddleware);
   
+  // Admin subdomain redirect middleware
+  app.use((req, res, next) => {
+    const host = req.get('host') || '';
+    // Check if request is from admin subdomain
+    if (host.startsWith('admin.')) {
+      // If accessing root or non-admin path, redirect to super-admin
+      if (req.path === '/' || (!req.path.startsWith('/super-admin') && !req.path.startsWith('/api') && !req.path.startsWith('/assets'))) {
+        return res.redirect('/super-admin');
+      }
+    }
+    next();
+  });
+  
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
