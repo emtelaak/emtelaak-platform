@@ -68,6 +68,22 @@ export function useAuth(options?: UseAuthOptions) {
     const user = token && verifyQuery.data?.valid 
       ? verifyQuery.data.user 
       : meQuery.data;
+    
+    // Debug logging
+    console.log('[useAuth] Debug:', {
+      hasToken: Boolean(token),
+      verifyQuery: {
+        data: verifyQuery.data,
+        isLoading: verifyQuery.isLoading,
+        error: verifyQuery.error
+      },
+      meQuery: {
+        data: meQuery.data,
+        isLoading: meQuery.isLoading,
+        error: meQuery.error
+      },
+      finalUser: user
+    });
 
     // Fix: If no token and meQuery is disabled, don't show loading
     const loading = token 
