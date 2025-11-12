@@ -33,6 +33,9 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function SuperAdminDashboard() {
   const { user, loading } = useAuth();
+  
+  // Debug logging
+  console.log('[SuperAdminDashboard] Auth state:', { user, loading, role: user?.role });
   const { language, t } = useLanguage();
   const [, setLocation] = useLocation();
   const [showCreateUserDialog, setShowCreateUserDialog] = useState(false);
