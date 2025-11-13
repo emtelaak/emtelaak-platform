@@ -314,24 +314,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Investment Type Demos */}
-      <section className="py-20 bg-muted/30">
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">
+      {/* Buy to Let and Buy to Sell Demo */}
+      <section className="py-12 md:py-20 bg-muted/30">
+        <div className="container px-4">
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4">
               {language === "en" ? "Investment Opportunities" : "فرص الاستثمار"}
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-sm md:text-base text-muted-foreground px-4">
               {language === "en" 
                 ? "Explore two distinct investment strategies tailored to your financial goals" 
                 : "استكشف استراتيجيتين استثماريتين مميزتين تناسب أهدافك المالية"}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {/* Buy to Let Demo */}
             <Card className="overflow-hidden">
-              <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-6 text-white">
+              <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-4 md:p-6 text-white">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="h-12 w-12 rounded-full bg-white/20 flex items-center justify-center">
                     <TrendingUp className="h-6 w-6" />
@@ -347,8 +347,8 @@ export default function Home() {
                 </div>
               </div>
               
-              <CardContent className="p-6">
-                <div className="space-y-4">
+              <CardContent className="p-4 md:p-6">
+                <div className="space-y-3 md:space-y-4">
                   <div>
                     <h4 className="font-semibold mb-2">
                       {language === "en" ? "What is Buy to Let?" : "ما هو الشراء للتأجير؟"}
@@ -399,9 +399,11 @@ export default function Home() {
                   </div>
                   
                   <Link href="/properties">
-                    <Button className="w-full" variant="default">
-                      {language === "en" ? "Explore Buy to Let Properties" : "استكشف عقارات الشراء للتأجير"}
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                    <Button className="w-full text-sm md:text-base py-5 md:py-6" variant="default">
+                      <span className="flex-1 text-center">
+                        {language === "en" ? "Explore Buy to Let Properties" : "استكشف عقارات الشراء للتأجير"}
+                      </span>
+                      <ArrowRight className={`h-4 w-4 flex-shrink-0 ${language === "ar" ? "mr-2 rotate-180" : "ml-2"}`} />
                     </Button>
                   </Link>
                 </div>
@@ -410,7 +412,7 @@ export default function Home() {
 
             {/* Buy to Sell Demo */}
             <Card className="overflow-hidden">
-              <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-6 text-white">
+              <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-4 md:p-6 text-white">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="h-12 w-12 rounded-full bg-white/20 flex items-center justify-center">
                     <Building2 className="h-6 w-6" />
@@ -426,8 +428,8 @@ export default function Home() {
                 </div>
               </div>
               
-              <CardContent className="p-6">
-                <div className="space-y-4">
+              <CardContent className="p-4 md:p-6">
+                <div className="space-y-3 md:space-y-4">
                   <div>
                     <h4 className="font-semibold mb-2">
                       {language === "en" ? "What is Buy to Sell?" : "ما هو الشراء للبيع؟"}
@@ -478,9 +480,11 @@ export default function Home() {
                   </div>
                   
                   <Link href="/properties">
-                    <Button className="w-full" variant="default">
-                      {language === "en" ? "Explore Buy to Sell Properties" : "استكشف عقارات الشراء للبيع"}
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                    <Button className="w-full text-sm md:text-base py-5 md:py-6" variant="default">
+                      <span className="flex-1 text-center">
+                        {language === "en" ? "Explore Buy to Sell Properties" : "استكشف عقارات الشراء للبيع"}
+                      </span>
+                      <ArrowRight className={`h-4 w-4 flex-shrink-0 ${language === "ar" ? "mr-2 rotate-180" : "ml-2"}`} />
                     </Button>
                   </Link>
                 </div>
