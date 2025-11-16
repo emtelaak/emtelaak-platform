@@ -130,12 +130,12 @@ export default function Home() {
               </>
             ) : (
               <>
-                <a href={getLoginUrl()}>
+                <Link href="/login">
                   <Button variant="ghost">{t.nav.login}</Button>
-                </a>
-                <a href={getLoginUrl()}>
+                </Link>
+                <Link href="/register">
                   <Button>{t.nav.getStarted}</Button>
-                </a>
+                </Link>
               </>
             )}
           </div>
