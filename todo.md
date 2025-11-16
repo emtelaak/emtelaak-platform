@@ -2737,3 +2737,22 @@
 - [ ] Test registration flow
 - [ ] Test OAuth login alongside email/password
 - [ ] Deploy authentication flow
+
+
+## Phase: Forgot Password Feature (Current)
+- [x] Create ForgotPassword page component with email input
+- [x] Add email validation and error handling
+- [x] Connect to requestPasswordReset API
+- [x] Show success message after email sent
+- [x] Update ResetPassword page to accept token parameter
+- [x] Add token validation in ResetPassword page
+- [x] Add new password form with strength indicator
+- [x] Connect to resetPassword API
+- [x] Integrate email service for sending reset links
+- [x] Create password reset email template
+- [x] Add /forgot-password route to App.tsx
+- [ ] Configure SMTP settings in production
+- [ ] Test forgot password flow end-to-end
+- [ ] Test password reset with valid token
+- [ ] Test password reset with expired token
+- [ ] Deploy forgot password feature

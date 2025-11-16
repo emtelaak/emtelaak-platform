@@ -302,10 +302,28 @@ export const localAuthRouter = router({
         })
         .where(eq(users.id, user.id));
 
-      // TODO: Send email with reset link
-      // For now, we'll just log it (in production, use email service)
-      console.log(`Password reset token for ${user.email}: ${resetToken}`);
-      console.log(`Reset link: ${process.env.VITE_APP_URL || "http://localhost:3000"}/reset-password?token=${resetToken}`);
+      // Send password reset email
+      const resetLink = `${process.env.FRONTEND_URL || "http://localhost:3000"}/reset-password?token=${resetToken}`;
+      
+      try {
+        const { sendEmail, generatePasswordResetEmail } = await import("../_core/emailService");
+        const emailContent = generatePasswordResetEmail({
+          userName: user.name || user.email || "User",
+          resetLink,
+        });
+        
+        await sendEmail({
+          to: user.email!,
+          subject: emailContent.subject,
+          html: emailContent.html,
+          text: emailContent.text,
+        });
+        
+        console.log(`[Auth] Password reset email sent to ${user.email}`);
+      } catch (error) {
+        console.error(`[Auth] Failed to send password reset email:`, error);
+        // Don't throw error to prevent email enumeration
+      }
 
       return {
         success: true,
