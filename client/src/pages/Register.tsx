@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { trpc } from "@/lib/trpc";
 import { Loader2, Eye, EyeOff, Check, X } from "lucide-react";
 import { APP_LOGO, APP_TITLE } from "@/const";
+import { toast } from "sonner";
 
 export default function Register() {
   const [, setLocation] = useLocation();
@@ -22,19 +23,16 @@ export default function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
 
-  const registerMutation = trpc.standardAuth.register.useMutation({
-    onSuccess: (data) => {
-      // Store JWT token in localStorage
-      localStorage.setItem("auth_token", data.token);
-      
-      // Redirect to home page
+  const registerMutation = trpc.localAuth.register.useMutation({
+    onSuccess: () => {
+      toast.success("Account created successfully!");
       setLocation("/");
-      
       // Reload to update auth context
       window.location.reload();
     },
     onError: (error) => {
       setError(error.message);
+      toast.error(error.message);
     },
   });
 
