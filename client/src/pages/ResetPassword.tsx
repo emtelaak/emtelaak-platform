@@ -28,7 +28,7 @@ export default function ResetPassword() {
     }
   }, []);
 
-  const resetPasswordMutation = trpc.standardAuth.resetPassword.useMutation({
+  const resetPasswordMutation = trpc.localAuth.resetPassword.useMutation({
     onSuccess: () => {
       setResetSuccess(true);
       toast.success("Password reset successful!");
