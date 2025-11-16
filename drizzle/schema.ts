@@ -16,6 +16,8 @@ export const users = mysqlTable("users", {
   email: varchar("email", { length: 320 }),
   phone: varchar("phone", { length: 20 }),
   password: varchar("password", { length: 255 }), // Hashed password for password-based auth
+  passwordResetToken: varchar("passwordResetToken", { length: 255 }), // Token for password reset
+  passwordResetExpiry: timestamp("passwordResetExpiry"), // Expiry time for reset token
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "investor", "fundraiser", "admin", "super_admin"]).default("user").notNull(),
   status: mysqlEnum("status", ["active", "suspended", "pending_verification"]).default("pending_verification").notNull(),

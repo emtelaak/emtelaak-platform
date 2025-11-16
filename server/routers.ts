@@ -26,6 +26,7 @@ import { offeringsRouter } from "./routes/offerings";
 import { approvalsRouter } from "./routes/approvals";
 import { investmentFlowRouter } from "./routes/investmentFlow";
 import { standardAuthRouter } from "./routes/standardAuth";
+import { localAuthRouter } from "./routes/localAuth";
 // import { getUnifiedPortfolioSummary } from "./db/unifiedInvestmentsDb";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -124,6 +125,9 @@ export const appRouter = router({
   
   // Standard email/password authentication
   standardAuth: standardAuthRouter,
+  
+  // Local password management
+  localAuth: localAuthRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
