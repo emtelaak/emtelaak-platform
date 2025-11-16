@@ -2666,3 +2666,53 @@
 - [ ] Create investments table
 - [ ] Run full database migration
 - [ ] Verify all tables exist
+
+
+## Phase: Local Password Management System (Current)
+
+### Database & Dependencies
+- [x] Add passwordHash field to users table (nullable) - Already exists
+- [x] Add passwordResetToken field to users table
+- [x] Add passwordResetExpiry field to users table
+- [x] Install bcrypt package
+- [ ] Run database migration (pending interactive prompts)
+
+### Backend Authentication APIs
+- [x] Create auth.register mutation (email, password, name)
+- [x] Create auth.login mutation (email, password)
+- [x] Create auth.changePassword mutation (currentPassword, newPassword)
+- [x] Create auth.requestPasswordReset mutation (email)
+- [x] Create auth.resetPassword mutation (token, newPassword)
+- [x] Add password hashing utility with bcrypt (10 rounds)
+- [x] Add password strength validation (min 8 chars, uppercase, lowercase, number)
+- [x] Add password comparison utility for verification
+- [x] Generate secure password reset tokens
+- [ ] Send password reset emails (TODO: integrate email service)
+
+### Frontend Authentication UI
+- [ ] Create Login page with email/password form
+- [ ] Create Register page with email/password form
+- [x] Add "Change Password" section to Profile page
+- [ ] Create Forgot Password page
+- [ ] Create Reset Password page
+- [ ] Add password strength indicator component
+- [ ] Add show/hide password toggle
+- [ ] Add bilingual support for all auth UI
+- [ ] Update navigation to include Login/Register links
+
+### Security Features
+- [ ] Implement rate limiting on login attempts
+- [ ] Add CSRF protection for auth endpoints
+- [ ] Validate password strength on frontend and backend
+- [ ] Expire password reset tokens after 1 hour
+- [ ] Clear reset token after successful password reset
+
+### Testing & Deployment
+- [ ] Test user registration flow
+- [ ] Test login with email/password
+- [ ] Test password change functionality
+- [ ] Test forgot password flow
+- [ ] Test password reset with valid token
+- [ ] Test password reset with expired token
+- [ ] Test password strength validation
+- [ ] Deploy local password management system

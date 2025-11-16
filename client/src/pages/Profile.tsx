@@ -22,6 +22,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { TwoFactorSettings } from "@/components/TwoFactorSettings";
 import { TrustedDevicesManager } from "@/components/TrustedDevicesManager";
+import { ChangePassword } from "@/components/ChangePassword";
 import { CustomFieldsForm } from "@/components/CustomFieldsForm";
 import { Breadcrumb } from "@/components/Breadcrumb";
 
@@ -519,6 +520,7 @@ export default function Profile() {
           {/* Preferences Tab */}
           {/* Security Tab */}
           <TabsContent value="security" className="space-y-6">
+            <ChangePassword />
             <TwoFactorSettings />
             <TrustedDevicesManager />
           </TabsContent>
