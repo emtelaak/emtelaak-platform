@@ -27,26 +27,34 @@ export function useAuth(options?: UseAuthOptions) {
 
   const logout = useCallback(async () => {
     try {
+      // Clear the session cookie on the server
       await logoutMutation.mutateAsync();
+      
+      // Clear local auth state
+      utils.auth.me.setData(undefined, null);
+      await utils.auth.me.invalidate();
+      
+      // Small delay to ensure cookie is cleared before redirect
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Redirect to home page after logout
+      if (typeof window !== "undefined") {
+        window.location.href = "/";
+      }
     } catch (error: unknown) {
       if (
         error instanceof TRPCClientError &&
         error.data?.code === "UNAUTHORIZED"
       ) {
-        // Already logged out, just redirect
+        // Already logged out, clear state and redirect
+        utils.auth.me.setData(undefined, null);
+        await utils.auth.me.invalidate();
         if (typeof window !== "undefined") {
           window.location.href = "/";
         }
         return;
       }
       throw error;
-    } finally {
-      utils.auth.me.setData(undefined, null);
-      await utils.auth.me.invalidate();
-      // Redirect to home page after logout
-      if (typeof window !== "undefined") {
-        window.location.href = "/";
-      }
     }
   }, [logoutMutation, utils]);
 

@@ -6,6 +6,7 @@ import { ENV } from "./env";
 import { getDb } from "../db";
 import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
+import { COOKIE_NAME } from "@shared/const";
 
 export type TrpcContext = {
   req: CreateExpressContextOptions["req"];
@@ -17,17 +18,25 @@ export async function createContext(
   opts: CreateExpressContextOptions
 ): Promise<TrpcContext> {
   let user: User | null = null;
+  let jwtToken: string | null = null;
 
   // First, try JWT authentication from Authorization header
   const authHeader = opts.req.headers.authorization;
   if (authHeader && authHeader.startsWith("Bearer ")) {
-    const token = authHeader.substring(7); // Remove "Bearer " prefix
-    
+    jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+  }
+
+  // If no Authorization header, check for JWT in cookie
+  if (!jwtToken && opts.req.cookies) {
+    jwtToken = opts.req.cookies[COOKIE_NAME] || null;
+  }
+
+  // If we have a JWT token, verify and load user
+  if (jwtToken) {
     try {
-      const decoded = jwt.verify(token, ENV.jwtSecret) as {
+      const decoded = jwt.verify(jwtToken, ENV.jwtSecret) as {
+        openId: string;
         userId: number;
-        email: string;
-        role: string;
       };
 
       const db = await getDb();
