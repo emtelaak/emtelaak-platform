@@ -2756,3 +2756,19 @@
 - [ ] Test password reset with valid token
 - [ ] Test password reset with expired token
 - [ ] Deploy forgot password feature
+
+
+## Phase: Fix Database Schema for Password Reset (Current)
+- [x] Add passwordResetToken column to users table in production
+- [x] Add passwordResetExpiry column to users table in production
+- [x] Run database migration using webdev_execute_sql
+- [x] Verify columns were added successfully
+- [ ] Test forgot password flow after migration
+
+
+## Phase: Fix Crypto Module Import Error (Current)
+- [x] Identify where crypto module is being imported
+- [x] Fix dynamic require issue in password utilities
+- [x] Ensure crypto is only used server-side
+- [ ] Test forgot password flow after fix
+- [ ] Deploy fix to production
