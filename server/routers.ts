@@ -133,7 +133,17 @@ export const appRouter = router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
       const cookieOptions = getSessionCookieOptions(ctx.req);
-      ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
+      console.log('[Logout] Cookie name:', COOKIE_NAME);
+      console.log('[Logout] Cookie options:', JSON.stringify(cookieOptions, null, 2));
+      
+      // Set cookie to invalid value instead of trying to clear it
+      // This ensures the token will be rejected by the backend
+      ctx.res.cookie(COOKIE_NAME, "LOGGED_OUT", {
+        ...cookieOptions,
+        maxAge: 1000, // 1 second expiry
+      });
+      
+      console.log('[Logout] Cookie set to invalid value');
       return {
         success: true,
       } as const;
