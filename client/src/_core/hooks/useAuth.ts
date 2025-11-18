@@ -12,8 +12,8 @@ export function useAuth(options?: UseAuthOptions) {
     options ?? {};
   const utils = trpc.useUtils();
 
-  // Use cookie-based authentication only (OAuth session)
-  // This works across subdomains with the .emtelaak.co domain setting
+  // Use cookie-based authentication (local email/password auth)
+  // Session managed by backend JWT cookies
   const meQuery = trpc.auth.me.useQuery(undefined, {
     retry: false,
     refetchOnWindowFocus: false,

@@ -2799,3 +2799,17 @@
 - [x] Fix logout issue - added redirect to home page after logout
 - [x] Code review and verification complete
 - [ ] Deploy and verify logout works in production
+
+
+## Phase: Remove Manus OAuth - Use Only Email/Password Auth (COMPLETED)
+- [x] Remove OAuth button from Login page
+- [x] Remove OAuth button from Register page (already didn't have one)
+- [x] Update useAuth hook to remove OAuth-specific code
+- [x] Update navigation to use local auth only (already using getLoginUrl)
+- [x] Verify getLoginUrl points to /login (local auth)
+- [x] Verify login page displays correctly without OAuth button
+- [x] Confirm Register page uses email/password only
+- [ ] User testing: login with email/password
+- [ ] User testing: registration with email/password
+- [ ] User testing: logout functionality
+- [ ] User testing: password reset flow
