@@ -25,12 +25,17 @@ export function getSessionCookieOptions(
   req: Request
 ): Pick<CookieOptions, "domain" | "httpOnly" | "path" | "sameSite" | "secure"> {
   const hostname = req.hostname;
+  const isSecure = isSecureRequest(req);
+  
+  // Don't set domain for preview/development environments
+  // This includes Manus preview URLs (*.manus.computer) and localhost
   const shouldSetDomain =
     hostname &&
     !LOCAL_HOSTS.has(hostname) &&
     !isIpAddress(hostname) &&
     hostname !== "127.0.0.1" &&
-    hostname !== "::1";
+    hostname !== "::1" &&
+    !hostname.includes("manus.computer"); // Skip domain for preview URLs
 
   // Extract base domain for subdomain sharing
   // e.g., admin.emtelaak.co -> .emtelaak.co
@@ -45,11 +50,15 @@ export function getSessionCookieOptions(
     }
   }
 
+  // Use 'lax' for better compatibility, 'none' only if domain is set and secure
+  const sameSite: "lax" | "none" | "strict" = 
+    domain && isSecure ? "none" : "lax";
+
   return {
     domain,
     httpOnly: true,
     path: "/",
-    sameSite: "none",
-    secure: isSecureRequest(req),
+    sameSite,
+    secure: isSecure,
   };
 }
