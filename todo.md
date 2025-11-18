@@ -2772,3 +2772,30 @@
 - [x] Ensure crypto is only used server-side
 - [ ] Test forgot password flow after fix
 - [ ] Deploy fix to production
+
+
+## Phase: Debug Email Delivery Issue (Current)
+- [ ] Check Render production logs for SMTP errors
+- [ ] Verify SMTP environment variables are set correctly
+- [ ] Test SMTP connection from production server
+- [ ] Check Gmail app password is valid
+- [ ] Verify email service integration in localAuth router
+- [ ] Add error logging for email sending failures
+- [ ] Test email delivery after fix
+
+
+## Phase: Fix Logout Functionality (Current)
+- [x] Investigate logout button/link behavior
+- [x] Check logout mutation implementation
+- [x] Verify cookie clearing logic
+- [x] Fix logout issue - added redirect to home page after logout
+- [ ] Deploy and verify logout works
+
+
+## Phase: Fix Logout Functionality (COMPLETED)
+- [x] Investigate logout button/link behavior
+- [x] Check logout mutation implementation
+- [x] Verify cookie clearing logic
+- [x] Fix logout issue - added redirect to home page after logout
+- [x] Code review and verification complete
+- [ ] Deploy and verify logout works in production
