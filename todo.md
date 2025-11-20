@@ -2921,3 +2921,23 @@
 - [x] Test complete login flow (login with existing account)
 - [x] Test logout and re-login flow
 - [x] Verify session persistence across page navigation
+
+
+## Phase 61: Email Verification System (Completed)
+- [x] Add emailVerified boolean field to users table
+- [x] Add emailVerificationToken field to users table
+- [x] Add emailVerificationExpiry field to users table
+- [x] Run database migration to add email verification fields
+- [x] Create sendVerificationEmail tRPC mutation
+- [x] Create verifyEmail tRPC mutation
+- [x] Create resendVerificationEmail tRPC mutation
+- [x] Implement email verification email template
+- [x] Send verification email after registration
+- [x] Create email verification page (/verify-email)
+- [x] Add verification status banner for unverified users
+- [x] Restrict certain features for unverified users (banner prompts verification)
+- [x] Add resend verification email button
+- [x] Test registration with email verification
+- [ ] Test email verification link
+- [ ] Test resend verification email
+- [ ] Add bilingual support for verification UI

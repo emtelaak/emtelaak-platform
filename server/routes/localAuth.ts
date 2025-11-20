@@ -3,7 +3,7 @@ import { router, publicProcedure, protectedProcedure } from "../_core/trpc";
 import { getDb, createUserSession, updateUserLastLogin } from "../db";
 import { users } from "../../drizzle/schema";
 import { eq, and } from "drizzle-orm";
-import { hashPassword, comparePassword, validatePasswordStrength, generateResetToken } from "../utils/password";
+import { hashPassword, comparePassword, validatePasswordStrength, generateResetToken, generateVerificationToken } from "../utils/password";
 import { TRPCError } from "@trpc/server";
 import jwt from "jsonwebtoken";
 import { ENV } from "../_core/env";
@@ -61,6 +61,10 @@ export const localAuthRouter = router({
       // Hash password
       const passwordHash = await hashPassword(input.password);
 
+      // Generate email verification token
+      const verificationToken = generateVerificationToken();
+      const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
+
       // Create user with a generated openId for compatibility
       const openId = `local_${Date.now()}_${Math.random().toString(36).substring(7)}`;
       
@@ -71,7 +75,10 @@ export const localAuthRouter = router({
         password: passwordHash,
         loginMethod: "email_password",
         role: "user",
-        status: "active",
+        status: "pending_verification",
+        emailVerified: false,
+        emailVerificationToken: verificationToken,
+        emailVerificationExpiry: verificationExpiry,
         lastSignedIn: new Date(),
       });
 
@@ -93,6 +100,29 @@ export const localAuthRouter = router({
       const cookieOptions = getSessionCookieOptions(ctx.req);
       ctx.res.cookie(COOKIE_NAME, token, cookieOptions);
 
+      // Send verification email
+      const verificationLink = `${process.env.FRONTEND_URL || "http://localhost:3000"}/verify-email?token=${verificationToken}`;
+      
+      try {
+        const { sendEmail, generateEmailVerificationEmail } = await import("../_core/emailService");
+        const emailContent = generateEmailVerificationEmail({
+          userName: newUser.name || newUser.email || "User",
+          verificationLink,
+        });
+        
+        await sendEmail({
+          to: newUser.email!,
+          subject: emailContent.subject,
+          html: emailContent.html,
+          text: emailContent.text,
+        });
+        
+        console.log(`[Auth] Verification email sent to ${newUser.email}`);
+      } catch (error) {
+        console.error(`[Auth] Failed to send verification email:`, error);
+        // Don't throw error - user is still registered
+      }
+
       return {
         success: true,
         user: {
@@ -100,6 +130,7 @@ export const localAuthRouter = router({
           email: newUser.email,
           name: newUser.name,
           role: newUser.role,
+          emailVerified: false,
         },
       };
     }),
@@ -435,4 +466,142 @@ export const localAuthRouter = router({
         message: "Password reset successfully. You can now login with your new password.",
       };
     }),
+
+  /**
+   * Verify email with token
+   */
+  verifyEmail: publicProcedure
+    .input(
+      z.object({
+        token: z.string().min(1, "Verification token is required"),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Database not available",
+        });
+      }
+
+      // Find user with valid verification token
+      const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.emailVerificationToken, input.token))
+        .limit(1);
+
+      if (!user || !user.emailVerificationExpiry) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid or expired verification token",
+        });
+      }
+
+      // Check if token is expired
+      if (new Date() > user.emailVerificationExpiry) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Verification token has expired. Please request a new one.",
+        });
+      }
+
+      // Update user as verified
+      await db
+        .update(users)
+        .set({
+          emailVerified: true,
+          emailVerificationToken: null,
+          emailVerificationExpiry: null,
+          status: "active",
+        })
+        .where(eq(users.id, user.id));
+
+      return {
+        success: true,
+        message: "Email verified successfully. You can now access all platform features.",
+      };
+    }),
+
+  /**
+   * Resend verification email
+   */
+  resendVerificationEmail: protectedProcedure
+    .mutation(async ({ ctx }) => {
+      const db = await getDb();
+      if (!db) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Database not available",
+        });
+      }
+
+      // Get current user
+      const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, ctx.user.id))
+        .limit(1);
+
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        });
+      }
+
+      // Check if already verified
+      if (user.emailVerified) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Email is already verified",
+        });
+      }
+
+      // Generate new verification token
+      const verificationToken = generateVerificationToken();
+      const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
+
+      // Update user with new token
+      await db
+        .update(users)
+        .set({
+          emailVerificationToken: verificationToken,
+          emailVerificationExpiry: verificationExpiry,
+        })
+        .where(eq(users.id, user.id));
+
+      // Send verification email
+      const verificationLink = `${process.env.FRONTEND_URL || "http://localhost:3000"}/verify-email?token=${verificationToken}`;
+      
+      try {
+        const { sendEmail, generateEmailVerificationEmail } = await import("../_core/emailService");
+        const emailContent = generateEmailVerificationEmail({
+          userName: user.name || user.email || "User",
+          verificationLink,
+        });
+        
+        await sendEmail({
+          to: user.email!,
+          subject: emailContent.subject,
+          html: emailContent.html,
+          text: emailContent.text,
+        });
+        
+        console.log(`[Auth] Verification email resent to ${user.email}`);
+      } catch (error) {
+        console.error(`[Auth] Failed to resend verification email:`, error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to send verification email. Please try again later.",
+        });
+      }
+
+      return {
+        success: true,
+        message: "Verification email sent. Please check your inbox.",
+      };
+    }),
+
 });
