@@ -1,4 +1,4 @@
-import { eq, and, desc, asc, sql, gte, lte, inArray, like, or } from "drizzle-orm";
+import { eq, and, desc, asc, sql, gte, lte, gt, ne, inArray, like, or } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
 import {
@@ -56,6 +56,7 @@ import {
   InsertUserWallet,
   InsertUserBankAccount,
   InsertWalletTransaction,
+  userSessions,
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -1910,4 +1911,110 @@ export async function deleteEmailTemplate(id: number) {
   
   await db.delete(emailTemplates).where(eq(emailTemplates.id, id));
   return { success: true };
+}
+
+
+// ============================================
+// SESSION MANAGEMENT
+// ============================================
+
+export async function createUserSession(session: {
+  sessionId: string;
+  userId: number;
+  deviceInfo?: string;
+  ipAddress?: string;
+  location?: string;
+  browser?: string;
+  expiresAt: Date;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(userSessions).values(session);
+  return result;
+}
+
+export async function getUserSessions(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  // Get only active sessions that haven't expired
+  return await db.select()
+    .from(userSessions)
+    .where(
+      and(
+        eq(userSessions.userId, userId),
+        eq(userSessions.isActive, true),
+        gt(userSessions.expiresAt, new Date())
+      )
+    )
+    .orderBy(desc(userSessions.lastActivity));
+}
+
+export async function getSessionById(sessionId: string) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.select()
+    .from(userSessions)
+    .where(eq(userSessions.sessionId, sessionId))
+    .limit(1);
+    
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function updateSessionActivity(sessionId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(userSessions)
+    .set({ lastActivity: new Date() })
+    .where(eq(userSessions.sessionId, sessionId));
+}
+
+export async function revokeSession(sessionId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(userSessions)
+    .set({ isActive: false })
+    .where(eq(userSessions.sessionId, sessionId));
+}
+
+export async function revokeAllUserSessions(userId: number, exceptSessionId?: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const conditions = [eq(userSessions.userId, userId)];
+  if (exceptSessionId) {
+    conditions.push(ne(userSessions.sessionId, exceptSessionId));
+  }
+  
+  await db.update(userSessions)
+    .set({ isActive: false })
+    .where(and(...conditions));
+}
+
+export async function cleanupExpiredSessions() {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Mark expired sessions as inactive
+  await db.update(userSessions)
+    .set({ isActive: false })
+    .where(
+      and(
+        eq(userSessions.isActive, true),
+        lte(userSessions.expiresAt, new Date())
+      )
+    );
+}
+
+export async function updateUserLastLogin(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(users)
+    .set({ lastLoginAt: new Date() })
+    .where(eq(users.id, userId));
 }

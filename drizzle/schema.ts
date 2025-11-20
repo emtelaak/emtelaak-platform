@@ -25,6 +25,7 @@ export const users = mysqlTable("users", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
+  lastLoginAt: timestamp("lastLoginAt"), // Last successful login timestamp
 });
 
 export const adminPermissions = mysqlTable("admin_permissions", {
@@ -64,6 +65,25 @@ export const passwordResetTokens = mysqlTable("password_reset_tokens", {
 }, (table) => ({
   userIdIdx: index("password_reset_user_id_idx").on(table.userId),
   tokenIdx: index("password_reset_token_idx").on(table.token),
+}));
+
+export const userSessions = mysqlTable("user_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: varchar("sessionId", { length: 255 }).notNull().unique(), // JWT token ID or unique session identifier
+  userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+  deviceInfo: text("deviceInfo"), // Device name, OS, browser
+  ipAddress: varchar("ipAddress", { length: 45 }), // IPv4 or IPv6
+  location: varchar("location", { length: 255 }), // City, Country
+  browser: varchar("browser", { length: 100 }), // Browser name and version
+  loginTime: timestamp("loginTime").defaultNow().notNull(),
+  lastActivity: timestamp("lastActivity").defaultNow().notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("user_sessions_user_id_idx").on(table.userId),
+  sessionIdIdx: index("user_sessions_session_id_idx").on(table.sessionId),
+  expiresAtIdx: index("user_sessions_expires_at_idx").on(table.expiresAt),
 }));
 
 export const permissionRoleTemplates = mysqlTable("permission_role_templates", {

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { router, publicProcedure, protectedProcedure } from "../_core/trpc";
-import { getDb } from "../db";
+import { getDb, createUserSession, updateUserLastLogin } from "../db";
 import { users } from "../../drizzle/schema";
 import { eq, and } from "drizzle-orm";
 import { hashPassword, comparePassword, validatePasswordStrength, generateResetToken } from "../utils/password";
@@ -155,11 +155,13 @@ export const localAuthRouter = router({
         });
       }
 
-      // Update last signed in
+      // Update last signed in and last login
       await db
         .update(users)
         .set({ lastSignedIn: new Date() })
         .where(eq(users.id, user.id));
+      
+      await updateUserLastLogin(user.id);
 
       // Create JWT token with extended expiry if rememberMe is true
       const tokenExpiry = input.rememberMe ? "30d" : "7d";
@@ -168,6 +170,29 @@ export const localAuthRouter = router({
         ENV.jwtSecret,
         { expiresIn: tokenExpiry }
       );
+      
+      // Extract device and browser information
+      const userAgent = ctx.req.headers["user-agent"] || "Unknown";
+      const ipAddress = (ctx.req.headers["x-forwarded-for"] as string)?.split(",")[0] || 
+                       (ctx.req.headers["x-real-ip"] as string) || 
+                       ctx.req.socket.remoteAddress || "Unknown";
+      
+      // Parse browser info from user agent
+      const browserMatch = userAgent.match(/(Chrome|Firefox|Safari|Edge|Opera)\/([\d.]+)/);
+      const browser = browserMatch ? `${browserMatch[1]} ${browserMatch[2]}` : "Unknown Browser";
+      
+      // Create session record
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + (input.rememberMe ? 30 : 7));
+      
+      await createUserSession({
+        sessionId: token.substring(0, 64), // Use first 64 chars of JWT as session ID
+        userId: user.id,
+        deviceInfo: userAgent,
+        ipAddress,
+        browser,
+        expiresAt,
+      });
 
       // Set cookie with extended maxAge if rememberMe is true
       const cookieOptions = getSessionCookieOptions(ctx.req);
