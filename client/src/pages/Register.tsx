@@ -23,12 +23,20 @@ export default function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
 
+  const utils = trpc.useUtils();
+
   const registerMutation = trpc.localAuth.register.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Account created successfully!");
-      setLocation("/");
-      // Reload to update auth context
-      window.location.reload();
+      
+      // Invalidate auth query to refetch user data
+      await utils.auth.me.invalidate();
+      
+      // Wait a moment for cookie to be set
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Navigate to home page - the auth context will update automatically
+      window.location.href = "/";
     },
     onError: (error) => {
       setError(error.message);

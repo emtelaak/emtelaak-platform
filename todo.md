@@ -2908,3 +2908,16 @@
 - [ ] Test session revocation functionality
 - [ ] Test "Revoke All" functionality
 - [ ] Verify expired sessions are cleaned up
+
+
+## Phase 60: Fix Login and Registration Session Persistence
+- [x] Investigate login redirect issue where users were redirected to home page without staying logged in
+- [x] Fix Login.tsx to properly handle cookie setting before redirect
+- [x] Fix Register.tsx to properly handle cookie setting before redirect
+- [x] Add 100ms delay to allow browser to process Set-Cookie header
+- [x] Invalidate auth query cache to trigger refetch after login/registration
+- [x] Use window.location.href instead of setLocation + reload to prevent race condition
+- [x] Test complete registration flow (account creation and auto-login)
+- [x] Test complete login flow (login with existing account)
+- [x] Test logout and re-login flow
+- [x] Verify session persistence across page navigation
