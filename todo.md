@@ -2886,3 +2886,25 @@
 - [x] Verify Remember Me checkbox UI displays correctly
 - [x] Verify checkbox can be checked/unchecked
 - [x] Verify session persists with Remember Me enabled
+
+
+## Phase: Last Login and Active Sessions Security Feature (Current)
+- [ ] Create user_sessions table (sessionId, userId, deviceInfo, ipAddress, location, browser, loginTime, lastActivity, expiresAt)
+- [ ] Add lastLoginAt field to users table
+- [ ] Update login mutation to create session record and update lastLoginAt
+- [ ] Implement getActiveSessions tRPC query (returns all active sessions for current user)
+- [ ] Implement revokeSession tRPC mutation (allows user to terminate specific session)
+- [ ] Implement revokeAllOtherSessions tRPC mutation (keep current, revoke all others)
+- [ ] Add session cleanup job to remove expired sessions
+- [ ] Create ActiveSessions component for Profile page
+- [ ] Display Last Login timestamp in Profile page
+- [ ] Display active sessions table with device, location, browser, login time
+- [ ] Highlight current session in the list
+- [ ] Add "Revoke" button for each session (except current)
+- [ ] Add "Revoke All Other Sessions" button
+- [ ] Add bilingual support for session management UI
+- [ ] Test session creation on login
+- [ ] Test session listing displays correctly
+- [ ] Test session revocation functionality
+- [ ] Test "Revoke All" functionality
+- [ ] Verify expired sessions are cleaned up
