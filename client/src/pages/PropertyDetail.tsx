@@ -201,7 +201,21 @@ export default function PropertyDetail() {
                 </Button>
               )
             ) : (
-              <Button onClick={() => setInvestModalOpen(true)} size="lg">
+              <Button onClick={() => {
+                if (!isAuthenticated) {
+                  window.location.href = getLoginUrl();
+                  return;
+                }
+                if (!user?.emailVerified) {
+                  toast.error(
+                    language === "en" 
+                      ? "Please verify your email address before investing. Check your inbox for the verification link."
+                      : "يرجى التحقق من عنوان بريدك الإلكتروني قبل الاستثمار. تحقق من صندوق الوارد للحصول على رابط التحقق."
+                  );
+                  return;
+                }
+                setInvestModalOpen(true);
+              }} size="lg">
                 {language === "en" ? "Invest Now" : "استثمر الآن"}
               </Button>
             )}
@@ -324,7 +338,21 @@ export default function PropertyDetail() {
                   }
                 </Button>
               ) : (
-                <Button onClick={() => setInvestModalOpen(true)} className="w-full" size="lg">
+                <Button onClick={() => {
+                  if (!isAuthenticated) {
+                    window.location.href = getLoginUrl();
+                    return;
+                  }
+                  if (!user?.emailVerified) {
+                    toast.error(
+                      language === "en" 
+                        ? "Please verify your email address before investing. Check your inbox for the verification link."
+                        : "يرجى التحقق من عنوان بريدك الإلكتروني قبل الاستثمار. تحقق من صندوق الوارد للحصول على رابط التحقق."
+                    );
+                    return;
+                  }
+                  setInvestModalOpen(true);
+                }} className="w-full" size="lg">
                   {language === "en" ? "Invest in This Property" : "استثمر في هذا العقار"}
                 </Button>
               )}

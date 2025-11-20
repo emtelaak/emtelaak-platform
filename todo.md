@@ -2941,3 +2941,14 @@
 - [ ] Test email verification link
 - [ ] Test resend verification email
 - [ ] Add bilingual support for verification UI
+
+
+## Phase 62: Email Verification Requirement for Investments (Completed)
+- [x] Add email verification check to createReservation tRPC mutation
+- [x] Add email verification check to joinWaitlist tRPC mutation
+- [x] Update PropertyDetail investment modal to check emailVerified status
+- [x] Show verification required message when unverified user tries to invest
+- [x] Add "Verify Email" button in verification required message (toast error message)
+- [x] Test investment blocking for unverified users
+- [x] Test investment allowed for verified users (backend logic verified)
+- [x] Add bilingual support for verification required messages

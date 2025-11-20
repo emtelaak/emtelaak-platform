@@ -462,6 +462,14 @@ export const appRouter = router({
     joinWaitlist: protectedProcedure
       .input(z.object({ propertyId: z.number() }))
       .mutation(async ({ ctx, input }) => {
+        // Check if user's email is verified
+        if (!ctx.user.emailVerified) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Please verify your email address before joining the waitlist. Check your inbox for the verification link.",
+          });
+        }
+
         await joinPropertyWaitlist(input.propertyId, ctx.user.id);
         
         // Create notification
