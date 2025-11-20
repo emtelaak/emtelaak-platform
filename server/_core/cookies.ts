@@ -50,9 +50,10 @@ export function getSessionCookieOptions(
     }
   }
 
-  // Use 'lax' for better compatibility, 'none' only if domain is set and secure
-  const sameSite: "lax" | "none" | "strict" = 
-    domain && isSecure ? "none" : "lax";
+  // Always use 'lax' for better compatibility and reliability
+  // 'lax' works for same-site applications and is more widely supported
+  // 'none' is only needed for cross-site contexts (e.g., embedded iframes)
+  const sameSite: "lax" | "none" | "strict" = "lax";
 
   return {
     domain,
