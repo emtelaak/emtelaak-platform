@@ -27,6 +27,14 @@ export const investmentFlowRouter = router({
     .mutation(async ({ ctx, input }) => {
       const { offeringId, shareQuantity, expirationMinutes } = input;
 
+      // Check if user's email is verified
+      if (!ctx.user.emailVerified) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Please verify your email address before making an investment. Check your inbox for the verification link.",
+        });
+      }
+
       // Calculate expiration time
       const expiresAt = new Date();
       expiresAt.setMinutes(expiresAt.getMinutes() + expirationMinutes);
