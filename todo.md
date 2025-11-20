@@ -2871,3 +2871,18 @@
 - [x] Test protected route access after logout - shows login prompt
 - [ ] Push fixes to GitHub and redeploy to production
 - [ ] Test complete auth flow on production (emtelaak.co)
+
+
+## Phase: Implement Remember Me Feature (COMPLETED)
+- [x] Add Remember Me checkbox to Login page UI
+- [x] Add rememberMe state to login form
+- [x] Update login mutation to send rememberMe parameter
+- [x] Update backend localAuth login to accept rememberMe parameter
+- [x] Modify cookie maxAge based on rememberMe (30 days vs 7 days)
+- [x] Modify JWT token expiry based on rememberMe (30d vs 7d)
+- [x] Test login without Remember Me - creates 7-day session
+- [x] Test login with Remember Me checked - creates 30-day session
+- [x] Test logout clears extended session correctly
+- [x] Verify Remember Me checkbox UI displays correctly
+- [x] Verify checkbox can be checked/unchecked
+- [x] Verify session persists with Remember Me enabled

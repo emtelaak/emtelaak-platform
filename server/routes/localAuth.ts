@@ -112,6 +112,7 @@ export const localAuthRouter = router({
       z.object({
         email: z.string().email("Invalid email address"),
         password: z.string().min(1, "Password is required"),
+        rememberMe: z.boolean().optional().default(false),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -160,15 +161,20 @@ export const localAuthRouter = router({
         .set({ lastSignedIn: new Date() })
         .where(eq(users.id, user.id));
 
-      // Create JWT token
+      // Create JWT token with extended expiry if rememberMe is true
+      const tokenExpiry = input.rememberMe ? "30d" : "7d";
       const token = jwt.sign(
         { openId: user.openId, userId: user.id },
         ENV.jwtSecret,
-        { expiresIn: "7d" }
+        { expiresIn: tokenExpiry }
       );
 
-      // Set cookie
+      // Set cookie with extended maxAge if rememberMe is true
       const cookieOptions = getSessionCookieOptions(ctx.req);
+      if (input.rememberMe) {
+        // 30 days in milliseconds
+        cookieOptions.maxAge = 30 * 24 * 60 * 60 * 1000;
+      }
       ctx.res.cookie(COOKIE_NAME, token, cookieOptions);
 
       return {
