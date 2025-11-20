@@ -695,3 +695,127 @@ export async function testEmailConfiguration(): Promise<boolean> {
     return false;
   }
 }
+
+
+/**
+ * Generate HTML email template for email verification
+ */
+export function generateEmailVerificationEmail(params: {
+  userName: string;
+  verificationLink: string;
+}): { subject: string; html: string; text: string } {
+  const { userName, verificationLink } = params;
+  
+  const subject = "Verify Your Email - Emtelaak";
+  
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Verification</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
+  <table role="presentation" style="width: 100%; border-collapse: collapse;">
+    <tr>
+      <td align="center" style="padding: 40px 0;">
+        <table role="presentation" style="width: 600px; border-collapse: collapse; background-color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="padding: 40px 30px; background: linear-gradient(135deg, #003366 0%, #004080 100%); text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">Emtelaak</h1>
+              <p style="margin: 10px 0 0 0; color: #ffffff; font-size: 14px;">Property Fractions</p>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 40px 30px;">
+              <h2 style="margin: 0 0 20px 0; color: #333333; font-size: 24px;">Verify Your Email Address</h2>
+              
+              <p style="margin: 0 0 15px 0; color: #666666; font-size: 16px; line-height: 1.5;">
+                Hello ${userName},
+              </p>
+              
+              <p style="margin: 0 0 15px 0; color: #666666; font-size: 16px; line-height: 1.5;">
+                Thank you for registering with Emtelaak! To complete your registration and start investing, please verify your email address by clicking the button below:
+              </p>
+              
+              <table role="presentation" style="margin: 30px 0;">
+                <tr>
+                  <td style="border-radius: 4px; background-color: #003366;">
+                    <a href="${verificationLink}" target="_blank" style="display: inline-block; padding: 16px 36px; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;">
+                      Verify Email Address
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              
+              <p style="margin: 0 0 15px 0; color: #666666; font-size: 14px; line-height: 1.5;">
+                Or copy and paste this link into your browser:
+              </p>
+              
+              <p style="margin: 0 0 20px 0; color: #003366; font-size: 14px; word-break: break-all;">
+                ${verificationLink}
+              </p>
+              
+              <div style="margin: 30px 0; padding: 20px; background-color: #e3f2fd; border-left: 4px solid #2196f3; border-radius: 4px;">
+                <p style="margin: 0; color: #1565c0; font-size: 14px; line-height: 1.5;">
+                  <strong>ℹ️ Important:</strong><br>
+                  • This verification link will expire in 24 hours<br>
+                  • You must verify your email to access all platform features<br>
+                  • If you didn't create an account, please ignore this email
+                </p>
+              </div>
+              
+              <p style="margin: 0; color: #666666; font-size: 14px; line-height: 1.5;">
+                Best regards,<br>
+                The Emtelaak Team
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 30px; background-color: #f8f9fa; text-align: center; border-top: 1px solid #e9ecef;">
+              <p style="margin: 0 0 10px 0; color: #999999; font-size: 12px;">
+                This is an automated message, please do not reply to this email.
+              </p>
+              <p style="margin: 0; color: #999999; font-size: 12px;">
+                © ${new Date().getFullYear()} Emtelaak. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+  
+  const text = `
+Hello ${userName},
+
+Thank you for registering with Emtelaak! To complete your registration and start investing, please verify your email address.
+
+Verify your email by visiting this link:
+${verificationLink}
+
+Important:
+- This verification link will expire in 24 hours
+- You must verify your email to access all platform features
+- If you didn't create an account, please ignore this email
+
+If you have any questions, please contact our support team.
+
+Best regards,
+The Emtelaak Team
+
+© ${new Date().getFullYear()} Emtelaak. All rights reserved.
+This is an automated message, please do not reply to this email.
+  `.trim();
+  
+  return { subject, html, text };
+}

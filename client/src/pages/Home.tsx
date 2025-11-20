@@ -11,6 +11,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import ROICalculator from "@/components/ROICalculator";
 import KYCStatusBanner from "@/components/KYCStatusBanner";
+import EmailVerificationBanner from "@/components/EmailVerificationBanner";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { TwoFactorVerification } from "@/components/TwoFactorVerification";
 import { useEffect, useState } from "react";
@@ -141,6 +142,13 @@ export default function Home() {
           </div>
         </div>
       </nav>
+
+      {/* Email Verification Banner */}
+      {isAuthenticated && user && !user.emailVerified && user.email && (
+        <div className="container mt-6">
+          <EmailVerificationBanner email={user.email} />
+        </div>
+      )}
 
       {/* KYC Status Banner */}
       <div className="container mt-6">

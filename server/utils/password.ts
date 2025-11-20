@@ -59,3 +59,12 @@ export function validatePasswordStrength(password: string): { isValid: boolean; 
 export function generateResetToken(): string {
   return crypto.randomBytes(32).toString("hex");
 }
+
+
+/**
+ * Generate a secure random token for email verification
+ * @returns Random token string
+ */
+export function generateVerificationToken(): string {
+  return crypto.randomBytes(32).toString("hex");
+}
