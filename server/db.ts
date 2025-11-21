@@ -79,7 +79,7 @@ export async function getDb() {
         ssl: {
           rejectUnauthorized: true,
         },
-        connectionLimit: 10,
+        connectionLimit: 20, // Increased from 10 to handle more concurrent users
         enableKeepAlive: true,
         keepAliveInitialDelay: 0,
       });
