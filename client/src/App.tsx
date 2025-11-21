@@ -48,6 +48,7 @@ const AdminLegalDocuments = lazy(() => import("./pages/AdminLegalDocuments"));
 const FAQContentEditor = lazy(() => import("./pages/FAQContentEditor"));
 const ContactContentEditor = lazy(() => import("./pages/ContactContentEditor"));
 const TermsContentEditor = lazy(() => import("./pages/TermsContentEditor"));
+const SystemMonitoring = lazy(() => import("./pages/admin/SystemMonitoring"));
 const EmailTemplateEditor = lazy(() => import("./pages/EmailTemplateEditor"));
 const HomepageContentEditor = lazy(() => import("@/pages/HomepageContentEditor"));
 const ImageLibrary = lazy(() => import("@/pages/ImageLibrary"));
@@ -131,6 +132,7 @@ function Router() {
       <Route path="/admin/media-library" component={ImageLibrary} />
         <Route path="/admin/content/about" component={AboutPageEditor} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
+      <Route path="/admin/monitoring" component={SystemMonitoring} />
       <Route path="/admin/roles" component={AdminRoles} />
       <Route path="/admin/role-management" component={RoleManagement} />
       <Route path="/admin/permissions" component={AdminPermissions} />
