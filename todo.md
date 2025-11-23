@@ -2992,3 +2992,13 @@
 - [x] Increased timing delays for production network latency (200ms + 100ms)
 - [x] Changed from invalidate to refetch for better auth state confirmation
 - [x] Applied fix to both Login and Register pages
+
+
+## Phase 66: Fix emtelaak.co Production Cookie Issue (Completed)
+- [x] Investigate cookie domain settings for .emtelaak.co
+- [x] Fixed cookie domain logic to not set domain for base domains (emtelaak.co)
+- [x] Only set domain attribute for subdomains (admin.emtelaak.co)
+- [x] Add comprehensive cookie debugging logs
+- [x] Add login mutation debugging
+- [ ] Deploy and test on emtelaak.co production
+- [ ] Verify session persistence after fix

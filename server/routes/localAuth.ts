@@ -231,7 +231,14 @@ export const localAuthRouter = router({
         // 30 days in milliseconds
         cookieOptions.maxAge = 30 * 24 * 60 * 60 * 1000;
       }
+      
+      console.log('[Login] Setting cookie:', COOKIE_NAME);
+      console.log('[Login] Cookie options:', cookieOptions);
+      console.log('[Login] Token (first 20 chars):', token.substring(0, 20));
+      
       ctx.res.cookie(COOKIE_NAME, token, cookieOptions);
+      
+      console.log('[Login] Cookie set successfully');
 
       return {
         success: true,
