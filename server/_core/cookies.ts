@@ -27,6 +27,11 @@ export function getSessionCookieOptions(
   const hostname = req.hostname;
   const isSecure = isSecureRequest(req);
   
+  console.log('[Cookie Debug] hostname:', hostname);
+  console.log('[Cookie Debug] isSecure:', isSecure);
+  console.log('[Cookie Debug] protocol:', req.protocol);
+  console.log('[Cookie Debug] x-forwarded-proto:', req.headers['x-forwarded-proto']);
+  
   // Don't set domain for preview/development environments
   // This includes Manus preview URLs (*.manus.computer) and localhost
   const shouldSetDomain =
@@ -37,17 +42,21 @@ export function getSessionCookieOptions(
     hostname !== "::1" &&
     !hostname.includes("manus.computer"); // Skip domain for preview URLs
 
-  // Extract base domain for subdomain sharing
-  // e.g., admin.emtelaak.co -> .emtelaak.co
+  // For production domains, DON'T set domain attribute
+  // This allows the cookie to work on the exact domain without subdomain issues
+  // Setting domain=undefined makes the cookie work for the current domain only
   let domain: string | undefined = undefined;
-  if (shouldSetDomain) {
+  
+  // Only set domain if we explicitly need subdomain sharing
+  // For most cases, leaving it undefined is more reliable
+  if (shouldSetDomain && hostname.split('.').length > 2) {
+    // Only for subdomains like admin.emtelaak.co, api.emtelaak.co
     const parts = hostname.split('.');
-    if (parts.length >= 2) {
-      // Get the last two parts (e.g., emtelaak.co)
-      const baseDomain = parts.slice(-2).join('.');
-      // Add leading dot for subdomain sharing
-      domain = `.${baseDomain}`;
-    }
+    const baseDomain = parts.slice(-2).join('.');
+    domain = `.${baseDomain}`;
+    console.log('[Cookie Debug] Setting domain for subdomain:', domain);
+  } else {
+    console.log('[Cookie Debug] No domain set (will use current domain)');
   }
 
   // Always use 'lax' for better compatibility and reliability
@@ -55,11 +64,15 @@ export function getSessionCookieOptions(
   // 'none' is only needed for cross-site contexts (e.g., embedded iframes)
   const sameSite: "lax" | "none" | "strict" = "lax";
 
-  return {
+  const cookieOptions = {
     domain,
     httpOnly: true,
     path: "/",
     sameSite,
     secure: isSecure,
   };
+  
+  console.log('[Cookie Debug] Final cookie options:', cookieOptions);
+  
+  return cookieOptions;
 }
