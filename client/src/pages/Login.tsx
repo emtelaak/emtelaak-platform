@@ -25,13 +25,16 @@ export default function Login() {
     onSuccess: async () => {
       toast.success("Login successful!");
       
-      // Invalidate auth query to refetch user data
-      await utils.auth.me.invalidate();
+      // Wait for cookie to be set and refetch auth state
+      await new Promise(resolve => setTimeout(resolve, 200));
       
-      // Wait a moment for cookie to be set
+      // Refetch user data to confirm login
+      await utils.auth.me.refetch();
+      
+      // Additional delay to ensure cookie is fully processed
       await new Promise(resolve => setTimeout(resolve, 100));
       
-      // Navigate to home page - the auth context will update automatically
+      // Navigate to home page
       window.location.href = "/";
     },
     onError: (error) => {
