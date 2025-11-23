@@ -3004,9 +3004,26 @@
 - [ ] Verify session persistence after fix
 
 
-## Phase 67: Deploy Production Cookie Fix to GitHub
-- [ ] Configure git with GitHub credentials
-- [ ] Commit all changes (cookie fix, email verification, architecture audit)
-- [ ] Push to GitHub repository (emtelaak/emtelaak-platform-test)
-- [ ] Verify Render auto-deployment
-- [ ] Test login on emtelaak.co production
+## Phase 67: Deploy Production Cookie Fix to GitHub (Completed)
+- [x] Configure git with GitHub credentials
+- [x] Commit all changes (cookie fix, email verification, architecture audit)
+- [x] Push to GitHub repository (emtelaak/emtelaak-platform-test)
+- [ ] Verify Render auto-deployment (user to check)
+- [ ] Test login on emtelaak.co production (user to test)
+
+
+## Phase 68: Fix Production Database Schema (Completed)
+- [x] Identify missing columns in production (emailVerified, emailVerificationToken, emailVerificationExpiry)
+- [x] Create production-safe SQL migration script (001-add-email-verification.sql)
+- [x] Push migration script to GitHub
+- [ ] Run migration on production database (user action required)
+- [ ] Verify login works after migration (user to test)
+
+
+## Phase 69: Implement Auto-Migration on Startup
+- [ ] Create auto-migration script that checks for missing columns
+- [ ] Add email verification columns migration logic
+- [ ] Integrate into server startup sequence
+- [ ] Add error handling and logging
+- [ ] Push to GitHub for automatic deployment
+- [ ] Verify migration runs successfully on production
