@@ -57,6 +57,20 @@ export async function runAutoMigrations() {
     `);
     console.log("[Auto-Migration] ✅ user_sessions table ready");
 
+    // Create platform_settings table if it doesn't exist
+    console.log("[Auto-Migration] Checking platform_settings table...");
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS platform_settings (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        settingKey VARCHAR(255) NOT NULL UNIQUE,
+        settingValue TEXT NOT NULL,
+        description TEXT,
+        updatedBy INT,
+        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
+      )
+    `);
+    console.log("[Auto-Migration] ✅ platform_settings table ready");
+
     // Check if emailVerified column exists
     const [columns] = await db.execute(`
       SELECT COLUMN_NAME 
