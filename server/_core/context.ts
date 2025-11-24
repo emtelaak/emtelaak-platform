@@ -34,7 +34,11 @@ export async function createContext(
   // If we have a JWT token, verify and load user
   if (jwtToken) {
     try {
-      const decoded = jwt.verify(jwtToken, ENV.jwtSecret) as {
+      // Add clock tolerance to handle server time skew issues
+      // This allows tokens to be valid even if server clocks are slightly off
+      const decoded = jwt.verify(jwtToken, ENV.jwtSecret, {
+        clockTolerance: 30 * 24 * 60 * 60, // 30 days tolerance in seconds
+      }) as {
         openId: string;
         userId: number;
       };
