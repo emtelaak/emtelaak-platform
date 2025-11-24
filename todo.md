@@ -3072,6 +3072,18 @@
 ## Phase 74: Fix Missing platform_settings Table
 - [x] Check platform_settings table schema
 - [x] Add platform_settings table creation to auto-migration
-- [ ] Push fix to GitHub
+- [x] Push fix to GitHub (commit 8973ac2)
 - [ ] Wait for Render deployment
 - [ ] Test logo upload on production
+
+
+## Phase 75: Implement Cloudinary File Storage
+- [x] Install cloudinary npm package
+- [x] Create cloudinaryService.ts with upload/delete functions
+- [x] Update logo upload to use Cloudinary
+- [x] Update profile picture upload to use Cloudinary
+- [ ] Add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET to environment
+- [ ] Test logo upload in development
+- [ ] Push changes to GitHub
+- [ ] Configure Cloudinary credentials on Render
+- [ ] Test all uploads on production
