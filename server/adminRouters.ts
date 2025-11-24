@@ -7,6 +7,7 @@ import { router, protectedProcedure, adminProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { storagePut } from './storage';
+import { saveFile, UPLOAD_CATEGORIES } from './localStorageService';
 import {
   getPendingKycVerifications,
   getUserKycDocuments,
@@ -650,8 +651,8 @@ export const adminRouter = router({
         const fileExtension = input.mimeType.split('/')[1];
         const fileName = `platform-logo-${Date.now()}.${fileExtension}`;
         
-        // Upload to S3
-        const { url } = await storagePut(fileName, buffer, input.mimeType);
+        // Upload to local storage
+        const { url } = await saveFile(UPLOAD_CATEGORIES.logos, buffer, fileName);
         
         // Save to platform settings
         await setPlatformSetting('platform_logo', url, ctx.user.id);

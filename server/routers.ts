@@ -293,8 +293,9 @@ export const appRouter = router({
         const fileExtension = input.mimeType.split('/')[1];
         const fileName = `profile-${ctx.user.id}-${Date.now()}.${fileExtension}`;
         
-        // Upload to S3
-        const { url } = await storagePut(fileName, buffer, input.mimeType);
+        // Upload to local storage
+        const { saveFile, UPLOAD_CATEGORIES } = await import('./localStorageService');
+        const { url } = await saveFile(UPLOAD_CATEGORIES.profiles, buffer, fileName);
         
         // Update user profile with new picture URL
         await createOrUpdateUserProfile({

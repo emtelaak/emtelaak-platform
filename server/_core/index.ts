@@ -11,6 +11,8 @@ import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { configureSecurityHeaders, queryRateLimiter } from "./security";
 import { runAutoMigrations } from "./autoMigrate";
+import { initializeStorage } from "../localStorageService";
+import path from "path";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -34,6 +36,9 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   // Run database migrations before starting server
   await runAutoMigrations();
+  
+  // Initialize local storage directories
+  await initializeStorage();
   
   const app = express();
   const server = createServer(app);
@@ -82,6 +87,11 @@ async function startServer() {
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  
+  // Serve uploaded files from /uploads directory
+  const uploadsPath = path.join(process.cwd(), 'uploads');
+  app.use('/uploads', express.static(uploadsPath));
+  console.log('[Static Files] Serving uploads from:', uploadsPath);
   
   // Rate limiting for API endpoints
   app.use("/api", queryRateLimiter);
