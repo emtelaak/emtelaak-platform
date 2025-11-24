@@ -3029,9 +3029,17 @@
 - [ ] Verify migration runs successfully on production (waiting for Render deployment)
 
 
-## Phase 70: Fix Missing blocked_ips Table
-- [ ] Add blocked_ips table creation to auto-migration
-- [ ] Ensure migration runs before middleware initialization
+## Phase 70: Fix Missing blocked_ips Table (Completed)
+- [x] Add blocked_ips table creation to auto-migration
+- [x] Ensure migration runs before middleware initialization
+- [x] Push fix to GitHub (commit 5ccb6d5)
+- [ ] Verify server starts successfully (waiting for Render deployment)
+- [ ] Test login on production
+
+
+## Phase 71: Fix lastLoginAt Column Mismatch
+- [ ] Check if lastLoginAt exists in schema
+- [ ] Add lastLoginAt to auto-migration if needed
+- [ ] Or remove lastLoginAt from queries if not needed
 - [ ] Push fix to GitHub
-- [ ] Verify server starts successfully
 - [ ] Test login on production
