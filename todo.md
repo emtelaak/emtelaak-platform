@@ -3020,10 +3020,18 @@
 - [ ] Verify login works after migration (user to test)
 
 
-## Phase 69: Implement Auto-Migration on Startup
-- [ ] Create auto-migration script that checks for missing columns
-- [ ] Add email verification columns migration logic
-- [ ] Integrate into server startup sequence
-- [ ] Add error handling and logging
-- [ ] Push to GitHub for automatic deployment
-- [ ] Verify migration runs successfully on production
+## Phase 69: Implement Auto-Migration on Startup (Completed)
+- [x] Create auto-migration script that checks for missing columns
+- [x] Add email verification columns migration logic
+- [x] Integrate into server startup sequence
+- [x] Add error handling and logging
+- [x] Push to GitHub for automatic deployment (commit f450cfe)
+- [ ] Verify migration runs successfully on production (waiting for Render deployment)
+
+
+## Phase 70: Fix Missing blocked_ips Table
+- [ ] Add blocked_ips table creation to auto-migration
+- [ ] Ensure migration runs before middleware initialization
+- [ ] Push fix to GitHub
+- [ ] Verify server starts successfully
+- [ ] Test login on production
