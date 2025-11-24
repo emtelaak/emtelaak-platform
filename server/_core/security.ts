@@ -17,6 +17,7 @@ export const authRateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skipSuccessfulRequests: false,
+  validate: { trustProxy: false }, // Disable trust proxy validation
   handler: async (req, res) => {
     // Log rate limit hit
     try {
@@ -46,6 +47,7 @@ export const mutationRateLimiter = rateLimit({
   message: 'Too many requests, please slow down.',
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { trustProxy: false }, // Disable trust proxy validation
   handler: async (req, res) => {
     try {
       const { logSecurityEvent } = await import('../securityDb');
@@ -74,6 +76,7 @@ export const queryRateLimiter = rateLimit({
   message: 'Too many requests, please slow down.',
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { trustProxy: false }, // Disable trust proxy validation
 });
 
 /**
@@ -86,6 +89,7 @@ export const uploadRateLimiter = rateLimit({
   message: 'Too many file uploads, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { trustProxy: false }, // Disable trust proxy validation
   handler: async (req, res) => {
     try {
       const { logSecurityEvent } = await import('../securityDb');
