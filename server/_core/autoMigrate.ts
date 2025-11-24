@@ -39,7 +39,7 @@ export async function runAutoMigrations() {
       FROM INFORMATION_SCHEMA.COLUMNS 
       WHERE TABLE_SCHEMA = DATABASE() 
       AND TABLE_NAME = 'users' 
-      AND COLUMN_NAME IN ('emailVerified', 'emailVerificationToken', 'emailVerificationExpiry')
+      AND COLUMN_NAME IN ('emailVerified', 'emailVerificationToken', 'emailVerificationExpiry', 'lastLoginAt')
     `) as any;
 
     const existingColumns = new Set(columns.map((row: any) => row.COLUMN_NAME));
@@ -49,8 +49,9 @@ export async function runAutoMigrations() {
     // If all columns exist, skip migration
     if (existingColumns.has('emailVerified') && 
         existingColumns.has('emailVerificationToken') && 
-        existingColumns.has('emailVerificationExpiry')) {
-      console.log("[Auto-Migration] ✅ All email verification columns already exist, skipping migration");
+        existingColumns.has('emailVerificationExpiry') &&
+        existingColumns.has('lastLoginAt')) {
+      console.log("[Auto-Migration] ✅ All required columns already exist, skipping migration");
       return;
     }
 
@@ -84,6 +85,16 @@ export async function runAutoMigrations() {
         ADD COLUMN emailVerificationExpiry TIMESTAMP NULL AFTER emailVerificationToken
       `);
       console.log("[Auto-Migration] ✅ emailVerificationExpiry column added");
+    }
+
+    // Add lastLoginAt column if missing
+    if (!existingColumns.has('lastLoginAt')) {
+      console.log("[Auto-Migration] Adding lastLoginAt column...");
+      await db.execute(`
+        ALTER TABLE users 
+        ADD COLUMN lastLoginAt TIMESTAMP NULL AFTER lastSignedIn
+      `);
+      console.log("[Auto-Migration] ✅ lastLoginAt column added");
     }
 
     // Add index if it doesn't exist
