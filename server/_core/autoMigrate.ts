@@ -5,14 +5,19 @@ import { getDb } from "../db";
  * Checks if email verification columns exist and adds them if missing
  */
 export async function runAutoMigrations() {
+  console.log("[Auto-Migration] ========================================");
   console.log("[Auto-Migration] Starting database migration check...");
   console.log("[Auto-Migration] This may take a few moments...");
+  console.log("[Auto-Migration] DATABASE_URL present:", !!process.env.DATABASE_URL);
   
   const db = await getDb();
   if (!db) {
-    console.warn("[Auto-Migration] Database not available, skipping migrations");
+    console.error("[Auto-Migration] ❌ Database connection failed - getDb() returned null");
+    console.error("[Auto-Migration] DATABASE_URL:", process.env.DATABASE_URL ? 'SET' : 'NOT SET');
     return;
   }
+  
+  console.log("[Auto-Migration] ✅ Database connection established");
 
   try {
     // First, create blocked_ips table if it doesn't exist
@@ -155,7 +160,9 @@ export async function runAutoMigrations() {
 
   } catch (error) {
     console.error("[Auto-Migration] ❌ Migration failed:", error);
-    console.error("[Auto-Migration] The server will continue to start, but email verification features may not work correctly");
+    console.error("[Auto-Migration] The server will continue to start, but some features may not work correctly");
     console.error("[Auto-Migration] Please run the migration manually or check database permissions");
   }
+  
+  console.log("[Auto-Migration] ========================================");
 }
