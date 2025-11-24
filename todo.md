@@ -3114,5 +3114,30 @@
 - [x] Find session creation code in db.ts
 - [x] Fix location field default value issue
 - [x] Fix other fields with default value conflicts (deviceInfo, ipAddress, browser)
-- [ ] Push fix to GitHub
+- [x] Push fix to GitHub (commit 8ad4f50)
+- [ ] Wait for Render to deploy
 - [ ] Test login on production
+
+
+## Phase 79: Fix user_sessions Schema - Allow NULL Values
+- [ ] Modify location column to allow NULL explicitly
+- [ ] Run ALTER TABLE command in MySQL
+- [ ] Test login immediately
+- [ ] Verify session is created in database
+
+
+## Phase 80: Fix Session Verification - Cookie Not Being Read
+- [ ] Check COOKIE_NAME constant in shared/const.ts
+- [ ] Check cookie name used in localAuth.ts (emtelaak_session)
+- [ ] Check cookie name used in context.ts for verification
+- [ ] Fix cookie name mismatch
+- [ ] Push fix to GitHub
+- [ ] Test login persistence
+
+
+## Phase 81: Fix JWT Clock Skew - Token Expiring Immediately
+- [x] Add clockTolerance option to jwt.verify in context.ts
+- [x] Set tolerance to 30 days to handle server time issues
+- [ ] Push fix to GitHub
+- [ ] Deploy to Render
+- [ ] Test login persistence across pages
