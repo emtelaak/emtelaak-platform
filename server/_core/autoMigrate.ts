@@ -6,6 +6,7 @@ import { getDb } from "../db";
  */
 export async function runAutoMigrations() {
   console.log("[Auto-Migration] Starting database migration check...");
+  console.log("[Auto-Migration] This may take a few moments...");
   
   const db = await getDb();
   if (!db) {
@@ -14,6 +15,24 @@ export async function runAutoMigrations() {
   }
 
   try {
+    // First, create blocked_ips table if it doesn't exist
+    console.log("[Auto-Migration] Checking blocked_ips table...");
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS blocked_ips (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        ip_address VARCHAR(45) NOT NULL UNIQUE,
+        reason TEXT,
+        blocked_by INT,
+        blocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        expires_at TIMESTAMP NULL,
+        is_active INT DEFAULT 1 NOT NULL,
+        block_type ENUM('manual', 'automatic') DEFAULT 'manual' NOT NULL,
+        INDEX idx_ip_address (ip_address),
+        FOREIGN KEY (blocked_by) REFERENCES users(id)
+      )
+    `);
+    console.log("[Auto-Migration] ✅ blocked_ips table ready");
+
     // Check if emailVerified column exists
     const [columns] = await db.execute(`
       SELECT COLUMN_NAME 
