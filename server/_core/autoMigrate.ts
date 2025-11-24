@@ -33,6 +33,30 @@ export async function runAutoMigrations() {
     `);
     console.log("[Auto-Migration] ✅ blocked_ips table ready");
 
+    // Create user_sessions table if it doesn't exist
+    console.log("[Auto-Migration] Checking user_sessions table...");
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS user_sessions (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        sessionId VARCHAR(255) NOT NULL UNIQUE,
+        userId INT NOT NULL,
+        deviceInfo TEXT,
+        ipAddress VARCHAR(45),
+        location VARCHAR(255) DEFAULT NULL,
+        browser VARCHAR(100),
+        loginTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        lastActivity TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        expiresAt TIMESTAMP NOT NULL,
+        isActive BOOLEAN DEFAULT TRUE NOT NULL,
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        INDEX user_sessions_user_id_idx (userId),
+        INDEX user_sessions_session_id_idx (sessionId),
+        INDEX user_sessions_expires_at_idx (expiresAt),
+        FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+      )
+    `);
+    console.log("[Auto-Migration] ✅ user_sessions table ready");
+
     // Check if emailVerified column exists
     const [columns] = await db.execute(`
       SELECT COLUMN_NAME 
