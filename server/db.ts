@@ -1930,7 +1930,20 @@ export async function createUserSession(session: {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   
-  const result = await db.insert(userSessions).values(session);
+  // Build the insert object with only defined values
+  const insertData: any = {
+    sessionId: session.sessionId,
+    userId: session.userId,
+    expiresAt: session.expiresAt,
+  };
+  
+  // Only add optional fields if they have values
+  if (session.deviceInfo) insertData.deviceInfo = session.deviceInfo;
+  if (session.ipAddress) insertData.ipAddress = session.ipAddress;
+  if (session.location) insertData.location = session.location;
+  if (session.browser) insertData.browser = session.browser;
+  
+  const result = await db.insert(userSessions).values(insertData);
   return result;
 }
 
