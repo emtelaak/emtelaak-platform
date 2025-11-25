@@ -3367,3 +3367,23 @@
 - [x] Fix changes parameter (changed to details)
 - [ ] Push fix to GitHub
 - [ ] Verify deployment succeeds
+
+
+## Phase 95: Fix All Import Errors for Deployment
+- [x] Fix LanguageSwitcher import in MobileMenu.tsx
+- [x] Fix LanguageSwitcher import in Home.tsx
+- [x] Test build locally - passes successfully
+- [x] Push fixes to GitHub (commit 5f7611b)
+- [ ] Verify deployment succeeds
+
+
+## Phase 96: Remove Desktop Sidebar - Use Responsive Menu Only
+- [x] Remove desktop sidebar code from MobileBottomNav component
+- [x] Keep only mobile bottom navigation (for authenticated users)
+- [x] Remove md:mr-80 / md:ml-80 from Home page
+- [x] Remove md:mr-80 / md:ml-80 from Properties page
+- [x] Remove md:mr-80 / md:ml-80 from Portfolio page
+- [x] Remove md:mr-80 / md:ml-80 from Wallet page
+- [x] Remove md:mr-80 / md:ml-80 from Menu page
+- [ ] Test full-width layout on desktop
+- [ ] Push to GitHub and deploy

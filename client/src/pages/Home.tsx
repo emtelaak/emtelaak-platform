@@ -96,7 +96,7 @@ export default function Home() {
         />
       )}
 
-      <div className={`min-h-screen pb-16 md:pb-0 ${isAuthenticated ? (language === 'ar' ? 'md:ml-80' : 'md:mr-80') : ''}`}>
+      <div className="min-h-screen pb-16 md:pb-0">
       {/* Navigation */}
       <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container flex h-16 items-center justify-between">
