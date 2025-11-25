@@ -764,12 +764,12 @@ export default function Home() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a href={getLoginUrl()}>
+              <Link href="/register">
                 <Button size="lg" className="text-lg px-12 py-7 h-auto font-semibold shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105" style={{ backgroundColor: '#CDE428', color: '#032941' }}>
                   {t.home.cta.button}
                   <ArrowRight className="ml-2 h-6 w-6" />
                 </Button>
-              </a>
+              </Link>
               <Link href="/properties">
                 <Button size="lg" variant="outline" className="text-lg px-12 py-7 h-auto font-semibold bg-white/10 border-2 border-white text-white hover:bg-white/20 shadow-xl transition-all duration-300 hover:scale-105">
                   {language === "en" ? "Browse Properties" : "تصفح العقارات"}
