@@ -3482,3 +3482,12 @@
 - [x] Increase opacity if needed for better visibility - Changed to bg-white/95 with shadow
 - [x] Test in both languages
 - [x] Deploy fixes
+
+
+## Phase 105: Enhance Hamburger Menu Icon Visibility
+- [x] Add solid white background to hamburger button
+- [x] Increase icon size for better visibility (h-7 w-7)
+- [x] Add stronger border with brand color (border-2 border-[#032941])
+- [x] Add shadow for depth (shadow-md)
+- [x] Test visibility on mobile in both languages
+- [x] Deploy changes
