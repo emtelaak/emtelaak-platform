@@ -3234,4 +3234,12 @@
 - [x] Style Sign Up button with primary styling (bg-primary text-primary-foreground)
 - [x] Link Sign Up buttons to /register page
 - [ ] Test button placement and styling
+- [x] Push to GitHub (commit ed1b235)
+- [ ] Wait for Render to deploy (2-3 minutes)
+
+
+## Phase 89: Hide Sign Up Button for Authenticated Users
+- [x] Add conditional rendering to Sign Up button in hero section ({!isAuthenticated && ...})
+- [x] Only show Sign Up button when user is NOT authenticated
+- [ ] Test with logged-in and logged-out states
 - [ ] Push to GitHub and deploy
