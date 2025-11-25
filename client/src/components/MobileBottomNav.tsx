@@ -1,13 +1,15 @@
-import { Home, TrendingUp, Briefcase, Wallet, Menu } from "lucide-react";
+import { Home, TrendingUp, Briefcase, Wallet, Menu, ChevronRight, ChevronLeft } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 export default function MobileBottomNav() {
   const [location] = useLocation();
   const { t, language } = useLanguage();
   const { isAuthenticated, loading } = useAuth();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Don't show navigation if not authenticated or still loading
   if (!isAuthenticated || loading) {
@@ -49,10 +51,30 @@ export default function MobileBottomNav() {
 
   return (
     <>
-      {/* Desktop Sidebar Navigation */}
-      <nav className="hidden md:block fixed left-0 top-0 h-screen w-64 bg-[#002B49] text-white z-40 shadow-xl">
+      {/* Desktop Right Sidebar Navigation */}
+      <nav 
+        className={cn(
+          "hidden md:block fixed right-0 top-0 h-screen bg-[#002B49] text-white z-40 shadow-xl transition-all duration-300",
+          isCollapsed ? "w-16" : "w-64"
+        )}
+      >
+        {/* Collapse/Expand Button */}
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="absolute -left-4 top-6 bg-[#D4FF00] text-[#002B49] rounded-full p-2 shadow-lg hover:bg-[#c4ef00] transition-colors"
+          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {isCollapsed ? (
+            <ChevronLeft className="h-4 w-4" />
+          ) : (
+            <ChevronRight className="h-4 w-4" />
+          )}
+        </button>
+
         <div className="p-6">
-          <h2 className="text-xl font-bold mb-8">Emtelaak</h2>
+          {!isCollapsed && (
+            <h2 className="text-xl font-bold mb-8">Emtelaak</h2>
+          )}
           <div className="space-y-2">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -65,9 +87,12 @@ export default function MobileBottomNav() {
                         ? "bg-[#D4FF00] text-[#002B49]"
                         : "text-white hover:bg-white/10"
                     )}
+                    title={isCollapsed ? item.label : undefined}
                   >
-                    <Icon className="h-5 w-5" />
-                    <span className="font-medium">{item.label}</span>
+                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    {!isCollapsed && (
+                      <span className="font-medium">{item.label}</span>
+                    )}
                   </button>
                 </Link>
               );
