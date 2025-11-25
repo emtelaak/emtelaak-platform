@@ -269,7 +269,7 @@ export default function Wallet() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-16 md:pb-0">
+    <div className={`min-h-screen bg-background pb-16 md:pb-0 ${isAuthenticated ? (language === 'ar' ? 'md:ml-72' : 'md:mr-72') : ''}`}>
       {/* Header */}
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between">
