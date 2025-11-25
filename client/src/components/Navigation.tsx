@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { trpc } from "@/lib/trpc";
-import MobileMenu from "./MobileMenu";
+
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -190,10 +190,7 @@ export default function Navigation() {
             </div>
           )}
 
-          {/* Mobile Menu */}
-          <div className="md:hidden">
-            <MobileMenu />
-          </div>
+
         </div>
       </div>
     </nav>
