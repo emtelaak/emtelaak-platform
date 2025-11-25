@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import MobileMenu from "@/components/MobileMenu";
+import Navigation from "@/components/Navigation";
 import ROICalculator from "@/components/ROICalculator";
 import KYCStatusBanner from "@/components/KYCStatusBanner";
 import EmailVerificationBanner from "@/components/EmailVerificationBanner";
@@ -97,58 +98,7 @@ export default function Home() {
       )}
 
       <div className="min-h-screen pb-16 md:pb-0">
-      {/* Navigation */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/">
-              <img src={APP_LOGO} alt={APP_TITLE} className="h-20 w-auto cursor-pointer" />
-            </Link>
-          </div>
-          
-          <div className="hidden md:flex items-center gap-6">
-            <Link href="/" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-              {t.nav.home}
-            </Link>
-            <Link href="/properties" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-              {t.nav.properties}
-            </Link>
-            <Link href="/how-it-works" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-              {t.nav.howItWorks}
-            </Link>
-            <Link href="/about" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-              {t.nav.about}
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-3">
-            {/* Desktop: Language Switcher + Auth Buttons */}
-            <div className="hidden md:flex items-center gap-3">
-              <LanguageSwitcher />
-              {isAuthenticated ? (
-                <>
-                  <NotificationCenter />
-                  <Link href="/profile">
-                    <Button variant="ghost">{t.nav.profile}</Button>
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link href="/login">
-                    <Button variant="ghost">{t.nav.login}</Button>
-                  </Link>
-                  <Link href="/register">
-                    <Button>{t.nav.getStarted}</Button>
-                  </Link>
-                </>
-              )}
-            </div>
-
-            {/* Mobile: Hamburger Menu */}
-            <MobileMenu />
-          </div>
-        </div>
-      </nav>
+      <Navigation />
 
       {/* Email Verification Banner */}
       {isAuthenticated && user && !user.emailVerified && user.email && (

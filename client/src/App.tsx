@@ -18,6 +18,7 @@ import KYCQuestionnaire from "./pages/KYCQuestionnaire";
 import LeadCapture from "./pages/LeadCapture";
 import Wallet from "./pages/Wallet";
 import Menu from "./pages/Menu";
+import Dashboard from "./pages/Dashboard";
 import ResetPassword from "./pages/ResetPassword";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -113,6 +114,7 @@ function Router() {
       <Route path="/admin/content/contact" component={ContactContentEditor} />
       <Route path="/admin/content/terms" component={TermsContentEditor} />
       <Route path="/admin/email-template-editor" component={EmailTemplateEditor} />
+      <Route path="/dashboard" component={Dashboard} />
       <Route path="/menu" component={Menu} />
       <Route path="/profile" component={Profile} />
       <Route path="/kyc-questionnaire" component={KYCQuestionnaire} />

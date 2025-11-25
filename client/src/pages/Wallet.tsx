@@ -16,6 +16,7 @@ import { Link } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import Navigation from "@/components/Navigation";
 import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function Wallet() {
@@ -270,6 +271,7 @@ export default function Wallet() {
 
   return (
     <div className="min-h-screen bg-background pb-16 md:pb-0">
+      <Navigation />
       {/* Header */}
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between">
