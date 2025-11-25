@@ -3167,5 +3167,19 @@
 - [x] On desktop: Transform to sidebar menu with Emtelaak branding
 - [x] On mobile: Keep as bottom navigation bar
 - [x] Adjust Home and Properties pages to accommodate sidebar (md:ml-64)
-- [ ] Push changes to GitHub
+- [x] Push changes to GitHub (commit 0390ae3)
+- [ ] Wait for Render to deploy (2-3 minutes)
 - [ ] Test on desktop (sidebar) and mobile (bottom nav)
+
+
+## Phase 85: Fix Navigation - Right Sidebar with Collapse
+- [x] Remove left padding/margin (md:ml-64) from all pages for logged-out users
+- [x] Move sidebar from left side to right side
+- [x] Change page layout to use right margin (md:mr-64) for logged-in users
+- [x] Add collapse/expand button to sidebar
+- [x] Make sidebar collapsible (toggle open/closed state)
+- [x] Add animation for smooth collapse/expand transition (CSS transition-all duration-300)
+- [x] Update Home page layout (conditional md:mr-64 based on auth)
+- [x] Update Properties page layout (conditional md:mr-64 based on auth)
+- [ ] Test on desktop and mobile
+- [ ] Push to GitHub and deploy
