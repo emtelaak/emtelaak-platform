@@ -8,7 +8,8 @@ import { Link } from "wouter";
 import NotificationCenter from "@/components/NotificationCenter";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import MobileMenu from "@/components/MobileMenu";
 import ROICalculator from "@/components/ROICalculator";
 import KYCStatusBanner from "@/components/KYCStatusBanner";
 import EmailVerificationBanner from "@/components/EmailVerificationBanner";
@@ -121,24 +122,30 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-3">
-            <LanguageSwitcher />
-            {isAuthenticated ? (
-              <>
-                <NotificationCenter />
-                <Link href="/profile">
-                  <Button variant="ghost">{t.nav.profile}</Button>
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link href="/login">
-                  <Button variant="ghost">{t.nav.login}</Button>
-                </Link>
-                <Link href="/register">
-                  <Button>{t.nav.getStarted}</Button>
-                </Link>
-              </>
-            )}
+            {/* Desktop: Language Switcher + Auth Buttons */}
+            <div className="hidden md:flex items-center gap-3">
+              <LanguageSwitcher />
+              {isAuthenticated ? (
+                <>
+                  <NotificationCenter />
+                  <Link href="/profile">
+                    <Button variant="ghost">{t.nav.profile}</Button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/login">
+                    <Button variant="ghost">{t.nav.login}</Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button>{t.nav.getStarted}</Button>
+                  </Link>
+                </>
+              )}
+            </div>
+
+            {/* Mobile: Hamburger Menu */}
+            <MobileMenu />
           </div>
         </div>
       </nav>
