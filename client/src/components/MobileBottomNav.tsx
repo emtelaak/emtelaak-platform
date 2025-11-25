@@ -57,42 +57,42 @@ export default function MobileBottomNav() {
       {/* Desktop Sidebar Navigation */}
       <nav 
         className={cn(
-          "hidden md:block fixed top-0 h-screen bg-gradient-to-b from-[#002B49] to-[#001a2e] text-white z-40 shadow-2xl transition-all duration-300 ease-in-out",
+          "hidden md:flex fixed top-0 h-screen bg-gradient-to-br from-[#002B49] via-[#003a5f] to-[#001a2e] text-white z-40 shadow-2xl transition-all duration-300 ease-in-out flex-col",
           isRTL ? "left-0" : "right-0",
-          isCollapsed ? "w-20" : "w-72"
+          isCollapsed ? "w-24" : "w-80"
         )}
       >
         {/* Collapse/Expand Button */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className={cn(
-            "absolute top-8 bg-[#D4FF00] text-[#002B49] rounded-full p-2.5 shadow-lg hover:bg-[#c4ef00] hover:scale-110 transition-all duration-200 z-50",
+            "absolute top-10 bg-[#D4FF00] text-[#002B49] rounded-full p-3 shadow-xl hover:bg-[#c4ef00] hover:scale-110 transition-all duration-200 z-50 border-2 border-[#002B49]",
             isRTL 
-              ? (isCollapsed ? "-right-5" : "-right-5")
-              : (isCollapsed ? "-left-5" : "-left-5")
+              ? (isCollapsed ? "-right-6" : "-right-6")
+              : (isCollapsed ? "-left-6" : "-left-6")
           )}
           aria-label={isCollapsed ? (language === "en" ? "Expand sidebar" : "توسيع القائمة") : (language === "en" ? "Collapse sidebar" : "طي القائمة")}
         >
           {isRTL ? (
-            isCollapsed ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />
+            isCollapsed ? <ChevronLeft className="h-5 w-5 font-bold" /> : <ChevronRight className="h-5 w-5 font-bold" />
           ) : (
-            isCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />
+            isCollapsed ? <ChevronRight className="h-5 w-5 font-bold" /> : <ChevronLeft className="h-5 w-5 font-bold" />
           )}
         </button>
 
         {/* Sidebar Header */}
         <div className={cn(
-          "p-6 border-b border-white/10",
-          isCollapsed && "px-3"
+          "p-8 border-b border-white/20",
+          isCollapsed && "px-4 py-8"
         )}>
           {!isCollapsed ? (
-            <div className="flex items-center gap-3">
-              <img src={APP_LOGO} alt="Emtelaak" className="h-12 w-auto" />
+            <div className="flex items-center justify-center">
+              <img src={APP_LOGO} alt="Emtelaak" className="h-16 w-auto" />
             </div>
           ) : (
             <div className="flex justify-center">
-              <div className="w-10 h-10 bg-[#D4FF00] rounded-lg flex items-center justify-center">
-                <span className="text-[#002B49] font-bold text-lg">E</span>
+              <div className="w-14 h-14 bg-[#D4FF00] rounded-2xl flex items-center justify-center shadow-lg">
+                <span className="text-[#002B49] font-bold text-2xl">E</span>
               </div>
             </div>
           )}
@@ -100,8 +100,8 @@ export default function MobileBottomNav() {
 
         {/* Navigation Items */}
         <div className={cn(
-          "p-4 space-y-2",
-          isCollapsed && "px-2"
+          "flex-1 p-6 space-y-3",
+          isCollapsed && "px-3"
         )}>
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -109,23 +109,29 @@ export default function MobileBottomNav() {
               <Link key={item.href} href={item.href}>
                 <button
                   className={cn(
-                    "flex items-center gap-4 w-full px-4 py-3.5 rounded-xl transition-all duration-200 group",
+                    "flex items-center gap-4 w-full px-5 py-4 rounded-2xl transition-all duration-200 group relative overflow-hidden",
                     item.active
-                      ? "bg-[#D4FF00] text-[#002B49] shadow-lg"
-                      : "text-white hover:bg-white/10 hover:translate-x-1",
-                    isCollapsed && "justify-center px-2",
+                      ? "bg-[#D4FF00] text-[#002B49] shadow-xl scale-105"
+                      : "text-white hover:bg-white/15 hover:scale-105 hover:shadow-lg",
+                    isCollapsed && "justify-center px-3",
                     isRTL && !isCollapsed && "flex-row-reverse"
                   )}
                   title={isCollapsed ? item.label : undefined}
                 >
+                  {/* Background glow effect for active state */}
+                  {item.active && (
+                    <div className="absolute inset-0 bg-[#D4FF00] opacity-20 blur-xl"></div>
+                  )}
+                  
                   <Icon className={cn(
-                    "flex-shrink-0 transition-transform duration-200",
-                    item.active ? "h-6 w-6" : "h-5 w-5 group-hover:scale-110"
+                    "flex-shrink-0 transition-all duration-200 relative z-10",
+                    item.active ? "h-7 w-7" : "h-6 w-6 group-hover:scale-110"
                   )} />
+                  
                   {!isCollapsed && (
                     <span className={cn(
-                      "font-medium transition-all duration-200",
-                      item.active ? "text-base" : "text-sm"
+                      "font-semibold transition-all duration-200 relative z-10",
+                      item.active ? "text-lg" : "text-base"
                     )}>
                       {item.label}
                     </span>
@@ -138,9 +144,12 @@ export default function MobileBottomNav() {
 
         {/* Footer */}
         {!isCollapsed && (
-          <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-white/10">
-            <p className="text-xs text-white/60 text-center">
+          <div className="p-6 border-t border-white/20">
+            <p className="text-sm text-white/70 text-center font-medium">
               {language === "en" ? "© 2024 Emtelaak" : "© 2024 إمتلاك"}
+            </p>
+            <p className="text-xs text-white/50 text-center mt-1">
+              {language === "en" ? "Fractional Real Estate" : "الملكية العقارية الجزئية"}
             </p>
           </div>
         )}
