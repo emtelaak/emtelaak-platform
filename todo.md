@@ -3438,3 +3438,15 @@
 - [x] Icons for all navigation items
 - [ ] Test on mobile devices
 - [ ] Push to GitHub and deploy
+
+
+## Phase 101: Fix Menu Visibility and Add Contact Link
+- [x] Increase backdrop opacity from bg-black/50 to bg-black/70 (better visibility)
+- [x] Add Contact link to GuestMobileMenu
+- [x] Add FAQ link to GuestMobileMenu
+- [x] Add Contact link to desktop navigation
+- [x] Add FAQ link to desktop navigation
+- [x] Navigation now shows: Home, Properties, How It Works, About, FAQ, Contact
+- [x] Bilingual support for FAQ and Contact
+- [ ] Test menu visibility on mobile
+- [ ] Push to GitHub and deploy

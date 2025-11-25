@@ -32,6 +32,8 @@ export default function Navigation() {
       properties: "Properties",
       howItWorks: "How It Works",
       about: "About",
+      faq: "FAQ",
+      contact: "Contact",
       login: "Login",
       getStarted: "Get Started",
       profile: "Profile",
@@ -46,6 +48,8 @@ export default function Navigation() {
       properties: "العقارات",
       howItWorks: "كيف يعمل",
       about: "من نحن",
+      faq: "الأسئلة الشائعة",
+      contact: "اتصل بنا",
       login: "تسجيل الدخول",
       getStarted: "ابدأ الآن",
       profile: "الملف الشخصي",
@@ -64,6 +68,8 @@ export default function Navigation() {
     { href: "/properties", label: nav.properties },
     { href: "/how-it-works", label: nav.howItWorks },
     { href: "/about", label: nav.about },
+    { href: "/faq", label: nav.faq },
+    { href: "/contact", label: nav.contact },
   ];
 
   const userMenuItems = [
