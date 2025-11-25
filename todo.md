@@ -3450,3 +3450,14 @@
 - [x] Bilingual support for FAQ and Contact
 - [ ] Test menu visibility on mobile
 - [ ] Push to GitHub and deploy
+
+
+## Phase 102: Add Back to Home Link to Auth Pages
+- [ ] Add Back to Home link to Register page
+- [ ] Add Back to Home link to Login page (if exists)
+- [ ] Style link with arrow icon and hover effect
+- [ ] Bilingual support (EN/AR)
+- [ ] Test navigation
+- [ ] Push to GitHub and deploy
+
+- [x] Test navigation from login/register to home
