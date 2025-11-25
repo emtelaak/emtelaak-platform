@@ -3461,3 +3461,13 @@
 - [ ] Push to GitHub and deploy
 
 - [x] Test navigation from login/register to home
+
+
+## Phase 103: Fix Back to Home Link RTL Support
+- [x] Add useLanguage hook to Login and Register pages
+- [x] Position button on right side for Arabic (RTL)
+- [x] Position button on left side for English (LTR)
+- [x] Add Arabic translation "العودة للرئيسية"
+- [x] Reverse arrow direction for RTL (ArrowRight instead of ArrowLeft)
+- [ ] Test in both English and Arabic modes
+- [ ] Deploy to production
