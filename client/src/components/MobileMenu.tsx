@@ -5,7 +5,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl, APP_LOGO, APP_TITLE } from "@/const";
 import { useState, useEffect } from "react";
-import LanguageSwitcher from "./LanguageSwitcher";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
