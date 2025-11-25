@@ -3182,4 +3182,26 @@
 - [x] Update Home page layout (conditional md:mr-64 based on auth)
 - [x] Update Properties page layout (conditional md:mr-64 based on auth)
 - [ ] Test on desktop and mobile
+- [x] Push to GitHub (commit 596ffa8)
+- [ ] Wait for Render to deploy (2-3 minutes)
+
+
+## Phase 86: Enhance Sidebar - RTL/LTR Support and Visual Design
+- [x] Add language context to sidebar component
+- [x] Implement RTL positioning (left side for Arabic)
+- [x] Implement LTR positioning (right side for English)
+- [x] Update collapse button to flip direction based on language
+- [x] Enhance visual design with gradient background and better spacing
+- [x] Add Emtelaak logo to sidebar header
+- [x] Improve typography and icon sizing (larger icons, better font weights)
+- [x] Add hover effects and active state styling (scale, translate animations)
+- [x] Update Home page layout to support RTL/LTR margins
+- [x] Update Properties page layout to support RTL/LTR margins
+- [x] Update Portfolio page layout to support RTL/LTR margins
+- [x] Update Wallet page layout to support RTL/LTR margins
+- [x] Update Menu page layout to support RTL/LTR margins
+- [x] Add smooth transitions for language switching (300ms ease-in-out)
+- [x] Add footer with copyright to sidebar
+- [ ] Test English mode (sidebar on right)
+- [ ] Test Arabic mode (sidebar on left)
 - [ ] Push to GitHub and deploy
