@@ -54,22 +54,22 @@ export default function MobileBottomNav() {
 
   return (
     <>
-      {/* Desktop Sidebar Navigation */}
+      {/* Desktop Sidebar Navigation - Clean White Design */}
       <nav 
         className={cn(
-          "hidden md:flex fixed top-0 h-screen bg-gradient-to-br from-[#002B49] via-[#003a5f] to-[#001a2e] text-white z-40 shadow-2xl transition-all duration-300 ease-in-out flex-col",
+          "hidden md:flex fixed top-0 h-screen bg-white z-40 shadow-2xl transition-all duration-300 ease-in-out flex-col border-l-2 border-gray-100",
           isRTL ? "left-0" : "right-0",
-          isCollapsed ? "w-24" : "w-80"
+          isCollapsed ? "w-24" : "w-72"
         )}
       >
         {/* Collapse/Expand Button */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className={cn(
-            "absolute top-10 bg-[#D4FF00] text-[#002B49] rounded-full p-3 shadow-xl hover:bg-[#c4ef00] hover:scale-110 transition-all duration-200 z-50 border-2 border-[#002B49]",
+            "absolute top-8 bg-[#CDE428] text-[#032941] rounded-full p-3 shadow-xl hover:bg-[#b8ce22] hover:scale-110 transition-all duration-200 z-50 border-2 border-[#032941]",
             isRTL 
-              ? (isCollapsed ? "-right-6" : "-right-6")
-              : (isCollapsed ? "-left-6" : "-left-6")
+              ? (isCollapsed ? "-right-5" : "-right-5")
+              : (isCollapsed ? "-left-5" : "-left-5")
           )}
           aria-label={isCollapsed ? (language === "en" ? "Expand sidebar" : "توسيع القائمة") : (language === "en" ? "Collapse sidebar" : "طي القائمة")}
         >
@@ -80,19 +80,19 @@ export default function MobileBottomNav() {
           )}
         </button>
 
-        {/* Sidebar Header */}
+        {/* Sidebar Header - Navy Blue Section */}
         <div className={cn(
-          "p-8 border-b border-white/20",
+          "p-8 border-b-2 border-gray-100 bg-gradient-to-br from-[#002B49] to-[#003a5f]",
           isCollapsed && "px-4 py-8"
         )}>
           {!isCollapsed ? (
             <div className="flex items-center justify-center">
-              <img src={APP_LOGO} alt="Emtelaak" className="h-16 w-auto" />
+              <img src={APP_LOGO} alt="Emtelaak" className="h-20 w-auto" />
             </div>
           ) : (
             <div className="flex justify-center">
-              <div className="w-14 h-14 bg-[#D4FF00] rounded-2xl flex items-center justify-center shadow-lg">
-                <span className="text-[#002B49] font-bold text-2xl">E</span>
+              <div className="w-16 h-16 bg-[#CDE428] rounded-2xl flex items-center justify-center shadow-lg">
+                <span className="text-[#032941] font-bold text-3xl">E</span>
               </div>
             </div>
           )}
@@ -100,7 +100,7 @@ export default function MobileBottomNav() {
 
         {/* Navigation Items */}
         <div className={cn(
-          "flex-1 p-6 space-y-3",
+          "flex-1 p-5 space-y-2 overflow-y-auto",
           isCollapsed && "px-3"
         )}>
           {navItems.map((item) => {
@@ -109,29 +109,24 @@ export default function MobileBottomNav() {
               <Link key={item.href} href={item.href}>
                 <button
                   className={cn(
-                    "flex items-center gap-4 w-full px-5 py-4 rounded-2xl transition-all duration-200 group relative overflow-hidden",
+                    "flex items-center gap-4 w-full px-5 py-4 rounded-2xl transition-all duration-200 group relative",
                     item.active
-                      ? "bg-[#D4FF00] text-[#002B49] shadow-xl scale-105"
-                      : "text-white hover:bg-white/15 hover:scale-105 hover:shadow-lg",
+                      ? "bg-[#CDE428] text-[#032941] shadow-lg scale-105 font-semibold"
+                      : "text-gray-700 hover:bg-gray-50 hover:scale-102 hover:shadow-md",
                     isCollapsed && "justify-center px-3",
                     isRTL && !isCollapsed && "flex-row-reverse"
                   )}
                   title={isCollapsed ? item.label : undefined}
                 >
-                  {/* Background glow effect for active state */}
-                  {item.active && (
-                    <div className="absolute inset-0 bg-[#D4FF00] opacity-20 blur-xl"></div>
-                  )}
-                  
                   <Icon className={cn(
-                    "flex-shrink-0 transition-all duration-200 relative z-10",
+                    "flex-shrink-0 transition-all duration-200",
                     item.active ? "h-7 w-7" : "h-6 w-6 group-hover:scale-110"
                   )} />
                   
                   {!isCollapsed && (
                     <span className={cn(
-                      "font-semibold transition-all duration-200 relative z-10",
-                      item.active ? "text-lg" : "text-base"
+                      "transition-all duration-200",
+                      item.active ? "text-lg font-bold" : "text-base font-semibold"
                     )}>
                       {item.label}
                     </span>
@@ -143,20 +138,29 @@ export default function MobileBottomNav() {
         </div>
 
         {/* Footer */}
-        {!isCollapsed && (
-          <div className="p-6 border-t border-white/20">
-            <p className="text-sm text-white/70 text-center font-medium">
-              {language === "en" ? "© 2024 Emtelaak" : "© 2024 إمتلاك"}
-            </p>
-            <p className="text-xs text-white/50 text-center mt-1">
-              {language === "en" ? "Fractional Real Estate" : "الملكية العقارية الجزئية"}
-            </p>
-          </div>
-        )}
+        <div className={cn(
+          "p-6 border-t-2 border-gray-100 bg-gray-50",
+          isCollapsed && "px-3"
+        )}>
+          {!isCollapsed ? (
+            <div className="text-center">
+              <p className="text-sm text-gray-700 font-semibold mb-1">
+                {language === "en" ? "© 2024 Emtelaak" : "© 2024 إمتلاك"}
+              </p>
+              <p className="text-xs text-gray-500">
+                {language === "en" ? "Fractional Real Estate" : "الملكية العقارية الجزئية"}
+              </p>
+            </div>
+          ) : (
+            <div className="text-center">
+              <p className="text-xs text-gray-600 font-semibold">© 2024</p>
+            </div>
+          )}
+        </div>
       </nav>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t-2 border-gray-100 shadow-lg">
         <div className="grid grid-cols-5 h-16">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -166,12 +170,18 @@ export default function MobileBottomNav() {
                   className={cn(
                     "flex flex-col items-center justify-center w-full h-full transition-colors",
                     item.active
-                      ? "text-primary"
+                      ? "text-[#032941]"
                       : "text-gray-500 hover:text-gray-700"
                   )}
                 >
-                  <Icon className="h-5 w-5 mb-1" />
-                  <span className="text-xs font-medium">{item.label}</span>
+                  <Icon className={cn(
+                    "mb-1",
+                    item.active ? "h-6 w-6" : "h-5 w-5"
+                  )} />
+                  <span className={cn(
+                    "text-xs",
+                    item.active ? "font-bold" : "font-medium"
+                  )}>{item.label}</span>
                 </button>
               </Link>
             );
