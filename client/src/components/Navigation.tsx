@@ -80,7 +80,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+    <nav className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 sticky top-0 z-50 shadow-sm">
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/">

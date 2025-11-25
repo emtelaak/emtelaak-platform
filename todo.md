@@ -3469,5 +3469,16 @@
 - [x] Position button on left side for English (LTR)
 - [x] Add Arabic translation "العودة للرئيسية"
 - [x] Reverse arrow direction for RTL (ArrowRight instead of ArrowLeft)
-- [ ] Test in both English and Arabic modes
-- [ ] Deploy to production
+- [x] Test in both English and Arabic modes
+- [x] Deploy to production
+
+
+## Phase 104: Fix Navigation Transparency Issues
+- [x] Check Navigation component transparency settings
+- [x] Check GuestMobileMenu transparency (already fixed to bg-black/70)
+- [x] Verify mobile menu visibility in English mode
+- [x] Verify mobile menu visibility in Arabic mode
+- [x] Check desktop navigation bar transparency
+- [x] Increase opacity if needed for better visibility - Changed to bg-white/95 with shadow
+- [x] Test in both languages
+- [x] Deploy fixes

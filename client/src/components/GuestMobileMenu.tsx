@@ -50,10 +50,10 @@ export default function GuestMobileMenu() {
       {/* Hamburger Button */}
       <button
         onClick={toggleMenu}
-        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        className="p-2 hover:bg-gray-100 rounded-lg transition-colors border border-[#032941]/20"
         aria-label="Menu"
       >
-        <Menu className="h-6 w-6" style={{ color: "#032941" }} />
+        <Menu className="h-6 w-6 text-[#032941]" />
       </button>
 
       {/* Backdrop */}
