@@ -49,13 +49,13 @@ export const propertyManagementRouter = router({
       // Create audit log
       await createAuditLog({
         userId: ctx.user.id,
-        action: "update_property_share_price",
-        entityType: "property",
-        entityId: propertyId.toString(),
-        changes: JSON.stringify({
-          field: "sharePrice",
-          oldValue: oldSharePrice,
-          newValue: sharePrice,
+        action: "update_property_status",
+        targetType: "property",
+        targetId: propertyId,
+        details: JSON.stringify({
+          field: "status",
+          oldValue: oldStatus,
+          newValue: status,
         }),
       });
 
@@ -91,9 +91,9 @@ export const propertyManagementRouter = router({
       await createAuditLog({
         userId: ctx.user.id,
         action: "update_property",
-        entityType: "property",
-        entityId: propertyId.toString(),
-        changes: JSON.stringify(updates),
+        targetType: "property",
+        targetId: propertyId,
+        details: JSON.stringify(updates),
       });
 
       return result;
