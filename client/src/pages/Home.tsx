@@ -183,6 +183,11 @@ export default function Home() {
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
+                <Link href="/register">
+                  <Button size="lg" className="text-lg px-8 py-6 h-auto bg-primary text-primary-foreground hover:bg-primary/90">
+                    {language === "en" ? "Sign Up" : "سجل الآن"}
+                  </Button>
+                </Link>
                 <Link href="/how-it-works">
                   <Button size="lg" variant="outline" className="text-lg px-8 py-6 h-auto border-2">
                     {heroCTA2}
