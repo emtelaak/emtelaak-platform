@@ -3225,3 +3225,13 @@
 - [x] Update all page layouts to md:ml-80 / md:mr-80
 - [ ] Test visual improvements
 - [ ] Push to GitHub and deploy
+
+
+## Phase 88: Add Sign Up Button to Hero and Navigation
+- [x] Add Sign Up button to hero section CTAs (3rd button between Explore Properties and How It Works)
+- [x] Top navigation already has "Get Started" button beside Login (links to /register)
+- [x] Add bilingual support for Sign Up button text ("Sign Up" / "سجل الآن")
+- [x] Style Sign Up button with primary styling (bg-primary text-primary-foreground)
+- [x] Link Sign Up buttons to /register page
+- [ ] Test button placement and styling
+- [ ] Push to GitHub and deploy
