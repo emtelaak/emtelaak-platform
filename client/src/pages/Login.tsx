@@ -7,12 +7,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { trpc } from "@/lib/trpc";
-import { Loader2, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Loader2, Eye, EyeOff, ArrowLeft, ArrowRight } from "lucide-react";
 import { APP_LOGO, APP_TITLE } from "@/const";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 
 export default function Login() {
   const [, setLocation] = useLocation();
+  const { language } = useLanguage();
+  const isRTL = language === 'ar';
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -60,11 +63,22 @@ export default function Login() {
       {/* Back to Home Link */}
       <Button
         variant="ghost"
-        className="absolute top-4 left-4 text-white hover:text-[#CDE428] hover:bg-white/10"
+        className={`absolute top-4 text-white hover:text-[#CDE428] hover:bg-white/10 ${
+          isRTL ? 'right-4' : 'left-4'
+        }`}
         onClick={() => setLocation("/")}
       >
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to Home
+        {isRTL ? (
+          <>
+            <ArrowRight className="ml-2 h-4 w-4" />
+            العودة للرئيسية
+          </>
+        ) : (
+          <>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </>
+        )}
       </Button>
 
       <Card className="w-full max-w-md">
