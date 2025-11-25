@@ -3242,4 +3242,58 @@
 - [x] Add conditional rendering to Sign Up button in hero section ({!isAuthenticated && ...})
 - [x] Only show Sign Up button when user is NOT authenticated
 - [ ] Test with logged-in and logged-out states
+- [x] Push to GitHub (commit 399fea8)
+- [ ] Wait for Render to deploy (2-3 minutes)
+
+
+## Phase 90: Nawy Shares Design Analysis & Implementation
+- [ ] Research Nawy Shares website design (https://shares.nawy.com/)
+- [ ] Analyze their hero section, navigation, and layout
+- [ ] Identify color scheme and typography patterns
+- [ ] Study their CTA placement and user flow
+- [ ] Document key design improvements to implement
+- [ ] Implement similar design patterns on Emtelaak
+- [ ] Test and deploy improvements
+
+
+## Phase 91: Modern Layout Redesign (Inspired by Nawy Shares)
+### Hero Section
+- [ ] Redesign hero with full-width background
+- [ ] Add overlay gradient for better text readability
+- [ ] Improve hero typography (larger, bolder headings)
+- [ ] Reposition CTAs for better visual flow
+- [ ] Add subtle animations/transitions
+
+### Visual Hierarchy & Spacing
+- [ ] Increase section padding (py-24 instead of py-20)
+- [ ] Add consistent spacing between sections
+- [ ] Improve heading sizes and weights
+- [ ] Better use of white space
+- [ ] Add section dividers or backgrounds
+
+### Property Showcase
+- [ ] Redesign property cards with modern style
+- [ ] Add hover effects and transitions
+- [ ] Improve image display and aspect ratios
+- [ ] Better badge/tag positioning
+- [ ] Enhanced property information layout
+
+### UI Enhancements
+- [ ] Add subtle shadows and depth
+- [ ] Improve button styles and hover states
+- [ ] Better icon usage and sizing
+- [ ] Modern card designs
+- [ ] Smooth scroll behavior
+
+### Brand Consistency
+- [ ] Maintain navy blue (#002B49) and lime green (#CDE428)
+- [ ] Keep all existing content
+- [ ] Preserve Emtelaak logo and branding
+- [ ] Ensure bilingual support (EN/AR)
+
+### Testing & Deployment
+- [ ] Test on desktop (1920px, 1440px, 1024px)
+- [ ] Test on tablet (768px)
+- [ ] Test on mobile (375px, 414px)
+- [ ] Test RTL/LTR layouts
 - [ ] Push to GitHub and deploy

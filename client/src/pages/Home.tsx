@@ -155,48 +155,159 @@ export default function Home() {
         <KYCStatusBanner />
       </div>
 
-      {/* Hero Section - With Brand Background */}
-      <section className="relative overflow-hidden py-32 md:py-40" style={{
-        backgroundImage: `linear-gradient(rgba(3, 41, 65, 0.7), rgba(3, 41, 65, 0.7)), url("${heroBackgroundImage}")`,
+      {/* Hero Section - Modern Redesign */}
+      <section className="relative overflow-hidden min-h-[85vh] flex items-center" style={{
+        backgroundImage: `linear-gradient(135deg, rgba(0, 43, 73, 0.95) 0%, rgba(0, 43, 73, 0.85) 50%, rgba(0, 43, 73, 0.95) 100%), url("${heroBackgroundImage}")`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center'
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
       }}>
-        <div className="container">
-          <div className="mx-auto max-w-5xl text-center">
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-12 md:p-16 shadow-2xl border border-white/20">
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6" style={{ color: '#032941' }}>
+        {/* Animated Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-[#CDE428] rounded-full filter blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#CDE428] rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        </div>
+
+        <div className="container relative z-10 py-20">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - Content */}
+            <div className="text-white space-y-8">
+              <div className="inline-block">
+                <span className="px-4 py-2 rounded-full text-sm font-semibold" style={{ backgroundColor: '#CDE428', color: '#032941' }}>
+                  {language === "en" ? "🏢 Fractional Real Estate Investment" : "🏢 الاستثمار العقاري الجزئي"}
+                </span>
+              </div>
+              
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
                 {heroTitle.split('\n').map((line: string, i: number) => (
-                  <span key={i}>
-                    {line}
-                    {i < heroTitle.split('\n').length - 1 && <br />}
+                  <span key={i} className="block">
+                    {i === 0 ? (
+                      <span className="text-white">{line}</span>
+                    ) : (
+                      <span className="bg-gradient-to-r from-[#CDE428] to-[#a8b820] bg-clip-text text-transparent">
+                        {line}
+                      </span>
+                    )}
                   </span>
                 ))}
               </h1>
+              
               <div 
-                className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto prose prose-lg max-w-none"
+                className="text-xl md:text-2xl text-gray-200 leading-relaxed max-w-xl"
                 dangerouslySetInnerHTML={{ __html: heroSubtitle }}
               />
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+
+              {/* Stats Row */}
+              <div className="grid grid-cols-3 gap-6 pt-4">
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl font-bold" style={{ color: '#CDE428' }}>10K+</div>
+                  <div className="text-sm text-gray-300">{language === "en" ? "Investors" : "مستثمر"}</div>
+                </div>
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl font-bold" style={{ color: '#CDE428' }}>50+</div>
+                  <div className="text-sm text-gray-300">{language === "en" ? "Properties" : "عقار"}</div>
+                </div>
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl font-bold" style={{ color: '#CDE428' }}>12%</div>
+                  <div className="text-sm text-gray-300">{language === "en" ? "Avg ROI" : "متوسط العائد"}</div>
+                </div>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Link href="/properties">
-                  <Button size="lg" className="text-lg px-8 py-6 h-auto" style={{ backgroundColor: '#CDE428', color: '#032941' }}>
+                  <Button size="lg" className="text-lg px-10 py-7 h-auto font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105" style={{ backgroundColor: '#CDE428', color: '#032941' }}>
                     {heroCTA1}
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <ArrowRight className="ml-2 h-6 w-6" />
                   </Button>
                 </Link>
                 {!isAuthenticated && (
                   <Link href="/register">
-                    <Button size="lg" className="text-lg px-8 py-6 h-auto bg-primary text-primary-foreground hover:bg-primary/90">
-                      {language === "en" ? "Sign Up" : "سجل الآن"}
+                    <Button size="lg" className="text-lg px-10 py-7 h-auto font-semibold bg-white text-[#032941] hover:bg-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                      {language === "en" ? "Sign Up Free" : "سجل مجاناً"}
                     </Button>
                   </Link>
                 )}
-                <Link href="/how-it-works">
-                  <Button size="lg" variant="outline" className="text-lg px-8 py-6 h-auto border-2">
-                    {heroCTA2}
-                  </Button>
-                </Link>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="flex items-center gap-6 pt-4 text-sm text-gray-300">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5" style={{ color: '#CDE428' }} />
+                  <span>{language === "en" ? "Fully Regulated" : "مرخص بالكامل"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Shield className="h-5 w-5" style={{ color: '#CDE428' }} />
+                  <span>{language === "en" ? "Secure Platform" : "منصة آمنة"}</span>
+                </div>
               </div>
             </div>
+
+            {/* Right Column - Visual Element */}
+            <div className="hidden lg:block">
+              <div className="relative">
+                {/* Floating Card */}
+                <div className="bg-white rounded-2xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-300">
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-2xl font-bold" style={{ color: '#032941' }}>
+                        {language === "en" ? "Start Investing" : "ابدأ الاستثمار"}
+                      </h3>
+                      <Building2 className="h-10 w-10" style={{ color: '#CDE428' }} />
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#CDE428' }}>
+                          <span className="text-sm font-bold" style={{ color: '#032941' }}>1</span>
+                        </div>
+                        <div>
+                          <p className="font-semibold" style={{ color: '#032941' }}>{language === "en" ? "Browse Properties" : "تصفح العقارات"}</p>
+                          <p className="text-sm text-gray-600">{language === "en" ? "Explore verified investment opportunities" : "استكشف فرص استثمارية موثوقة"}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#CDE428' }}>
+                          <span className="text-sm font-bold" style={{ color: '#032941' }}>2</span>
+                        </div>
+                        <div>
+                          <p className="font-semibold" style={{ color: '#032941' }}>{language === "en" ? "Invest from EGP 10,000" : "استثمر من 10,000 جنيه"}</p>
+                          <p className="text-sm text-gray-600">{language === "en" ? "Own fractional shares in premium properties" : "امتلك حصصاً جزئية في عقارات مميزة"}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#CDE428' }}>
+                          <span className="text-sm font-bold" style={{ color: '#032941' }}>3</span>
+                        </div>
+                        <div>
+                          <p className="font-semibold" style={{ color: '#032941' }}>{language === "en" ? "Earn Returns" : "احصل على العوائد"}</p>
+                          <p className="text-sm text-gray-600">{language === "en" ? "Receive rental income & capital appreciation" : "احصل على دخل إيجاري وزيادة رأس المال"}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Link href="/how-it-works">
+                      <Button variant="outline" className="w-full border-2" style={{ borderColor: '#032941', color: '#032941' }}>
+                        {heroCTA2}
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Decorative Elements */}
+                <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-20" style={{ backgroundColor: '#CDE428' }}></div>
+                <div className="absolute -bottom-6 -left-6 w-32 h-32 rounded-full opacity-20" style={{ backgroundColor: '#CDE428' }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2">
+            <div className="w-1 h-3 bg-white/50 rounded-full"></div>
           </div>
         </div>
       </section>
