@@ -8,7 +8,7 @@ import { Link } from "wouter";
 import NotificationCenter from "@/components/NotificationCenter";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import MobileMenu from "@/components/MobileMenu";
 import ROICalculator from "@/components/ROICalculator";
 import KYCStatusBanner from "@/components/KYCStatusBanner";
