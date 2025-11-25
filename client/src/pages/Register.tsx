@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { trpc } from "@/lib/trpc";
-import { Loader2, Eye, EyeOff, Check, X } from "lucide-react";
+import { Loader2, Eye, EyeOff, Check, X, ArrowLeft } from "lucide-react";
 import { APP_LOGO, APP_TITLE } from "@/const";
 import { toast } from "sonner";
 
@@ -102,6 +102,16 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#003366] via-[#004080] to-[#002244] p-4">
+      {/* Back to Home Link */}
+      <Button
+        variant="ghost"
+        className="absolute top-4 left-4 text-white hover:text-[#CDE428] hover:bg-white/10"
+        onClick={() => setLocation("/")}
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to Home
+      </Button>
+
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center mb-4">
