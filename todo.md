@@ -3138,6 +3138,23 @@
 ## Phase 81: Fix JWT Clock Skew - Token Expiring Immediately
 - [x] Add clockTolerance option to jwt.verify in context.ts
 - [x] Set tolerance to 30 days to handle server time issues
-- [ ] Push fix to GitHub
-- [ ] Deploy to Render
+- [x] Push fix to GitHub (commit 457eb5f)
+- [ ] Wait for Render to deploy (2-3 minutes)
 - [ ] Test login persistence across pages
+
+
+## Phase 82: Fix Email Verification - Configure Google Workspace SMTP
+- [ ] Find email sending service/module in codebase
+- [ ] Check if nodemailer or similar is installed
+- [ ] Create email service with Google Workspace SMTP configuration
+- [ ] Add SMTP environment variables to Render
+- [ ] Test verification email sending
+- [ ] Verify email arrives in inbox
+
+
+## Phase 83: Show Bottom Navigation on Desktop and Mobile
+- [x] Find bottom navigation component (MobileBottomNav.tsx)
+- [x] Remove md:hidden class to show on desktop
+- [x] Bottom nav now visible on all screen sizes
+- [ ] Push fix to GitHub
+- [ ] Test on desktop and mobile
