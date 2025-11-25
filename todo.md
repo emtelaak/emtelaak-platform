@@ -3415,3 +3415,10 @@
 - [x] Remove MobileMenu import from Navigation.tsx
 - [ ] Test mobile navigation without hamburger icon
 - [ ] Push to GitHub and deploy
+
+
+## Phase 99: Fix Get Started Now Button Link
+- [x] Change Get Started Now button href from /login to /register in Home.tsx
+- [x] Change from <a> tag to <Link> component
+- [ ] Test button redirects to registration page
+- [ ] Push to GitHub and deploy
