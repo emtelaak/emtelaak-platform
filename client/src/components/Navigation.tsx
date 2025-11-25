@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { trpc } from "@/lib/trpc";
+import GuestMobileMenu from "./GuestMobileMenu";
 
 
 export default function Navigation() {
@@ -180,14 +181,22 @@ export default function Navigation() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <div className="hidden md:flex items-center gap-2">
-              <Button variant="ghost" asChild>
-                <a href={getLoginUrl()}>{nav.login}</a>
-              </Button>
-              <Button asChild>
-                <Link href="/register">{nav.getStarted}</Link>
-              </Button>
-            </div>
+            <>
+              {/* Desktop Auth Buttons */}
+              <div className="hidden md:flex items-center gap-2">
+                <Button variant="ghost" asChild>
+                  <a href={getLoginUrl()}>{nav.login}</a>
+                </Button>
+                <Button asChild>
+                  <Link href="/register">{nav.getStarted}</Link>
+                </Button>
+              </div>
+              
+              {/* Mobile Hamburger Menu for Guests */}
+              <div className="md:hidden">
+                <GuestMobileMenu />
+              </div>
+            </>
           )}
 
 

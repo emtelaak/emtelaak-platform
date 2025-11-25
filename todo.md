@@ -3422,3 +3422,19 @@
 - [x] Change from <a> tag to <Link> component
 - [ ] Test button redirects to registration page
 - [ ] Push to GitHub and deploy
+
+
+## Phase 100: Create Hamburger Menu for Logged-Out Mobile Users
+- [x] Create GuestMobileMenu component
+- [x] Add hamburger icon (Menu from lucide-react)
+- [x] Add slide-out drawer with navigation links
+- [x] Include: Home, Properties, How It Works, About, FAQ
+- [x] Add Login and Sign Up buttons (Login = outline, Sign Up = lime green)
+- [x] Add language switcher
+- [x] Add to Navigation component (show only for logged-out users on mobile)
+- [x] Add Emtelaak logo and close button in header
+- [x] Add footer with copyright
+- [x] RTL/LTR support (slides from left in Arabic, right in English)
+- [x] Icons for all navigation items
+- [ ] Test on mobile devices
+- [ ] Push to GitHub and deploy
