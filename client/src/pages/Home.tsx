@@ -313,129 +313,204 @@ export default function Home() {
       </section>
 
       {/* Promotional Video Section */}
-      <section className="py-16 bg-muted/30">
+      <section className="py-24 bg-gradient-to-b from-background to-muted/30">
         <div className="container">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#032941' }}>
+          <div className="text-center mb-12">
+            <div className="inline-block mb-4">
+              <span className="px-4 py-2 rounded-full text-sm font-semibold bg-primary/10 text-primary">
+                {language === "en" ? "📹 Platform Overview" : "📹 نظرة عامة على المنصة"}
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: '#032941' }}>
               {language === "en" ? "Discover Emtelaak" : "اكتشف إمتلاك"}
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               {language === "en" 
                 ? "Watch our video to learn how Emtelaak is revolutionizing real estate investment in Egypt"
                 : "شاهد الفيديو لتتعرف على كيفية إحداث إمتلاك ثورة في الاستثمار العقاري في مصر"}
             </p>
           </div>
           
-          <div className="max-w-4xl mx-auto">
-            <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl">
-              <iframe
-                className="w-full h-full"
-                src={videoUrl}
-                title={language === "en" ? "Emtelaak Platform Introduction" : "مقدمة منصة إمتلاك"}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              ></iframe>
+          <div className="max-w-5xl mx-auto">
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-[#CDE428]/20 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-300"></div>
+              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/5">
+                <iframe
+                  className="w-full h-full"
+                  src={videoUrl}
+                  title={language === "en" ? "Emtelaak Platform Introduction" : "مقدمة منصة إمتلاك"}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Why Choose Emtelaak */}
-      <section className="py-20 bg-background">
+      <section className="py-24 bg-muted/30">
         <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">{t.home.whyChoose.title}</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-block mb-4">
+              <span className="px-4 py-2 rounded-full text-sm font-semibold" style={{ backgroundColor: '#CDE428', color: '#032941' }}>
+                {language === "en" ? "✨ Why Choose Us" : "✨ لماذا تختارنا"}
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: '#032941' }}>{t.home.whyChoose.title}</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               {t.home.whyChoose.subtitle}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card>
-              <CardHeader>
-                <Building2 className="h-10 w-10 text-primary mb-2" />
-                <CardTitle>{t.home.whyChoose.lowMinimum.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  {t.home.whyChoose.lowMinimum.description}
-                </p>
-              </CardContent>
-            </Card>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-[#CDE428]/5 rounded-2xl transform group-hover:scale-105 transition-transform duration-300"></div>
+              <Card className="relative border-0 shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
+                <CardHeader className="pb-4">
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#CDE428' }}>
+                    <Building2 className="h-8 w-8" style={{ color: '#032941' }} />
+                  </div>
+                  <CardTitle className="text-xl">{t.home.whyChoose.lowMinimum.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-base text-muted-foreground leading-relaxed">
+                    {t.home.whyChoose.lowMinimum.description}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <TrendingUp className="h-10 w-10 text-primary mb-2" />
-                <CardTitle>{t.home.whyChoose.highReturns.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  {t.home.whyChoose.highReturns.description}
-                </p>
-              </CardContent>
-            </Card>
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-[#CDE428]/5 rounded-2xl transform group-hover:scale-105 transition-transform duration-300"></div>
+              <Card className="relative border-0 shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
+                <CardHeader className="pb-4">
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#CDE428' }}>
+                    <TrendingUp className="h-8 w-8" style={{ color: '#032941' }} />
+                  </div>
+                  <CardTitle className="text-xl">{t.home.whyChoose.highReturns.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-base text-muted-foreground leading-relaxed">
+                    {t.home.whyChoose.highReturns.description}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <Shield className="h-10 w-10 text-primary mb-2" />
-                <CardTitle>{t.home.whyChoose.fullyRegulated.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  {t.home.whyChoose.fullyRegulated.description}
-                </p>
-              </CardContent>
-            </Card>
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-[#CDE428]/5 rounded-2xl transform group-hover:scale-105 transition-transform duration-300"></div>
+              <Card className="relative border-0 shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
+                <CardHeader className="pb-4">
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#CDE428' }}>
+                    <Shield className="h-8 w-8" style={{ color: '#032941' }} />
+                  </div>
+                  <CardTitle className="text-xl">{t.home.whyChoose.fullyRegulated.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-base text-muted-foreground leading-relaxed">
+                    {t.home.whyChoose.fullyRegulated.description}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <Users className="h-10 w-10 text-primary mb-2" />
-                <CardTitle>{t.home.whyChoose.professionalManagement.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  {t.home.whyChoose.professionalManagement.description}
-                </p>
-              </CardContent>
-            </Card>
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-[#CDE428]/5 rounded-2xl transform group-hover:scale-105 transition-transform duration-300"></div>
+              <Card className="relative border-0 shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
+                <CardHeader className="pb-4">
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#CDE428' }}>
+                    <Users className="h-8 w-8" style={{ color: '#032941' }} />
+                  </div>
+                  <CardTitle className="text-xl">{t.home.whyChoose.professionalManagement.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-base text-muted-foreground leading-relaxed">
+                    {t.home.whyChoose.professionalManagement.description}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* How It Works - Matching emtelaak.com design */}
-      <section className="py-20 bg-background">
+      {/* How It Works - Modern Flow Design */}
+      <section className="py-24 bg-gradient-to-b from-background to-muted/20">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">{t.home.howItWorks.title}</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <div className="inline-block mb-4">
+              <span className="px-4 py-2 rounded-full text-sm font-semibold bg-primary/10 text-primary">
+                {language === "en" ? "🚀 Simple Process" : "🚀 عملية بسيطة"}
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: '#032941' }}>{t.home.howItWorks.title}</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               {t.home.howItWorks.subtitle}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Browse Card - Oxford Blue */}
-            <div className="rounded-3xl p-8 text-white" style={{ backgroundColor: '#032941' }}>
-              <h3 className="text-2xl font-bold mb-6">{t.home.howItWorks.step1.title}</h3>
-              <p className="text-white/90 leading-relaxed">{t.home.howItWorks.step1.description}</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+            {/* Connection Lines (Desktop only) */}
+            <div className="hidden lg:block absolute top-1/4 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#CDE428]/30 to-transparent"></div>
+
+            {/* Step 1 - Browse */}
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-br from-[#032941] to-[#032941]/80 rounded-3xl opacity-75 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative rounded-3xl p-8 text-white h-full" style={{ backgroundColor: '#032941' }}>
+                <div className="absolute -top-4 -right-4 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl" style={{ backgroundColor: '#CDE428', color: '#032941' }}>
+                  1
+                </div>
+                <h3 className="text-2xl font-bold mb-4">{t.home.howItWorks.step1.title}</h3>
+                <p className="text-white/90 leading-relaxed">{t.home.howItWorks.step1.description}</p>
+              </div>
             </div>
 
-            {/* Calculate Card - Lime Yellow */}
-            <div className="rounded-3xl p-8" style={{ backgroundColor: '#CDE428' }}>
-              <h3 className="text-2xl font-bold mb-6" style={{ color: '#032941' }}>{t.home.howItWorks.step2.title}</h3>
-              <p className="leading-relaxed" style={{ color: '#333333' }}>{t.home.howItWorks.step2.description}</p>
+            {/* Step 2 - Calculate */}
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-br from-[#CDE428] to-[#a8b820] rounded-3xl opacity-75 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative rounded-3xl p-8 h-full" style={{ backgroundColor: '#CDE428' }}>
+                <div className="absolute -top-4 -right-4 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl text-white" style={{ backgroundColor: '#032941' }}>
+                  2
+                </div>
+                <h3 className="text-2xl font-bold mb-4" style={{ color: '#032941' }}>{t.home.howItWorks.step2.title}</h3>
+                <p className="leading-relaxed" style={{ color: '#333333' }}>{t.home.howItWorks.step2.description}</p>
+              </div>
             </div>
 
-            {/* Own Card - Bangladesh Green */}
-            <div className="rounded-3xl p-8 text-white" style={{ backgroundColor: '#085C52' }}>
-              <h3 className="text-2xl font-bold mb-6">{t.home.howItWorks.step3.title}</h3>
-              <p className="text-white/90 leading-relaxed">{t.home.howItWorks.step3.description}</p>
+            {/* Step 3 - Own */}
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-br from-[#085C52] to-[#085C52]/80 rounded-3xl opacity-75 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative rounded-3xl p-8 text-white h-full" style={{ backgroundColor: '#085C52' }}>
+                <div className="absolute -top-4 -right-4 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl" style={{ backgroundColor: '#CDE428', color: '#032941' }}>
+                  3
+                </div>
+                <h3 className="text-2xl font-bold mb-4">{t.home.howItWorks.step3.title}</h3>
+                <p className="text-white/90 leading-relaxed">{t.home.howItWorks.step3.description}</p>
+              </div>
             </div>
 
-            {/* Track Card - Orange */}
-            <div className="rounded-3xl p-8 text-white" style={{ backgroundColor: '#FF7F00' }}>
-              <h3 className="text-2xl font-bold mb-6">{t.home.howItWorks.step4.title}</h3>
-              <p className="text-white/90 leading-relaxed">{t.home.howItWorks.step4.description}</p>
+            {/* Step 4 - Track */}
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-br from-[#FF7F00] to-[#FF7F00]/80 rounded-3xl opacity-75 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative rounded-3xl p-8 text-white h-full" style={{ backgroundColor: '#FF7F00' }}>
+                <div className="absolute -top-4 -right-4 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl" style={{ backgroundColor: '#CDE428', color: '#032941' }}>
+                  4
+                </div>
+                <h3 className="text-2xl font-bold mb-4">{t.home.howItWorks.step4.title}</h3>
+                <p className="text-white/90 leading-relaxed">{t.home.howItWorks.step4.description}</p>
+              </div>
             </div>
+          </div>
+
+          {/* CTA Below Steps */}
+          <div className="text-center mt-12">
+            <Link href="/how-it-works">
+              <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2" style={{ borderColor: '#032941', color: '#032941' }}>
+                {language === "en" ? "Learn More About the Process" : "تعرف على المزيد عن العملية"}
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -705,18 +780,62 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-secondary text-secondary-foreground">
-        <div className="container text-center">
-          <h2 className="text-3xl font-bold mb-4">{t.home.cta.title}</h2>
-          <p className="text-lg mb-8 max-w-2xl mx-auto opacity-90">
-            {t.home.cta.subtitle}
-          </p>
-          <a href={getLoginUrl()}>
-            <Button size="lg" variant="default" className="gap-2">
-              {t.home.cta.button} <ArrowRight className="h-4 w-4" />
-            </Button>
-          </a>
+      {/* CTA Section - Modern Design */}
+      <section className="relative py-32 overflow-hidden" style={{
+        backgroundImage: `linear-gradient(135deg, rgba(0, 43, 73, 0.97) 0%, rgba(0, 43, 73, 0.95) 100%), url("${heroBackgroundImage}")`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}>
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#CDE428] rounded-full filter blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-[#CDE428] rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        </div>
+
+        <div className="container relative z-10">
+          <div className="max-w-4xl mx-auto text-center text-white">
+            <div className="inline-block mb-6">
+              <span className="px-6 py-3 rounded-full text-base font-semibold" style={{ backgroundColor: '#CDE428', color: '#032941' }}>
+                {language === "en" ? "🚀 Ready to Invest?" : "🚀 جاهز للاستثمار؟"}
+              </span>
+            </div>
+            
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">{t.home.cta.title}</h2>
+            <p className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto text-gray-200 leading-relaxed">
+              {t.home.cta.subtitle}
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a href={getLoginUrl()}>
+                <Button size="lg" className="text-lg px-12 py-7 h-auto font-semibold shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105" style={{ backgroundColor: '#CDE428', color: '#032941' }}>
+                  {t.home.cta.button}
+                  <ArrowRight className="ml-2 h-6 w-6" />
+                </Button>
+              </a>
+              <Link href="/properties">
+                <Button size="lg" variant="outline" className="text-lg px-12 py-7 h-auto font-semibold bg-white/10 border-2 border-white text-white hover:bg-white/20 shadow-xl transition-all duration-300 hover:scale-105">
+                  {language === "en" ? "Browse Properties" : "تصفح العقارات"}
+                </Button>
+              </Link>
+            </div>
+
+            {/* Trust Stats */}
+            <div className="grid grid-cols-3 gap-8 mt-16 pt-12 border-t border-white/20">
+              <div>
+                <div className="text-4xl font-bold mb-2" style={{ color: '#CDE428' }}>10,000+</div>
+                <div className="text-sm text-gray-300">{language === "en" ? "Active Investors" : "مستثمر نشط"}</div>
+              </div>
+              <div>
+                <div className="text-4xl font-bold mb-2" style={{ color: '#CDE428' }}>EGP 500M+</div>
+                <div className="text-sm text-gray-300">{language === "en" ? "Assets Under Management" : "الأصول المُدارة"}</div>
+              </div>
+              <div>
+                <div className="text-4xl font-bold mb-2" style={{ color: '#CDE428' }}>12%</div>
+                <div className="text-sm text-gray-300">{language === "en" ? "Average Annual Return" : "متوسط العائد السنوي"}</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
