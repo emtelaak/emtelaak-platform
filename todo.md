@@ -3258,38 +3258,63 @@
 
 ## Phase 91: Modern Layout Redesign (Inspired by Nawy Shares)
 ### Hero Section
-- [ ] Redesign hero with full-width background
-- [ ] Add overlay gradient for better text readability
-- [ ] Improve hero typography (larger, bolder headings)
-- [ ] Reposition CTAs for better visual flow
-- [ ] Add subtle animations/transitions
+- [x] Redesign hero with full-width background (min-h-[85vh])
+- [x] Add overlay gradient for better text readability (135deg diagonal)
+- [x] Improve hero typography (text-5xl to text-7xl, gradient on second line)
+- [x] Reposition CTAs for better visual flow (2-column grid, left content, right card)
+- [x] Add subtle animations/transitions (pulsing blobs, scroll indicator, hover scale)
+- [x] Add stats row (10K+ Investors, 50+ Properties, 12% ROI)
+- [x] Add trust indicators (Fully Regulated, Secure Platform)
+- [x] Add floating "Start Investing" card on desktop
+
+### Video Section
+- [x] Increase section padding to py-24
+- [x] Add category badge (📹 Platform Overview)
+- [x] Improve heading sizes (text-4xl to text-5xl)
+- [x] Add gradient glow effect around video
+- [x] Better spacing and typography
 
 ### Visual Hierarchy & Spacing
-- [ ] Increase section padding (py-24 instead of py-20)
-- [ ] Add consistent spacing between sections
-- [ ] Improve heading sizes and weights
-- [ ] Better use of white space
-- [ ] Add section dividers or backgrounds
+- [x] Increase section padding (py-24 instead of py-20)
+- [x] Add consistent spacing between sections (mb-12 to mb-16)
+- [x] Improve heading sizes and weights (text-4xl to text-5xl)
+- [x] Better use of white space (leading-relaxed, max-w-3xl)
+- [x] Add section dividers with gradient backgrounds
 
-### Property Showcase
-- [ ] Redesign property cards with modern style
-- [ ] Add hover effects and transitions
-- [ ] Improve image display and aspect ratios
-- [ ] Better badge/tag positioning
-- [ ] Enhanced property information layout
+### Why Choose Section
+- [x] Redesign cards with modern style (lime green icon boxes)
+- [x] Add hover effects and transitions (group-hover:scale-105)
+- [x] Add subtle shadows and depth (shadow-lg hover:shadow-2xl)
+- [x] Better icon sizing (h-8 w-8 in 64px boxes)
+- [x] Category badge (✨ Why Choose Us)
+
+### How It Works Section
+- [x] Add numbered badges (1, 2, 3, 4 in lime green circles)
+- [x] Add connection line between steps (desktop only)
+- [x] Add gradient glow on hover
+- [x] Add CTA below steps ("Learn More About the Process")
+- [x] Category badge (🚀 Simple Process)
+
+### CTA Section
+- [x] Redesign with full-width background and parallax
+- [x] Add animated background blobs
+- [x] Larger typography (text-4xl to text-6xl)
+- [x] Two CTAs (Get Started + Browse Properties)
+- [x] Add trust stats row (10,000+ Investors, EGP 500M+ AUM, 12% Return)
+- [x] Category badge (🚀 Ready to Invest?)
 
 ### UI Enhancements
-- [ ] Add subtle shadows and depth
-- [ ] Improve button styles and hover states
-- [ ] Better icon usage and sizing
-- [ ] Modern card designs
-- [ ] Smooth scroll behavior
+- [x] Add subtle shadows and depth throughout
+- [x] Improve button styles and hover states (scale-105, shadow-2xl)
+- [x] Better icon usage and sizing (h-8 w-8)
+- [x] Modern card designs with gradient backgrounds
+- [x] Category badges on all sections
 
 ### Brand Consistency
-- [ ] Maintain navy blue (#002B49) and lime green (#CDE428)
-- [ ] Keep all existing content
-- [ ] Preserve Emtelaak logo and branding
-- [ ] Ensure bilingual support (EN/AR)
+- [x] Maintain navy blue (#002B49) and lime green (#CDE428)
+- [x] Keep all existing content
+- [x] Preserve Emtelaak logo and branding
+- [x] Ensure bilingual support (EN/AR)
 
 ### Testing & Deployment
 - [ ] Test on desktop (1920px, 1440px, 1024px)
