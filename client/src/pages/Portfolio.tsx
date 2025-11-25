@@ -12,6 +12,7 @@ import { getLoginUrl, APP_LOGO, APP_TITLE } from "@/const";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import Navigation from "@/components/Navigation";
 import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function Portfolio() {
@@ -91,6 +92,7 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-background pb-16 md:pb-0">
+      <Navigation />
       {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container py-6">

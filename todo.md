@@ -3387,3 +3387,24 @@
 - [x] Remove md:mr-80 / md:ml-80 from Menu page
 - [ ] Test full-width layout on desktop
 - [ ] Push to GitHub and deploy
+
+
+## Phase 97: Navigation Redesign - Main Menu + User Profile Mega Menu + Dashboard
+- [x] Create shared Navigation component
+- [x] Add main menu links (Home, Properties, How It Works, About) - visible on all pages
+- [x] Create user profile mega menu dropdown with ChevronDown icon
+- [x] Add mega menu items: Dashboard, Invest, Portfolio, Wallet, Profile, Logout
+- [x] Add user info section in dropdown (name, email)
+- [x] Add icons to all mega menu items
+- [x] Build new Investor Dashboard page
+- [x] Add dashboard overview cards (Total Investment, Portfolio Value, Total Return, Active Properties)
+- [x] Add quick actions section (Invest Now, View Portfolio, Add Funds)
+- [x] Add recent activity section
+- [x] Update Home page to use new navigation
+- [x] Update Properties page to use new navigation
+- [x] Update Portfolio page to use new navigation
+- [x] Update Wallet page to use new navigation
+- [x] Update Menu page to use new navigation
+- [x] Add Dashboard route to App.tsx
+- [ ] Test navigation on all pages
+- [ ] Push to GitHub and deploy
