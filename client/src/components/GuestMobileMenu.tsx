@@ -20,6 +20,7 @@ export default function GuestMobileMenu() {
       howItWorks: "How It Works",
       about: "About",
       faq: "FAQ",
+      contact: "Contact",
       login: "Login",
       signUp: "Sign Up",
     },
@@ -29,6 +30,7 @@ export default function GuestMobileMenu() {
       howItWorks: "كيف يعمل",
       about: "من نحن",
       faq: "الأسئلة الشائعة",
+      contact: "اتصل بنا",
       login: "تسجيل الدخول",
       signUp: "سجل الآن",
     },
@@ -40,6 +42,7 @@ export default function GuestMobileMenu() {
     { href: "/how-it-works", icon: HelpCircle, label: t[language].howItWorks },
     { href: "/about", icon: Info, label: t[language].about },
     { href: "/faq", icon: HelpCircle, label: t[language].faq },
+    { href: "/contact", icon: Info, label: t[language].contact },
   ];
 
   return (
@@ -56,7 +59,7 @@ export default function GuestMobileMenu() {
       {/* Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40"
+          className="fixed inset-0 bg-black/70 z-40"
           onClick={closeMenu}
         />
       )}
