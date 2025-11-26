@@ -3491,3 +3491,12 @@
 - [x] Add shadow for depth (shadow-md)
 - [x] Test visibility on mobile in both languages
 - [x] Deploy changes
+
+
+## Phase 106: Fix YouTube Video Embed
+- [x] Locate video embed code in Home.tsx
+- [x] Change to proper YouTube embed URL format (youtube.com/embed/)
+- [x] Add proper iframe parameters (frameBorder, referrerPolicy)
+- [x] Test video playback on production domain
+- [x] Verify both English and Arabic videos work
+- [x] Deploy changes
