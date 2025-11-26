@@ -49,13 +49,13 @@ export const propertyManagementRouter = router({
       // Create audit log
       await createAuditLog({
         userId: ctx.user.id,
-        action: "update_property_status",
+        action: "update_share_price",
         targetType: "property",
         targetId: propertyId,
         details: JSON.stringify({
-          field: "status",
-          oldValue: oldStatus,
-          newValue: status,
+          field: "sharePrice",
+          oldValue: oldSharePrice,
+          newValue: sharePrice,
         }),
       });
 

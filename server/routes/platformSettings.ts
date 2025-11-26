@@ -59,7 +59,6 @@ export const platformSettingsRouter = router({
           newValue: input.percentage,
         }),
         ipAddress: ctx.req.ip || "unknown",
-        userAgent: ctx.req.get("user-agent") || "unknown",
       });
 
       return result;
@@ -90,7 +89,6 @@ export const platformSettingsRouter = router({
           displayValue: `$${input.dollars}`,
         }),
         ipAddress: ctx.req.ip || "unknown",
-        userAgent: ctx.req.get("user-agent") || "unknown",
       });
 
       return result;
