@@ -22,17 +22,24 @@ describe('Logout Functionality', () => {
     mockSetData = vi.fn();
     mockInvalidate = vi.fn().mockResolvedValue(undefined);
     
+    // Mock window if it doesn't exist (Node environment)
+    if (typeof window === 'undefined') {
+      (global as any).window = {};
+    }
+    
     // Save original location
-    originalLocation = window.location;
+    originalLocation = (global as any).window.location;
     
     // Mock window.location with a simple object
-    delete (window as any).location;
-    (window as any).location = { href: '' };
+    delete ((global as any).window as any).location;
+    ((global as any).window as any).location = { href: '' };
   });
 
   afterEach(() => {
     // Restore original location
-    window.location = originalLocation;
+    if (typeof window !== 'undefined') {
+      (global as any).window.location = originalLocation;
+    }
   });
 
   it('should redirect to home page after successful logout', async () => {
