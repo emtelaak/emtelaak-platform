@@ -75,9 +75,9 @@ export default function Home() {
   const heroCTA2 = (content as any)?.cta2 || defaultContent.cta2;
   const heroBackgroundImage = (heroContent?.content as any)?.backgroundImage || "/brand/backgrounds/hero-bg.jpg";
   
-  // Video URLs - fetch from database or use defaults
-  const videoUrlEn = (heroContent?.content as any)?.videoUrl || "https://www.youtube.com/embed/P9K-VUdc0SA?rel=0&modestbranding=1";
-  const videoUrlAr = (heroContent?.contentAr as any)?.videoUrl || "https://www.youtube.com/embed/w7hmsuFkrmg?rel=0&modestbranding=1";
+  // Video URLs - fetch from database or use defaults (using youtube-nocookie for better embed compatibility)
+  const videoUrlEn = (heroContent?.content as any)?.videoUrl || "https://www.youtube-nocookie.com/embed/P9K-VUdc0SA?rel=0&modestbranding=1";
+  const videoUrlAr = (heroContent?.contentAr as any)?.videoUrl || "https://www.youtube-nocookie.com/embed/w7hmsuFkrmg?rel=0&modestbranding=1";
   const videoUrl = language === "en" ? videoUrlEn : videoUrlAr;
 
   // Don't show loading spinner on homepage - let it load immediately

@@ -3500,3 +3500,12 @@
 - [x] Test video playback on production domain
 - [x] Verify both English and Arabic videos work
 - [x] Deploy changes
+
+
+## Phase 107: Fix YouTube Embed with youtube-nocookie
+- [x] Change embed URL from youtube.com to youtube-nocookie.com
+- [x] Check for CSP headers blocking iframe
+- [x] Add CSP meta tag allowing YouTube iframes
+- [x] Test on production domain
+- [x] Verify video loads correctly
+- [x] Deploy changes
