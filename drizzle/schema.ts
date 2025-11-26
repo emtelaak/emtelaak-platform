@@ -72,7 +72,7 @@ export const passwordResetTokens = mysqlTable("password_reset_tokens", {
 
 export const userSessions = mysqlTable("user_sessions", {
   id: int("id").autoincrement().primaryKey(),
-  sessionId: varchar("sessionId", { length: 512 }).notNull().unique(), // JWT token ID or unique session identifier
+  sessionId: varchar("sessionId", { length: 1000 }).notNull().unique(), // JWT token ID or unique session identifier
   userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
   deviceInfo: text("deviceInfo"), // Device name, OS, browser
   ipAddress: varchar("ipAddress", { length: 45 }), // IPv4 or IPv6
