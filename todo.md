@@ -3675,3 +3675,12 @@
 - [ ] Test login with actual production token
 - [ ] Verify session creation works
 - [ ] Document the fix
+
+
+## Phase 116: Fix Session Creation Code (REAL ROOT CAUSE)
+- [x] Find where user_sessions insert is happening - localAuth.ts line 226
+- [x] Fix the code passing full JWT token as sessionId
+- [x] Use crypto hash instead of substring for sessionId
+- [x] Generate 64-char SHA256 hash of JWT as sessionId
+- [ ] Test login and verify session creation works
+- [ ] Verify no more insert errors in logs
