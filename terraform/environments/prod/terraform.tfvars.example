@@ -1,0 +1,25 @@
+# Emtelaak Platform - Production Environment Configuration
+
+# AWS Configuration
+aws_region   = "us-east-1"
+project_name = "emtelaak"
+environment  = "prod"
+
+# VPC Configuration
+vpc_cidr = "10.1.0.0/16"
+
+# Database Configuration
+db_instance_class    = "db.r5.large"  # Production-grade instance
+db_allocated_storage = 500
+db_name              = "emtelaak"
+db_username          = "emtelaak_admin"
+db_multi_az          = true  # Multi-AZ for high availability
+
+# EC2 Configuration
+ec2_instance_type = "t3.large"  # Larger instance for production
+ec2_key_name      = "emtelaak-prod-key"  # Must exist in AWS
+
+# Application Configuration (Required for production)
+# smtp_password          = "your-sendgrid-api-key"
+# stripe_secret_key      = "sk_live_your-key"
+# stripe_publishable_key = "pk_live_your-key"
