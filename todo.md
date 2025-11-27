@@ -3684,3 +3684,11 @@
 - [x] Generate 64-char SHA256 hash of JWT as sessionId
 - [ ] Test login and verify session creation works
 - [ ] Verify no more insert errors in logs
+
+
+## Phase 117: Deploy Session Fix to Production
+- [ ] Commit all changes to git
+- [ ] Push to GitHub main branch
+- [ ] Verify Render auto-deployment triggered
+- [ ] Test login on production (emtelaak.co)
+- [ ] Verify no session creation errors in production
