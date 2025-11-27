@@ -120,7 +120,7 @@ export async function getFundraiserPropertyPerformance(fundraiserId: number) {
     investorCount: Number(p.investorCount),
     totalInvested: Number(p.totalInvested),
     sharesSold: Number(p.sharesSold),
-    fundingProgress: p.fundingGoal > 0 ? (p.currentFunding / p.fundingGoal) * 100 : 0,
+    fundingProgress: p.totalValue > 0 ? ((p.totalValue - p.availableValue) / p.totalValue) * 100 : 0,
     sharesProgress: p.totalShares > 0 ? (Number(p.sharesSold) / p.totalShares) * 100 : 0,
   }));
 }

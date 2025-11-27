@@ -91,7 +91,6 @@ export default function Register() {
     registerMutation.mutate({
       name: formData.name,
       email: formData.email,
-      phone: formData.phone || undefined,
       password: formData.password,
     });
   };

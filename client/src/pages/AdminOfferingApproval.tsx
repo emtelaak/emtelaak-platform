@@ -52,33 +52,33 @@ export default function AdminOfferingApproval() {
   const [reviewComment, setReviewComment] = useState("");
   const [filterStatus, setFilterStatus] = useState<OfferingStatus | "all">("under_review");
 
-  const { data: offerings, isLoading, refetch } = trpc.offerings.list.useQuery({});
+  const { data: offerings, isLoading, refetch } = trpc.offerings.getByStatus.useQuery({ status: filterStatus === "all" ? undefined : filterStatus });
 
   const { data: offeringDetail } = trpc.offerings.getComplete.useQuery(
     { id: selectedOffering! },
     { enabled: !!selectedOffering }
   );
 
-  const approveMutation = trpc.offerings.approve.useMutation({
+  const approveMutation = trpc.offerings.updateApproval.useMutation({
     onSuccess: () => {
       toast.success("Offering approved successfully!");
       setReviewComment("");
       setSelectedOffering(null);
       refetch();
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast.error(`Approval failed: ${error.message}`);
     },
   });
 
-  const rejectMutation = trpc.offerings.reject.useMutation({
+  const rejectMutation = trpc.offerings.updateApproval.useMutation({
     onSuccess: () => {
       toast.success("Offering rejected");
       setReviewComment("");
       setSelectedOffering(null);
       refetch();
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast.error(`Rejection failed: ${error.message}`);
     },
   });
@@ -338,30 +338,30 @@ export default function AdminOfferingApproval() {
 
                 {/* Financials Tab */}
                 <TabsContent value="financials" className="space-y-4">
-                  {offeringDetail.financialProjection ? (
+                  {offeringDetail.financialProjections ? (
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label className="text-muted-foreground">Projected IRR</Label>
                         <p className="font-medium">
-                          {(offeringDetail.financialProjection.projectedIRR / 100).toFixed(2)}%
+                          {(offeringDetail.financialProjections.projectedIRR / 100).toFixed(2)}%
                         </p>
                       </div>
                       <div>
                         <Label className="text-muted-foreground">Projected ROI</Label>
                         <p className="font-medium">
-                          {(offeringDetail.financialProjection.projectedROI / 100).toFixed(2)}%
+                          {(offeringDetail.financialProjections.projectedROI / 100).toFixed(2)}%
                         </p>
                       </div>
                       <div>
                         <Label className="text-muted-foreground">Cash-on-Cash</Label>
                         <p className="font-medium">
-                          {(offeringDetail.financialProjection.projectedCashOnCash / 100).toFixed(2)}%
+                          {(offeringDetail.financialProjections.projectedCashOnCash / 100).toFixed(2)}%
                         </p>
                       </div>
                       <div>
                         <Label className="text-muted-foreground">Equity Multiple</Label>
                         <p className="font-medium">
-                          {(offeringDetail.financialProjection.projectedEquityMultiple / 100).toFixed(2)}x
+                          {(offeringDetail.financialProjections.projectedEquityMultiple / 100).toFixed(2)}x
                         </p>
                       </div>
                     </div>

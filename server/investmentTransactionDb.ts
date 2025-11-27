@@ -143,7 +143,7 @@ export async function cancelExpiredReservations() {
       )
     );
 
-  return result.rowsAffected || 0;
+  return (result as any).rowsAffected || 0;
 }
 
 /**
@@ -320,7 +320,7 @@ export async function checkInvestmentEligibility(userId: number, amount: number)
 
   // Check annual investment limit
   if (eligibility.annualInvestmentLimit) {
-    const remainingLimit = eligibility.annualInvestmentLimit - eligibility.currentYearInvested;
+    const remainingLimit = eligibility.annualInvestmentLimit - eligibility.currentYearInvested || 0 || 0;
     if (amount > remainingLimit) {
       return {
         eligible: false,
