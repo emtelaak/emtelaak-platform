@@ -72,24 +72,24 @@ export async function getUnifiedUserInvestments(userId: number): Promise<Unified
   
   // Transform new investments to unified format
   const transformedNew: UnifiedInvestment[] = newInvestments.map(inv => ({
-    id: inv.id,
-    userId: inv.userId,
-    propertyId: inv.propertyId,
-    investmentAmount: inv.investmentAmount,
-    numberOfShares: inv.numberOfShares,
-    pricePerShare: inv.pricePerShare,
-    platformFee: inv.platformFee,
-    processingFee: inv.processingFee,
-    totalAmount: inv.totalAmount,
-    status: inv.status,
-    paymentStatus: inv.paymentStatus,
-    createdAt: inv.createdAt,
-    completedAt: inv.completedAt || null,
+    id: inv.investment.id,
+    userId: inv.investment.userId,
+    propertyId: inv.investment.propertyId,
+    investmentAmount: inv.investment.investmentAmount,
+    numberOfShares: inv.investment.numberOfShares,
+    pricePerShare: inv.investment.pricePerShare,
+    platformFee: inv.investment.platformFee,
+    processingFee: inv.investment.processingFee,
+    totalAmount: inv.investment.totalAmount,
+    status: inv.investment.status,
+    paymentStatus: inv.investment.paymentStatus,
+    createdAt: inv.investment.createdAt,
+    completedAt: inv.investment.completedAt || null,
     source: "new" as const,
     // Phase 2 fields from new system
-    distributionFrequency: inv.distributionFrequency || null,
-    exitedAt: inv.exitedAt || null,
-    ownershipPercentage: inv.ownershipPercentage || null,
+    distributionFrequency: inv.investment.distributionFrequency || null,
+    exitedAt: inv.investment.exitedAt || null,
+    ownershipPercentage: inv.investment.ownershipPercentage || null,
   }));
   
   // Combine and sort by date (newest first)

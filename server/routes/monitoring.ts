@@ -38,7 +38,7 @@ export const monitoringRouter = router({
         WHERE db = DATABASE()
       `);
 
-      const stats = (processlist as any[])[0];
+      const stats = (processlist as unknown as any[])[0];
 
       return {
         success: true,
@@ -90,7 +90,7 @@ export const monitoringRouter = router({
         GROUP BY table_schema
       `);
 
-      const dbSize = (sizeResult as any[])[0] || {
+      const dbSize = (sizeResult as unknown as any[])[0] || {
         database_name: "unknown",
         table_count: 0,
         total_rows: 0,

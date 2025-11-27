@@ -7,11 +7,13 @@ import { getDb } from "../db";
 import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { COOKIE_NAME } from "@shared/const";
+import type { MySql2Database } from "drizzle-orm/mysql2";
 
 export type TrpcContext = {
   req: CreateExpressContextOptions["req"];
   res: CreateExpressContextOptions["res"];
   user: User | null;
+  db: MySql2Database<Record<string, never>> | null;
 };
 
 export async function createContext(
@@ -71,9 +73,12 @@ export async function createContext(
     }
   }
 
+  const db = await getDb();
+
   return {
     req: opts.req,
     res: opts.res,
     user,
+    db,
   };
 }
