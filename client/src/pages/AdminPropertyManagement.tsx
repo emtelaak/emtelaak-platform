@@ -127,7 +127,7 @@ export default function AdminPropertyManagement() {
                         <div>
                           <div className="font-medium">{property.name}</div>
                           <div className="text-sm text-muted-foreground">
-                            {property.location}
+                            {property.city}
                           </div>
                         </div>
                       </div>

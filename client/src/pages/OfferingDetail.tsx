@@ -341,7 +341,7 @@ export default function OfferingDetail() {
         <TabsContent value="timeline">
           <TimelineManagement 
             offeringId={offeringId} 
-            timeline={timeline || []} 
+            timeline={(timeline || []) as any} 
             isEditable={offering.status === "draft" || offering.status === "under_review" || offering.status === "approved"}
           />
         </TabsContent>

@@ -90,7 +90,7 @@ export default function CreateOffering() {
 
   const handleSubmit = async () => {
     try {
-      await createOfferingMutation.mutateAsync(formData as OfferingFormData);
+      await createOfferingMutation.mutateAsync(formData as any);
     } catch (error) {
       // Error handled by mutation
     }

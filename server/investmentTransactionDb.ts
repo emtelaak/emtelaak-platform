@@ -320,7 +320,7 @@ export async function checkInvestmentEligibility(userId: number, amount: number)
 
   // Check annual investment limit
   if (eligibility.annualInvestmentLimit) {
-    const remainingLimit = eligibility.annualInvestmentLimit - eligibility.currentYearInvested || 0 || 0;
+    const remainingLimit = eligibility.annualInvestmentLimit - ((eligibility.currentYearInvested || 0) || 0) || 0 || 0;
     if (amount > remainingLimit) {
       return {
         eligible: false,

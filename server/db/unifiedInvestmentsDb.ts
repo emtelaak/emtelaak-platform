@@ -90,7 +90,7 @@ export async function getUnifiedUserInvestments(userId: number): Promise<Unified
     distributionFrequency: inv.investment.distributionFrequency || null,
     exitedAt: inv.investment.exitedAt || null,
     ownershipPercentage: inv.investment.ownershipPercentage || null,
-  }));
+  })) as UnifiedInvestment[];
   
   // Combine and sort by date (newest first)
   const allInvestments = [...transformedOld, ...transformedNew];

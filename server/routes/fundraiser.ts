@@ -35,7 +35,7 @@ export const fundraiserRouter = router({
 
     return {
       totalProperties: properties.length,
-      activeProperties: properties.filter((p) => p.status === "active").length,
+      activeProperties: properties.filter((p) => p.status === "available").length,
       fundedProperties: properties.filter((p) => p.status === "funded").length,
       ...investmentStats,
     };

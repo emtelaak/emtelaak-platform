@@ -209,7 +209,7 @@ export default function FundraiserDashboard() {
                           <div className="flex items-center justify-between text-sm">
                             <span>{property.fundingProgress.toFixed(1)}%</span>
                             <span className="text-muted-foreground">
-                              {formatCurrency(property.currentFunding)} / {formatCurrency(property.fundingGoal)}
+                              {formatCurrency(property.totalValue - property.availableValue)} / {formatCurrency(property.totalValue)}
                             </span>
                           </div>
                           <Progress value={property.fundingProgress} className="h-2" />

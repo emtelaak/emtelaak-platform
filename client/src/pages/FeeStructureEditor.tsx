@@ -89,7 +89,7 @@ export default function FeeStructureEditor() {
 
   useEffect(() => {
     if (existingFees) {
-      setFormData(existingFees);
+      setFormData(existingFees as any);
     }
   }, [existingFees]);
 

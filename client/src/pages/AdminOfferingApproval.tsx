@@ -52,7 +52,7 @@ export default function AdminOfferingApproval() {
   const [reviewComment, setReviewComment] = useState("");
   const [filterStatus, setFilterStatus] = useState<OfferingStatus | "all">("under_review");
 
-  const { data: offerings, isLoading, refetch } = trpc.offerings.getByStatus.useQuery({ status: filterStatus === "all" ? undefined : filterStatus });
+  const { data: offerings, isLoading, refetch } = trpc.offerings.getByStatus.useQuery({ status: filterStatus === "all" ? undefined : filterStatus as any });
 
   const { data: offeringDetail } = trpc.offerings.getComplete.useQuery(
     { id: selectedOffering! },
@@ -86,7 +86,8 @@ export default function AdminOfferingApproval() {
   const handleApprove = async () => {
     if (!selectedOffering) return;
     await approveMutation.mutateAsync({
-      offeringId: selectedOffering,
+      id: selectedOffering,
+      decision: "approved" as const,
       comments: reviewComment,
     });
   };
@@ -97,8 +98,9 @@ export default function AdminOfferingApproval() {
       return;
     }
     await rejectMutation.mutateAsync({
-      offeringId: selectedOffering,
-      reason: reviewComment,
+      id: selectedOffering,
+      decision: "rejected" as const,
+      comments: reviewComment,
     });
   };
 
@@ -343,25 +345,25 @@ export default function AdminOfferingApproval() {
                       <div>
                         <Label className="text-muted-foreground">Projected IRR</Label>
                         <p className="font-medium">
-                          {(offeringDetail.financialProjections.projectedIRR / 100).toFixed(2)}%
+                          {offeringDetail.financialProjections.projectedIRR ? (offeringDetail.financialProjections.projectedIRR / 100).toFixed(2) : '0.00'}%
                         </p>
                       </div>
                       <div>
                         <Label className="text-muted-foreground">Projected ROI</Label>
                         <p className="font-medium">
-                          {(offeringDetail.financialProjections.projectedROI / 100).toFixed(2)}%
+                          {offeringDetail.financialProjections.projectedROI ? (offeringDetail.financialProjections.projectedROI / 100).toFixed(2) : '0.00'}%
                         </p>
                       </div>
                       <div>
                         <Label className="text-muted-foreground">Cash-on-Cash</Label>
                         <p className="font-medium">
-                          {(offeringDetail.financialProjections.projectedCashOnCash / 100).toFixed(2)}%
+                          {offeringDetail.financialProjections.projectedCashOnCash ? (offeringDetail.financialProjections.projectedCashOnCash / 100).toFixed(2) : '0.00'}%
                         </p>
                       </div>
                       <div>
                         <Label className="text-muted-foreground">Equity Multiple</Label>
                         <p className="font-medium">
-                          {(offeringDetail.financialProjections.projectedEquityMultiple / 100).toFixed(2)}x
+                          {offeringDetail.financialProjections.projectedEquityMultiple ? (offeringDetail.financialProjections.projectedEquityMultiple / 100).toFixed(2) : '0.00'}x
                         </p>
                       </div>
                     </div>
