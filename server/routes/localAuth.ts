@@ -9,6 +9,7 @@ import jwt from "jsonwebtoken";
 import { ENV } from "../_core/env";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "../_core/cookies";
+import crypto from "crypto";
 
 /**
  * Local Authentication Router
@@ -216,8 +217,14 @@ export const localAuthRouter = router({
       const expiresAt = new Date();
       expiresAt.setDate(expiresAt.getDate() + (input.rememberMe ? 30 : 7));
       
+      // Generate a unique session ID from the token (use hash to keep it short)
+      const sessionId = crypto.createHash('sha256').update(token).digest('hex').substring(0, 64);
+      
+      console.log('[Login] Creating session with ID:', sessionId);
+      console.log('[Login] Session ID length:', sessionId.length);
+      
       await createUserSession({
-        sessionId: token.substring(0, 64), // Use first 64 chars of JWT as session ID
+        sessionId,
         userId: user.id,
         deviceInfo: userAgent,
         ipAddress,
