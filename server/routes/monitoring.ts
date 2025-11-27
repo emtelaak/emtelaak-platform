@@ -38,7 +38,7 @@ export const monitoringRouter = router({
         WHERE db = DATABASE()
       `);
 
-      const stats = (processlist as unknown as any[])[0];
+      const stats = (processlist as unknown as unknown as any[])[0];
 
       return {
         success: true,
@@ -90,7 +90,7 @@ export const monitoringRouter = router({
         GROUP BY table_schema
       `);
 
-      const dbSize = (sizeResult as unknown as any[])[0] || {
+      const dbSize = (sizeResult as unknown as unknown as any[])[0] || {
         database_name: "unknown",
         table_count: 0,
         total_rows: 0,
@@ -119,7 +119,7 @@ export const monitoringRouter = router({
           totalRows: dbSize.total_rows,
           sizeMB: dbSize.size_mb,
         },
-        topTables: tableStats as any[],
+        topTables: tableStats as unknown as unknown as any[],
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
@@ -198,7 +198,7 @@ export const monitoringRouter = router({
         FROM users
       `);
 
-      const stats = (userStats as any[])[0];
+      const stats = (userStats as unknown as any[])[0];
 
       // Get recent registrations
       const [recentUsers] = await db.execute(`
@@ -228,7 +228,7 @@ export const monitoringRouter = router({
           thisWeek: stats.registered_this_week || 0,
           thisMonth: stats.registered_this_month || 0,
         },
-        recentRegistrations: recentUsers as any[],
+        recentRegistrations: recentUsers as unknown as any[],
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
@@ -272,7 +272,7 @@ export const monitoringRouter = router({
         FROM investments
       `);
 
-      const stats = (investmentStats as any[])[0] || {
+      const stats = (investmentStats as unknown as any[])[0] || {
         total_investments: 0,
         active_investments: 0,
         completed_investments: 0,
@@ -289,7 +289,7 @@ export const monitoringRouter = router({
         FROM properties
       `);
 
-      const propStats = (propertyStats as any[])[0] || {
+      const propStats = (propertyStats as unknown as any[])[0] || {
         total_properties: 0,
         available_properties: 0,
         funded_properties: 0,

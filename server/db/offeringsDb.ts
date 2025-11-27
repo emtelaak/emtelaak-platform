@@ -506,7 +506,7 @@ export async function updateOfferingFunding(
   if (!offering) throw new Error("Offering not found");
 
   const newFundedAmount = offering.currentFundedAmount + amountToAdd;
-  const newInvestorCount = offering.currentInvestorCount + investorCount;
+  const newInvestorCount = offering.currentInvestorCount || 0 || 0 + investorCount;
   const fundingPercentage = (newFundedAmount / offering.totalOfferingAmount) * 100;
 
   // Update offering

@@ -93,7 +93,7 @@ export default function FinancialProjectionForm() {
 
   useEffect(() => {
     if (existingProjection) {
-      setFormData(existingProjection);
+      setFormData(existingProjection as any);
     }
   }, [existingProjection]);
 
@@ -106,10 +106,10 @@ export default function FinancialProjectionForm() {
       if (existingProjection) {
         await updateMutation.mutateAsync({
           offeringId,
-          data: formData,
+          data: formData as any,
         });
       } else {
-        await createMutation.mutateAsync(formData as FinancialProjectionData);
+        await createMutation.mutateAsync(formData as any);
       }
     } catch (error) {
       // Error handled by mutation

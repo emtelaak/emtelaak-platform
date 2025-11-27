@@ -251,10 +251,10 @@ export default function Portfolio() {
                           <TableCell className="font-medium">
                             Property #{investment.propertyId}
                           </TableCell>
-                          <TableCell>{formatCurrency(investment.amount)}</TableCell>
-                          <TableCell>{investment.shares.toLocaleString()}</TableCell>
+                          <TableCell>{formatCurrency(investment.investmentAmount)}</TableCell>
+                          <TableCell>{investment.numberOfShares.toLocaleString()}</TableCell>
                           <TableCell>
-                            {(investment.ownershipPercentage / 10000).toFixed(4)}%
+                            {investment.ownershipPercentage ? (investment.ownershipPercentage / 10000).toFixed(4) : '0.0000'}%
                           </TableCell>
                           <TableCell>
                             <Badge
@@ -269,7 +269,7 @@ export default function Portfolio() {
                               {investment.status}
                             </Badge>
                           </TableCell>
-                          <TableCell>{formatDate(investment.investmentDate)}</TableCell>
+                          <TableCell>{formatDate(investment.createdAt)}</TableCell>
                           <TableCell>
                             <Link href={`/properties/${investment.propertyId}`}>
                               <Button variant="ghost" size="sm">

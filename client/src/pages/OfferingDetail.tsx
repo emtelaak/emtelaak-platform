@@ -119,7 +119,7 @@ export default function OfferingDetail() {
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-3xl font-bold">
-                {property?.titleEn || property?.titleAr || `Offering #${offering.id}`}
+                {property?.name || property?.nameAr || `Offering #${offering.id}`}
               </h1>
               <Badge className={STATUS_COLORS[offering.status as OfferingStatus]}>
                 {STATUS_LABELS[offering.status as OfferingStatus]}

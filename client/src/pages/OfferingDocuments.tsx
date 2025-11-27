@@ -69,7 +69,7 @@ export default function OfferingDocuments() {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [documentData, setDocumentData] = useState({
-    category: "" as DocumentCategory,
+    documentCategory: "" as DocumentCategory,
     title: "",
     description: "",
     isPublic: false,
@@ -85,7 +85,7 @@ export default function OfferingDocuments() {
       toast.success("Document uploaded successfully!");
       setSelectedFile(null);
       setDocumentData({
-        category: "" as DocumentCategory,
+        documentCategory: "" as DocumentCategory,
         title: "",
         description: "",
         isPublic: false,
@@ -134,7 +134,7 @@ export default function OfferingDocuments() {
   };
 
   const handleUpload = async () => {
-    if (!selectedFile || !documentData.category || !documentData.title) {
+    if (!selectedFile || !documentData.documentCategory || !documentData.title) {
       toast.error("Please fill in all required fields and select a file");
       return;
     }
@@ -147,11 +147,13 @@ export default function OfferingDocuments() {
         const base64Data = reader.result as string;
         await uploadMutation.mutateAsync({
           offeringId,
-          category: documentData.category,
+          documentCategory: documentData.documentCategory,
+          documentType: selectedFile.type || 'application/octet-stream',
           title: documentData.title,
           description: documentData.description,
           fileName: selectedFile.name,
           fileData: base64Data,
+          mimeType: selectedFile.type || 'application/octet-stream',
           isPublic: documentData.isPublic,
         });
         setUploading(false);
@@ -162,9 +164,9 @@ export default function OfferingDocuments() {
     }
   };
 
-  const handleDelete = async (documentId: number) => {
+  const handleDelete = async (id: number) => {
     if (confirm("Are you sure you want to delete this document?")) {
-      await deleteMutation.mutateAsync({ documentId });
+      await deleteMutation.mutateAsync({ id });
     }
   };
 
@@ -277,9 +279,9 @@ export default function OfferingDocuments() {
                   Document Category <span className="text-destructive">*</span>
                 </Label>
                 <Select
-                  value={documentData.category}
+                  value={documentData.documentCategory}
                   onValueChange={(value) =>
-                    setDocumentData((prev) => ({ ...prev, category: value as DocumentCategory }))
+                    setDocumentData((prev) => ({ ...prev, documentCategory: value as DocumentCategory }))
                   }
                 >
                   <SelectTrigger>
@@ -348,7 +350,7 @@ export default function OfferingDocuments() {
 
             <Button
               onClick={handleUpload}
-              disabled={uploading || !selectedFile || !documentData.category || !documentData.title}
+              disabled={uploading || !selectedFile || !documentData.documentCategory || !documentData.title}
               className="w-full"
             >
               {uploading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
