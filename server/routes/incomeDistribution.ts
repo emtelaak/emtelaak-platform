@@ -36,8 +36,8 @@ export const incomeDistributionRouter = router({
       await createAuditLog({
         userId: ctx.user.id,
         action: "income_distribution_created",
-        entityType: "income_distribution",
-        entityId: input.propertyId,
+        targetType: "income_distribution",
+        targetId: input.propertyId,
         details: JSON.stringify({
           propertyId: input.propertyId,
           totalAmount: input.totalAmount,
@@ -255,8 +255,8 @@ export const incomeDistributionRouter = router({
       await createAuditLog({
         userId: ctx.user.id,
         action: "income_distribution_processed",
-        entityType: "income_distribution",
-        entityId: input.distributionId,
+        targetType: "income_distribution",
+        targetId: input.distributionId,
         details: JSON.stringify({ distributionId: input.distributionId }),
       });
 
