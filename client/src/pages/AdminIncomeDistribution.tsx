@@ -126,7 +126,7 @@ export default function AdminIncomeDistribution() {
               <SelectContent>
                 {properties?.map((property) => (
                   <SelectItem key={property.id} value={property.id.toString()}>
-                    {property.title}
+                    {property.name}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -207,7 +207,7 @@ export default function AdminIncomeDistribution() {
                     <Users className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm">Total Investors</span>
                   </div>
-                  <span className="font-semibold">{investorPreview.totalInvestors}</span>
+                  <span className="font-semibold">{investorPreview?.totalInvestors || 0}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -222,7 +222,7 @@ export default function AdminIncomeDistribution() {
                   <div className="flex items-center justify-between pt-2 border-t">
                     <span className="text-sm font-medium">Amount per Investor (avg)</span>
                     <span className="font-semibold">
-                      ${(parseFloat(amount) / investorPreview.totalInvestors).toFixed(2)}
+                      ${(parseFloat(amount) / (investorPreview?.totalInvestors || 1)).toFixed(2)}
                     </span>
                   </div>
                 )}
@@ -259,7 +259,7 @@ export default function AdminIncomeDistribution() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {distributionHistory.map((dist) => (
+                {distributionHistory.map((dist: any) => (
                   <TableRow key={dist.id}>
                     <TableCell>{format(new Date(dist.distributionDate), "PPP")}</TableCell>
                     <TableCell className="capitalize">
@@ -312,13 +312,13 @@ export default function AdminIncomeDistribution() {
                 <span className="font-semibold text-foreground">
                   {investorPreview?.totalInvestors || 0} investors
                 </span>{" "}
-                of <span className="font-semibold text-foreground">{selectedProperty?.title}</span>.
+                of <span className="font-semibold text-foreground">{selectedProperty?.name}</span>.
               </div>
             </div>
             <div className="rounded-lg border p-4 space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Property:</span>
-                <span className="font-medium">{selectedProperty?.title}</span>
+                <span className="font-medium">{selectedProperty?.name}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Type:</span>

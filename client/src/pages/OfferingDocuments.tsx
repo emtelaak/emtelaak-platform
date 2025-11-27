@@ -134,7 +134,7 @@ export default function OfferingDocuments() {
   };
 
   const handleUpload = async () => {
-    if (!selectedFile || !documentData.documentCategory || !documentData.title) {
+    if (!selectedFile || !documentData.documentCategory as any as any || !documentData.title) {
       toast.error("Please fill in all required fields and select a file");
       return;
     }
@@ -147,7 +147,7 @@ export default function OfferingDocuments() {
         const base64Data = reader.result as string;
         await uploadMutation.mutateAsync({
           offeringId,
-          documentCategory: documentData.documentCategory,
+          documentCategory: documentData.documentCategory as any as any,
           documentType: selectedFile.type || 'application/octet-stream',
           title: documentData.title,
           description: documentData.description,
@@ -279,7 +279,7 @@ export default function OfferingDocuments() {
                   Document Category <span className="text-destructive">*</span>
                 </Label>
                 <Select
-                  value={documentData.documentCategory}
+                  value={documentData.documentCategory as any as any}
                   onValueChange={(value) =>
                     setDocumentData((prev) => ({ ...prev, documentCategory: value as DocumentCategory }))
                   }
@@ -350,7 +350,7 @@ export default function OfferingDocuments() {
 
             <Button
               onClick={handleUpload}
-              disabled={uploading || !selectedFile || !documentData.documentCategory || !documentData.title}
+              disabled={uploading || !selectedFile || !documentData.documentCategory as any as any || !documentData.title}
               className="w-full"
             >
               {uploading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}

@@ -90,7 +90,7 @@ export async function getDb() {
       connection.release();
       
       // Create Drizzle instance with the pool
-      _db = drizzle(_pool);
+      _db = drizzle(_pool) as any;
     } catch (error) {
       console.error("[Database] Failed to connect:", error);
       _db = null;

@@ -518,7 +518,7 @@ export const offeringsRouter = router({
     )
     .mutation(async ({ input }) => {
       const { id, ...data } = input;
-      return await offeringsDb.updateTimelineMilestone(id, data);
+      return await offeringsDb.updateTimelineMilestone(id, data as any);
     }),
 
   deleteMilestone: protectedProcedure

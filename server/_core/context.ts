@@ -13,7 +13,7 @@ export type TrpcContext = {
   req: CreateExpressContextOptions["req"];
   res: CreateExpressContextOptions["res"];
   user: User | null;
-  db: MySql2Database<Record<string, never>> | null;
+  db: MySql2Database<Record<string, unknown>> | null;
 };
 
 export async function createContext(

@@ -93,7 +93,7 @@ export const incomeDistributionRouter = router({
         .from(incomeDistributions);
 
       if (conditions.length > 0) {
-        query = query.where(and(...conditions));
+        query = query.where(and(...conditions)) as any;
       }
 
       const distributions = await query
@@ -127,7 +127,7 @@ export const incomeDistributionRouter = router({
         return filtered;
       }
 
-      return distributions;
+      return distributions as any;
     }),
 
   /**

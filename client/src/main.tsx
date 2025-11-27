@@ -53,7 +53,7 @@ const trpcClient = trpc.createClient({
         };
         
         if (token) {
-          headers["Authorization"] = `Bearer ${token}`;
+          headers["Authorization" as keyof typeof headers] = `Bearer ${token}`;
         }
         
         return globalThis.fetch(input, {
@@ -66,7 +66,7 @@ const trpcClient = trpc.createClient({
   ],
 });
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById("root")! as HTMLElement as HTMLElement).render(
   <LanguageProvider>
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
