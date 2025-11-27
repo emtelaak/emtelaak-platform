@@ -24,6 +24,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import VerifyEmail from "./pages/VerifyEmail";
+import SessionManagement from "./pages/SessionManagement";
 
 // Lazy load admin pages (only loaded when accessed)
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
@@ -117,6 +118,7 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/menu" component={Menu} />
       <Route path="/profile" component={Profile} />
+      <Route path="/sessions" component={SessionManagement} />
       <Route path="/kyc-questionnaire" component={KYCQuestionnaire} />
       <Route path="/reset-password" component={ResetPassword} />
       <Route path={"/contact"} component={Contact} />

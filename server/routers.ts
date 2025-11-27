@@ -28,6 +28,7 @@ import { investmentFlowRouter } from "./routes/investmentFlow";
 import { standardAuthRouter } from "./routes/standardAuth";
 import { localAuthRouter } from "./routes/localAuth";
 import { monitoringRouter } from "./routes/monitoring";
+import { sessionManagementRouter } from "./routes/sessionManagement";
 // import { getUnifiedPortfolioSummary } from "./db/unifiedInvestmentsDb";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -124,6 +125,7 @@ export const appRouter = router({
   approvals: approvalsRouter,
   investmentFlow: investmentFlowRouter,
   monitoring: monitoringRouter,
+  sessionManagement: sessionManagementRouter,
   
   // Standard email/password authentication
   standardAuth: standardAuthRouter,
