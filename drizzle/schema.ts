@@ -660,16 +660,20 @@ export const offeringTimeline = mysqlTable("offering_timeline", {
   
   // Milestone Information
   milestoneType: mysqlEnum("milestoneType", [
-    "funding_start",
-    "funding_end",
-    "closing",
+    "custom",
+    "approved",
+    "fully_funded",
     "first_distribution",
-    "quarterly_distribution",
-    "annual_report",
-    "property_improvement",
-    "refinance",
-    "exit",
-    "other"
+    "offering_created",
+    "submitted_for_review",
+    "funding_started",
+    "25_percent_funded",
+    "50_percent_funded",
+    "75_percent_funded",
+    "100_percent_funded",
+    "funding_ended",
+    "property_acquired",
+    "offering_closed"
   ]).notNull(),
   milestoneDate: timestamp("milestoneDate").notNull(),
   milestoneTitle: varchar("milestoneTitle", { length: 255 }).notNull(),

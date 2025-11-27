@@ -508,7 +508,7 @@ export const offeringsRouter = router({
     .input(
       z.object({
         id: z.number(),
-        milestoneType: z.enum(["funding_start", "funding_end", "closing", "first_distribution", "quarterly_distribution", "annual_report", "property_improvement", "refinance", "exit", "other"]).optional(),
+        milestoneType: z.enum(["custom", "approved", "fully_funded", "first_distribution", "offering_created", "submitted_for_review", "funding_started", "25_percent_funded", "50_percent_funded", "75_percent_funded", "100_percent_funded", "funding_ended", "property_acquired", "offering_closed"]).optional(),
         milestoneDate: z.date().optional(),
         milestoneTitle: z.string().optional(),
         milestoneDescription: z.string().optional(),

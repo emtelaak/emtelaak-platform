@@ -15,14 +15,14 @@ export async function getFundraiserProperties(fundraiserId: number) {
     .select({
       id: properties.id,
       name: properties.name,
-      location: properties.location,
+      city: properties.city,
+      country: properties.country,
       totalShares: properties.totalShares,
       sharePrice: properties.sharePrice,
-      fundingGoal: properties.fundingGoal,
-      currentFunding: properties.currentFunding,
+      totalValue: properties.totalValue,
+      availableValue: properties.availableValue,
       status: properties.status,
       createdAt: properties.createdAt,
-      images: properties.images,
     })
     .from(properties)
     .where(eq(properties.fundraiserId, fundraiserId))
@@ -94,8 +94,8 @@ export async function getFundraiserPropertyPerformance(fundraiserId: number) {
       propertyName: properties.name,
       totalShares: properties.totalShares,
       sharePrice: properties.sharePrice,
-      fundingGoal: properties.fundingGoal,
-      currentFunding: properties.currentFunding,
+      totalValue: properties.totalValue,
+      availableValue: properties.availableValue,
       status: properties.status,
       investmentCount: sql<number>`COUNT(${investmentTransactions.id})`,
       investorCount: sql<number>`COUNT(DISTINCT ${investmentTransactions.userId})`,
