@@ -28,13 +28,13 @@ variable "vpc_cidr" {
 variable "db_instance_class" {
   description = "RDS instance class"
   type        = string
-  default     = "db.t3.medium"
+  default     = "db.t3.micro"  # Free tier eligible
 }
 
 variable "db_allocated_storage" {
   description = "Allocated storage for RDS (GB)"
   type        = number
-  default     = 100
+  default     = 20  # Free tier allows up to 20GB
 }
 
 variable "db_name" {
@@ -59,7 +59,7 @@ variable "db_multi_az" {
 variable "ec2_instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "t3.medium"
+  default     = "t2.micro"  # Free tier eligible
 }
 
 variable "ec2_key_name" {
