@@ -82,7 +82,7 @@ export function useAuth(options?: UseAuthOptions) {
     // Store user info in localStorage for compatibility with other components
     if (typeof window !== "undefined") {
       localStorage.setItem(
-        "manus-runtime-user-info",
+        "ofok-runtime-user-info",
         JSON.stringify(user)
       );
     }

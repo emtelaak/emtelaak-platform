@@ -87,6 +87,8 @@ export const userSessions = mysqlTable("user_sessions", {
   userIdIdx: index("user_sessions_user_id_idx").on(table.userId),
   sessionIdIdx: index("user_sessions_session_id_idx").on(table.sessionId),
   expiresAtIdx: index("user_sessions_expires_at_idx").on(table.expiresAt),
+  // Composite index for session cleanup queries (userId + expiresAt)
+  userExpiresIdx: index("user_sessions_user_expires_idx").on(table.userId, table.expiresAt),
 }));
 
 export const permissionRoleTemplates = mysqlTable("permission_role_templates", {
@@ -290,6 +292,8 @@ export const properties = mysqlTable("properties", {
   statusIdx: index("status_idx").on(table.status),
   propertyTypeIdx: index("property_type_idx").on(table.propertyType),
   investmentTypeIdx: index("investment_type_idx").on(table.investmentType),
+  // Composite index for property listing queries (status + investmentType + createdAt)
+  statusTypeCreatedIdx: index("status_type_created_idx").on(table.status, table.investmentType, table.createdAt),
 }));
 
 export const propertyDocuments = mysqlTable("property_documents", {
@@ -395,6 +399,8 @@ export const investments = mysqlTable("investments", {
   userIdIdx: index("user_id_idx").on(table.userId),
   propertyIdIdx: index("property_id_idx").on(table.propertyId),
   statusIdx: index("status_idx").on(table.status),
+  // Composite index for portfolio queries (userId + status + createdAt)
+  userStatusCreatedIdx: index("user_status_created_idx").on(table.userId, table.status, table.createdAt),
 }));
 
 export const incomeDistributions = mysqlTable("income_distributions", {
@@ -1514,6 +1520,8 @@ export const walletTransactions = mysqlTable("wallet_transactions", {
   userIdIdx: index("user_id_idx").on(table.userId),
   statusIdx: index("status_idx").on(table.status),
   typeIdx: index("type_idx").on(table.type),
+  // Composite index for transaction history queries (userId + status + createdAt)
+  userStatusCreatedIdx: index("wallet_user_status_created_idx").on(table.userId, table.status, table.createdAt),
 }));
 
 export type UserWallet = typeof userWallets.$inferSelect;

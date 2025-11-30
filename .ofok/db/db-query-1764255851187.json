@@ -1,0 +1,13 @@
+{
+  "query": "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='offering_timeline' AND COLUMN_NAME='milestoneType'",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='offering_timeline' AND COLUMN_NAME='milestoneType'",
+  "rows": [
+    {
+      "COLUMN_TYPE": "enum('offering_created','submitted_for_review','approved','funding_started','25_percent_funded','50_percent_funded','75_percent_funded','fully_funded','funding_closed','property_acquired','first_distribution','property_sold','offering_closed','custom')"
+    }
+  ],
+  "messages": [],
+  "stdout": "COLUMN_TYPE\nenum('offering_created','submitted_for_review','approved','funding_started','25_percent_funded','50_percent_funded','75_percent_funded','fully_funded','funding_closed','property_acquired','first_distribution','property_sold','offering_closed','custom')\n",
+  "stderr": "",
+  "execution_time_ms": 1609
+}

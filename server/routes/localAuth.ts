@@ -13,7 +13,7 @@ import crypto from "crypto";
 
 /**
  * Local Authentication Router
- * Handles email/password authentication alongside Manus OAuth
+ * Handles email/password authentication alongside Ofok OAuth
  */
 export const localAuthRouter = router({
   /**

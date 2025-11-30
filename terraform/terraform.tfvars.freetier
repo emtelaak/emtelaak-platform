@@ -1,0 +1,30 @@
+# Emtelaak Platform - AWS Free Tier Configuration
+# This configuration minimizes costs using AWS Free Tier resources
+
+# AWS Configuration
+aws_region   = "us-east-1"
+project_name = "emtelaak"
+environment  = "dev"
+
+# VPC Configuration (Free)
+vpc_cidr = "10.0.0.0/16"
+
+# Database Configuration - Free Tier Eligible
+db_instance_class    = "db.t3.micro"  # Free tier: 750 hours/month
+db_allocated_storage = 20             # Free tier: up to 20GB
+db_name              = "emtelaak"
+db_username          = "emtelaak_admin"
+db_multi_az          = false          # Single AZ (Multi-AZ not free)
+
+# EC2 Configuration - Free Tier Eligible
+ec2_instance_type = "t2.micro"        # Free tier: 750 hours/month
+ec2_key_name      = "emtelaak-dev-key"
+
+# Note: Free tier includes:
+# - 750 hours/month of t2.micro EC2 (Linux)
+# - 750 hours/month of db.t3.micro RDS
+# - 5GB of S3 storage
+# - 20GB of EBS storage
+# - 1GB of data transfer out
+#
+# Estimated monthly cost: $0-5 (mostly data transfer if you exceed 1GB)

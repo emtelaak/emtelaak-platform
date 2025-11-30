@@ -1,0 +1,25 @@
+# Emtelaak Platform - Development Environment Configuration
+
+# AWS Configuration
+aws_region   = "us-east-1"
+project_name = "emtelaak"
+environment  = "dev"
+
+# VPC Configuration
+vpc_cidr = "10.0.0.0/16"
+
+# Database Configuration
+db_instance_class    = "db.t3.medium"
+db_allocated_storage = 100
+db_name              = "emtelaak"
+db_username          = "emtelaak_admin"
+db_multi_az          = false  # Single AZ for dev
+
+# EC2 Configuration
+ec2_instance_type = "t3.medium"
+ec2_key_name      = "emtelaak-dev-key"  # Must exist in AWS
+
+# Application Configuration (Optional)
+# smtp_password          = "your-sendgrid-api-key"
+# stripe_secret_key      = "sk_test_your-key"
+# stripe_publishable_key = "pk_test_your-key"

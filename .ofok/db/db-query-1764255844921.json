@@ -1,0 +1,18 @@
+{
+  "query": "SHOW COLUMNS FROM offering_timeline LIKE 'milestoneType'",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3MFojkLuMTYkad4.root --database VvJGXt6mJVC6petxtZ2P78 --execute SHOW COLUMNS FROM offering_timeline LIKE 'milestoneType'",
+  "rows": [
+    {
+      "Field": "milestoneType",
+      "Type": "enum('offering_created','submitted_for_review','approved','funding_started','25_percent_funded','50_percent_funded','75_percent_funded','fully_funded','funding_closed','property_acquired','first_distribution','property_sold','offering_closed','custom')",
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "NULL",
+      "Extra": ""
+    }
+  ],
+  "messages": [],
+  "stdout": "Field\tType\tNull\tKey\tDefault\tExtra\nmilestoneType\tenum('offering_created','submitted_for_review','approved','funding_started','25_percent_funded','50_percent_funded','75_percent_funded','fully_funded','funding_closed','property_acquired','first_distribution','property_sold','offering_closed','custom')\tNO\tMUL\tNULL\t\n",
+  "stderr": "",
+  "execution_time_ms": 1735
+}

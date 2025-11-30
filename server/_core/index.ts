@@ -4,6 +4,7 @@ import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import net from "net";
 import cookieParser from "cookie-parser";
+import compression from "compression";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
 import { appRouter } from "../routers";
@@ -64,6 +65,9 @@ async function startServer() {
   // Security headers
   app.use(configureSecurityHeaders());
   
+  // Response compression for better performance
+  app.use(compression());
+  
   // IP blocking middleware (before all routes)
   const { ipBlockingMiddleware } = await import("./ipBlockingMiddleware");
   app.use(ipBlockingMiddleware);
@@ -87,6 +91,31 @@ async function startServer() {
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  
+  // Health check endpoint for monitoring and load balancers
+  app.get("/health", (req, res) => {
+    res.status(200).json({
+      status: "healthy",
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      memory: process.memoryUsage(),
+    });
+  });
+  
+  // Readiness check endpoint
+  app.get("/ready", async (req, res) => {
+    try {
+      // Check database connection
+      const { getDb } = await import("../db");
+      const db = await getDb();
+      if (!db) {
+        return res.status(503).json({ status: "not_ready", reason: "database_unavailable" });
+      }
+      res.status(200).json({ status: "ready", timestamp: new Date().toISOString() });
+    } catch (error) {
+      res.status(503).json({ status: "not_ready", reason: "database_error" });
+    }
+  });
   
   // Serve uploaded files from /uploads directory
   const uploadsPath = path.join(process.cwd(), 'uploads');

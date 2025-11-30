@@ -3783,3 +3783,100 @@
 - [ ] Create final checkpoint
 - [ ] Update AWS migration guide if needed
 - [ ] Document all fixes made
+
+
+## COMPREHENSIVE REFACTORING PROJECT (ASAP Priority)
+
+### Phase 1: Codebase Audit and Performance Analysis
+- [ ] Analyze database schema for missing indexes
+- [ ] Identify N+1 query problems in API endpoints
+- [ ] Check for memory leaks in long-running processes
+- [ ] Review bundle size and identify optimization opportunities
+- [ ] Audit API response times and identify slow endpoints
+- [ ] Check for unused dependencies and code
+- [ ] Analyze database connection pool usage
+
+### Phase 2: Database Performance Optimization
+- [x] Add composite indexes for frequently queried columns
+- [x] Optimize properties table queries (add indexes on status, investmentType)
+- [x] Optimize investments table queries (add indexes on userId, propertyId, status)
+- [x] Optimize user_sessions table (add index on userId, expiresAt)
+- [x] Add indexes for wallet transactions (userId, status, createdAt)
+- [ ] Implement database query caching for read-heavy operations
+- [ ] Add database connection pooling optimization
+- [ ] Test query performance improvements
+
+### Phase 3: Application Performance Enhancements
+- [ ] Implement Redis caching for frequently accessed data
+- [x] Add response compression middleware
+- [ ] Optimize bundle size with code splitting
+- [ ] Implement lazy loading for heavy components
+- [ ] Add CDN configuration for static assets
+- [ ] Optimize image loading and compression
+- [ ] Implement API rate limiting
+- [ ] Add request/response caching headers
+
+### Phase 4: Deployment Simplification
+- [x] Create production-ready Dockerfile
+- [x] Create docker-compose.yml for local development
+- [x] Set up GitHub Actions CI/CD pipeline
+- [x] Add automated testing in CI pipeline
+- [x] Create deployment scripts for AWS
+- [x] Implement health check endpoints
+- [ ] Add graceful shutdown handling
+- [ ] Create deployment rollback procedure
+
+### Phase 5: AWS Infrastructure Optimization
+- [x] Simplify Terraform configuration
+- [x] Use AWS ECS Fargate instead of EC2 (no server management)
+- [x] Add Application Load Balancer
+- [x] Configure auto-scaling policies
+- [ ] Set up CloudFront CDN
+- [ ] Configure RDS with read replicas
+- [ ] Add ElastiCache Redis cluster
+- [ ] Implement AWS CloudWatch monitoring
+- [ ] Set up automated backups
+- [ ] Configure SSL/TLS certificates
+
+### Phase 6: Stability and Reliability
+- [ ] Add comprehensive error handling
+- [ ] Implement circuit breaker pattern for external services
+- [ ] Add retry logic for transient failures
+- [ ] Implement request timeout handling
+- [ ] Add database transaction management
+- [ ] Create error monitoring with Sentry
+- [ ] Add performance monitoring with New Relic/DataDog
+- [ ] Implement automated health checks
+- [ ] Add logging aggregation
+
+### Phase 7: Testing and Validation
+- [ ] Run full test suite (225 tests)
+- [ ] Add performance benchmarking tests
+- [ ] Test deployment pipeline end-to-end
+- [ ] Load testing with 1000+ concurrent users
+- [ ] Verify database performance improvements
+- [ ] Test auto-scaling behavior
+- [ ] Verify CDN configuration
+- [ ] Test rollback procedures
+
+### Phase 8: Documentation
+- [x] Create deployment guide
+- [x] Document infrastructure architecture
+- [x] Create runbook for common issues
+- [ ] Document performance optimization techniques
+- [ ] Create monitoring and alerting guide
+- [ ] Document scaling procedures
+- [ ] Create disaster recovery plan
+
+
+## Rename Manus to Ofok (Current Priority)
+- [x] Search for all "manus" references in codebase (files, folders, code)
+- [x] Rename files containing "manus" to "ofok"
+- [x] Rename folders containing "manus" to "ofok"
+- [x] Update import statements referencing manus files
+- [x] Update code references to manus variables/functions
+- [x] Update configuration files (package.json, tsconfig.json, etc.)
+- [x] Update environment variable references
+- [x] Update comments and documentation
+- [x] Test application after renaming
+- [x] Verify all links and imports work correctly
