@@ -77,10 +77,16 @@ async function startServer() {
     const host = req.get('host') || '';
     // Check if request is from admin subdomain
     if (host.startsWith('admin.')) {
-      // If accessing root or non-admin path, redirect to super-admin
-      if (req.path === '/' || (!req.path.startsWith('/super-admin') && !req.path.startsWith('/api') && !req.path.startsWith('/assets'))) {
-        return res.redirect('/super-admin');
+      // If accessing root, redirect to admin dashboard
+      if (req.path === '/') {
+        return res.redirect(301, '/admin');
       }
+      // If accessing admin path directly, allow it
+      if (req.path.startsWith('/admin') || req.path.startsWith('/super-admin') || req.path.startsWith('/api') || req.path.startsWith('/assets')) {
+        return next();
+      }
+      // For any other path, redirect to admin with the path preserved
+      return res.redirect(301, '/admin' + req.path);
     }
     next();
   });
