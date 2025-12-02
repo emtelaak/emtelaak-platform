@@ -3944,3 +3944,13 @@
 - [ ] Configure DNS for admin.emtelaak.co subdomain
 - [ ] Test authentication on production (waleed@emtelaak.com)
 - [ ] Document deployment process for future updates
+
+
+## Phase 101: Admin Dashboard Link in User Menu
+- [x] Locate user dropdown menu component (Navigation.tsx)
+- [x] Add "Admin" menu item with Shield icon
+- [x] Implement role-based visibility (admin and super_admin only)
+- [x] Link to /admin route
+- [x] Add bilingual support (English: "Admin", Arabic: "لوحة الإدارة")
+- [ ] Test with admin user (requires OAuth login)
+- [ ] Test with regular user (should not see admin link)

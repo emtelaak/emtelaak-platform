@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Globe, Bell, User, LayoutDashboard, TrendingUp, Briefcase, Wallet as WalletIcon, LogOut, ChevronDown } from "lucide-react";
+import { Globe, Bell, User, LayoutDashboard, TrendingUp, Briefcase, Wallet as WalletIcon, LogOut, ChevronDown, Shield } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { APP_LOGO, getLoginUrl } from "@/const";
@@ -41,6 +41,7 @@ export default function Navigation() {
       invest: "Invest",
       portfolio: "Portfolio",
       wallet: "Wallet",
+      admin: "Admin",
       logout: "Logout",
     },
     ar: {
@@ -57,6 +58,7 @@ export default function Navigation() {
       invest: "استثمر",
       portfolio: "المحفظة",
       wallet: "المحفظة المالية",
+      admin: "لوحة الإدارة",
       logout: "تسجيل الخروج",
     },
   };
@@ -173,6 +175,19 @@ export default function Navigation() {
                     <span className="font-medium">{nav.profile}</span>
                   </DropdownMenuItem>
                 </Link>
+
+                {/* Admin Link - Only for admin and super_admin */}
+                {(user?.role === 'admin' || user?.role === 'super_admin') && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <Link href="/admin">
+                      <DropdownMenuItem className="cursor-pointer gap-3 py-3">
+                        <Shield className="h-5 w-5" />
+                        <span className="font-medium">{nav.admin}</span>
+                      </DropdownMenuItem>
+                    </Link>
+                  </>
+                )}
 
                 <DropdownMenuSeparator />
 
