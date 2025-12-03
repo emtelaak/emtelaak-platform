@@ -3,7 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { APP_LOGO, APP_TITLE } from "@/const";
 
 export default function Footer() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -31,6 +31,11 @@ export default function Footer() {
               <li>
                 <Link href="/properties" className="text-muted-foreground hover:text-primary transition-colors">
                   {t.nav.properties}
+                </Link>
+              </li>
+              <li>
+                <Link href="/workflows" className="text-muted-foreground hover:text-primary transition-colors">
+                  {language === "ar" ? "سير العمل" : "Workflows"}
                 </Link>
               </li>
               <li>
