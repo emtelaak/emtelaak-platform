@@ -3954,3 +3954,21 @@
 - [x] Add bilingual support (English: "Admin", Arabic: "لوحة الإدارة")
 - [ ] Test with admin user (requires OAuth login)
 - [ ] Test with regular user (should not see admin link)
+
+
+## Phase 102: Production Fundraiser Workflow Testing
+- [x] Create fundraiser account on production (emtelaak.co)
+- [x] Identify JWT token missing role issue (admin link not showing)
+- [x] Fix JWT token to include user role in payload (login & registration)
+- [ ] Deploy fix to production and test admin link appears
+- [ ] Complete KYC verification for fundraiser
+- [ ] Navigate to property management dashboard
+- [ ] Add new property listing with all required details
+- [ ] Upload property images and documents
+- [ ] Create investment offer with pricing and terms
+- [ ] Publish property to marketplace
+- [ ] Test investor view of published property
+- [ ] Test investment flow from investor perspective
+- [ ] Identify and document any errors or issues
+- [ ] Fix critical bugs blocking workflow
+- [ ] Verify all features work end-to-end

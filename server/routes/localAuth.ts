@@ -92,7 +92,7 @@ export const localAuthRouter = router({
 
       // Create JWT token
       const token = jwt.sign(
-        { openId: newUser.openId, userId: newUser.id },
+        { openId: newUser.openId, userId: newUser.id, role: newUser.role },
         ENV.jwtSecret,
         { expiresIn: "7d" }
       );
@@ -198,7 +198,7 @@ export const localAuthRouter = router({
       // Create JWT token with extended expiry if rememberMe is true
       const tokenExpiry = input.rememberMe ? "30d" : "7d";
       const token = jwt.sign(
-        { openId: user.openId, userId: user.id },
+        { openId: user.openId, userId: user.id, role: user.role },
         ENV.jwtSecret,
         { expiresIn: tokenExpiry }
       );
