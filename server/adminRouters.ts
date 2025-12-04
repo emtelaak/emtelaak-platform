@@ -423,8 +423,19 @@ export const adminRouter = router({
         const { properties, propertyMedia } = await import("../drizzle/schema");
         const mysql = await import("mysql2/promise");
         
-        // Use DATABASE_URL directly - it already has SSL configuration
-        const connection = await mysql.createConnection(process.env.DATABASE_URL!);
+        // Parse DATABASE_URL and configure SSL for TiDB Cloud
+        const dbUrl = new URL(process.env.DATABASE_URL!);
+        const sslParam = dbUrl.searchParams.get('ssl');
+        const sslConfig = sslParam ? JSON.parse(decodeURIComponent(sslParam)) : { rejectUnauthorized: true };
+        
+        const connection = await mysql.createConnection({
+          host: dbUrl.hostname,
+          port: parseInt(dbUrl.port || '4000'),
+          user: dbUrl.username,
+          password: dbUrl.password,
+          database: dbUrl.pathname.slice(1),
+          ssl: sslConfig
+        });
         
         // Extract images and date fields from input
         const { images, firstDistributionDate, fundingDeadline, acquisitionDate, completionDate, expectedExitDate, ...propertyData } = input;
