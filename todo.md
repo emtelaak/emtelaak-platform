@@ -4522,8 +4522,9 @@
 - [ ] Verify property appears in database
 
 
-## Phase 77: Fix Database Status Enum Mismatch (Completed)
+## Phase 77: Fix Database Status Enum Mismatch and Property Creation (Completed)
 - [x] Update properties table status enum to match schema: 'draft','coming_soon','available','funded','exited','cancelled'
 - [x] Update any existing 'closed' status values to 'exited'
-- [x] Fixed property creation mutation to use explicit field assignment
-- [x] Pushed fix to GitHub for production deployment
+- [x] Replaced Drizzle ORM insert with raw SQL using mysql2 for precise column control
+- [x] Fixed column count mismatch (47 columns vs 23 values)
+- [x] Pushed fix to GitHub (commit e6a5683)
