@@ -4371,3 +4371,44 @@
 - [ ] Add loading states for images
 - [ ] Implement responsive image sizes
 - [ ] Test on various screen sizes and devices
+
+
+## Phase 112: Migrate to Own AWS S3 Storage
+
+### AWS Account Setup
+- [x] Create AWS account at aws.amazon.com
+- [x] Verify email and set up billing
+- [ ] Enable MFA for root account security (recommended)
+
+### S3 Bucket Creation
+- [x] Create S3 bucket (name: emtelaak-property-images)
+- [x] Set region (us-east-1)
+- [x] Configure bucket for public read access
+- [x] Enable versioning for backup protection
+- [ ] Set up lifecycle rules for cost optimization (optional)
+
+### IAM User & Credentials
+- [x] Create IAM user for programmatic access (emtelaak-s3-uploader)
+- [x] Attach S3 permissions policy (AmazonS3FullAccess)
+- [x] Generate Access Key ID and Secret Access Key
+- [x] Save credentials securely
+
+### Code Migration
+- [x] Install @aws-sdk/client-s3 package
+- [x] Update server/storage.ts with AWS SDK
+- [x] Add environment variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, S3_BUCKET_NAME)
+- [x] Test upload functionality (5/5 tests passed)
+- [ ] Update Render environment variables (when deploying to production)
+
+### Testing & Verification
+- [x] Run automated S3 storage tests (5/5 passed)
+- [ ] Test image upload via admin interface (manual testing)
+- [ ] Verify S3 bucket contains uploaded files via AWS Console
+- [ ] Verify image URLs are accessible
+- [ ] Test image display on Properties page
+- [ ] Test lightbox gallery functionality
+
+### Data Migration (if needed)
+- [ ] Download existing images from Manus S3
+- [ ] Re-upload to new AWS S3 bucket
+- [ ] Update database URLs to new S3 paths

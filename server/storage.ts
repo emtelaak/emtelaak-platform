@@ -1,102 +1,115 @@
-// Preconfigured storage helpers for Ofok WebDev templates
-// Uses the Biz-provided storage proxy (Authorization: Bearer <token>)
+// AWS S3 storage implementation for Emtelaak Platform
+// Replaces Manus-managed storage with user's own AWS S3 bucket
 
-import { ENV } from './_core/env';
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 
-type StorageConfig = { baseUrl: string; apiKey: string };
+// AWS S3 Configuration
+const AWS_REGION = process.env.AWS_REGION || 'us-east-1';
+const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
+const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
+const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME || 'emtelaak-property-images';
 
-function getStorageConfig(): StorageConfig {
-  const baseUrl = ENV.forgeApiUrl;
-  const apiKey = ENV.forgeApiKey;
+// Initialize S3 Client
+let s3Client: S3Client | null = null;
 
-  if (!baseUrl || !apiKey) {
-    throw new Error(
-      "Storage proxy credentials missing: set BUILT_IN_FORGE_API_URL and BUILT_IN_FORGE_API_KEY"
-    );
+function getS3Client(): S3Client {
+  if (!s3Client) {
+    if (!AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
+      throw new Error(
+        'AWS credentials missing: Set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables'
+      );
+    }
+
+    s3Client = new S3Client({
+      region: AWS_REGION,
+      credentials: {
+        accessKeyId: AWS_ACCESS_KEY_ID,
+        secretAccessKey: AWS_SECRET_ACCESS_KEY,
+      },
+    });
   }
 
-  return { baseUrl: baseUrl.replace(/\/+$/, ""), apiKey };
+  return s3Client;
 }
 
-function buildUploadUrl(baseUrl: string, relKey: string): URL {
-  const url = new URL("v1/storage/upload", ensureTrailingSlash(baseUrl));
-  url.searchParams.set("path", normalizeKey(relKey));
-  return url;
-}
-
-async function buildDownloadUrl(
-  baseUrl: string,
-  relKey: string,
-  apiKey: string
-): Promise<string> {
-  const downloadApiUrl = new URL(
-    "v1/storage/downloadUrl",
-    ensureTrailingSlash(baseUrl)
-  );
-  downloadApiUrl.searchParams.set("path", normalizeKey(relKey));
-  const response = await fetch(downloadApiUrl, {
-    method: "GET",
-    headers: buildAuthHeaders(apiKey),
-  });
-  return (await response.json()).url;
-}
-
-function ensureTrailingSlash(value: string): string {
-  return value.endsWith("/") ? value : `${value}/`;
-}
-
-function normalizeKey(relKey: string): string {
-  return relKey.replace(/^\/+/, "");
-}
-
-function toFormData(
-  data: Buffer | Uint8Array | string,
-  contentType: string,
-  fileName: string
-): FormData {
-  const blob =
-    typeof data === "string"
-      ? new Blob([data], { type: contentType })
-      : new Blob([data as any], { type: contentType });
-  const form = new FormData();
-  form.append("file", blob, fileName || "file");
-  return form;
-}
-
-function buildAuthHeaders(apiKey: string): HeadersInit {
-  return { Authorization: `Bearer ${apiKey}` };
-}
-
+/**
+ * Upload file to AWS S3 bucket
+ * @param relKey - Relative path/key for the file (e.g., "properties/123/image.png")
+ * @param data - File data as Buffer, Uint8Array, or string
+ * @param contentType - MIME type of the file (e.g., "image/png")
+ * @returns Object with key and public URL
+ */
 export async function storagePut(
   relKey: string,
   data: Buffer | Uint8Array | string,
-  contentType = "application/octet-stream"
+  contentType = 'application/octet-stream'
 ): Promise<{ key: string; url: string }> {
-  const { baseUrl, apiKey } = getStorageConfig();
+  const client = getS3Client();
   const key = normalizeKey(relKey);
-  const uploadUrl = buildUploadUrl(baseUrl, key);
-  const formData = toFormData(data, contentType, key.split("/").pop() ?? key);
-  const response = await fetch(uploadUrl, {
-    method: "POST",
-    headers: buildAuthHeaders(apiKey),
-    body: formData,
+
+  // Convert string to Buffer if needed
+  const bodyData = typeof data === 'string' ? Buffer.from(data) : data;
+
+  const command = new PutObjectCommand({
+    Bucket: S3_BUCKET_NAME,
+    Key: key,
+    Body: bodyData,
+    ContentType: contentType,
+    ACL: 'public-read', // Make files publicly accessible
   });
 
-  if (!response.ok) {
-    const message = await response.text().catch(() => response.statusText);
-    throw new Error(
-      `Storage upload failed (${response.status} ${response.statusText}): ${message}`
-    );
+  try {
+    await client.send(command);
+
+    // Construct public URL
+    const url = `https://${S3_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${key}`;
+
+    console.log(`[S3] Uploaded file: ${key} → ${url}`);
+
+    return { key, url };
+  } catch (error) {
+    console.error('[S3] Upload failed:', error);
+    throw new Error(`S3 upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
-  const url = (await response.json()).url;
+}
+
+/**
+ * Get public URL for an S3 object
+ * @param relKey - Relative path/key for the file
+ * @returns Object with key and public URL
+ */
+export async function storageGet(relKey: string): Promise<{ key: string; url: string }> {
+  const key = normalizeKey(relKey);
+  const url = `https://${S3_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${key}`;
+
   return { key, url };
 }
 
-export async function storageGet(relKey: string): Promise<{ key: string; url: string; }> {
-  const { baseUrl, apiKey } = getStorageConfig();
+/**
+ * Delete file from S3 bucket
+ * @param relKey - Relative path/key for the file
+ */
+export async function storageDelete(relKey: string): Promise<void> {
+  const client = getS3Client();
   const key = normalizeKey(relKey);
-  return {
-    key,
-    url: await buildDownloadUrl(baseUrl, key, apiKey),
-  };
+
+  const command = new DeleteObjectCommand({
+    Bucket: S3_BUCKET_NAME,
+    Key: key,
+  });
+
+  try {
+    await client.send(command);
+    console.log(`[S3] Deleted file: ${key}`);
+  } catch (error) {
+    console.error('[S3] Delete failed:', error);
+    throw new Error(`S3 delete failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
+/**
+ * Normalize S3 key by removing leading slashes
+ */
+function normalizeKey(relKey: string): string {
+  return relKey.replace(/^\/+/, '');
 }
