@@ -421,6 +421,8 @@ export const adminRouter = router({
         if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
         
         const { properties, propertyMedia } = await import("../drizzle/schema");
+        const mysql = await import("mysql2/promise");
+        const connection = await mysql.createConnection(process.env.DATABASE_URL!);
         
         // Extract images and date fields from input
         const { images, firstDistributionDate, fundingDeadline, acquisitionDate, completionDate, expectedExitDate, ...propertyData } = input;
@@ -487,8 +489,19 @@ export const adminRouter = router({
         if (dates.completionDate) insertData.completionDate = dates.completionDate;
         if (dates.expectedExitDate) insertData.expectedExitDate = dates.expectedExitDate;
         
-        // Create property
-        const [result] = await db.insert(properties).values(insertData);
+        // Build dynamic SQL with only the fields we have
+        const columns = Object.keys(insertData);
+        const columnNames = columns.join(', ');
+        const placeholders = columns.map(() => '?').join(', ');
+        const values = columns.map(col => insertData[col]);
+        
+        // Execute raw SQL with mysql2 for full control
+        const [result] = await connection.execute(
+          `INSERT INTO properties (${columnNames}) VALUES (${placeholders})`,
+          values
+        ) as any;
+        
+        await connection.end();
         
         const propertyId = Number(result.insertId);
         
