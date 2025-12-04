@@ -4520,3 +4520,10 @@
 - [ ] Verify Render auto-deploys (waiting for deployment)
 - [ ] Test property creation in production (after deployment)
 - [ ] Verify property appears in database
+
+
+## Phase 77: Fix Database Status Enum Mismatch (Current)
+- [ ] Update properties table status enum to match schema: 'draft','coming_soon','available','funded','exited','cancelled'
+- [ ] Update any existing 'closed' status values to 'exited'
+- [ ] Test property creation with new status values
+- [ ] Deploy fix to production
