@@ -4412,3 +4412,30 @@
 - [ ] Download existing images from Manus S3
 - [ ] Re-upload to new AWS S3 bucket
 - [ ] Update database URLs to new S3 paths
+
+
+## Phase 113: Organize S3 Bucket Folder Structure
+
+### Define Folder Structure
+- [x] Create /logos folder for platform logos
+- [x] Create /users/profiles folder for user profile pictures
+- [x] Create /users/documents folder for user KYC documents
+- [x] Create /admins/profiles folder for admin profile pictures
+- [x] Create /properties folder for property images (already exists)
+- [x] Create /documents/legal folder for legal documents
+- [x] Create /documents/contracts folder for contracts
+- [x] Create /documents/invoices folder for invoice receipts
+
+### Update Upload Paths
+- [x] Create S3 path helper functions in server/s3Paths.ts
+- [x] Update profile picture upload to use /users/profiles or /admins/profiles
+- [x] Update property image upload to use organized paths
+- [ ] Update KYC document upload to use /users/kyc (when KYC upload is implemented)
+- [ ] Update logo upload to use /logos (when logo upload is implemented)
+- [ ] Update legal document upload to use /documents/legal (already using organized paths)
+
+### Testing
+- [x] Created comprehensive S3 folder structure documentation
+- [ ] Test profile picture upload with new paths (manual testing required)
+- [ ] Test property image upload with new paths (manual testing required)
+- [ ] Verify all files appear in correct S3 folders via AWS Console

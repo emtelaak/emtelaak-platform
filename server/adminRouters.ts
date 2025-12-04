@@ -1139,11 +1139,10 @@ export const adminRouter = router({
       const base64Data = imageData.replace(/^data:image\/\w+;base64,/, "");
       const buffer = Buffer.from(base64Data, "base64");
 
-      // Generate unique file key
-      const timestamp = Date.now();
-      const randomSuffix = Math.random().toString(36).substring(7);
-      const fileExtension = fileName.split(".").pop() || "jpg";
-      const fileKey = `properties/${propertyId}/images/${timestamp}-${randomSuffix}.${fileExtension}`;
+      // Generate unique file key using S3 path helper
+      const { getPropertyImageKey, getFileExtension } = await import('./s3Paths');
+      const fileExtension = getFileExtension(fileName, 'jpg');
+      const fileKey = getPropertyImageKey(propertyId, fileExtension);
 
       // Upload to S3
       const { url } = await storagePut(fileKey, buffer, `image/${fileExtension}`);

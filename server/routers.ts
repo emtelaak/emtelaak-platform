@@ -286,18 +286,24 @@ export const appRouter = router({
         mimeType: z.string(),
       }))
       .mutation(async ({ ctx, input }) => {
+        const { storagePut } = await import('./storage');
+        const { getUserProfileKey, getAdminProfileKey, getFileExtension } = await import('./s3Paths');
         
         // Convert base64 to buffer
         const base64Data = input.imageData.replace(/^data:image\/\w+;base64,/, '');
         const buffer = Buffer.from(base64Data, 'base64');
         
-        // Generate unique filename
-        const fileExtension = input.mimeType.split('/')[1];
-        const fileName = `profile-${ctx.user.id}-${Date.now()}.${fileExtension}`;
+        // Determine file extension
+        const fileExtension = getFileExtension(input.mimeType, 'jpg');
         
-        // Upload to Cloudinary
-        const { uploadToCloudinary, UPLOAD_FOLDERS } = await import('./cloudinaryService');
-        const { url } = await uploadToCloudinary(UPLOAD_FOLDERS.profiles, buffer, fileName, 'image');
+        // Generate S3 key based on user role
+        const isAdmin = ctx.user.role === 'admin' || ctx.user.role === 'super_admin';
+        const s3Key = isAdmin 
+          ? getAdminProfileKey(ctx.user.id, fileExtension)
+          : getUserProfileKey(ctx.user.id, fileExtension);
+        
+        // Upload to S3
+        const { url } = await storagePut(s3Key, buffer, input.mimeType);
         
         // Update user profile with new picture URL
         await createOrUpdateUserProfile({
