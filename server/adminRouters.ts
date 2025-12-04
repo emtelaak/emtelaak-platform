@@ -437,23 +437,58 @@ export const adminRouter = router({
         const availableValue = propertyData.totalValue;
         const availableShares = propertyData.totalShares;
         
-        // Filter out undefined values to prevent SQL errors
-        const cleanPropertyData = Object.fromEntries(
-          Object.entries(propertyData).filter(([_, v]) => v !== undefined)
-        );
-        
-        const cleanDates = Object.fromEntries(
-          Object.entries(dates).filter(([_, v]) => v !== undefined)
-        );
-        
-        // Create property
-        const [result] = await db.insert(properties).values({
-          ...cleanPropertyData,
-          ...cleanDates,
+        // Build the insert object with only defined values
+        const insertData: any = {
+          name: propertyData.name,
+          propertyType: propertyData.propertyType,
+          investmentType: propertyData.investmentType,
+          status: propertyData.status,
+          totalValue: propertyData.totalValue,
+          sharePrice: propertyData.sharePrice,
+          totalShares: propertyData.totalShares,
+          minimumInvestment: propertyData.minimumInvestment,
           availableValue,
           availableShares,
           fundraiserId: ctx.user.id,
-        } as any);
+        };
+        
+        // Add optional fields only if they have values
+        if (propertyData.nameAr) insertData.nameAr = propertyData.nameAr;
+        if (propertyData.description) insertData.description = propertyData.description;
+        if (propertyData.descriptionAr) insertData.descriptionAr = propertyData.descriptionAr;
+        if (propertyData.addressLine1) insertData.addressLine1 = propertyData.addressLine1;
+        if (propertyData.addressLine2) insertData.addressLine2 = propertyData.addressLine2;
+        if (propertyData.city) insertData.city = propertyData.city;
+        if (propertyData.country) insertData.country = propertyData.country;
+        if (propertyData.gpsLatitude) insertData.gpsLatitude = propertyData.gpsLatitude;
+        if (propertyData.gpsLongitude) insertData.gpsLongitude = propertyData.gpsLongitude;
+        if (propertyData.propertySize) insertData.propertySize = propertyData.propertySize;
+        if (propertyData.numberOfUnits) insertData.numberOfUnits = propertyData.numberOfUnits;
+        if (propertyData.constructionYear) insertData.constructionYear = propertyData.constructionYear;
+        if (propertyData.propertyCondition) insertData.propertyCondition = propertyData.propertyCondition;
+        if (propertyData.amenities) insertData.amenities = propertyData.amenities;
+        if (propertyData.rentalYield) insertData.rentalYield = propertyData.rentalYield;
+        if (propertyData.annualYieldIncrease) insertData.annualYieldIncrease = propertyData.annualYieldIncrease;
+        if (propertyData.managementFee) insertData.managementFee = propertyData.managementFee;
+        if (propertyData.otherCosts) insertData.otherCosts = propertyData.otherCosts;
+        if (propertyData.projectedNetYield) insertData.projectedNetYield = propertyData.projectedNetYield;
+        if (propertyData.fundTermMonths) insertData.fundTermMonths = propertyData.fundTermMonths;
+        if (propertyData.projectedSalePrice) insertData.projectedSalePrice = propertyData.projectedSalePrice;
+        if (propertyData.expectedAppreciation) insertData.expectedAppreciation = propertyData.expectedAppreciation;
+        if (propertyData.distributionFrequency) insertData.distributionFrequency = propertyData.distributionFrequency;
+        if (propertyData.vrTourUrl) insertData.vrTourUrl = propertyData.vrTourUrl;
+        if (propertyData.videoTourUrl) insertData.videoTourUrl = propertyData.videoTourUrl;
+        if (propertyData.waitlistEnabled !== undefined) insertData.waitlistEnabled = propertyData.waitlistEnabled;
+        
+        // Add date fields only if they have values
+        if (dates.firstDistributionDate) insertData.firstDistributionDate = dates.firstDistributionDate;
+        if (dates.fundingDeadline) insertData.fundingDeadline = dates.fundingDeadline;
+        if (dates.acquisitionDate) insertData.acquisitionDate = dates.acquisitionDate;
+        if (dates.completionDate) insertData.completionDate = dates.completionDate;
+        if (dates.expectedExitDate) insertData.expectedExitDate = dates.expectedExitDate;
+        
+        // Create property
+        const [result] = await db.insert(properties).values(insertData);
         
         const propertyId = Number(result.insertId);
         
