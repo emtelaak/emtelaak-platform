@@ -15,11 +15,14 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import Navigation from "@/components/Navigation";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import PortfolioPerformanceChart from "@/components/PortfolioPerformanceChart";
+import { useSwipeable } from "react-swipeable";
+import { useState } from "react";
 
 export default function Portfolio() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
   const { t } = useLanguage();
   const [, setLocation] = useLocation();
+  const [activeTab, setActiveTab] = useState("investments");
 
   const { data: portfolioSummary, isLoading: summaryLoading } = trpc.portfolio.summary.useQuery(
     undefined,
@@ -61,6 +64,26 @@ export default function Portfolio() {
     const totalIncome = calculateTotalIncome();
     return ((totalIncome / portfolioSummary.totalInvested) * 100).toFixed(2);
   };
+
+  // Swipe navigation for mobile
+  const tabs = ["investments", "performance", "income", "transactions"];
+  const currentTabIndex = tabs.indexOf(activeTab);
+
+  const handleSwipe = (direction: "left" | "right") => {
+    if (direction === "left" && currentTabIndex < tabs.length - 1) {
+      setActiveTab(tabs[currentTabIndex + 1]);
+    } else if (direction === "right" && currentTabIndex > 0) {
+      setActiveTab(tabs[currentTabIndex - 1]);
+    }
+  };
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => handleSwipe("left"),
+    onSwipedRight: () => handleSwipe("right"),
+    trackMouse: false, // Only track touch, not mouse
+    preventScrollOnSwipe: false, // Allow vertical scrolling
+    delta: 50, // Minimum swipe distance
+  });
 
   if (authLoading) {
     return (
@@ -216,13 +239,16 @@ export default function Portfolio() {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="investments" className="space-y-4 md:space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6">
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
             <TabsTrigger value="investments" className="text-xs md:text-sm py-3 md:py-2">Investments</TabsTrigger>
             <TabsTrigger value="performance" className="text-xs md:text-sm py-3 md:py-2">Performance</TabsTrigger>
             <TabsTrigger value="income" className="text-xs md:text-sm py-3 md:py-2">Income</TabsTrigger>
             <TabsTrigger value="transactions" className="text-xs md:text-sm py-3 md:py-2">Transactions</TabsTrigger>
           </TabsList>
+
+          {/* Swipeable container for mobile */}
+          <div {...swipeHandlers} className="md:pointer-events-none">
 
           {/* Investments Tab */}
           <TabsContent value="investments" className="space-y-4">
@@ -459,6 +485,7 @@ export default function Portfolio() {
               </CardContent>
             </Card>
           </TabsContent>
+          </div>
         </Tabs>
       </div>
       
