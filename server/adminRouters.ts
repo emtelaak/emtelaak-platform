@@ -1118,4 +1118,96 @@ export const adminRouter = router({
         return { data: JSON.stringify(transactionData, null, 2), filename: `transactions-export-${Date.now()}.json`, mimeType: "application/json" };
       }
     }),
+
+  // ============================================
+  // PROPERTY IMAGE MANAGEMENT
+  // ============================================
+
+  uploadPropertyImage: adminProcedure
+    .input(z.object({
+      propertyId: z.number(),
+      imageData: z.string(), // Base64 encoded image
+      fileName: z.string(),
+      isPrimary: z.boolean().optional(),
+      caption: z.string().optional(),
+      captionAr: z.string().optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const { propertyId, imageData, fileName, isPrimary, caption, captionAr } = input;
+
+      // Convert base64 to buffer
+      const base64Data = imageData.replace(/^data:image\/\w+;base64,/, "");
+      const buffer = Buffer.from(base64Data, "base64");
+
+      // Generate unique file key
+      const timestamp = Date.now();
+      const randomSuffix = Math.random().toString(36).substring(7);
+      const fileExtension = fileName.split(".").pop() || "jpg";
+      const fileKey = `properties/${propertyId}/images/${timestamp}-${randomSuffix}.${fileExtension}`;
+
+      // Upload to S3
+      const { url } = await storagePut(fileKey, buffer, `image/${fileExtension}`);
+
+      // Save to database
+      const { createPropertyImage } = await import("./db/propertyImageDb.js");
+      const imageId = await createPropertyImage({
+        propertyId,
+        imageUrl: url,
+        imageKey: fileKey,
+        isPrimary: isPrimary || false,
+        caption,
+        captionAr,
+        uploadedBy: ctx.user.id,
+      });
+
+      // If this is set as primary, update others
+      if (isPrimary) {
+        const { setPrimaryImage } = await import("./db/propertyImageDb.js");
+        await setPrimaryImage(imageId, propertyId);
+      }
+
+      return { success: true, imageId, imageUrl: url };
+    }),
+
+  getPropertyImages: adminProcedure
+    .input(z.object({ propertyId: z.number() }))
+    .query(async ({ input }) => {
+      const { getPropertyImages } = await import("./db/propertyImageDb.js");
+      return await getPropertyImages(input.propertyId);
+    }),
+
+  setPrimaryImage: adminProcedure
+    .input(z.object({
+      imageId: z.number(),
+      propertyId: z.number(),
+    }))
+    .mutation(async ({ input }) => {
+      const { setPrimaryImage } = await import("./db/propertyImageDb.js");
+      await setPrimaryImage(input.imageId, input.propertyId);
+      return { success: true };
+    }),
+
+  updateImageOrder: adminProcedure
+    .input(z.object({
+      imageId: z.number(),
+      displayOrder: z.number(),
+    }))
+    .mutation(async ({ input }) => {
+      const { updateImageOrder } = await import("./db/propertyImageDb.js");
+      await updateImageOrder(input.imageId, input.displayOrder);
+      return { success: true };
+    }),
+
+  deletePropertyImage: adminProcedure
+    .input(z.object({ imageId: z.number() }))
+    .mutation(async ({ input }) => {
+      const { deletePropertyImage } = await import("./db/propertyImageDb.js");
+      const deletedImage = await deletePropertyImage(input.imageId);
+
+      // Note: S3 deletion not implemented in storage helper
+      // Images remain in S3 but are removed from database
+      // TODO: Implement S3 cleanup or use lifecycle policies
+
+      return { success: true };
+    }),
 });

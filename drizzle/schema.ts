@@ -1938,6 +1938,27 @@ export const investmentActivity = mysqlTable("investment_activity", {
 export type InvestmentActivity = typeof investmentActivity.$inferSelect;
 export type InsertInvestmentActivity = typeof investmentActivity.$inferInsert;
 
+// ============================================
+// PROPERTY IMAGES
+// ============================================
+
+export const propertyImages = mysqlTable("property_images", {
+  id: int("id").autoincrement().primaryKey(),
+  propertyId: int("propertyId").notNull().references(() => properties.id, { onDelete: "cascade" }),
+  imageUrl: varchar("imageUrl", { length: 500 }).notNull(), // Full S3 URL
+  imageKey: varchar("imageKey", { length: 500 }).notNull(), // S3 key for deletion
+  isPrimary: boolean("isPrimary").default(false).notNull(), // Primary/featured image
+  displayOrder: int("displayOrder").default(0).notNull(), // Order for display
+  caption: varchar("caption", { length: 255 }), // Optional image caption
+  captionAr: varchar("captionAr", { length: 255 }), // Arabic caption
+  uploadedBy: int("uploadedBy").notNull().references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PropertyImage = typeof propertyImages.$inferSelect;
+export type InsertPropertyImage = typeof propertyImages.$inferInsert;
+
 
 // ============================================
 // OFFERINGS SYSTEM (Phase 1 Roadmap)

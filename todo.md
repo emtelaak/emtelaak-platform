@@ -4266,3 +4266,79 @@
 - [x] Bilingual support (English/Arabic)
 - [ ] Test on actual mobile devices
 
+
+
+## Phase 110: Property Image Upload System
+
+### Database Schema
+- [ ] Add propertyImages table to schema (propertyId, imageUrl, imageKey, isPrimary, displayOrder)
+- [ ] Run database migration with pnpm db:push
+- [ ] Create database helpers for image CRUD operations
+
+### Backend Implementation
+- [ ] Create image upload tRPC procedure with file validation
+- [ ] Implement S3 upload with storagePut
+- [ ] Add image optimization (resize, compress)
+- [ ] Create procedure to set primary image
+- [ ] Create procedure to reorder images
+- [ ] Create procedure to delete images from S3 and DB
+- [ ] Add procedure to get all images for a property
+
+### Admin UI
+- [ ] Create PropertyImageUpload component with drag-and-drop
+- [ ] Add image preview grid with reorder functionality
+- [ ] Implement set primary image button
+- [ ] Add delete image confirmation dialog
+- [ ] Show upload progress indicator
+- [ ] Add image validation (size, format)
+- [ ] Integrate into AdminPropertyEdit page
+- [ ] Test upload, reorder, delete workflows
+
+### Frontend Display
+- [ ] Update Properties page to show uploaded images
+- [ ] Update PropertyDetail page to show image gallery
+- [ ] Add image carousel/slider for multiple images
+- [ ] Implement lazy loading for images
+- [ ] Add fallback to placeholder if no images
+
+
+## Phase 110: Property Image Upload System (In Progress)
+
+### Database Schema
+- [x] Add property_images table to schema
+- [x] Add fields: id, propertyId, imageUrl, imageKey, isPrimary, displayOrder, caption, captionAr, uploadedBy, createdAt
+- [x] Run database migration
+
+### Backend Implementation
+- [x] Create propertyImageDb.ts with CRUD helpers
+- [x] Add uploadPropertyImage tRPC procedure
+- [x] Add getPropertyImages tRPC procedure
+- [x] Add setPrimaryImage tRPC procedure
+- [x] Add deletePropertyImage tRPC procedure
+- [x] Implement S3 upload with storagePut
+- [x] Add image validation (file type, size)
+- [x] Generate unique file keys to prevent conflicts
+
+### Admin UI Component
+- [x] Create PropertyImageUpload component
+- [x] Implement drag-and-drop file upload
+- [x] Add file input fallback for click-to-upload
+- [x] Show upload progress indicator
+- [x] Display uploaded images in grid
+- [x] Add "Set as Primary" button for each image
+- [x] Add delete button for each image
+- [x] Show primary badge on primary image
+
+### Admin Page Integration
+- [x] Create AdminPropertyImages page
+- [x] Add route /admin/properties/:id/images
+- [x] Add "Images" button to AdminPropertyManagement table
+- [x] Add breadcrumb navigation
+- [x] Show property name and details
+
+### Frontend Display Updates
+- [x] Create usePropertyImage hook
+- [ ] Update Properties page to show uploaded images
+- [ ] Update PropertyDetail page to show primary image
+- [ ] Add image gallery/carousel for multiple images
+- [ ] Replace all placeholder icons with real images

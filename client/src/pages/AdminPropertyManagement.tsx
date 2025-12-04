@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { DollarSign, Edit, Building2 } from "lucide-react";
+import { DollarSign, Edit, Building2, Image } from "lucide-react";
 import { toast } from "sonner";
 import { Breadcrumb } from "@/components/Breadcrumb";
 
@@ -146,14 +146,24 @@ export default function AdminPropertyManagement() {
                       {formatCurrency(property.totalValue)}
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEditSharePrice(property)}
-                      >
-                        <Edit className="h-4 w-4 mr-2" />
-                        Edit Price
-                      </Button>
+                      <div className="flex gap-2 justify-end">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEditSharePrice(property)}
+                        >
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edit Price
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => window.location.href = `/admin/properties/${property.id}/images`}
+                        >
+                          <Image className="h-4 w-4 mr-2" />
+                          Images
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
