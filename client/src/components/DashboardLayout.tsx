@@ -94,6 +94,7 @@ const menuItems: MenuItem[] = [
   },
   { icon: DollarSign, label: "Platform Settings", path: "/admin/platform-settings" },
   { icon: TrendingUp, label: "Income Distribution", path: "/admin/income-distribution" },
+  { icon: BarChart3, label: "Analytics", path: "/admin/analytics" },
   { 
     icon: Layers, 
     label: "Offering Management", 

@@ -724,4 +724,398 @@ export const adminRouter = router({
     const { desc } = await import("drizzle-orm");
     return await db.select().from(users).orderBy(desc(users.createdAt));
   }),
+
+  // Analytics Dashboard
+  getAnalyticsOverview: adminProcedure.query(async () => {
+    const db = await import("./db").then(m => m.getDb());
+    if (!db) return null;
+    
+    const { investments, users, properties, walletTransactions } = await import("../drizzle/schema");
+    const { eq, and, gte, sql, desc } = await import("drizzle-orm");
+    const { subMonths, startOfMonth } = await import("date-fns");
+    
+    const now = new Date();
+    const lastMonth = subMonths(now, 1);
+    const twoMonthsAgo = subMonths(now, 2);
+    
+    // Total investments (current month)
+    const [currentInvestments] = await db
+      .select({ total: sql<number>`COALESCE(SUM(${investments.amount}), 0)` })
+      .from(investments)
+      .where(and(
+        eq(investments.status, "confirmed"),
+        gte(investments.createdAt, startOfMonth(now))
+      ));
+    
+    // Previous month investments
+    const [previousInvestments] = await db
+      .select({ total: sql<number>`COALESCE(SUM(${investments.amount}), 0)` })
+      .from(investments)
+      .where(and(
+        eq(investments.status, "confirmed"),
+        gte(investments.createdAt, startOfMonth(lastMonth)),
+        sql`${investments.createdAt} < ${startOfMonth(now)}`
+      ));
+    
+    const investmentChange = previousInvestments.total > 0
+      ? ((currentInvestments.total - previousInvestments.total) / previousInvestments.total) * 100
+      : 0;
+    
+    // Active investors (users with confirmed investments)
+    const [currentInvestors] = await db
+      .select({ count: sql<number>`COUNT(DISTINCT ${investments.userId})` })
+      .from(investments)
+      .where(eq(investments.status, "confirmed"));
+    
+    const [previousInvestors] = await db
+      .select({ count: sql<number>`COUNT(DISTINCT ${investments.userId})` })
+      .from(investments)
+      .where(and(
+        eq(investments.status, "confirmed"),
+        sql`${investments.createdAt} < ${startOfMonth(now)}`
+      ));
+    
+    const investorChange = previousInvestors.count > 0
+      ? ((currentInvestors.count - previousInvestors.count) / previousInvestors.count) * 100
+      : 0;
+    
+    // Active properties
+    const [activeProperties] = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(properties)
+      .where(eq(properties.status, "available"));
+    
+    const [fundedProperties] = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(properties)
+      .where(eq(properties.status, "funded"));
+    
+    // Platform revenue (2% of total investments as platform fee)
+    const [currentRevenue] = await db
+      .select({ total: sql<number>`COALESCE(SUM(${investments.amount}) * 0.02, 0)` })
+      .from(investments)
+      .where(and(
+        eq(investments.status, "confirmed"),
+        gte(investments.createdAt, startOfMonth(now))
+      ));
+    
+    const [previousRevenue] = await db
+      .select({ total: sql<number>`COALESCE(SUM(${investments.amount}) * 0.02, 0)` })
+      .from(investments)
+      .where(and(
+        eq(investments.status, "confirmed"),
+        gte(investments.createdAt, startOfMonth(lastMonth)),
+        sql`${investments.createdAt} < ${startOfMonth(now)}`
+      ));
+    
+    const revenueChange = previousRevenue.total > 0
+      ? ((currentRevenue.total - previousRevenue.total) / previousRevenue.total) * 100
+      : 0;
+    
+    return {
+      totalInvestments: currentInvestments.total,
+      investmentChange,
+      activeInvestors: currentInvestors.count,
+      investorChange,
+      activeProperties: activeProperties.count,
+      fundedProperties: fundedProperties.count,
+      platformRevenue: currentRevenue.total,
+      revenueChange,
+    };
+  }),
+
+  getInvestmentTrends: adminProcedure
+    .input(z.object({
+      timeRange: z.enum(["7d", "30d", "90d", "1y"]),
+    }))
+    .query(async ({ input }) => {
+      const db = await import("./db").then(m => m.getDb());
+      if (!db) return [];
+      
+      const { investments } = await import("../drizzle/schema");
+      const { eq, gte, sql, and } = await import("drizzle-orm");
+      const { subDays, format } = await import("date-fns");
+      
+      const days = input.timeRange === "7d" ? 7 : input.timeRange === "30d" ? 30 : input.timeRange === "90d" ? 90 : 365;
+      const startDate = subDays(new Date(), days);
+      
+      const trends = await db
+        .select({
+          date: sql<string>`DATE(${investments.createdAt})`,
+          amount: sql<number>`SUM(${investments.amount})`,
+          count: sql<number>`COUNT(*)`,
+        })
+        .from(investments)
+        .where(and(
+          eq(investments.status, "confirmed"),
+          gte(investments.createdAt, startDate)
+        ))
+        .groupBy(sql`DATE(${investments.createdAt})`)
+        .orderBy(sql`DATE(${investments.createdAt})`);
+      
+      return trends.map(t => ({
+        date: format(new Date(t.date), "MMM dd"),
+        amount: t.amount,
+        count: t.count,
+      }));
+    }),
+
+  getPropertyPerformance: adminProcedure.query(async () => {
+    const db = await import("./db").then(m => m.getDb());
+    if (!db) return [];
+    
+    const { investments, properties } = await import("../drizzle/schema");
+    const { eq, sql } = await import("drizzle-orm");
+    
+    const performance = await db
+      .select({
+        propertyId: investments.propertyId,
+        name: properties.name,
+        totalInvested: sql<number>`SUM(${investments.amount})`,
+        investorCount: sql<number>`COUNT(DISTINCT ${investments.userId})`,
+      })
+      .from(investments)
+      .innerJoin(properties, eq(investments.propertyId, properties.id))
+      .where(eq(investments.status, "confirmed"))
+      .groupBy(investments.propertyId, properties.name)
+      .orderBy(sql`SUM(${investments.amount}) DESC`)
+      .limit(10);
+    
+    return performance;
+  }),
+
+  getInvestorGrowth: adminProcedure
+    .input(z.object({
+      timeRange: z.enum(["7d", "30d", "90d", "1y"]),
+    }))
+    .query(async ({ input }) => {
+      const db = await import("./db").then(m => m.getDb());
+      if (!db) return [];
+      
+      const { users } = await import("../drizzle/schema");
+      const { gte, sql } = await import("drizzle-orm");
+      const { subDays, format } = await import("date-fns");
+      
+      const days = input.timeRange === "7d" ? 7 : input.timeRange === "30d" ? 30 : input.timeRange === "90d" ? 90 : 365;
+      const startDate = subDays(new Date(), days);
+      
+      const growth = await db
+        .select({
+          date: sql<string>`DATE(${users.createdAt})`,
+          newInvestors: sql<number>`COUNT(*)`,
+        })
+        .from(users)
+        .where(gte(users.createdAt, startDate))
+        .groupBy(sql`DATE(${users.createdAt})`)
+        .orderBy(sql`DATE(${users.createdAt})`);
+      
+      let totalInvestors = 0;
+      return growth.map(g => {
+        totalInvestors += g.newInvestors;
+        return {
+          date: format(new Date(g.date), "MMM dd"),
+          newInvestors: g.newInvestors,
+          totalInvestors,
+        };
+      });
+    }),
+
+  getRevenueBreakdown: adminProcedure.query(async () => {
+    const db = await import("./db").then(m => m.getDb());
+    if (!db) return [];
+    
+    const { investments, properties } = await import("../drizzle/schema");
+    const { eq, sql } = await import("drizzle-orm");
+    
+    const breakdown = await db
+      .select({
+        name: properties.propertyType,
+        value: sql<number>`SUM(${investments.amount}) * 0.02`, // 2% platform fee
+      })
+      .from(investments)
+      .innerJoin(properties, eq(investments.propertyId, properties.id))
+      .where(eq(investments.status, "confirmed"))
+      .groupBy(properties.propertyType);
+    
+    return breakdown.map(b => ({
+      name: b.name.charAt(0).toUpperCase() + b.name.slice(1),
+      value: b.value,
+    }));
+  }),
+
+  getKYCMetrics: adminProcedure.query(async () => {
+    const db = await import("./db").then(m => m.getDb());
+    if (!db) return null;
+    
+    const { kycQuestionnaires } = await import("../drizzle/schema");
+    const { eq, sql } = await import("drizzle-orm");
+    
+    const [pending] = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(kycQuestionnaires)
+      .where(eq(kycQuestionnaires.status, "pending"));
+    
+    const [approved] = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(kycQuestionnaires)
+      .where(eq(kycQuestionnaires.status, "approved"));
+    
+    const [rejected] = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(kycQuestionnaires)
+      .where(eq(kycQuestionnaires.status, "rejected"));
+    
+    const total = pending.count + approved.count + rejected.count;
+    
+    return {
+      pending: pending.count,
+      approved: approved.count,
+      rejected: rejected.count,
+      total,
+    };
+  }),
+
+  getRecentActivity: adminProcedure
+    .input(z.object({
+      limit: z.number().default(10),
+    }))
+    .query(async ({ input }) => {
+      const db = await import("./db").then(m => m.getDb());
+      if (!db) return [];
+      
+      const { investments, users, properties } = await import("../drizzle/schema");
+      const { eq, desc, sql } = await import("drizzle-orm");
+      
+      const activities = await db
+        .select({
+          id: investments.id,
+          description: sql<string>`CONCAT(${users.name}, ' invested in ', ${properties.name})`,
+          createdAt: investments.createdAt,
+        })
+        .from(investments)
+        .innerJoin(users, eq(investments.userId, users.id))
+        .innerJoin(properties, eq(investments.propertyId, properties.id))
+        .where(eq(investments.status, "confirmed"))
+        .orderBy(desc(investments.createdAt))
+        .limit(input.limit);
+      
+      return activities;
+    }),
+
+  // Data Export
+  exportUsers: adminProcedure
+    .input(z.object({
+      format: z.enum(["csv", "json"]),
+    }))
+    .mutation(async ({ input }) => {
+      const db = await import("./db").then(m => m.getDb());
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+      
+      const { users } = await import("../drizzle/schema");
+      const { desc } = await import("drizzle-orm");
+      
+      const userData = await db
+        .select({
+          id: users.id,
+          name: users.name,
+          email: users.email,
+          role: users.role,
+          loginMethod: users.loginMethod,
+          createdAt: users.createdAt,
+          lastSignedIn: users.lastSignedIn,
+        })
+        .from(users)
+        .orderBy(desc(users.createdAt));
+      
+      if (input.format === "csv") {
+        const { Parser } = await import("json2csv");
+        const parser = new Parser();
+        const csv = parser.parse(userData);
+        return { data: csv, filename: `users-export-${Date.now()}.csv`, mimeType: "text/csv" };
+      } else {
+        return { data: JSON.stringify(userData, null, 2), filename: `users-export-${Date.now()}.json`, mimeType: "application/json" };
+      }
+    }),
+
+  exportInvestments: adminProcedure
+    .input(z.object({
+      format: z.enum(["csv", "json"]),
+      propertyId: z.number().optional(),
+    }))
+    .mutation(async ({ input }) => {
+      const db = await import("./db").then(m => m.getDb());
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+      
+      const { investments, users, properties } = await import("../drizzle/schema");
+      const { eq, desc } = await import("drizzle-orm");
+      
+      let query = db
+        .select({
+          id: investments.id,
+          userName: users.name,
+          userEmail: users.email,
+          propertyName: properties.name,
+          amount: investments.amount,
+          shares: investments.shares,
+          status: investments.status,
+          createdAt: investments.createdAt,
+        })
+        .from(investments)
+        .innerJoin(users, eq(investments.userId, users.id))
+        .innerJoin(properties, eq(investments.propertyId, properties.id))
+        .orderBy(desc(investments.createdAt));
+      
+      if (input.propertyId) {
+        query = query.where(eq(investments.propertyId, input.propertyId)) as any;
+      }
+      
+      const investmentData = await query;
+      
+      if (input.format === "csv") {
+        const { Parser } = await import("json2csv");
+        const parser = new Parser();
+        const csv = parser.parse(investmentData);
+        return { data: csv, filename: `investments-export-${Date.now()}.csv`, mimeType: "text/csv" };
+      } else {
+        return { data: JSON.stringify(investmentData, null, 2), filename: `investments-export-${Date.now()}.json`, mimeType: "application/json" };
+      }
+    }),
+
+  exportTransactions: adminProcedure
+    .input(z.object({
+      format: z.enum(["csv", "json"]),
+    }))
+    .mutation(async ({ input }) => {
+      const db = await import("./db").then(m => m.getDb());
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+      
+      const { walletTransactions, users } = await import("../drizzle/schema");
+      const { eq, desc } = await import("drizzle-orm");
+      
+      const transactionData = await db
+        .select({
+          id: walletTransactions.id,
+          userName: users.name,
+          userEmail: users.email,
+          type: walletTransactions.type,
+          amount: walletTransactions.amount,
+          status: walletTransactions.status,
+          paymentMethod: walletTransactions.paymentMethod,
+          reference: walletTransactions.reference,
+          description: walletTransactions.description,
+          createdAt: walletTransactions.createdAt,
+        })
+        .from(walletTransactions)
+        .innerJoin(users, eq(walletTransactions.userId, users.id))
+        .orderBy(desc(walletTransactions.createdAt));
+      
+      if (input.format === "csv") {
+        const { Parser } = await import("json2csv");
+        const parser = new Parser();
+        const csv = parser.parse(transactionData);
+        return { data: csv, filename: `transactions-export-${Date.now()}.csv`, mimeType: "text/csv" };
+      } else {
+        return { data: JSON.stringify(transactionData, null, 2), filename: `transactions-export-${Date.now()}.json`, mimeType: "application/json" };
+      }
+    }),
 });

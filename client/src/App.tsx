@@ -33,6 +33,7 @@ const AdminSettings = lazy(() => import("./pages/AdminSettings"));
 const AdminPlatformSettings = lazy(() => import("./pages/AdminPlatformSettings"));
 const AdminPropertyManagement = lazy(() => import("@/pages/AdminPropertyManagement"));
 const AdminIncomeDistribution = lazy(() => import("@/pages/AdminIncomeDistribution"));
+const AdminAnalytics = lazy(() => import("@/pages/AdminAnalytics"));
 const FundraiserDashboard = lazy(() => import("./pages/FundraiserDashboard"));
 const FundraiserPropertyManagement = lazy(() => import("./pages/FundraiserPropertyManagement"));
 const AdminKYCReview = lazy(() => import("./pages/AdminKYCReview"));
@@ -146,6 +147,7 @@ function Router() {
       <Route path="/admin/platform-settings" component={AdminPlatformSettings} />
       <Route path="/admin/property-management" component={AdminPropertyManagement} />
       <Route path="/admin/income-distribution" component={AdminIncomeDistribution} />
+      <Route path="/admin/analytics" component={AdminAnalytics} />
       <Route path="/fundraiser/dashboard" component={FundraiserDashboard} />
       <Route path="/fundraiser/property-management" component={FundraiserPropertyManagement} />
       <Route path="/offerings" component={OfferingsDashboard} />
