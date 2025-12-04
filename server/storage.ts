@@ -8,6 +8,7 @@ const AWS_REGION = process.env.AWS_REGION || 'us-east-1';
 const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME || 'emtelaak-property-images';
+const CLOUDFRONT_DOMAIN = process.env.CLOUDFRONT_DOMAIN; // CloudFront CDN domain
 
 // Initialize S3 Client
 let s3Client: S3Client | null = null;
@@ -61,8 +62,10 @@ export async function storagePut(
   try {
     await client.send(command);
 
-    // Construct public URL
-    const url = `https://${S3_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${key}`;
+    // Construct public URL - use CloudFront if available, otherwise direct S3
+    const url = CLOUDFRONT_DOMAIN
+      ? `https://${CLOUDFRONT_DOMAIN}/${key}`
+      : `https://${S3_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${key}`;
 
     console.log(`[S3] Uploaded file: ${key} → ${url}`);
 

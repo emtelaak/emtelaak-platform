@@ -4439,3 +4439,37 @@
 - [ ] Test profile picture upload with new paths (manual testing required)
 - [ ] Test property image upload with new paths (manual testing required)
 - [ ] Verify all files appear in correct S3 folders via AWS Console
+
+
+## Phase 114: CloudFront CDN Setup
+
+### AWS CloudFront Configuration
+- [x] Create CloudFront distribution in AWS Console
+- [x] Set S3 bucket as origin
+- [x] Configure Origin Access Control (OAC)
+- [x] Update S3 bucket policy for CloudFront access (automatic)
+- [x] Enable HTTPS/SSL (default)
+- [x] Configure caching behavior (recommended settings)
+- [ ] Set up custom error pages (optional)
+- [x] Configure compression (gzip, brotli) - automatic
+- [x] Wait for distribution deployment (completed)
+
+### Code Integration
+- [x] Add CloudFront domain to environment variables (CLOUDFRONT_DOMAIN)
+- [x] Update storage.ts to return CloudFront URLs
+- [x] Test image uploads with CloudFront URLs (3/3 tests passed)
+- [x] Verify images load from CDN
+
+### Testing & Verification
+- [x] Upload test image and verify CloudFront URL
+- [x] Test CloudFront URL generation (automated tests)
+- [ ] Test image loading speed from different locations (manual)
+- [ ] Verify cache headers are correct (manual)
+- [x] Test HTTPS certificate works (default CloudFront cert)
+- [ ] Check CloudFront metrics in AWS Console (after 24 hours)
+
+### Optional Enhancements
+- [ ] Set up custom domain (cdn.emtelaak.com)
+- [ ] Configure AWS WAF for security
+- [ ] Set up CloudFront Functions for image optimization
+- [ ] Enable real-time logs
