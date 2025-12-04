@@ -128,25 +128,25 @@ export default function Properties() {
       <Navigation />
       {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur">
-        <div className="container py-6">
+        <div className="container py-4 md:py-6 px-4">
           <Breadcrumb />
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-2 md:gap-4 mb-4 md:mb-6">
             <Link href="/">
-              <img src={APP_LOGO} alt={APP_TITLE} className="h-20 w-auto cursor-pointer" />
+              <img src={APP_LOGO} alt={APP_TITLE} className="h-12 md:h-20 w-auto cursor-pointer" />
             </Link>
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl md:text-3xl font-bold mb-1 md:mb-2 truncate">
                 {language === "en" ? "Investment Properties" : "العقارات الاستثمارية"}
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-xs md:text-sm text-muted-foreground hidden sm:block">
                 {language === "en" 
                   ? "Browse our curated selection of premium real estate opportunities"
                   : "تصفح مجموعتنا المختارة من فرص العقارات المميزة"}
               </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3">
               <LanguageSwitcher />
-              <Link href="/">
+              <Link href="/" className="hidden md:block">
                 <Button variant="outline">{language === "en" ? "Back to Home" : "العودة للرئيسية"}</Button>
               </Link>
             </div>
@@ -177,12 +177,12 @@ export default function Properties() {
           </Tabs>
 
           {/* Filters */}
-          <div className="grid md:grid-cols-4 gap-4">
-            <div className="relative">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-4">
+            <div className="relative md:col-span-2">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search properties..."
-                className="pl-9"
+                className="pl-9 h-11 md:h-10"
               />
             </div>
 
@@ -190,7 +190,7 @@ export default function Properties() {
               value={filters.propertyType}
               onValueChange={(value) => setFilters({ ...filters, propertyType: value === "all" ? undefined : value })}
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-11 md:h-10">
                 <SelectValue placeholder="Property Type" />
               </SelectTrigger>
               <SelectContent>
@@ -205,7 +205,7 @@ export default function Properties() {
               value={filters.investmentType}
               onValueChange={(value) => setFilters({ ...filters, investmentType: value === "all" ? undefined : value })}
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-11 md:h-10">
                 <SelectValue placeholder="Investment Type" />
               </SelectTrigger>
               <SelectContent>
@@ -218,6 +218,7 @@ export default function Properties() {
 
             <Button
               variant="outline"
+              className="h-11 md:h-10 md:col-span-4"
               onClick={() => setFilters({
                 propertyType: undefined,
                 investmentType: undefined,
@@ -237,9 +238,9 @@ export default function Properties() {
       </div>
 
       {/* Property Grid */}
-      <div className="container py-8">
+      <div className="container py-4 md:py-8 px-4">
         {isLoading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <Card key={i}>
                 <Skeleton className="h-48 w-full rounded-t-lg" />
@@ -255,10 +256,10 @@ export default function Properties() {
           </div>
         ) : allProperties && allProperties.length > 0 ? (
           <>
-            <div className="mb-6 text-sm text-muted-foreground">
+            <div className="mb-4 md:mb-6 text-sm text-muted-foreground">
               Showing {properties.length} {properties.length === 1 ? 'property' : 'properties'}
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {properties.map((property) => {
                 const fundingProgress = calculateFundingProgress(property.totalValue, property.availableValue);
                 const yieldValue = property.rentalYield || property.expectedAppreciation || 0;

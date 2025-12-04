@@ -48,7 +48,7 @@ export default function MobileBottomNav() {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t-2 border-gray-100 shadow-lg">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t border-border shadow-lg safe-area-inset-bottom">
       <div className="grid grid-cols-5 h-16">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -56,20 +56,23 @@ export default function MobileBottomNav() {
             <Link key={item.href} href={item.href}>
               <button
                 className={cn(
-                  "flex flex-col items-center justify-center w-full h-full transition-colors",
+                  "flex flex-col items-center justify-center w-full h-full transition-all duration-200 active:scale-95",
                   item.active
-                    ? "text-[#032941]"
-                    : "text-gray-500 hover:text-gray-700"
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 <Icon className={cn(
-                  "mb-1",
+                  "mb-1 transition-all",
                   item.active ? "h-6 w-6" : "h-5 w-5"
                 )} />
                 <span className={cn(
-                  "text-xs",
+                  "text-xs transition-all",
                   item.active ? "font-bold" : "font-medium"
                 )}>{item.label}</span>
+                {item.active && (
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-primary rounded-t-full" />
+                )}
               </button>
             </Link>
           );

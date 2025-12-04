@@ -96,19 +96,19 @@ export default function Portfolio() {
       <Navigation />
       {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container py-6">
-          <div className="flex items-center gap-4">
+        <div className="container py-4 md:py-6">
+          <div className="flex items-center gap-2 md:gap-4">
             <Link href="/">
-              <img src={APP_LOGO} alt={APP_TITLE} className="h-20 w-auto cursor-pointer" />
+              <img src={APP_LOGO} alt={APP_TITLE} className="h-12 md:h-20 w-auto cursor-pointer" />
             </Link>
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2">{t.portfolio.title}</h1>
-              <p className="text-muted-foreground">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl md:text-3xl font-bold mb-1 md:mb-2 truncate">{t.portfolio.title}</h1>
+              <p className="text-xs md:text-sm text-muted-foreground hidden sm:block">
                 {t.portfolio.subtitle}
               </p>
             </div>
             <LanguageSwitcher />
-            <div className="flex gap-3">
+            <div className="hidden md:flex gap-3">
               <Link href="/properties">
                 <Button variant="outline">{t.nav.properties}</Button>
               </Link>
@@ -117,27 +117,33 @@ export default function Portfolio() {
                 Export Report
               </Button>
             </div>
+            {/* Mobile: Show only export button */}
+            <div className="md:hidden">
+              <Button size="sm" variant="outline">
+                <Download className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="container py-8">
+      <div className="container py-4 md:py-8 px-4">
         {/* Summary Cards */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{t.portfolio.overview.totalInvested}</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium truncate">{t.portfolio.overview.totalInvested}</CardTitle>
+              <DollarSign className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground flex-shrink-0" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-3 md:p-6 pt-0">
               {summaryLoading ? (
-                <Skeleton className="h-8 w-32" />
+                <Skeleton className="h-6 md:h-8 w-20 md:w-32" />
               ) : (
                 <>
-                  <div className="text-2xl font-bold">
+                  <div className="text-lg md:text-2xl font-bold truncate">
                     {formatCurrency(portfolioSummary?.totalInvested || 0)}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-xs text-muted-foreground mt-1 truncate">
                     {t.portfolio.overview.activeProperties}: {portfolioSummary?.activeInvestments || 0}
                   </p>
                 </>
@@ -146,20 +152,20 @@ export default function Portfolio() {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{t.portfolio.income.title}</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium truncate">{t.portfolio.income.title}</CardTitle>
+              <TrendingUp className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground flex-shrink-0" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-3 md:p-6 pt-0">
               {incomeLoading ? (
-                <Skeleton className="h-8 w-32" />
+                <Skeleton className="h-6 md:h-8 w-20 md:w-32" />
               ) : (
                 <>
-                  <div className="text-2xl font-bold text-primary">
+                  <div className="text-lg md:text-2xl font-bold text-primary truncate">
                     {formatCurrency(calculateTotalIncome())}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {incomeHistory?.length || 0} distributions received
+                  <p className="text-xs text-muted-foreground mt-1 truncate">
+                    {incomeHistory?.length || 0} distributions
                   </p>
                 </>
               )}
@@ -167,20 +173,20 @@ export default function Portfolio() {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">ROI</CardTitle>
-              <TrendingUp className="h-4 w-4 text-primary" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium truncate">ROI</CardTitle>
+              <TrendingUp className="h-3 w-3 md:h-4 md:w-4 text-primary flex-shrink-0" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-3 md:p-6 pt-0">
               {summaryLoading || incomeLoading ? (
-                <Skeleton className="h-8 w-24" />
+                <Skeleton className="h-6 md:h-8 w-16 md:w-24" />
               ) : (
                 <>
-                  <div className="text-2xl font-bold text-primary">
+                  <div className="text-lg md:text-2xl font-bold text-primary truncate">
                     {calculateROI()}%
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Return on investment
+                  <p className="text-xs text-muted-foreground mt-1 truncate">
+                    Return
                   </p>
                 </>
               )}
@@ -188,11 +194,11 @@ export default function Portfolio() {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Investments</CardTitle>
-              <Building2 className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-medium truncate">Active</CardTitle>
+              <Building2 className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground flex-shrink-0" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-3 md:p-6 pt-0">
               {summaryLoading ? (
                 <Skeleton className="h-8 w-16" />
               ) : (
@@ -210,12 +216,12 @@ export default function Portfolio() {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="investments" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="investments">Investments</TabsTrigger>
-            <TabsTrigger value="performance">Performance</TabsTrigger>
-            <TabsTrigger value="income">Income History</TabsTrigger>
-            <TabsTrigger value="transactions">Transactions</TabsTrigger>
+        <Tabs defaultValue="investments" className="space-y-4 md:space-y-6">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
+            <TabsTrigger value="investments" className="text-xs md:text-sm py-3 md:py-2">Investments</TabsTrigger>
+            <TabsTrigger value="performance" className="text-xs md:text-sm py-3 md:py-2">Performance</TabsTrigger>
+            <TabsTrigger value="income" className="text-xs md:text-sm py-3 md:py-2">Income</TabsTrigger>
+            <TabsTrigger value="transactions" className="text-xs md:text-sm py-3 md:py-2">Transactions</TabsTrigger>
           </TabsList>
 
           {/* Investments Tab */}
