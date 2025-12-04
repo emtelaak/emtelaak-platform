@@ -4552,3 +4552,19 @@
 - [x] Configure mysql2 connection with proper SSL options
 - [x] Test property creation with SSL
 - [x] Pushed fix to GitHub (commit 23717bd)
+
+
+## Phase 81: Debug MySQL2 Database Connection (Current)
+- [ ] Add logging to see what database name is being used
+- [ ] Test the connection configuration
+- [ ] Identify why mysql2 connects to 'emtelaak' instead of 'VvJGXt6mJVC6petxtZ2P78'
+- [ ] Fix the database name configuration
+- [ ] Verify property creation works
+
+
+## Phase 82: Revert to Drizzle ORM (Current)
+- [ ] Remove mysql2 raw SQL approach
+- [ ] Use Drizzle ORM insert with proper value handling
+- [ ] Ensure undefined values are not passed to Drizzle
+- [ ] Test property creation
+- [ ] Deploy fix

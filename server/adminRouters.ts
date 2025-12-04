@@ -421,21 +421,6 @@ export const adminRouter = router({
         if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
         
         const { properties, propertyMedia } = await import("../drizzle/schema");
-        const mysql = await import("mysql2/promise");
-        
-        // Parse DATABASE_URL and configure SSL for TiDB Cloud
-        const dbUrl = new URL(process.env.DATABASE_URL!);
-        const sslParam = dbUrl.searchParams.get('ssl');
-        const sslConfig = sslParam ? JSON.parse(decodeURIComponent(sslParam)) : { rejectUnauthorized: true };
-        
-        const connection = await mysql.createConnection({
-          host: dbUrl.hostname,
-          port: parseInt(dbUrl.port || '4000'),
-          user: dbUrl.username,
-          password: dbUrl.password,
-          database: dbUrl.pathname.slice(1),
-          ssl: sslConfig
-        });
         
         // Extract images and date fields from input
         const { images, firstDistributionDate, fundingDeadline, acquisitionDate, completionDate, expectedExitDate, ...propertyData } = input;
@@ -502,19 +487,8 @@ export const adminRouter = router({
         if (dates.completionDate) insertData.completionDate = dates.completionDate;
         if (dates.expectedExitDate) insertData.expectedExitDate = dates.expectedExitDate;
         
-        // Build dynamic SQL with only the fields we have
-        const columns = Object.keys(insertData);
-        const columnNames = columns.join(', ');
-        const placeholders = columns.map(() => '?').join(', ');
-        const values = columns.map(col => insertData[col]);
-        
-        // Execute raw SQL with mysql2 for full control
-        const [result] = await connection.execute(
-          `INSERT INTO properties (${columnNames}) VALUES (${placeholders})`,
-          values
-        ) as any;
-        
-        await connection.end();
+        // Use Drizzle ORM to insert - it handles the database connection correctly
+        const [result] = await db.insert(properties).values(insertData);
         
         const propertyId = Number(result.insertId);
         
