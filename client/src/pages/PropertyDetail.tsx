@@ -14,8 +14,9 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl, APP_LOGO, APP_TITLE } from "@/const";
 import { 
   Building2, MapPin, TrendingUp, Calendar, DollarSign, FileText, 
-  Image as ImageIcon, ArrowLeft, CheckCircle2, AlertCircle 
+  ArrowLeft, CheckCircle2, AlertCircle 
 } from "lucide-react";
+import PropertyGallery from "@/components/PropertyGallery";
 import { toast } from "sonner";
 import ROICalculator from "@/components/ROICalculator";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -226,20 +227,13 @@ export default function PropertyDetail() {
       <div className="container py-8">
         {/* Hero Section */}
         <div className="grid lg:grid-cols-2 gap-8 mb-8">
-          {/* Property Image */}
-          <div className="relative aspect-video bg-muted rounded-lg overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <ImageIcon className="h-24 w-24 text-muted-foreground/30" />
-            </div>
-            <div className="absolute top-4 left-4 flex gap-2">
-              <Badge className="bg-primary text-primary-foreground">
-                {property.investmentType === "buy_to_let" ? "High Yield" : "Capital Growth"}
-              </Badge>
-              <Badge variant="outline" className="bg-background">
-                {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
-              </Badge>
-            </div>
-          </div>
+          {/* Property Gallery */}
+          <PropertyGallery 
+            propertyId={propertyId} 
+            investmentType={property.investmentType}
+            status={property.status}
+            language={language}
+          />
 
           {/* Key Info Card */}
           <Card>

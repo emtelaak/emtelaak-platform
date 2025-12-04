@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PROPERTY_TYPES, INVESTMENT_TYPES, APP_LOGO, APP_TITLE } from "@/const";
 import { Building2, MapPin, TrendingUp, Calendar, ArrowRight, Search, Bookmark, Heart } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
+import PropertyImageDisplay from "@/components/PropertyImageDisplay";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "wouter";
 import ROICalculator from "@/components/ROICalculator";
@@ -267,11 +268,8 @@ export default function Properties() {
                 return (
                   <Card key={property.id} className="property-card-hover overflow-hidden">
                     <div className="relative h-48 bg-muted">
-                      {/* Placeholder for property image - will be replaced with actual images */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <Building2 className="h-16 w-16 text-muted-foreground/30" />
-                      </div>
-                      <div className="absolute top-4 right-4 flex gap-2">
+                      <PropertyImageDisplay propertyId={property.id} className="absolute inset-0" />
+                      <div className="absolute top-4 right-4 flex gap-2 z-10">
                         <Button
                           variant="ghost"
                           size="icon"
