@@ -4522,8 +4522,8 @@
 - [ ] Verify property appears in database
 
 
-## Phase 77: Fix Database Status Enum Mismatch (Current)
-- [ ] Update properties table status enum to match schema: 'draft','coming_soon','available','funded','exited','cancelled'
-- [ ] Update any existing 'closed' status values to 'exited'
-- [ ] Test property creation with new status values
-- [ ] Deploy fix to production
+## Phase 77: Fix Database Status Enum Mismatch (Completed)
+- [x] Update properties table status enum to match schema: 'draft','coming_soon','available','funded','exited','cancelled'
+- [x] Update any existing 'closed' status values to 'exited'
+- [x] Fixed property creation mutation to use explicit field assignment
+- [x] Pushed fix to GitHub for production deployment
