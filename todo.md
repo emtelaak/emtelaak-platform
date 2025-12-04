@@ -4473,3 +4473,50 @@
 - [ ] Configure AWS WAF for security
 - [ ] Set up CloudFront Functions for image optimization
 - [ ] Enable real-time logs
+
+
+## Phase 115: Custom Domain for CloudFront (cdn.emtelaak.com)
+
+### SSL Certificate (AWS Certificate Manager)
+- [ ] Request SSL certificate for cdn.emtelaak.com
+- [ ] Add DNS validation records (CNAME)
+- [ ] Wait for certificate to be issued
+- [ ] Verify certificate status is "Issued"
+
+### CloudFront Configuration
+- [ ] Add cdn.emtelaak.com to Alternate Domain Names (CNAMEs)
+- [ ] Select custom SSL certificate
+- [ ] Save CloudFront distribution changes
+- [ ] Wait for distribution to deploy (5-10 minutes)
+
+### DNS Configuration
+- [ ] Add CNAME record pointing to CloudFront domain
+- [ ] Verify DNS propagation (5-10 minutes)
+- [ ] Test custom domain URL
+
+### Code Update
+- [ ] Update CLOUDFRONT_DOMAIN environment variable
+- [ ] Test image uploads with custom domain
+- [ ] Update Render environment variables
+- [ ] Deploy to production
+
+
+## Phase 116: Fix Property Creation Database Error
+
+### Investigation
+- [x] Check property schema in drizzle/schema.ts
+- [x] Review createProperty procedure in adminRouters.ts
+- [x] Identify fields with incorrect default values (undefined values causing SQL errors)
+- [x] Check for missing required fields
+
+### Fix Implementation
+- [x] Update property creation procedure to filter undefined values
+- [x] Ensure all required fields have valid defaults
+- [x] Fix any schema mismatches
+- [x] Test property creation locally (5/5 tests passed)
+
+### Production Deployment
+- [ ] Push fixes to GitHub
+- [ ] Verify Render auto-deploys
+- [ ] Test property creation in production
+- [ ] Verify property appears in database

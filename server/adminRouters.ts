@@ -437,14 +437,23 @@ export const adminRouter = router({
         const availableValue = propertyData.totalValue;
         const availableShares = propertyData.totalShares;
         
+        // Filter out undefined values to prevent SQL errors
+        const cleanPropertyData = Object.fromEntries(
+          Object.entries(propertyData).filter(([_, v]) => v !== undefined)
+        );
+        
+        const cleanDates = Object.fromEntries(
+          Object.entries(dates).filter(([_, v]) => v !== undefined)
+        );
+        
         // Create property
         const [result] = await db.insert(properties).values({
-          ...propertyData,
-          ...dates,
+          ...cleanPropertyData,
+          ...cleanDates,
           availableValue,
           availableShares,
           fundraiserId: ctx.user.id,
-        });
+        } as any);
         
         const propertyId = Number(result.insertId);
         
