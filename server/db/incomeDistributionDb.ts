@@ -223,6 +223,18 @@ export async function markDistributionAsProcessed(distributionId: number) {
     throw new Error("Database not available");
   }
 
+  // Get distribution details before updating
+  const [distribution] = await db
+    .select()
+    .from(incomeDistributions)
+    .where(eq(incomeDistributions.id, distributionId))
+    .limit(1);
+
+  if (!distribution) {
+    throw new Error("Distribution not found");
+  }
+
+  // Update status
   await db
     .update(incomeDistributions)
     .set({
@@ -230,4 +242,68 @@ export async function markDistributionAsProcessed(distributionId: number) {
       processedAt: new Date(),
     })
     .where(eq(incomeDistributions.id, distributionId));
+
+  // Send email notification to investor
+  try {
+    const { generateIncomeDistributionEmail, sendEmail } = await import("../_core/emailService");
+    const { getUserById } = await import("../db");
+    
+    // Get user ID from investment
+    let userId: number | null = null;
+    let propertyId: number | null = null;
+    
+    if (distribution.investmentId) {
+      const [investment] = await db
+        .select({ userId: investments.userId, propertyId: investments.propertyId })
+        .from(investments)
+        .where(eq(investments.id, distribution.investmentId))
+        .limit(1);
+      userId = investment?.userId || null;
+      propertyId = investment?.propertyId || null;
+    } else if (distribution.investmentTransactionId) {
+      const [transaction] = await db
+        .select({ userId: investmentTransactions.userId, propertyId: investmentTransactions.propertyId })
+        .from(investmentTransactions)
+        .where(eq(investmentTransactions.id, distribution.investmentTransactionId))
+        .limit(1);
+      userId = transaction?.userId || null;
+      propertyId = transaction?.propertyId || null;
+    }
+    
+    if (userId && propertyId) {
+      const user = await getUserById(userId);
+      const { getPropertyById } = await import("../db");
+      const property = await getPropertyById(propertyId);
+      
+      if (user && user.email && property) {
+        const distributionTypeLabels = {
+          rental_income: "Rental Income",
+          capital_gain: "Capital Gain",
+          exit_proceeds: "Exit Proceeds",
+        };
+        
+        const emailContent = generateIncomeDistributionEmail({
+          userName: user.name || "Investor",
+          propertyName: property.name,
+          amount: distribution.amount,
+          distributionDate: distribution.distributionDate.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
+          distributionPeriod: distributionTypeLabels[distribution.distributionType],
+        });
+        
+        await sendEmail({
+          to: user.email,
+          subject: emailContent.subject,
+          html: emailContent.html,
+          text: emailContent.text,
+        });
+      }
+    }
+  } catch (emailError) {
+    console.error("Failed to send income distribution email:", emailError);
+    // Don't fail the distribution processing if email fails
+  }
 }

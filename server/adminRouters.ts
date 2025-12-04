@@ -75,6 +75,32 @@ export const adminRouter = router({
         // Send notification
         await notificationHelpers.notifyKYCQuestionnaireApproved(questionnaire.userId);
         
+        // Send email notification
+        try {
+          const { getUserById } = await import("./db");
+          const { generateKYCApprovalEmail, sendEmail } = await import("./_core/emailService");
+          const user = await getUserById(questionnaire.userId);
+          
+          if (user && user.email) {
+            const verificationStatus = await getVerificationStatus(questionnaire.userId);
+            const verificationLevel = verificationStatus?.level === "level_2" ? 2 : 1;
+            
+            const emailContent = generateKYCApprovalEmail({
+              userName: user.name || "Investor",
+              verificationLevel,
+            });
+            
+            await sendEmail({
+              to: user.email,
+              subject: emailContent.subject,
+              html: emailContent.html,
+              text: emailContent.text,
+            });
+          }
+        } catch (emailError) {
+          console.error("Failed to send KYC approval email:", emailError);
+        }
+        
         return { success: true };
       }),
 
@@ -106,6 +132,29 @@ export const adminRouter = router({
         
         // Send notification
         await notificationHelpers.notifyKYCQuestionnaireRejected(questionnaire.userId);
+        
+        // Send email notification
+        try {
+          const { getUserById } = await import("./db");
+          const { generateKYCRejectionEmail, sendEmail } = await import("./_core/emailService");
+          const user = await getUserById(questionnaire.userId);
+          
+          if (user && user.email) {
+            const emailContent = generateKYCRejectionEmail({
+              userName: user.name || "Investor",
+              reason: input.reviewNotes || "Please review and update your KYC information.",
+            });
+            
+            await sendEmail({
+              to: user.email,
+              subject: emailContent.subject,
+              html: emailContent.html,
+              text: emailContent.text,
+            });
+          }
+        } catch (emailError) {
+          console.error("Failed to send KYC rejection email:", emailError);
+        }
         
         return { success: true };
       }),

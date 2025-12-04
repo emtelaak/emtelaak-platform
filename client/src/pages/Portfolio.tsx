@@ -14,6 +14,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import Navigation from "@/components/Navigation";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import PortfolioPerformanceChart from "@/components/PortfolioPerformanceChart";
 
 export default function Portfolio() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
@@ -212,6 +213,7 @@ export default function Portfolio() {
         <Tabs defaultValue="investments" className="space-y-6">
           <TabsList>
             <TabsTrigger value="investments">Investments</TabsTrigger>
+            <TabsTrigger value="performance">Performance</TabsTrigger>
             <TabsTrigger value="income">Income History</TabsTrigger>
             <TabsTrigger value="transactions">Transactions</TabsTrigger>
           </TabsList>
@@ -295,6 +297,14 @@ export default function Portfolio() {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Performance Tab */}
+          <TabsContent value="performance" className="space-y-4">
+            <PortfolioPerformanceChart 
+              investments={portfolioSummary?.investments}
+              incomeHistory={incomeHistory}
+            />
           </TabsContent>
 
           {/* Income History Tab */}

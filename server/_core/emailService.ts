@@ -819,3 +819,596 @@ This is an automated message, please do not reply to this email.
   
   return { subject, html, text };
 }
+
+
+/**
+ * Generate HTML email template for investment confirmation
+ */
+export function generateInvestmentConfirmationEmail(params: {
+  userName: string;
+  propertyName: string;
+  shares: number;
+  amount: number;
+  investmentDate: string;
+  invoiceUrl?: string;
+}): { subject: string; html: string; text: string } {
+  const { userName, propertyName, shares, amount, investmentDate, invoiceUrl } = params;
+  
+  const subject = `Investment Confirmed - ${propertyName}`;
+  
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Investment Confirmation</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
+  <table role="presentation" style="width: 100%; border-collapse: collapse;">
+    <tr>
+      <td align="center" style="padding: 40px 0;">
+        <table role="presentation" style="width: 600px; border-collapse: collapse; background-color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="padding: 40px 30px; background: linear-gradient(135deg, #003366 0%, #004080 100%); text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">✅ Investment Confirmed!</h1>
+              <p style="margin: 10px 0 0 0; color: #ffffff; font-size: 14px;">Your investment is now active</p>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 40px 30px;">
+              <h2 style="margin: 0 0 20px 0; color: #333333; font-size: 24px;">Hello ${userName}!</h2>
+              
+              <p style="margin: 0 0 15px 0; color: #666666; font-size: 16px; line-height: 1.5;">
+                Congratulations! Your investment has been successfully confirmed and processed.
+              </p>
+              
+              <!-- Investment Details Box -->
+              <div style="margin: 30px 0; padding: 25px; background-color: #f8f9fa; border-radius: 8px; border-left: 4px solid #28a745;">
+                <h3 style="margin: 0 0 15px 0; color: #333333; font-size: 18px;">Investment Details</h3>
+                
+                <table style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-size: 14px;">Property:</td>
+                    <td style="padding: 8px 0; color: #333333; font-size: 14px; font-weight: bold; text-align: right;">${propertyName}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-size: 14px;">Shares Purchased:</td>
+                    <td style="padding: 8px 0; color: #333333; font-size: 14px; font-weight: bold; text-align: right;">${shares}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-size: 14px;">Total Investment:</td>
+                    <td style="padding: 8px 0; color: #28a745; font-size: 16px; font-weight: bold; text-align: right;">EGP ${(amount / 100).toFixed(2)}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-size: 14px;">Investment Date:</td>
+                    <td style="padding: 8px 0; color: #333333; font-size: 14px; text-align: right;">${investmentDate}</td>
+                  </tr>
+                </table>
+              </div>
+              
+              <p style="margin: 0 0 15px 0; color: #666666; font-size: 16px; line-height: 1.5;">
+                <strong>What happens next?</strong>
+              </p>
+              
+              <ul style="margin: 0 0 20px 0; padding-left: 20px; color: #666666; font-size: 15px; line-height: 1.8;">
+                <li>Your shares are now active in your portfolio</li>
+                <li>You'll start receiving rental income distributions</li>
+                <li>Track your investment performance in your dashboard</li>
+                <li>View detailed property updates and reports</li>
+              </ul>
+              
+              ${invoiceUrl ? `
+              <table role="presentation" style="margin: 30px 0;">
+                <tr>
+                  <td style="border-radius: 4px; background-color: #003366;">
+                    <a href="${invoiceUrl}" target="_blank" style="display: inline-block; padding: 16px 36px; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;">
+                      Download Invoice
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              ` : ''}
+              
+              <div style="margin: 30px 0; padding: 20px; background-color: #e7f3ff; border-left: 4px solid #007bff; border-radius: 4px;">
+                <p style="margin: 0; color: #004085; font-size: 14px; line-height: 1.5;">
+                  <strong>💡 Pro Tip:</strong><br>
+                  Visit your portfolio regularly to track your investment performance and view income distributions.
+                </p>
+              </div>
+              
+              <p style="margin: 0; color: #666666; font-size: 14px; line-height: 1.5;">
+                Thank you for investing with Emtelaak!<br><br>
+                Best regards,<br>
+                The Emtelaak Team
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 30px; background-color: #f8f9fa; text-align: center; border-top: 1px solid #e9ecef;">
+              <p style="margin: 0 0 10px 0; color: #999999; font-size: 12px;">
+                This is an automated message, please do not reply to this email.
+              </p>
+              <p style="margin: 0; color: #999999; font-size: 12px;">
+                © ${new Date().getFullYear()} Emtelaak. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+  
+  const text = `
+Hello ${userName}!
+
+Congratulations! Your investment has been successfully confirmed and processed.
+
+Investment Details:
+- Property: ${propertyName}
+- Shares Purchased: ${shares}
+- Total Investment: EGP ${(amount / 100).toFixed(2)}
+- Investment Date: ${investmentDate}
+
+What happens next?
+- Your shares are now active in your portfolio
+- You'll start receiving rental income distributions
+- Track your investment performance in your dashboard
+- View detailed property updates and reports
+
+${invoiceUrl ? `Download your invoice: ${invoiceUrl}` : ''}
+
+Thank you for investing with Emtelaak!
+
+Best regards,
+The Emtelaak Team
+
+© ${new Date().getFullYear()} Emtelaak. All rights reserved.
+This is an automated message, please do not reply to this email.
+  `.trim();
+  
+  return { subject, html, text };
+}
+
+/**
+ * Generate HTML email template for KYC approval
+ */
+export function generateKYCApprovalEmail(params: {
+  userName: string;
+  verificationLevel: number;
+}): { subject: string; html: string; text: string } {
+  const { userName, verificationLevel } = params;
+  
+  const subject = "KYC Verification Approved - Start Investing Now!";
+  
+  const investmentLimits = verificationLevel === 2 
+    ? "Unlimited investment access" 
+    : "Up to EGP 50,000 per property";
+  
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KYC Approved</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
+  <table role="presentation" style="width: 100%; border-collapse: collapse;">
+    <tr>
+      <td align="center" style="padding: 40px 0;">
+        <table role="presentation" style="width: 600px; border-collapse: collapse; background-color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="padding: 40px 30px; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">🎉 KYC Approved!</h1>
+              <p style="margin: 10px 0 0 0; color: #ffffff; font-size: 14px;">You're ready to start investing</p>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 40px 30px;">
+              <h2 style="margin: 0 0 20px 0; color: #333333; font-size: 24px;">Congratulations ${userName}!</h2>
+              
+              <p style="margin: 0 0 15px 0; color: #666666; font-size: 16px; line-height: 1.5;">
+                Great news! Your KYC verification has been approved. You now have full access to invest in properties on the Emtelaak platform.
+              </p>
+              
+              <!-- Verification Details Box -->
+              <div style="margin: 30px 0; padding: 25px; background-color: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                <h3 style="margin: 0 0 15px 0; color: #155724; font-size: 18px;">Verification Status</h3>
+                
+                <table style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td style="padding: 8px 0; color: #155724; font-size: 14px;">Verification Level:</td>
+                    <td style="padding: 8px 0; color: #155724; font-size: 14px; font-weight: bold; text-align: right;">Level ${verificationLevel}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #155724; font-size: 14px;">Investment Limit:</td>
+                    <td style="padding: 8px 0; color: #155724; font-size: 14px; font-weight: bold; text-align: right;">${investmentLimits}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #155724; font-size: 14px;">Status:</td>
+                    <td style="padding: 8px 0; color: #28a745; font-size: 14px; font-weight: bold; text-align: right;">✅ Approved</td>
+                  </tr>
+                </table>
+              </div>
+              
+              <p style="margin: 0 0 15px 0; color: #666666; font-size: 16px; line-height: 1.5;">
+                <strong>You can now:</strong>
+              </p>
+              
+              <ul style="margin: 0 0 20px 0; padding-left: 20px; color: #666666; font-size: 15px; line-height: 1.8;">
+                <li>Browse and invest in all available properties</li>
+                <li>Purchase property shares starting from EGP 100</li>
+                <li>Receive rental income distributions</li>
+                <li>Build your real estate investment portfolio</li>
+                <li>Track your investment performance</li>
+              </ul>
+              
+              <table role="presentation" style="margin: 30px 0;">
+                <tr>
+                  <td style="border-radius: 4px; background-color: #003366;">
+                    <a href="${FRONTEND_URL}/properties" target="_blank" style="display: inline-block; padding: 16px 36px; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;">
+                      Browse Properties
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              
+              <p style="margin: 0; color: #666666; font-size: 14px; line-height: 1.5;">
+                Welcome to the Emtelaak investment community!<br><br>
+                Best regards,<br>
+                The Emtelaak Team
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 30px; background-color: #f8f9fa; text-align: center; border-top: 1px solid #e9ecef;">
+              <p style="margin: 0 0 10px 0; color: #999999; font-size: 12px;">
+                This is an automated message, please do not reply to this email.
+              </p>
+              <p style="margin: 0; color: #999999; font-size: 12px;">
+                © ${new Date().getFullYear()} Emtelaak. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+  
+  const text = `
+Congratulations ${userName}!
+
+Great news! Your KYC verification has been approved. You now have full access to invest in properties on the Emtelaak platform.
+
+Verification Status:
+- Verification Level: Level ${verificationLevel}
+- Investment Limit: ${investmentLimits}
+- Status: ✅ Approved
+
+You can now:
+- Browse and invest in all available properties
+- Purchase property shares starting from EGP 100
+- Receive rental income distributions
+- Build your real estate investment portfolio
+- Track your investment performance
+
+Start investing: ${FRONTEND_URL}/properties
+
+Welcome to the Emtelaak investment community!
+
+Best regards,
+The Emtelaak Team
+
+© ${new Date().getFullYear()} Emtelaak. All rights reserved.
+This is an automated message, please do not reply to this email.
+  `.trim();
+  
+  return { subject, html, text };
+}
+
+/**
+ * Generate HTML email template for KYC rejection
+ */
+export function generateKYCRejectionEmail(params: {
+  userName: string;
+  reason: string;
+}): { subject: string; html: string; text: string } {
+  const { userName, reason } = params;
+  
+  const subject = "KYC Verification - Additional Information Required";
+  
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KYC Review</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
+  <table role="presentation" style="width: 100%; border-collapse: collapse;">
+    <tr>
+      <td align="center" style="padding: 40px 0;">
+        <table role="presentation" style="width: 600px; border-collapse: collapse; background-color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="padding: 40px 30px; background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%); text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">KYC Review Update</h1>
+              <p style="margin: 10px 0 0 0; color: #ffffff; font-size: 14px;">Additional information needed</p>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 40px 30px;">
+              <h2 style="margin: 0 0 20px 0; color: #333333; font-size: 24px;">Hello ${userName},</h2>
+              
+              <p style="margin: 0 0 15px 0; color: #666666; font-size: 16px; line-height: 1.5;">
+                Thank you for submitting your KYC verification documents. After reviewing your submission, we need some additional information to complete your verification.
+              </p>
+              
+              <!-- Reason Box -->
+              <div style="margin: 30px 0; padding: 25px; background-color: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                <h3 style="margin: 0 0 15px 0; color: #856404; font-size: 18px;">Required Action</h3>
+                <p style="margin: 0; color: #856404; font-size: 15px; line-height: 1.6;">
+                  ${reason}
+                </p>
+              </div>
+              
+              <p style="margin: 0 0 15px 0; color: #666666; font-size: 16px; line-height: 1.5;">
+                <strong>What to do next:</strong>
+              </p>
+              
+              <ul style="margin: 0 0 20px 0; padding-left: 20px; color: #666666; font-size: 15px; line-height: 1.8;">
+                <li>Review the feedback above carefully</li>
+                <li>Prepare the requested documents or information</li>
+                <li>Resubmit your KYC application</li>
+                <li>Our team will review within 2-3 business days</li>
+              </ul>
+              
+              <table role="presentation" style="margin: 30px 0;">
+                <tr>
+                  <td style="border-radius: 4px; background-color: #003366;">
+                    <a href="${FRONTEND_URL}/kyc-questionnaire" target="_blank" style="display: inline-block; padding: 16px 36px; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;">
+                      Update KYC Information
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              
+              <div style="margin: 30px 0; padding: 20px; background-color: #e7f3ff; border-left: 4px solid #007bff; border-radius: 4px;">
+                <p style="margin: 0; color: #004085; font-size: 14px; line-height: 1.5;">
+                  <strong>Need Help?</strong><br>
+                  If you have questions about the verification process, please contact our support team at support@emtelaak.com
+                </p>
+              </div>
+              
+              <p style="margin: 0; color: #666666; font-size: 14px; line-height: 1.5;">
+                We're here to help you complete the verification process.<br><br>
+                Best regards,<br>
+                The Emtelaak Team
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 30px; background-color: #f8f9fa; text-align: center; border-top: 1px solid #e9ecef;">
+              <p style="margin: 0 0 10px 0; color: #999999; font-size: 12px;">
+                This is an automated message, please do not reply to this email.
+              </p>
+              <p style="margin: 0; color: #999999; font-size: 12px;">
+                © ${new Date().getFullYear()} Emtelaak. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+  
+  const text = `
+Hello ${userName},
+
+Thank you for submitting your KYC verification documents. After reviewing your submission, we need some additional information to complete your verification.
+
+Required Action:
+${reason}
+
+What to do next:
+- Review the feedback above carefully
+- Prepare the requested documents or information
+- Resubmit your KYC application
+- Our team will review within 2-3 business days
+
+Update your KYC information: ${FRONTEND_URL}/kyc-questionnaire
+
+Need Help?
+If you have questions about the verification process, please contact our support team at support@emtelaak.com
+
+We're here to help you complete the verification process.
+
+Best regards,
+The Emtelaak Team
+
+© ${new Date().getFullYear()} Emtelaak. All rights reserved.
+This is an automated message, please do not reply to this email.
+  `.trim();
+  
+  return { subject, html, text };
+}
+
+/**
+ * Generate HTML email template for income distribution
+ */
+export function generateIncomeDistributionEmail(params: {
+  userName: string;
+  propertyName: string;
+  amount: number;
+  distributionDate: string;
+  distributionPeriod: string;
+}): { subject: string; html: string; text: string } {
+  const { userName, propertyName, amount, distributionDate, distributionPeriod } = params;
+  
+  const subject = `Income Distribution Received - ${propertyName}`;
+  
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Income Distribution</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
+  <table role="presentation" style="width: 100%; border-collapse: collapse;">
+    <tr>
+      <td align="center" style="padding: 40px 0;">
+        <table role="presentation" style="width: 600px; border-collapse: collapse; background-color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="padding: 40px 30px; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">💰 Income Received!</h1>
+              <p style="margin: 10px 0 0 0; color: #ffffff; font-size: 14px;">Your investment is generating returns</p>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 40px 30px;">
+              <h2 style="margin: 0 0 20px 0; color: #333333; font-size: 24px;">Hello ${userName}!</h2>
+              
+              <p style="margin: 0 0 15px 0; color: #666666; font-size: 16px; line-height: 1.5;">
+                Great news! You've received an income distribution from your investment.
+              </p>
+              
+              <!-- Distribution Details Box -->
+              <div style="margin: 30px 0; padding: 25px; background-color: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                <h3 style="margin: 0 0 15px 0; color: #155724; font-size: 18px;">Distribution Details</h3>
+                
+                <table style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td style="padding: 8px 0; color: #155724; font-size: 14px;">Property:</td>
+                    <td style="padding: 8px 0; color: #155724; font-size: 14px; font-weight: bold; text-align: right;">${propertyName}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #155724; font-size: 14px;">Period:</td>
+                    <td style="padding: 8px 0; color: #155724; font-size: 14px; font-weight: bold; text-align: right;">${distributionPeriod}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #155724; font-size: 14px;">Amount Received:</td>
+                    <td style="padding: 8px 0; color: #28a745; font-size: 18px; font-weight: bold; text-align: right;">EGP ${(amount / 100).toFixed(2)}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #155724; font-size: 14px;">Distribution Date:</td>
+                    <td style="padding: 8px 0; color: #155724; font-size: 14px; text-align: right;">${distributionDate}</td>
+                  </tr>
+                </table>
+              </div>
+              
+              <p style="margin: 0 0 15px 0; color: #666666; font-size: 16px; line-height: 1.5;">
+                The distribution has been credited to your wallet and is available for:
+              </p>
+              
+              <ul style="margin: 0 0 20px 0; padding-left: 20px; color: #666666; font-size: 15px; line-height: 1.8;">
+                <li>Reinvesting in more properties</li>
+                <li>Withdrawing to your bank account</li>
+                <li>Keeping in your wallet for future investments</li>
+              </ul>
+              
+              <table role="presentation" style="margin: 30px 0;">
+                <tr>
+                  <td style="border-radius: 4px; background-color: #003366; margin-right: 10px;">
+                    <a href="${FRONTEND_URL}/portfolio" target="_blank" style="display: inline-block; padding: 16px 36px; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold;">
+                      View Portfolio
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              
+              <div style="margin: 30px 0; padding: 20px; background-color: #e7f3ff; border-left: 4px solid #007bff; border-radius: 4px;">
+                <p style="margin: 0; color: #004085; font-size: 14px; line-height: 1.5;">
+                  <strong>💡 Investment Tip:</strong><br>
+                  Consider reinvesting your distributions to benefit from compound growth and build your portfolio faster.
+                </p>
+              </div>
+              
+              <p style="margin: 0; color: #666666; font-size: 14px; line-height: 1.5;">
+                Thank you for being a valued Emtelaak investor!<br><br>
+                Best regards,<br>
+                The Emtelaak Team
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 30px; background-color: #f8f9fa; text-align: center; border-top: 1px solid #e9ecef;">
+              <p style="margin: 0 0 10px 0; color: #999999; font-size: 12px;">
+                This is an automated message, please do not reply to this email.
+              </p>
+              <p style="margin: 0; color: #999999; font-size: 12px;">
+                © ${new Date().getFullYear()} Emtelaak. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+  
+  const text = `
+Hello ${userName}!
+
+Great news! You've received an income distribution from your investment.
+
+Distribution Details:
+- Property: ${propertyName}
+- Period: ${distributionPeriod}
+- Amount Received: EGP ${(amount / 100).toFixed(2)}
+- Distribution Date: ${distributionDate}
+
+The distribution has been credited to your wallet and is available for:
+- Reinvesting in more properties
+- Withdrawing to your bank account
+- Keeping in your wallet for future investments
+
+View your portfolio: ${FRONTEND_URL}/portfolio
+
+💡 Investment Tip:
+Consider reinvesting your distributions to benefit from compound growth and build your portfolio faster.
+
+Thank you for being a valued Emtelaak investor!
+
+Best regards,
+The Emtelaak Team
+
+© ${new Date().getFullYear()} Emtelaak. All rights reserved.
+This is an automated message, please do not reply to this email.
+  `.trim();
+  
+  return { subject, html, text };
+}

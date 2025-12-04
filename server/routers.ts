@@ -699,6 +699,38 @@ export const appRouter = router({
           message: `Your payment for invoice ${invoice.invoiceNumber} has been confirmed.`,
         });
         
+        // Send investment confirmation email
+        if (invoice.investmentId) {
+          try {
+            const { generateInvestmentConfirmationEmail, sendEmail } = await import("./_core/emailService");
+            const property = await getPropertyById(invoice.propertyId);
+            
+            if (ctx.user.email && property) {
+              const emailContent = generateInvestmentConfirmationEmail({
+                userName: ctx.user.name || "Investor",
+                propertyName: property.name,
+                shares: invoice.shares,
+                amount: invoice.amount,
+                investmentDate: new Date().toLocaleDateString("en-US", { 
+                  year: "numeric", 
+                  month: "long", 
+                  day: "numeric" 
+                }),
+                invoiceUrl: `${process.env.VITE_APP_URL || "https://emtelaak.com"}/invoices`,
+              });
+              
+              await sendEmail({
+                to: ctx.user.email,
+                subject: emailContent.subject,
+                html: emailContent.html,
+                text: emailContent.text,
+              });
+            }
+          } catch (emailError) {
+            console.error("Failed to send investment confirmation email:", emailError);
+          }
+        }
+        
         return { success: true };
       }),
     
