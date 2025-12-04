@@ -4249,3 +4249,20 @@
 - [x] Verify swipe doesn't interfere with scrolling (preventScrollOnSwipe: false)
 - [ ] Test swipe navigation on actual touch devices
 
+
+
+## Phase 109: Visual Swipe Indicators
+
+### Swipe Tutorial Component
+- [x] Create SwipeIndicator component with animated arrows
+- [x] Add subtle tooltip explaining swipe navigation
+- [x] Implement left/right arrow animations (pulse effect)
+- [x] Add dismissible close button
+- [x] Store dismissal state in localStorage
+- [x] Show only on mobile devices (window.innerWidth < 768)
+- [x] Display only on first Portfolio visit (localStorage check)
+- [x] Add smooth fade-in/fade-out transitions (animate-in)
+- [x] Position indicators at bottom of tabs area (bottom-24)
+- [x] Bilingual support (English/Arabic)
+- [ ] Test on actual mobile devices
+

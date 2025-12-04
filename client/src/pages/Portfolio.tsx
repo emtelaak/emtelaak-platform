@@ -15,6 +15,7 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import Navigation from "@/components/Navigation";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import PortfolioPerformanceChart from "@/components/PortfolioPerformanceChart";
+import SwipeIndicator from "@/components/SwipeIndicator";
 import { useSwipeable } from "react-swipeable";
 import { useState } from "react";
 
@@ -491,6 +492,9 @@ export default function Portfolio() {
       
       {/* Mobile Bottom Navigation */}
       <MobileBottomNav />
+      
+      {/* Swipe Tutorial Indicator */}
+      <SwipeIndicator />
     </div>
   );
 }
