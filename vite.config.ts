@@ -6,6 +6,7 @@ import path from "path";
 import { defineConfig } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 import { visualizer } from "rollup-plugin-visualizer";
+import { VitePWA } from "vite-plugin-pwa";
 
 
 const plugins = [
@@ -18,6 +19,100 @@ const plugins = [
     open: false,
     gzipSize: true,
     brotliSize: true,
+  }),
+  VitePWA({
+    registerType: 'autoUpdate',
+    includeAssets: ['favicon.ico', 'favicon-192.png', 'favicon-512.png', 'logo.png'],
+    manifest: {
+      name: 'Emtelaak - Fractional Real Estate Investment',
+      short_name: 'Emtelaak',
+      description: 'Invest in fractional real estate ownership and build your property portfolio',
+      theme_color: '#003366',
+      background_color: '#ffffff',
+      display: 'standalone',
+      icons: [
+        {
+          src: '/favicon-192.png',
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
+          src: '/favicon-512.png',
+          sizes: '512x512',
+          type: 'image/png'
+        },
+        {
+          src: '/favicon-512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'any maskable'
+        }
+      ]
+    },
+    workbox: {
+      globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2}'],
+      runtimeCaching: [
+        {
+          urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'google-fonts-cache',
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+            },
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        },
+        {
+          urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'gstatic-fonts-cache',
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+            },
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        },
+        {
+          urlPattern: /\/api\/.*\/*.*/i,
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'api-cache',
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 60 * 5 // 5 minutes
+            },
+            networkTimeoutSeconds: 10,
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        },
+        {
+          urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'images-cache',
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+            }
+          }
+        }
+      ],
+      skipWaiting: true,
+      clientsClaim: true
+    },
+    devOptions: {
+      enabled: false // Disable in dev for faster reload
+    }
   }),
 ];
 
