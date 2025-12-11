@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import MobileBottomNav from "./components/MobileBottomNav";
+import { PWAInstallPrompt, IOSInstallInstructions } from "./components/PWAInstallPrompt";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -199,6 +200,8 @@ function App() {
             <Router />
           </Suspense>
           <MobileBottomNav />
+          <PWAInstallPrompt />
+          <IOSInstallInstructions />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

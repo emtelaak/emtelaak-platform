@@ -4409,3 +4409,13 @@
 - [ ] Replace img tags with Picture component
 - [ ] Test offline functionality
 - [ ] Test responsive images on mobile
+
+## Phase 113: Final PWA & Offline Features
+- [x] Replace property images with ResponsiveImage component
+- [x] Create PWA install prompt component
+- [x] Add install prompt to App.tsx
+- [x] Implement offline transaction queue (IndexedDB)
+- [x] Add background sync for transactions
+- [ ] Create offline indicator component
+- [ ] Test offline transaction flow
+- [ ] Test PWA install prompt

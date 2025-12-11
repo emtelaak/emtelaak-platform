@@ -1,5 +1,6 @@
 import { Building2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
+import { ResponsiveImage } from "@/components/ResponsiveImage";
 
 interface PropertyImageDisplayProps {
   propertyId: number;
@@ -29,11 +30,13 @@ export default function PropertyImageDisplay({ propertyId, className = "relative
   return (
     <div className={className}>
       {imageUrl ? (
-        <img
+        <ResponsiveImage
           src={imageUrl}
           alt="Property"
           className="w-full h-full object-cover"
           loading="lazy"
+          responsive={true}
+          fallbackFormat="jpg"
         />
       ) : (
         <div className="absolute inset-0 flex items-center justify-center">
