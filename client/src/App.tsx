@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import MobileBottomNav from "./components/MobileBottomNav";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -197,6 +198,7 @@ function App() {
           <Suspense fallback={<PageLoader />}>
             <Router />
           </Suspense>
+          <MobileBottomNav />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
