@@ -4384,3 +4384,9 @@
 - [x] Implement non-logged-in user menu
 - [x] Remove hamburger menu on mobile
 - [x] Update layouts to use bottom navigation
+
+## Phase 110: iOS Splash Screens
+- [x] Design splash screen template
+- [x] Generate 13-15 splash screen images for different iOS devices
+- [x] Add apple-touch-startup-image meta tags to index.html
+- [ ] Test splash screens on iOS devices
