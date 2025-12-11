@@ -30,7 +30,7 @@ export default function HomepageContentEditor() {
   const [heroCTA2Ar, setHeroCTA2Ar] = useState("كيف يعمل");
 
   // Hero background image
-  const [heroBackgroundImage, setHeroBackgroundImage] = useState("/brand/backgrounds/hero-bg.jpg");
+  const [heroBackgroundImage, setHeroBackgroundImage] = useState("/brand/backgrounds/hero-bg.webp");
 
   // Video URLs
   const [videoUrlEn, setVideoUrlEn] = useState("https://www.youtube.com/embed/P9K-VUdc0SA");

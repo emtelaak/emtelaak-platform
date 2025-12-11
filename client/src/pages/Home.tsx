@@ -73,7 +73,7 @@ export default function Home() {
   const heroSubtitle = (content as any)?.subtitle || defaultContent.subtitle;
   const heroCTA1 = (content as any)?.cta1 || defaultContent.cta1;
   const heroCTA2 = (content as any)?.cta2 || defaultContent.cta2;
-  const heroBackgroundImage = (heroContent?.content as any)?.backgroundImage || "/brand/backgrounds/hero-bg.jpg";
+  const heroBackgroundImage = (heroContent?.content as any)?.backgroundImage || "/brand/backgrounds/hero-bg.webp";
   
   // Video URLs - fetch from database or use defaults (using youtube-nocookie for better embed compatibility)
   const videoUrlEn = (heroContent?.content as any)?.videoUrl || "https://www.youtube-nocookie.com/embed/P9K-VUdc0SA?rel=0&modestbranding=1";

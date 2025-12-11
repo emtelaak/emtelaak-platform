@@ -4400,3 +4400,12 @@
 - [x] Add background sync support
 - [ ] Update image references to use WebP
 - [ ] Test offline functionality
+
+## Phase 112: Activate Performance Optimizations
+- [x] Register service worker in main.tsx
+- [x] Update image references to WebP in Home.tsx
+- [x] Update image references to WebP in HomepageContentEditor.tsx
+- [x] Create responsive Picture component
+- [ ] Replace img tags with Picture component
+- [ ] Test offline functionality
+- [ ] Test responsive images on mobile
