@@ -26,7 +26,7 @@ export default function RoleManagement() {
 
   // Queries
   const { data: roles, refetch: refetchRoles } = trpc.adminRoles.list.useQuery();
-  const { data: permissions } = trpc.adminPermissions.permissions.list.useQuery();
+  const { data: permissions, isLoading: permissionsLoading, error: permissionsError } = trpc.adminPermissions.permissions.list.useQuery();
 
   // Mutations
   const createRoleMutation = trpc.adminRoles.create.useMutation({
@@ -262,14 +262,29 @@ export default function RoleManagement() {
               Assign permissions to this role using the matrix below
             </DialogDescription>
           </DialogHeader>
-          {selectedRole && permissions && (
+          {permissionsLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <span className="ml-3 text-muted-foreground">Loading permissions...</span>
+            </div>
+          ) : permissionsError ? (
+            <div className="text-center py-12 text-destructive">
+              <p>Failed to load permissions</p>
+              <p className="text-sm text-muted-foreground mt-2">{permissionsError.message}</p>
+            </div>
+          ) : !permissions || permissions.length === 0 ? (
+            <div className="text-center py-12 text-muted-foreground">
+              <p>No permissions available</p>
+              <p className="text-sm mt-2">Please contact your system administrator</p>
+            </div>
+          ) : selectedRole ? (
             <PermissionMatrix
               roleId={selectedRole.id}
               permissions={permissions as Array<{ id: number; name: string; description: string; category: string }>}
               onSave={handleUpdateRole}
               onCancel={() => setEditDialogOpen(false)}
             />
-          )}
+          ) : null}
         </DialogContent>
       </Dialog>
 

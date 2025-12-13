@@ -4419,3 +4419,13 @@
 - [ ] Create offline indicator component
 - [ ] Test offline transaction flow
 - [ ] Test PWA install prompt
+
+
+## Phase 89: Fix Role Management Permission Selection Dialog
+- [x] Fix permission selection matrix not displaying in Edit Role dialog
+- [x] Fix NaN% completion calculation
+- [x] Fix "0 / 0" selected permissions display
+- [x] Add permission checkboxes to the dialog
+- [x] Add loading state while permissions are being fetched
+- [x] Add error handling for permission loading failures
+- [ ] Test role permission assignment functionality
