@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1762428415445,
+      "tag": "0000_wild_leech",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1762428557712,
+      "tag": "0001_fantastic_slapstick",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1762430256531,
+      "tag": "0002_lively_ravenous",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1762433040481,
+      "tag": "0003_lazy_ender_wiggin",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1762433291221,
+      "tag": "0004_flawless_jean_grey",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1762434233024,
+      "tag": "0005_fancy_human_fly",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1762434357634,
+      "tag": "0006_tiresome_whiplash",
+      "breakpoints": true
+    }
+  ]
+}

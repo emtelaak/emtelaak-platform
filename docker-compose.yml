@@ -1,0 +1,124 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: emtelaak-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_change_me
+      MYSQL_DATABASE: emtelaak_dev
+      MYSQL_USER: emtelaak_user
+      MYSQL_PASSWORD: emtelaak_password_change_me
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql-init:/docker-entrypoint-initdb.d
+    networks:
+      - emtelaak-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: emtelaak-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: mysql://emtelaak_user:emtelaak_password_change_me@db:3306/emtelaak_dev
+      JWT_SECRET: dev_jwt_secret_change_in_production
+      PORT: 3000
+      
+      # S3 Storage (use MinIO for local development)
+      S3_ENDPOINT: http://minio:9000
+      S3_REGION: us-east-1
+      S3_BUCKET: emtelaak-dev
+      S3_ACCESS_KEY_ID: minioadmin
+      S3_SECRET_ACCESS_KEY: minioadmin
+      S3_FORCE_PATH_STYLE: "true"
+      
+      # Email (configure with your credentials)
+      SMTP_HOST: smtp.sendgrid.net
+      SMTP_PORT: 587
+      SMTP_SECURE: "false"
+      SMTP_USER: apikey
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-your-sendgrid-api-key}
+      SMTP_FROM_EMAIL: noreply@emtelaak.com
+      SMTP_FROM_NAME: Emtelaak Platform
+      
+      # Stripe (configure with your test keys)
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_your-key}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-whsec_your-secret}
+      VITE_STRIPE_PUBLISHABLE_KEY: ${VITE_STRIPE_PUBLISHABLE_KEY:-pk_test_your-key}
+      
+      # Application
+      VITE_APP_TITLE: Emtelaak Platform
+      VITE_APP_LOGO: /logo.png
+    depends_on:
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    networks:
+      - emtelaak-network
+    volumes:
+      - ./uploads:/app/uploads
+
+  # MinIO (S3-compatible storage for local development)
+  minio:
+    image: minio/minio:latest
+    container_name: emtelaak-minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - emtelaak-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MinIO Client (create bucket on startup)
+  minio-setup:
+    image: minio/mc:latest
+    container_name: emtelaak-minio-setup
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb myminio/emtelaak-dev --ignore-existing;
+      /usr/bin/mc anonymous set public myminio/emtelaak-dev;
+      exit 0;
+      "
+    networks:
+      - emtelaak-network
+
+volumes:
+  mysql_data:
+    driver: local
+  minio_data:
+    driver: local
+
+networks:
+  emtelaak-network:
+    driver: bridge
