@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Globe, Bell, User, LayoutDashboard, TrendingUp, Briefcase, Wallet as WalletIcon, LogOut, ChevronDown, Shield } from "lucide-react";
+import { Globe, Bell, User, LayoutDashboard, TrendingUp, Briefcase, Wallet as WalletIcon, LogOut, ChevronDown, Shield, Building2 } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { APP_LOGO } from "@/const";
@@ -175,6 +175,19 @@ export default function Navigation() {
                     <span className="font-medium">{nav.profile}</span>
                   </DropdownMenuItem>
                 </Link>
+
+                {/* Fundraiser Portal Link - Only for fundraiser, admin and super_admin */}
+                {(user?.role === 'fundraiser' || user?.role === 'admin' || user?.role === 'super_admin') && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <Link href="/fundraiser/dashboard">
+                      <DropdownMenuItem className="cursor-pointer gap-3 py-3">
+                        <Building2 className="h-5 w-5" />
+                        <span className="font-medium">{language === 'en' ? 'Fundraiser Portal' : 'بوابة جمع التمويل'}</span>
+                      </DropdownMenuItem>
+                    </Link>
+                  </>
+                )}
 
                 {/* Admin Link - Only for admin and super_admin */}
                 {(user?.role === 'admin' || user?.role === 'super_admin') && (
