@@ -1,0 +1,453 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Emtelaak Custom Fonts */
+/* Arabic Font: GE Dinar One */
+@font-face {
+  font-family: 'GE Dinar One';
+  src: url('/fonts/ArbFONTS-GE-Dinar-One-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GE Dinar One';
+  src: url('/fonts/ArbFONTS-GE-Dinar-One-Light-Italic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GE Dinar One';
+  src: url('/fonts/ArbFONTS-GE-Dinar-One-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GE Dinar One';
+  src: url('/fonts/ArbFONTS-GE-Dinar-One-Medium-Italic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* English Font: Lab Grotesque */
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque';
+  src: url('/fonts/LabGrotesque-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  /* Emtelaak Official Brand Colors */
+  /* PRIMARY: Oxford Blue #032941 and Lime Yellow #CDE428 */
+  /* SECONDARY: Bangladesh Green #085C52, Ateneo Blue #064B66, Orange #FF7F00, Platinum #E4E4E4, Dark Charcoal #333333 */
+  
+  --primary: oklch(0.20 0.08 240); /* Oxford Blue #032941 - main brand color */
+  --primary-foreground: oklch(1 0 0); /* White text on Oxford Blue */
+  
+  --secondary: oklch(0.88 0.15 110); /* Lime Yellow #CDE428 - accent color */
+  --secondary-foreground: oklch(0.20 0.08 240); /* Oxford Blue text on Lime Yellow */
+  
+  --accent: oklch(0.88 0.15 110); /* Lime Yellow #CDE428 for highlights */
+  --accent-foreground: oklch(0.20 0.08 240); /* Oxford Blue on Lime Yellow */
+  
+  --muted: oklch(0.92 0.002 0); /* Platinum #E4E4E4 for muted backgrounds */
+  --muted-foreground: oklch(0.35 0.01 0); /* Dark Charcoal #333333 for muted text */
+  
+  --destructive: oklch(0.62 0.25 30); /* Orange #FF7F00 for warnings/destructive */
+  --destructive-foreground: oklch(1 0 0); /* White on orange */
+  
+  --border: oklch(0.85 0.005 240); /* Light border based on Oxford Blue */
+  --input: oklch(0.92 0.002 0); /* Platinum for inputs */
+  --ring: oklch(0.88 0.15 110); /* Lime Yellow for focus rings */
+  
+  --radius: 0.65rem;
+  --background: oklch(1 0 0); /* White background */
+  --foreground: oklch(0.35 0.01 0); /* Dark Charcoal #333333 for text */
+  
+  --card: oklch(1 0 0); /* White cards */
+  --card-foreground: oklch(0.35 0.01 0); /* Dark Charcoal text */
+  
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.35 0.01 0);
+  
+  /* Chart colors using brand palette */
+  --chart-1: oklch(0.20 0.08 240); /* Oxford Blue */
+  --chart-2: oklch(0.88 0.15 110); /* Lime Yellow */
+  --chart-3: oklch(0.35 0.12 170); /* Bangladesh Green #085C52 */
+  --chart-4: oklch(0.30 0.10 230); /* Ateneo Blue #064B66 */
+  --chart-5: oklch(0.62 0.25 30); /* Orange #FF7F00 */
+  
+  /* Sidebar colors */
+  --sidebar: oklch(0.20 0.08 240); /* Oxford Blue sidebar */
+  --sidebar-foreground: oklch(1 0 0); /* White text */
+  --sidebar-primary: oklch(0.88 0.15 110); /* Lime Yellow for active items */
+  --sidebar-primary-foreground: oklch(0.20 0.08 240); /* Oxford Blue text on Lime Yellow */
+  --sidebar-accent: oklch(0.88 0.15 110); /* Lime Yellow accent */
+  --sidebar-accent-foreground: oklch(0.20 0.08 240);
+  --sidebar-border: oklch(0.30 0.06 240); /* Darker Oxford Blue for borders */
+  --sidebar-ring: oklch(0.88 0.15 110); /* Lime Yellow focus ring */
+}
+
+.dark {
+  /* Dark theme with Oxford Blue background and brand colors */
+  --primary: oklch(0.88 0.15 110); /* Lime Yellow #CDE428 */
+  --primary-foreground: oklch(0.20 0.08 240); /* Oxford Blue text */
+  
+  --secondary: oklch(0.30 0.10 230); /* Ateneo Blue #064B66 */
+  --secondary-foreground: oklch(1 0 0); /* White text */
+  
+  --accent: oklch(0.88 0.15 110); /* Lime Yellow */
+  --accent-foreground: oklch(0.20 0.08 240);
+  
+  --background: oklch(0.20 0.08 240); /* Oxford Blue #032941 background */
+  --foreground: oklch(0.98 0 0); /* White text */
+  
+  --card: oklch(0.25 0.08 240); /* Slightly lighter Oxford Blue for cards */
+  --card-foreground: oklch(0.98 0 0);
+  
+  --popover: oklch(0.25 0.08 240);
+  --popover-foreground: oklch(0.98 0 0);
+  
+  --muted: oklch(0.30 0.06 240); /* Muted Oxford Blue */
+  --muted-foreground: oklch(0.75 0.02 0); /* Light gray text */
+  
+  --destructive: oklch(0.62 0.25 30); /* Orange #FF7F00 */
+  --destructive-foreground: oklch(1 0 0);
+  
+  --border: oklch(1 0 0 / 12%); /* Subtle white borders */
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.88 0.15 110); /* Lime Yellow focus ring */
+  
+  /* Chart colors for dark theme */
+  --chart-1: oklch(0.88 0.15 110); /* Lime Yellow */
+  --chart-2: oklch(0.35 0.12 170); /* Bangladesh Green */
+  --chart-3: oklch(0.30 0.10 230); /* Ateneo Blue */
+  --chart-4: oklch(0.62 0.25 30); /* Orange */
+  --chart-5: oklch(0.92 0.002 0); /* Platinum */
+  
+  /* Sidebar for dark theme */
+  --sidebar: oklch(0.25 0.08 240); /* Slightly lighter Oxford Blue */
+  --sidebar-foreground: oklch(0.98 0 0);
+  --sidebar-primary: oklch(0.88 0.15 110); /* Lime Yellow */
+  --sidebar-primary-foreground: oklch(0.20 0.08 240);
+  --sidebar-accent: oklch(0.88 0.15 110);
+  --sidebar-accent-foreground: oklch(0.20 0.08 240);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.88 0.15 110);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Lab Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+
+  /* Arabic font support */
+  [lang="ar"] body,
+  [dir="rtl"] body {
+    font-family: 'GE Dinar One', 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  /**
+   * Custom container utility that centers content and adds responsive padding.
+   *
+   * This overrides Tailwind's default container behavior to:
+   * - Auto-center content (mx-auto)
+   * - Add responsive horizontal padding
+   * - Set max-width for large screens
+   *
+   * Usage: <div className="container">...</div>
+   *
+   * For custom widths, use max-w-* utilities directly:
+   * <div className="max-w-6xl mx-auto px-4">...</div>
+   */
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem; /* 16px - mobile padding */
+    padding-right: 1rem;
+  }
+
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem; /* 24px - tablet padding */
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem; /* 32px - desktop padding */
+      padding-right: 2rem;
+      max-width: 1280px; /* Standard content width */
+    }
+  }
+}
+
+/* RTL Support - Comprehensive adjustments for Arabic layout */
+@layer utilities {
+  /* RTL-aware spacing utilities */
+  [dir="rtl"] .mr-auto {
+    margin-right: 0;
+    margin-left: auto;
+  }
+  
+  [dir="rtl"] .ml-auto {
+    margin-left: 0;
+    margin-right: auto;
+  }
+  
+  /* Flip flex row direction in RTL */
+  [dir="rtl"] .flex-row {
+    flex-direction: row-reverse;
+  }
+  
+  /* RTL text alignment */
+  [dir="rtl"] .text-left {
+    text-align: right;
+  }
+  
+  [dir="rtl"] .text-right {
+    text-align: left;
+  }
+  
+  /* RTL-aware borders */
+  [dir="rtl"] .border-l {
+    border-left: 0;
+    border-right: 1px solid;
+  }
+  
+  [dir="rtl"] .border-r {
+    border-right: 0;
+    border-left: 1px solid;
+  }
+  
+  /* RTL-aware rounded corners */
+  [dir="rtl"] .rounded-l {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+  }
+  
+  [dir="rtl"] .rounded-r {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
+  }
+  
+  /* RTL-aware transforms for icons */
+  [dir="rtl"] .lucide-chevron-right,
+  [dir="rtl"] .lucide-arrow-right,
+  [dir="rtl"] .lucide-chevron-left,
+  [dir="rtl"] .lucide-arrow-left {
+    transform: scaleX(-1);
+  }
+  
+  /* RTL-aware positioning */
+  [dir="rtl"] .left-0 {
+    left: auto;
+    right: 0;
+  }
+  
+  [dir="rtl"] .right-0 {
+    right: auto;
+    left: 0;
+  }
+  
+  /* RTL-aware padding and margin classes */
+  [dir="rtl"] .pl-2 { padding-left: 0; padding-right: 0.5rem; }
+  [dir="rtl"] .pr-2 { padding-right: 0; padding-left: 0.5rem; }
+  [dir="rtl"] .pl-3 { padding-left: 0; padding-right: 0.75rem; }
+  [dir="rtl"] .pr-3 { padding-right: 0; padding-left: 0.75rem; }
+  [dir="rtl"] .pl-4 { padding-left: 0; padding-right: 1rem; }
+  [dir="rtl"] .pr-4 { padding-right: 0; padding-left: 1rem; }
+  [dir="rtl"] .pl-6 { padding-left: 0; padding-right: 1.5rem; }
+  [dir="rtl"] .pr-6 { padding-right: 0; padding-left: 1.5rem; }
+  [dir="rtl"] .pl-8 { padding-left: 0; padding-right: 2rem; }
+  [dir="rtl"] .pr-8 { padding-right: 0; padding-left: 2rem; }
+  
+  [dir="rtl"] .ml-2 { margin-left: 0; margin-right: 0.5rem; }
+  [dir="rtl"] .mr-2 { margin-right: 0; margin-left: 0.5rem; }
+  [dir="rtl"] .ml-3 { margin-left: 0; margin-right: 0.75rem; }
+  [dir="rtl"] .mr-3 { margin-right: 0; margin-left: 0.75rem; }
+  [dir="rtl"] .ml-4 { margin-left: 0; margin-right: 1rem; }
+  [dir="rtl"] .mr-4 { margin-right: 0; margin-left: 1rem; }
+  [dir="rtl"] .ml-6 { margin-left: 0; margin-right: 1.5rem; }
+  [dir="rtl"] .mr-6 { margin-right: 0; margin-left: 1.5rem; }
+  [dir="rtl"] .ml-8 { margin-left: 0; margin-right: 2rem; }
+  [dir="rtl"] .mr-8 { margin-right: 0; margin-left: 2rem; }
+  
+  /* RTL-aware space between */
+  [dir="rtl"] .space-x-2 > * + * {
+    margin-left: 0;
+    margin-right: 0.5rem;
+  }
+  
+  [dir="rtl"] .space-x-4 > * + * {
+    margin-left: 0;
+    margin-right: 1rem;
+  }
+  
+  /* RTL-aware gap utilities are handled automatically by flexbox/grid */
+}

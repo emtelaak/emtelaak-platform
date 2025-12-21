@@ -1,0 +1,698 @@
+export const en = {
+  // Common
+  common: {
+    loading: "Loading...",
+    error: "Error",
+    success: "Success",
+    save: "Save",
+    cancel: "Cancel",
+    delete: "Delete",
+    edit: "Edit",
+    create: "Create",
+    update: "Update",
+    search: "Search",
+    filter: "Filter",
+    export: "Export",
+    download: "Download",
+    upload: "Upload",
+    submit: "Submit",
+    back: "Back",
+    next: "Next",
+    previous: "Previous",
+    close: "Close",
+    confirm: "Confirm",
+    yes: "Yes",
+    no: "No",
+  },
+
+  // Navigation
+  nav: {
+    home: "Home",
+    properties: "Properties",
+    howItWorks: "How It Works",
+    about: "About",
+    portfolio: "Portfolio",
+    profile: "Profile",
+    contact: "Contact Us",
+    faq: "FAQ",
+    login: "Login",
+    logout: "Logout",
+    getStarted: "Get Started",
+    dashboard: "Dashboard",
+    settings: "Settings",
+  },
+
+  // Home Page
+  home: {
+    hero: {
+      title: "Invest in Real Estate",
+      subtitle: "Starting from",
+      amount: "$100",
+      description: "Democratizing property investment across MEASA markets. Own fractions of premium properties and earn rental income or capital gains.",
+      startInvesting: "Start Investing Today",
+      learnMore: "Learn More",
+    },
+    whyChoose: {
+      title: "Why Choose Emtelaak?",
+      subtitle: "We make real estate investment accessible, transparent, and profitable for everyone.",
+      lowMinimum: {
+        title: "Low Minimum Investment",
+        description: "Start with just $100 instead of hundreds of thousands. Diversify across multiple properties.",
+      },
+      highReturns: {
+        title: "High Returns",
+        description: "Earn 6-8% annual yields from rental income or appreciation. Choose between Buy to Let or Buy to Sell strategies.",
+      },
+      fullyRegulated: {
+        title: "Fully Regulated",
+        description: "Licensed by FRA Sandbox and DIFC Innovation License. Your investments are secure and compliant with all regulations.",
+      },
+      professionalManagement: {
+        title: "Professional Management",
+        description: "Expert property management, transparent reporting, and hassle-free income distribution directly to your account.",
+      },
+    },
+    howItWorks: {
+      title: "How It Works",
+      subtitle: "Start investing in real estate in four simple steps",
+      step1: {
+        title: "Sign Up & Verify",
+        description: "Create your account and complete KYC verification in minutes. We ensure a secure and compliant platform.",
+      },
+      step2: {
+        title: "Browse Properties",
+        description: "Explore our curated selection of premium properties across different categories with detailed analytics.",
+      },
+      step3: {
+        title: "Invest & Own",
+        description: "Choose your investment amount, select distribution frequency, and own fractional shares of the property.",
+      },
+      step4: {
+        title: "Earn Returns",
+        description: "Receive regular rental income or capital gains. Track your portfolio performance in real-time.",
+      },
+    },
+    categories: {
+      title: "Investment Categories",
+      subtitle: "Diversify your portfolio across multiple property types",
+      residential: "Residential",
+      commercial: "Commercial",
+      administrative: "Administrative",
+      hospitality: "Hospitality",
+      education: "Education",
+      logistics: "Logistics",
+      medical: "Medical",
+    },
+    trust: {
+      title: "Trusted & Secure",
+      fra: {
+        title: "FRA Sandbox Licensed",
+        description: "Regulated by Financial Regulatory Authority",
+      },
+      difc: {
+        title: "DIFC Innovation License",
+        description: "Dubai International Financial Centre approved",
+      },
+      security: {
+        title: "Bank-Level Security",
+        description: "256-bit encryption and secure payment processing",
+      },
+    },
+    cta: {
+      title: "Ready to Start Your Investment Journey?",
+      subtitle: "Join thousands of investors building wealth through fractional real estate ownership.",
+      button: "Get Started Now",
+    },
+  },
+
+  // Footer
+  footer: {
+    tagline: "Democratizing real estate investment across MEASA markets.",
+    platform: "Platform",
+    legal: "Legal",
+    support: "Support",
+    termsOfService: "Terms of Service",
+    privacyPolicy: "Privacy Policy",
+    compliance: "Compliance",
+    riskDisclosure: "Risk Disclosure",
+    faq: "FAQ",
+    helpCenter: "Help Center",
+    investorResources: "Investor Resources",
+    rights: "All rights reserved.",
+  },
+
+  // Properties Page
+  properties: {
+    title: "Investment Properties",
+    subtitle: "Browse our curated selection of premium real estate opportunities",
+    searchPlaceholder: "Search properties...",
+    filters: {
+      all: "All Properties",
+      residential: "Residential",
+      commercial: "Commercial",
+      administrative: "Administrative",
+    },
+    card: {
+      minInvestment: "Min. Investment",
+      targetReturn: "Target Return",
+      fundingProgress: "Funding Progress",
+      daysLeft: "days left",
+      viewDetails: "View Details",
+      invested: "Invested",
+      raised: "Raised",
+    },
+    noProperties: "No properties found",
+  },
+
+  // Portfolio Page
+  portfolio: {
+    title: "My Portfolio",
+    subtitle: "Track your investments and performance",
+    overview: {
+      totalInvested: "Total Invested",
+      currentValue: "Current Value",
+      totalReturn: "Total Return",
+      activeProperties: "Active Properties",
+    },
+    performance: {
+      title: "Portfolio Performance",
+      last6Months: "Last 6 Months",
+    },
+    allocation: {
+      title: "Asset Allocation",
+    },
+    income: {
+      title: "Income Distributions",
+      date: "Date",
+      property: "Property",
+      amount: "Amount",
+      status: "Status",
+      noDistributions: "No income distributions yet",
+    },
+    transactions: {
+      title: "Transaction History",
+      date: "Date",
+      type: "Type",
+      property: "Property",
+      amount: "Amount",
+      status: "Status",
+      noTransactions: "No transactions yet",
+    },
+  },
+
+  // Profile Page
+  profile: {
+    title: "My Profile",
+    subtitle: "Manage your account information and settings",
+    tabs: {
+      overview: "Overview",
+      personal: "Personal Info",
+      verification: "Verification",
+      preferences: "Preferences",
+    },
+    overview: {
+      accountInfo: "Account Information",
+      accountDesc: "Your basic account details",
+      notProvided: "Not provided",
+      verificationStatus: "Verification Status",
+      verificationDesc: "Your account verification progress",
+      emailVerified: "Email Verified",
+      phoneVerified: "Phone Verified",
+      documentsVerified: "Documents Verified",
+      questionnaireCompleted: "Questionnaire Completed",
+      investmentAccess: "Investment Access",
+      canInvest: "✓ You can invest in properties",
+      completeVerification: "Complete verification to start investing",
+    },
+    personalInfo: {
+      title: "Personal Information",
+      subtitle: "Update your personal details",
+      editProfile: "Edit Profile",
+      firstNameEn: "First Name (English)",
+      lastNameEn: "Last Name (English)",
+      firstNameAr: "First Name (Arabic)",
+      lastNameAr: "Last Name (Arabic)",
+      nationality: "Nationality",
+      addressLine1: "Address Line 1",
+      addressLine2: "Address Line 2",
+      city: "City",
+      country: "Country",
+      postalCode: "Postal Code",
+      employmentStatus: "Employment Status",
+      selectStatus: "Select status",
+      employed: "Employed",
+      selfEmployed: "Self-Employed",
+      unemployed: "Unemployed",
+      retired: "Retired",
+      student: "Student",
+      annualIncome: "Annual Income Range",
+      selectRange: "Select range",
+      saveChanges: "Save Changes",
+      saving: "Saving...",
+      cancel: "Cancel",
+    },
+    verification: {
+      title: "Verification Status",
+      level: "Verification Level",
+      status: "Status",
+      startKYC: "Start KYC Verification",
+      continueKYC: "Continue KYC",
+      viewDetails: "View Details",
+    },
+    preferences: {
+      title: "Preferences",
+      subtitle: "Manage your app preferences",
+      language: "Language",
+      currency: "Currency",
+      savePreferences: "Save Preferences",
+    },
+    kycProgress: {
+      title: "KYC Progress",
+      completed: "Completed",
+      lastSaved: "Last saved",
+    },
+    profilePicture: {
+      upload: "Upload Picture",
+      remove: "Remove Picture",
+      uploading: "Uploading...",
+    },
+    messages: {
+      updateSuccess: "Profile updated successfully",
+    },
+    kyc: {
+      completeTitle: "Complete Your KYC Verification",
+      completeDesc: "Complete your KYC questionnaire to unlock full investment features and start building your property portfolio.",
+      completeButton: "Complete KYC Questionnaire",
+    },
+    recentActivity: {
+      title: "Recent Activity",
+      subtitle: "Your latest actions and transactions",
+      noActivity: "No recent activity to display",
+    },
+  },
+
+  // Contact Page
+  contact: {
+    title: "Contact Us",
+    subtitle: "Get in touch with our team",
+    form: {
+      title: "Send us a message",
+      name: "Your Name",
+      email: "Your Email",
+      subject: "Subject",
+      message: "Message",
+      send: "Send Message",
+      sending: "Sending...",
+    },
+    info: {
+      email: {
+        title: "Email",
+        value: "support@emtelaak.com",
+      },
+      phone: {
+        title: "Phone",
+        value: "+971 4 123 4567",
+      },
+      address: {
+        title: "Office",
+        value: "DIFC, Dubai, UAE",
+      },
+    },
+    success: {
+      title: "Message Sent!",
+      description: "Thank you for contacting us. We'll get back to you soon.",
+      backToHome: "Back to Home",
+    },
+    faq: {
+      title: "Frequently Asked Questions",
+    },
+  },
+
+  // KYC Wizard
+  kyc: {
+    title: "KYC Verification",
+    subtitle: "Complete your verification to start investing",
+    steps: {
+      personal: "Personal Info",
+      documents: "Documents",
+      questionnaire: "Questionnaire",
+      review: "Review",
+    },
+    personalInfo: {
+      title: "Personal Information",
+      fullName: "Full Name",
+      dateOfBirth: "Date of Birth",
+      nationality: "Nationality",
+      address: "Address",
+      city: "City",
+      country: "Country",
+      postalCode: "Postal Code",
+    },
+    documents: {
+      title: "Upload Documents",
+      idDocument: "ID Document",
+      proofOfAddress: "Proof of Address",
+      dragDrop: "Drag and drop or click to upload",
+      maxSize: "Maximum file size: 5MB",
+    },
+    questionnaire: {
+      title: "KYC Questionnaire",
+      subtitle: "Complete your investor accreditation questionnaire",
+      submitSuccess: "Questionnaire Submitted",
+      submitSuccessDesc: "Your KYC questionnaire has been submitted for review.",
+      progress: "Completion Progress",
+      progressHint: "Fill in all required fields to submit your questionnaire",
+      financialInfo: "Financial Information",
+      financialInfoDesc: "Provide details about your financial situation",
+      annualIncome: "Annual Income",
+      netWorth: "Net Worth",
+      liquidAssets: "Liquid Assets",
+      employmentStatus: "Employment Status",
+      occupation: "Occupation/Industry",
+      investmentExp: "Investment Experience",
+      investmentExpDesc: "Tell us about your investment background",
+      overallExp: "Overall Investment Experience",
+      realEstateExp: "Real Estate Investment Experience",
+      previousInv: "Previous Investment Types",
+      riskTolerance: "Risk Tolerance",
+      accreditation: "Investor Accreditation",
+      accreditationDesc: "Determine your investor accreditation status",
+      accreditationType: "Accreditation Type",
+      goals: "Investment Goals",
+      goalsDesc: "Define your investment objectives",
+      primaryGoals: "Primary Investment Goals",
+      horizon: "Investment Horizon",
+      expectedReturn: "Expected Annual Return",
+      sourceOfFunds: "Source of Funds",
+      sourceOfFundsDesc: "Information about the origin of your investment funds",
+      primarySource: "Primary Source of Funds",
+      additionalDetails: "Additional Details",
+      additional: "Additional Information",
+      additionalDesc: "Regulatory compliance information",
+      pepDetails: "PEP Details",
+      notes: "Additional Notes",
+    },
+    review: {
+      title: "Review & Submit",
+      description: "Please review your information before submitting",
+      submit: "Submit for Verification",
+    },
+  },
+
+  // Admin Dashboard
+  admin: {
+    title: "Admin Dashboard",
+    subtitle: "Manage users, roles, and platform settings",
+    stats: {
+      totalUsers: "Total Users",
+      pendingKYC: "Pending KYC",
+      activeInvestments: "Active Investments",
+      totalRevenue: "Total Revenue",
+    },
+    users: {
+      title: "User Management",
+      search: "Search users...",
+      name: "Name",
+      email: "Email",
+      role: "Role",
+      status: "Status",
+      actions: "Actions",
+      changeRole: "Change Role",
+      updateStatus: "Update Status",
+    },
+    roles: {
+      title: "Role Management",
+      createRole: "Create Role",
+      roleName: "Role Name",
+      description: "Description",
+      permissions: "Permissions",
+      system: "System",
+      custom: "Custom",
+    },
+    permissions: {
+      title: "Permissions Management",
+      selectUser: "Select User",
+      permissionsMatrix: "Permissions Matrix",
+      granted: "Granted",
+      denied: "Denied",
+      exportUsers: "Export Users",
+      exportAuditLogs: "Export Audit Logs",
+    },
+    settings: {
+      title: "Platform Settings",
+      logo: "Platform Logo",
+      currentLogo: "Current Logo",
+      newLogo: "New Logo",
+      uploadLogo: "Upload New Logo",
+      maxSize: "Maximum size: 2MB",
+    },
+  },
+
+  // Notifications
+  notifications: {
+    title: "Notifications",
+    markAllRead: "Mark all as read",
+    noNotifications: "No notifications",
+    types: {
+      kycApproved: "KYC Approved",
+      kycRejected: "KYC Rejected",
+      investmentConfirmed: "Investment Confirmed",
+      incomeDistributed: "Income Distributed",
+    },
+  },
+
+  // Status
+  status: {
+    active: "Active",
+    pending: "Pending",
+    suspended: "Suspended",
+    approved: "Approved",
+    rejected: "Rejected",
+    completed: "Completed",
+    processing: "Processing",
+  },
+
+  // About Page
+  about: {
+    title: "About Emtelaak",
+    subtitle: "Pioneering fractional real estate investment across MEASA markets",
+    ourStory: {
+      title: "Our Story",
+      description: "Emtelaak is the pioneer company in providing a unique experience for investing in real estate as a popular and high-value investment product by dividing this investment into real-estate stakes at reasonable values to enable clients to seize the opportunity of fractional ownership across residential, commercial, administrative, medical and educational assets from foundation to operation and management.",
+    },
+    values: {
+      pioneer: {
+        title: "Pioneer Status",
+        description: "First platform offering fractional real estate investment in the region",
+      },
+      accessibility: {
+        title: "Accessible Investment",
+        description: "Reasonable stake values make real estate investment accessible to everyone",
+      },
+      diverse: {
+        title: "Diverse Assets",
+        description: "Invest across residential, commercial, administrative, medical, and educational properties",
+      },
+      fullService: {
+        title: "Full Service",
+        description: "Complete management from foundation to operation",
+      },
+    },
+    mission: {
+      title: "Our Mission",
+      description: "To democratize real estate investment by providing accessible, transparent, and profitable fractional ownership opportunities that empower individuals to build wealth through property investment.",
+    },
+    vision: {
+      title: "Our Vision",
+      description: "To become the leading fractional real estate investment platform across MEASA markets, setting the standard for transparency, compliance, and investor returns.",
+    },
+    compliance: {
+      title: "Trusted & Secure",
+      subtitle: "Regulated by leading financial authorities",
+      fra: {
+        title: "FRA Sandbox Licensed",
+        description: "Regulated by Financial Regulatory Authority",
+      },
+      difc: {
+        title: "DIFC Innovation License",
+        description: "Dubai International Financial Centre approved",
+      },
+      security: {
+        title: "Bank-Level Security",
+        description: "256-bit encryption and secure payment processing",
+      },
+    },
+    cta: {
+      title: "Ready to Start Your Investment Journey?",
+      description: "Join thousands of investors building wealth through fractional real estate ownership.",
+      browseProperties: "Browse Properties",
+      contactUs: "Contact Us",
+    },
+    team: {
+      title: "Meet Our Team",
+      subtitle: "Experienced professionals dedicated to democratizing real estate investment",
+      members: [
+        {
+          name: "Ahmed Al-Masri",
+          title: "Chief Executive Officer",
+          bio: "With over 15 years of experience in real estate and fintech, Ahmed leads Emtelaak's vision to make property investment accessible to everyone across MEASA markets.",
+        },
+        {
+          name: "Sarah Hassan",
+          title: "Chief Financial Officer",
+          bio: "Sarah brings deep expertise in financial structuring and regulatory compliance, ensuring Emtelaak operates with the highest standards of transparency and governance.",
+        },
+        {
+          name: "Omar Khalil",
+          title: "Chief Technology Officer",
+          bio: "Omar architected Emtelaak's secure and scalable platform, leveraging cutting-edge technology to deliver seamless investment experiences for thousands of users.",
+        },
+        {
+          name: "Layla Ibrahim",
+          title: "Head of Legal & Compliance",
+          bio: "Layla ensures Emtelaak maintains full regulatory compliance across all markets, protecting investor interests and maintaining trust with financial authorities.",
+        },
+        {
+          name: "Khaled Mansour",
+          title: "Head of Property Acquisition",
+          bio: "Khaled leads the identification and evaluation of premium properties, conducting thorough due diligence to ensure quality investment opportunities for our investors.",
+        },
+        {
+          name: "Nadia Farouk",
+          title: "Head of Investor Relations",
+          bio: "Nadia manages relationships with our growing investor community, ensuring clear communication and exceptional service throughout the investment journey.",
+        },
+      ],
+    },
+  },
+
+  // How It Works Page
+  howItWorks: {
+    heroTitle: "How It Works",
+    heroSubtitle: "Start investing in real estate with just a few simple steps",
+    processTitle: "Your Investment Journey",
+    processSubtitle: "Follow these four simple steps to start building your real estate portfolio",
+    step1Title: "Sign Up & Verify",
+    step1Description: "Create your account and complete KYC verification. We ensure a secure and compliant platform.",
+    step2Title: "Browse Properties",
+    step2Description: "Explore our curated selection of properties across different categories with detailed analytics.",
+    step3Title: "Invest & Own",
+    step3Description: "Choose your investment amount, select distribution frequency, and own fractional shares.",
+    step4Title: "Earn Returns",
+    step4Description: "Receive regular rental income and track your portfolio performance in real-time.",
+    servicesTitle: "What We Offer",
+    servicesSubtitle: "Comprehensive services to support your investment journey",
+    service1Title: "Regulatory Compliance",
+    service1Description: "FRA Sandbox License and DIFC Innovation License ensure your investments are protected.",
+    service2Title: "Legal Documentation",
+    service2Description: "Complete legal framework with property deeds, contracts, and ownership certificates.",
+    service3Title: "Professional Management",
+    service3Description: "Expert property management teams handle operations, maintenance, and tenant relations.",
+    service4Title: "Transparent Reporting",
+    service4Description: "Real-time dashboards showing property performance, income, and market valuations.",
+    service5Title: "Income Distribution",
+    service5Description: "Choose monthly, quarterly, or annual distribution frequency for your rental income.",
+    service6Title: "Secondary Market",
+    service6Description: "Liquidity options through our marketplace to buy or sell fractional ownership shares.",
+    benefitsTitle: "Why Choose Fractional Ownership?",
+    benefitsSubtitle: "Experience the advantages of modern real estate investing",
+    benefit1: "Low minimum investment starting from $100",
+    benefit2: "Diversify across multiple properties and asset types",
+    benefit3: "No property management hassles or maintenance costs",
+    benefit4: "Passive income through regular rental distributions",
+    benefit5: "Professional due diligence and property selection",
+    benefit6: "Transparent fees and performance tracking",
+    ctaTitle: "Ready to Start Investing?",
+    ctaSubtitle: "Join thousands of investors building wealth through fractional real estate ownership",
+    ctaBrowse: "Browse Properties",
+    ctaContact: "Contact Us",
+  },
+
+  // FAQ Page
+  faq: {
+    title: "Frequently Asked Questions",
+    subtitle: "Find answers to common questions about fractional property ownership and investing with Emtelaak",
+    stillHaveQuestions: "Still have questions?",
+    contactPrompt: "Our team is here to help. Get in touch with us for personalized assistance.",
+    contactUs: "Contact Us",
+    questions: {
+      q1: {
+        question: "What's the sharing economy?",
+        answer: "It's an economic model where individuals share physical assets and collaborate in producing and trading goods and services between people and businesses. It relies on information that facilitates sharing and exchange.",
+      },
+      q2: {
+        question: "What's fractional property ownership?",
+        answer: "Fractional ownership is a modern real-estate investment concept. It allows individuals to own a share of a property—residential, commercial, or administrative—often as square-meter ownership, for renting or reselling units and distributing returns to investors.",
+      },
+      q3: {
+        question: "Can fractional property shares be registered?",
+        answer: "Yes. The fractional owner can register their fractions—specific or common—at the Egyptian notary public after obtaining the developer contract, in accordance with civil law rules for common shares.",
+      },
+      q4: {
+        question: "What are the risks and responsibilities of fractional ownership?",
+        answer: "Like any investment, property fractions are affected by market conditions, developer performance, and operating costs. Holders share ongoing expenses proportionally to their stake and must comply with the project's legal terms and timelines. Always review due-diligence and legal agreements before investing.",
+      },
+      q5: {
+        question: "How can I exit or resell my property fraction?",
+        answer: "You may resell your fraction through mechanisms allowed by the project (e.g., a secondary market or direct transfer) subject to developer rules and local regulations. Transfers are documented and, where applicable, notarized. Settlement times and fees depend on the project terms and market demand.",
+      },
+      q6: {
+        question: "Who manages the property and distributes returns?",
+        answer: "Properties are typically operated by the developer or an appointed operator. Returns (from rental or resale proceeds) are calculated and distributed to holders in line with their share and the project terms. EMTELAAK facilitates information and the investment process; legal obligations remain with the developer and the governing contracts.",
+      },
+    },
+  },
+
+  // Roles
+  roles: {
+    user: "User",
+    investor: "Investor",
+    fundraiser: "Fundraiser",
+    admin: "Admin",
+    superAdmin: "Super Admin",
+  },
+
+  // Password Reset
+  resetPassword: {
+    title: "Reset Your Password",
+    subtitle: "Enter your new password below",
+    newPassword: "New Password",
+    confirmPassword: "Confirm Password",
+    newPasswordPlaceholder: "Enter new password",
+    confirmPasswordPlaceholder: "Confirm new password",
+    passwordStrength: "Password Strength:",
+    weak: "Weak",
+    medium: "Medium",
+    strong: "Strong",
+    requirements: {
+      length: "At least 8 characters",
+      uppercase: "Contains uppercase letter",
+      lowercase: "Contains lowercase letter",
+      number: "Contains number",
+    },
+    passwordsMatch: "Passwords match",
+    passwordsDontMatch: "Passwords do not match",
+    resetButton: "Reset Password",
+    resetting: "Resetting Password...",
+    backToHome: "Back to Home",
+    invalidToken: {
+      title: "Invalid Reset Link",
+      message: "The password reset link is invalid or has expired.",
+      description: "This reset link may have expired or already been used. Please request a new password reset link.",
+      returnHome: "Return to Home",
+    },
+    success: {
+      title: "Password Reset Successful!",
+      message: "Your password has been successfully reset.",
+      description: "You can now log in with your new password. Redirecting to home page...",
+    },
+    validating: "Validating reset token...",
+    errors: {
+      requirementsFailed: "Please meet all password requirements",
+      passwordMismatch: "Passwords do not match",
+      resetFailed: "Failed to reset password. Please try again.",
+    },
+  },
+};
+
+export type Translation = typeof en;
