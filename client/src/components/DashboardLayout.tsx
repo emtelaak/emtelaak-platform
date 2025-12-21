@@ -91,6 +91,7 @@ const menuItems: MenuItem[] = [
       { icon: BarChart3, label: "Dashboard", path: "/fundraiser/dashboard" },
       { icon: Building2, label: "Property Management", path: "/fundraiser/property-management" },
       { icon: Layers, label: "My Offerings", path: "/offerings" },
+      { icon: FileCheck, label: "Create Offering", path: "/offerings/create" },
     ]
   },
   { icon: DollarSign, label: "Platform Settings", path: "/admin/platform-settings" },
@@ -102,6 +103,7 @@ const menuItems: MenuItem[] = [
     path: "/offerings",
     children: [
       { icon: Layers, label: "My Offerings", path: "/offerings" },
+      { icon: FileCheck, label: "Create Offering", path: "/offerings/create" },
       { icon: FileCheck, label: "Offering Approvals", path: "/admin/offering-approvals" },
     ]
   },
