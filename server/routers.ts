@@ -439,19 +439,21 @@ export const appRouter = router({
         maxValue: z.number().optional(),
         status: z.string().optional(),
       }).optional())
-      .query(async ({ input }) => {
+      .query(async ({ input, ctx }) => {
+        const isAuthenticated = !!ctx.user;
         if (input && Object.keys(input).length > 0) {
-          return await searchProperties(input);
+          return await searchProperties({ ...input, isAuthenticated });
         }
-        return await getAvailableProperties();
+        return await getAvailableProperties(isAuthenticated);
       }),
     
     getById: publicProcedure
       .input(z.object({ id: z.number() }))
-      .query(async ({ input }) => {
-        const property = await getPropertyById(input.id);
+      .query(async ({ input, ctx }) => {
+        const isAuthenticated = !!ctx.user;
+        const property = await getPropertyById(input.id, isAuthenticated);
         if (!property) {
-          throw new TRPCError({ code: "NOT_FOUND", message: "Property not found" });
+          throw new TRPCError({ code: "NOT_FOUND", message: "Property not found or requires authentication" });
         }
         return property;
       }),

@@ -77,6 +77,7 @@ export const propertyManagementRouter = router({
           totalShares: z.number().optional(),
           availableShares: z.number().optional(),
           status: z.enum(["coming_soon", "available", "funded", "exited"]).optional(),
+          visibility: z.enum(["public", "authenticated"]).optional(),
           // Add other fields as needed
         }),
       })
@@ -94,6 +95,42 @@ export const propertyManagementRouter = router({
         targetType: "property",
         targetId: propertyId,
         details: JSON.stringify(updates),
+      });
+
+      return result;
+    }),
+
+  /**
+   * Toggle property visibility (public/authenticated)
+   */
+  toggleVisibility: adminProcedure
+    .input(
+      z.object({
+        propertyId: z.number(),
+        visibility: z.enum(["public", "authenticated"]),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { propertyId, visibility } = input;
+
+      // Get current property to log old value
+      const property = await getPropertyForManagement(propertyId);
+      const oldVisibility = property?.visibility || "authenticated";
+
+      // Update visibility
+      const result = await updateProperty(propertyId, { visibility });
+
+      // Create audit log
+      await createAuditLog({
+        userId: ctx.user.id,
+        action: "update_property_visibility",
+        targetType: "property",
+        targetId: propertyId,
+        details: JSON.stringify({
+          field: "visibility",
+          oldValue: oldVisibility,
+          newValue: visibility,
+        }),
       });
 
       return result;

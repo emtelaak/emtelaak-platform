@@ -390,21 +390,52 @@ export default function Properties() {
         ) : (
           <div className="text-center py-16">
             <Building2 className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">No Properties Found</h3>
-            <p className="text-muted-foreground mb-6">
-              Try adjusting your filters or check back later for new opportunities.
-            </p>
-            <Button
-              variant="outline"
-              onClick={() => setFilters({
-                propertyType: undefined,
-                investmentType: undefined,
-                minValue: undefined,
-                maxValue: undefined,
-              })}
-            >
-              Clear All Filters
-            </Button>
+            {!isAuthenticated ? (
+              <>
+                <h3 className="text-xl font-semibold mb-2">
+                  {language === "en" ? "Login Required" : "يرجى تسجيل الدخول"}
+                </h3>
+                <p className="text-muted-foreground mb-6">
+                  {language === "en" 
+                    ? "Please login to view our exclusive investment properties."
+                    : "يرجى تسجيل الدخول لعرض عقاراتنا الاستثمارية الحصرية."}
+                </p>
+                <div className="flex gap-4 justify-center">
+                  <Link href="/login?redirect=/properties">
+                    <Button>
+                      {language === "en" ? "Login" : "تسجيل الدخول"}
+                    </Button>
+                  </Link>
+                  <Link href="/request-access">
+                    <Button variant="outline">
+                      {language === "en" ? "Request Access" : "طلب الوصول"}
+                    </Button>
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="text-xl font-semibold mb-2">
+                  {language === "en" ? "No Properties Found" : "لم يتم العثور على عقارات"}
+                </h3>
+                <p className="text-muted-foreground mb-6">
+                  {language === "en"
+                    ? "Try adjusting your filters or check back later for new opportunities."
+                    : "حاول تعديل الفلاتر أو تحقق لاحقاً من الفرص الجديدة."}
+                </p>
+                <Button
+                  variant="outline"
+                  onClick={() => setFilters({
+                    propertyType: undefined,
+                    investmentType: undefined,
+                    minValue: undefined,
+                    maxValue: undefined,
+                  })}
+                >
+                  {language === "en" ? "Clear All Filters" : "مسح جميع الفلاتر"}
+                </Button>
+              </>
+            )}
           </div>
         )}
       </div>
