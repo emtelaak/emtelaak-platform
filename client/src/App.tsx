@@ -57,13 +57,13 @@ const HomepageContentEditor = lazy(() => import("@/pages/HomepageContentEditor")
 const ImageLibrary = lazy(() => import("@/pages/ImageLibrary"));
 const AboutPageEditor = lazy(() => import("@/pages/AboutPageEditor"));
 
-// Lazy load Developer Portal pages (dedicated portal for property developers)
-const DeveloperDashboard = lazy(() => import("./pages/fundraiser/FundraiserDashboard"));
-const DeveloperProperties = lazy(() => import("./pages/fundraiser/FundraiserProperties"));
-const DeveloperPropertyNew = lazy(() => import("./pages/fundraiser/FundraiserPropertyNew"));
-const DeveloperOfferings = lazy(() => import("./pages/fundraiser/FundraiserOfferings"));
+// Lazy load Fund Manager Portal pages (dedicated portal for fund managers/property developers)
+const FundManagerDashboard = lazy(() => import("./pages/fundraiser/FundraiserDashboard"));
+const FundManagerProperties = lazy(() => import("./pages/fundraiser/FundraiserProperties"));
+const FundManagerPropertyNew = lazy(() => import("./pages/fundraiser/FundraiserPropertyNew"));
+const FundManagerOfferings = lazy(() => import("./pages/fundraiser/FundraiserOfferings"));
 
-// Legacy fundraiser pages (for backwards compatibility - will redirect to developer)
+// Legacy fundraiser pages (for backwards compatibility - will redirect to fund-manager)
 const FundraiserDashboard = lazy(() => import("./pages/FundraiserDashboard"));
 const FundraiserPropertyManagement = lazy(() => import("./pages/FundraiserPropertyManagement"));
 
@@ -163,50 +163,75 @@ function Router() {
       <Route path="/request-access" component={RequestAccess} />
       
       {/* ============================================= */}
-      {/* DEVELOPER PORTAL - Dedicated Routes for Property Developers */}
+      {/* FUND MANAGER PORTAL - Dedicated Routes for Fund Managers */}
       {/* ============================================= */}
       
-      {/* Main Developer Portal Routes */}
-      <Route path="/developer" component={DeveloperDashboard} />
-      <Route path="/developer/properties" component={DeveloperProperties} />
-      <Route path="/developer/properties/new" component={DeveloperPropertyNew} />
-      <Route path="/developer/properties/:id/edit" component={AddProperty} />
-      <Route path="/developer/offerings" component={DeveloperOfferings} />
+      {/* Main Fund Manager Portal Routes */}
+      <Route path="/fund-manager" component={FundManagerDashboard} />
+      <Route path="/fund-manager/properties" component={FundManagerProperties} />
+      <Route path="/fund-manager/properties/new" component={FundManagerPropertyNew} />
+      <Route path="/fund-manager/properties/:id/edit" component={AddProperty} />
+      <Route path="/fund-manager/offerings" component={FundManagerOfferings} />
       
-      {/* Legacy fundraiser routes - redirect to developer portal */}
+      {/* Legacy fundraiser routes - redirect to fund-manager portal */}
       <Route path="/fundraiser">
         {() => {
-          window.location.href = "/developer";
+          window.location.href = "/fund-manager";
           return null;
         }}
       </Route>
       <Route path="/fundraiser/properties">
         {() => {
-          window.location.href = "/developer/properties";
+          window.location.href = "/fund-manager/properties";
           return null;
         }}
       </Route>
       <Route path="/fundraiser/properties/new">
         {() => {
-          window.location.href = "/developer/properties/new";
+          window.location.href = "/fund-manager/properties/new";
           return null;
         }}
       </Route>
       <Route path="/fundraiser/offerings">
         {() => {
-          window.location.href = "/developer/offerings";
+          window.location.href = "/fund-manager/offerings";
           return null;
         }}
       </Route>
       <Route path="/fundraiser/dashboard">
         {() => {
-          window.location.href = "/developer";
+          window.location.href = "/fund-manager";
           return null;
         }}
       </Route>
       <Route path="/fundraiser/property-management">
         {() => {
-          window.location.href = "/developer/properties";
+          window.location.href = "/fund-manager/properties";
+          return null;
+        }}
+      </Route>
+      {/* Legacy developer routes - redirect to fund-manager portal */}
+      <Route path="/developer">
+        {() => {
+          window.location.href = "/fund-manager";
+          return null;
+        }}
+      </Route>
+      <Route path="/developer/properties">
+        {() => {
+          window.location.href = "/fund-manager/properties";
+          return null;
+        }}
+      </Route>
+      <Route path="/developer/properties/new">
+        {() => {
+          window.location.href = "/fund-manager/properties/new";
+          return null;
+        }}
+      </Route>
+      <Route path="/developer/offerings">
+        {() => {
+          window.location.href = "/fund-manager/offerings";
           return null;
         }}
       </Route>

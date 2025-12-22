@@ -176,14 +176,14 @@ export default function Navigation() {
                   </DropdownMenuItem>
                 </Link>
 
-                {/* Developer Portal Link - Only for developer, admin and super_admin */}
-                {(user?.role === 'developer' || user?.role === 'admin' || user?.role === 'super_admin') && (
+{/* Fund Manager Portal Link - Only for fund_manager, admin and super_admin */}
+                {(user?.role === 'fund_manager' || user?.role === 'admin' || user?.role === 'super_admin') && (
                   <>
                     <DropdownMenuSeparator />
-                    <Link href="/developer">
+                    <Link href="/fund-manager">
                       <DropdownMenuItem className="cursor-pointer gap-3 py-3">
                         <Building2 className="h-5 w-5" />
-                        <span className="font-medium">{language === 'en' ? 'Developer Portal' : 'بوابة المطور'}</span>
+                        <span className="font-medium">{language === 'en' ? 'Fund Manager Portal' : 'بوابة مدير الصندوق'}</span>
                       </DropdownMenuItem>
                     </Link>
                   </>

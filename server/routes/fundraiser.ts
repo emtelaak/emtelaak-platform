@@ -15,10 +15,10 @@ import { storagePut } from "../storage";
  * Ensures the user has fundraiser or admin role
  */
 const fundraiserProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.user.role !== "developer" && ctx.user.role !== "admin" && ctx.user.role !== "super_admin") {
+  if (ctx.user.role !== "fund_manager" && ctx.user.role !== "admin" && ctx.user.role !== "super_admin") {
     throw new TRPCError({
       code: "FORBIDDEN",
-      message: "Access denied. Developer role required.",
+      message: "Access denied. Fund Manager role required.",
     });
   }
   return next({ ctx });

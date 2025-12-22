@@ -34,7 +34,7 @@ export function CreateUserDialog({ open, onOpenChange, onSuccess }: CreateUserDi
     name: "",
     email: "",
     phone: "",
-    role: "user" as "user" | "investor" | "developer" | "admin" | "super_admin",
+    role: "user" as "user" | "investor" | "fund_manager" | "admin" | "super_admin",
     status: "pending_verification" as "active" | "suspended" | "pending_verification",
   });
 
@@ -176,7 +176,7 @@ export function CreateUserDialog({ open, onOpenChange, onSuccess }: CreateUserDi
               <SelectContent>
                 <SelectItem value="user">{language === "en" ? "User" : "مستخدم"}</SelectItem>
                 <SelectItem value="investor">{language === "en" ? "Investor" : "مستثمر"}</SelectItem>
-                <SelectItem value="developer">{language === "en" ? "Property Developer" : "مطور عقاري"}</SelectItem>
+                <SelectItem value="fund_manager">{language === "en" ? "Fund Manager" : "مدير الصندوق"}</SelectItem>
                 <SelectItem value="admin">{language === "en" ? "Admin" : "مسؤول"}</SelectItem>
                 <SelectItem value="super_admin">{language === "en" ? "Super Admin" : "مسؤول رئيسي"}</SelectItem>
               </SelectContent>

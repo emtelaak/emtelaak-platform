@@ -105,7 +105,7 @@ export default function FundraiserPropertyNew() {
     );
   }
 
-  if (!user || (user.role !== "developer" && user.role !== "admin" && user.role !== "super_admin")) {
+  if (!user || (user.role !== "fund_manager" && user.role !== "admin" && user.role !== "super_admin")) {
     return (
       <FundraiserLayout>
         <div className="flex items-center justify-center min-h-[400px]">
