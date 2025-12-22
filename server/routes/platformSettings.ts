@@ -1,11 +1,15 @@
 import { z } from "zod";
-import { router, adminProcedure } from "../_core/trpc";
+import { router, adminProcedure, publicProcedure } from "../_core/trpc";
 import {
   getAllPlatformSettings,
   getPlatformFeePercentage,
   getProcessingFeeCents,
   updatePlatformFeePercentage,
   updateProcessingFeeCents,
+  getPlatformAccessMode,
+  updatePlatformAccessMode,
+  getInvitationEmail,
+  updateInvitationEmail,
 } from "../db/platformSettingsDb";
 import { createAuditLog } from "../permissionsDb";
 
@@ -87,6 +91,78 @@ export const platformSettingsRouter = router({
           settingKey: "processing_fee_cents",
           newValue: cents,
           displayValue: `$${input.dollars}`,
+        }),
+        ipAddress: ctx.req.ip || "unknown",
+      });
+
+      return result;
+    }),
+
+  /**
+   * Get platform access mode settings (public endpoint for registration flow)
+   */
+  getAccessMode: publicProcedure.query(async () => {
+    const [accessMode, invitationEmail] = await Promise.all([
+      getPlatformAccessMode(),
+      getInvitationEmail(),
+    ]);
+
+    return {
+      accessMode,
+      invitationEmail,
+      isPrivate: accessMode === "private",
+    };
+  }),
+
+  /**
+   * Update platform access mode (admin only)
+   */
+  updateAccessMode: adminProcedure
+    .input(
+      z.object({
+        mode: z.enum(["public", "private"]),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const result = await updatePlatformAccessMode(input.mode, ctx.user.id);
+
+      // Create audit log
+      await createAuditLog({
+        userId: ctx.user.id,
+        action: "update_access_mode",
+        targetType: "platform_settings",
+        targetId: result?.id || 0,
+        details: JSON.stringify({
+          settingKey: "platform_access_mode",
+          newValue: input.mode,
+        }),
+        ipAddress: ctx.req.ip || "unknown",
+      });
+
+      return result;
+    }),
+
+  /**
+   * Update invitation email address (admin only)
+   */
+  updateInvitationEmail: adminProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const result = await updateInvitationEmail(input.email, ctx.user.id);
+
+      // Create audit log
+      await createAuditLog({
+        userId: ctx.user.id,
+        action: "update_invitation_email",
+        targetType: "platform_settings",
+        targetId: result?.id || 0,
+        details: JSON.stringify({
+          settingKey: "invitation_email",
+          newValue: input.email,
         }),
         ipAddress: ctx.req.ip || "unknown",
       });

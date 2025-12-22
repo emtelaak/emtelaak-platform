@@ -5,6 +5,7 @@ import { sql } from "drizzle-orm";
 import { sendEmail } from "../_core/sendgrid";
 import { notifyOwner } from "../_core/notification";
 import { ENV } from "../_core/env";
+import { getInvitationEmail } from "../db/platformSettingsDb";
 
 // Generate random invitation code
 function generateInvitationCode(): string {
@@ -157,7 +158,83 @@ export const accessRequestsRouter = router({
                 'pending', NOW())
       `);
 
+      // Send notification to configured invitation email
       try {
+        const invitationEmail = await getInvitationEmail();
+        
+        // Send email notification to admin
+        const adminHtml = `
+          <!DOCTYPE html>
+          <html dir="ltr">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          </head>
+          <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+              <div style="background: linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%); padding: 40px 30px; text-align: center;">
+                <h1 style="color: #c9a227; margin: 0; font-size: 28px;">Emtelaak</h1>
+                <p style="color: #ffffff; margin: 10px 0 0 0; font-size: 14px;">New Registration Request</p>
+              </div>
+              <div style="padding: 40px 30px;">
+                <h2 style="color: #1e3a5f; margin: 0 0 20px 0; font-size: 24px;">طلب تسجيل جديد / New Registration Request</h2>
+                <div style="background-color: #f8f9fa; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                  <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Name / الاسم:</td>
+                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${input.fullName}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Email / البريد:</td>
+                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${input.email}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Phone / الهاتف:</td>
+                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${input.phone || 'Not provided'}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Country / البلد:</td>
+                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${input.country || 'Not provided'}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Interest / الاهتمام:</td>
+                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${input.investmentInterest || 'Not specified'}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Budget / الميزانية:</td>
+                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${input.investmentBudget || 'Not specified'}</td>
+                    </tr>
+                    ${input.message ? `
+                    <tr>
+                      <td style="padding: 10px 0; font-weight: bold; color: #666;">Message / الرسالة:</td>
+                      <td style="padding: 10px 0; color: #333;">${input.message}</td>
+                    </tr>
+                    ` : ''}
+                  </table>
+                </div>
+                <div style="text-align: center; margin: 30px 0;">
+                  <a href="${process.env.VITE_OAUTH_PORTAL_URL || 'https://emtelaak.co'}/admin/access-requests" 
+                     style="display: inline-block; background: linear-gradient(135deg, #c9a227 0%, #b8941f 100%); color: #ffffff; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: bold;">
+                    Review Request / مراجعة الطلب
+                  </a>
+                </div>
+              </div>
+              <div style="background-color: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #eeeeee;">
+                <p style="color: #999999; font-size: 12px; margin: 0;">
+                  © ${new Date().getFullYear()} Emtelaak. All rights reserved.
+                </p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `;
+
+        await sendEmail({
+          to: invitationEmail,
+          subject: `طلب تسجيل جديد من ${input.fullName} | New Registration Request`,
+          html: adminHtml
+        });
+
         await notifyOwner({
           title: "New Access Request",
           content: `New access request from ${input.fullName} (${input.email}). Investment interest: ${input.investmentInterest || 'Not specified'}. Budget: ${input.investmentBudget || 'Not specified'}.`

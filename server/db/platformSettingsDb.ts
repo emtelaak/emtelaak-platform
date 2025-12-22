@@ -117,3 +117,60 @@ export async function updateProcessingFeeCents(
     updatedBy
   );
 }
+
+
+/**
+ * Get platform access mode (default 'private')
+ */
+export async function getPlatformAccessMode(): Promise<string> {
+  const setting = await getPlatformSetting("platform_access_mode");
+  if (!setting) return "private"; // Default to private
+  return setting.settingValue;
+}
+
+/**
+ * Update platform access mode
+ */
+export async function updatePlatformAccessMode(
+  mode: string,
+  updatedBy: number
+) {
+  if (!["public", "private"].includes(mode)) {
+    throw new Error("Access mode must be 'public' or 'private'");
+  }
+
+  return await upsertPlatformSetting(
+    "platform_access_mode",
+    mode,
+    "Platform access mode: 'public' for open registration, 'private' for invitation only",
+    updatedBy
+  );
+}
+
+/**
+ * Get invitation email address (default 'investment@emtelaak.com')
+ */
+export async function getInvitationEmail(): Promise<string> {
+  const setting = await getPlatformSetting("invitation_email");
+  if (!setting) return "investment@emtelaak.com";
+  return setting.settingValue;
+}
+
+/**
+ * Update invitation email address
+ */
+export async function updateInvitationEmail(
+  email: string,
+  updatedBy: number
+) {
+  if (!email || !email.includes("@")) {
+    throw new Error("Invalid email address");
+  }
+
+  return await upsertPlatformSetting(
+    "invitation_email",
+    email,
+    "Email address for receiving registration requests in private mode",
+    updatedBy
+  );
+}
