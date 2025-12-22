@@ -974,6 +974,26 @@ export const accessRequests = mysqlTable("access_requests", {
 export type AccessRequest = typeof accessRequests.$inferSelect;
 export type InsertAccessRequest = typeof accessRequests.$inferInsert;
 
+// Platform Invitations (for private mode registration)
+export const platformInvitations = mysqlTable("platform_invitations", {
+  id: int("id").autoincrement().primaryKey(),
+  code: varchar("code", { length: 20 }).notNull().unique(),
+  email: varchar("email", { length: 320 }), // Optional: restrict to specific email
+  maxUses: int("maxUses").default(1).notNull(),
+  usedCount: int("usedCount").default(0).notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  expiresAt: timestamp("expiresAt"), // Optional expiration
+  createdBy: int("createdBy").references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  codeIdx: index("platform_invitations_code_idx").on(table.code),
+  emailIdx: index("platform_invitations_email_idx").on(table.email),
+}));
+
+export type PlatformInvitation = typeof platformInvitations.$inferSelect;
+export type InsertPlatformInvitation = typeof platformInvitations.$inferInsert;
+
 // Permissions and Roles System
 export const permissions = mysqlTable("permissions", {
   id: int("id").autoincrement().primaryKey(),
