@@ -949,6 +949,31 @@ export const platformSettings = mysqlTable("platform_settings", {
 export type PlatformSetting = typeof platformSettings.$inferSelect;
 export type InsertPlatformSetting = typeof platformSettings.$inferInsert;
 
+// Access Requests for Private Mode Registration
+export const accessRequests = mysqlTable("access_requests", {
+  id: int("id").autoincrement().primaryKey(),
+  fullName: varchar("fullName", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  phone: varchar("phone", { length: 20 }),
+  country: varchar("country", { length: 100 }),
+  investmentInterest: varchar("investmentInterest", { length: 100 }),
+  investmentBudget: varchar("investmentBudget", { length: 100 }),
+  message: text("message"),
+  status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("pending").notNull(),
+  invitationCode: varchar("invitationCode", { length: 20 }),
+  reviewedBy: int("reviewedBy").references(() => users.id),
+  reviewedAt: timestamp("reviewedAt"),
+  reviewNotes: text("reviewNotes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  emailIdx: index("access_requests_email_idx").on(table.email),
+  statusIdx: index("access_requests_status_idx").on(table.status),
+}));
+
+export type AccessRequest = typeof accessRequests.$inferSelect;
+export type InsertAccessRequest = typeof accessRequests.$inferInsert;
+
 // Permissions and Roles System
 export const permissions = mysqlTable("permissions", {
   id: int("id").autoincrement().primaryKey(),
