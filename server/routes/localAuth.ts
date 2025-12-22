@@ -2,7 +2,7 @@ import { z } from "zod";
 import { router, publicProcedure, protectedProcedure } from "../_core/trpc";
 import { getDb, createUserSession, updateUserLastLogin } from "../db";
 import { users } from "../../drizzle/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 import { hashPassword, comparePassword, validatePasswordStrength, generateResetToken, generateVerificationToken } from "../utils/password";
 import { TRPCError } from "@trpc/server";
 import jwt from "jsonwebtoken";
@@ -10,6 +10,7 @@ import { ENV } from "../_core/env";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "../_core/cookies";
 import crypto from "crypto";
+import { getPlatformAccessMode } from "../db/platformSettingsDb";
 
 /**
  * Local Authentication Router
@@ -25,6 +26,7 @@ export const localAuthRouter = router({
         email: z.string().email("Invalid email address"),
         password: z.string().min(8, "Password must be at least 8 characters"),
         name: z.string().min(2, "Name must be at least 2 characters"),
+        invitationCode: z.string().optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -34,6 +36,46 @@ export const localAuthRouter = router({
           code: "INTERNAL_SERVER_ERROR",
           message: "Database not available",
         });
+      }
+
+      // Check platform access mode
+      const accessMode = await getPlatformAccessMode();
+      
+      if (accessMode === "private") {
+        // Validate invitation code
+        if (!input.invitationCode) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Invitation code is required for registration",
+          });
+        }
+
+        // Check if invitation code is valid
+        const invitationResult = await db.execute(sql`
+          SELECT * FROM platform_invitations 
+          WHERE code = ${input.invitationCode} 
+          AND isActive = true 
+          AND (maxUses = 0 OR usedCount < maxUses)
+          AND (expiresAt IS NULL OR expiresAt > NOW())
+          LIMIT 1
+        `);
+
+        const invitation = (invitationResult as any)[0]?.[0];
+        
+        if (!invitation) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Invalid or expired invitation code",
+          });
+        }
+
+        // If invitation is email-specific, verify email matches
+        if (invitation.email && invitation.email !== input.email) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "This invitation code is not valid for your email address",
+          });
+        }
       }
 
       // Validate password strength
@@ -89,6 +131,17 @@ export const localAuthRouter = router({
         .from(users)
         .where(eq(users.email, input.email))
         .limit(1);
+
+      // Update invitation code usage if in private mode
+      if (accessMode === "private" && input.invitationCode) {
+        await db.execute(sql`
+          UPDATE platform_invitations 
+          SET usedCount = usedCount + 1, 
+              usedAt = NOW(),
+              usedBy = ${newUser.id}
+          WHERE code = ${input.invitationCode}
+        `);
+      }
 
       // Create JWT token
       const token = jwt.sign(
