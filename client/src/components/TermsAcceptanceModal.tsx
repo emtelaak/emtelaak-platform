@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2, FileText, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
@@ -22,6 +21,7 @@ export function TermsAcceptanceModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   const [hasAccepted, setHasAccepted] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Only check terms acceptance if user is authenticated
   const isAuthenticated = !!user && !authLoading;
@@ -32,7 +32,7 @@ export function TermsAcceptanceModal() {
     {
       retry: false,
       refetchOnWindowFocus: false,
-      enabled: isAuthenticated, // Only run query when user is authenticated
+      enabled: isAuthenticated,
     }
   );
 
@@ -68,11 +68,14 @@ export function TermsAcceptanceModal() {
     }
   }, [acceptanceStatus]);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLDivElement;
-    const isAtBottom = target.scrollHeight - target.scrollTop <= target.clientHeight + 50;
-    if (isAtBottom) {
-      setHasScrolledToBottom(true);
+  // Check scroll position
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+      const isAtBottom = scrollHeight - scrollTop <= clientHeight + 50;
+      if (isAtBottom) {
+        setHasScrolledToBottom(true);
+      }
     }
   };
 
@@ -120,17 +123,19 @@ export function TermsAcceptanceModal() {
           </div>
         ) : (
           <>
-            <ScrollArea 
-              className="flex-1 border rounded-lg p-4 max-h-[50vh]"
-              onScrollCapture={handleScroll}
+            <div 
+              ref={scrollRef}
+              onScroll={handleScroll}
+              className="flex-1 border rounded-lg p-4 overflow-y-auto"
+              style={{ maxHeight: "50vh" }}
             >
-              <div className={`prose prose-sm max-w-none ${language === "ar" ? "prose-rtl" : ""}`}>
+              <div className={`prose prose-sm max-w-none ${language === "ar" ? "prose-rtl text-right" : ""}`}>
                 <ReactMarkdown>{content || ""}</ReactMarkdown>
               </div>
-            </ScrollArea>
+            </div>
 
             {!hasScrolledToBottom && (
-              <p className="text-sm text-muted-foreground text-center">
+              <p className="text-sm text-muted-foreground text-center py-2">
                 {language === "ar" 
                   ? "يرجى التمرير لأسفل لقراءة جميع الشروط"
                   : "Please scroll down to read all terms"}
