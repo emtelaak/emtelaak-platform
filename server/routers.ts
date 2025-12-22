@@ -30,6 +30,7 @@ import { localAuthRouter } from "./routes/localAuth";
 import { monitoringRouter } from "./routes/monitoring";
 import { sessionManagementRouter } from "./routes/sessionManagement";
 import { accessRequestsRouter } from "./routes/accessRequests";
+import { termsRouter } from "./routes/terms";
 // import { getUnifiedPortfolioSummary } from "./db/unifiedInvestmentsDb";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -128,6 +129,7 @@ export const appRouter = router({
   investmentFlow: investmentFlowRouter,
   monitoring: monitoringRouter,
   sessionManagement: sessionManagementRouter,
+  terms: termsRouter,
   
   // Standard email/password authentication
   standardAuth: standardAuthRouter,

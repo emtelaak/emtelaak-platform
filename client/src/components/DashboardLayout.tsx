@@ -108,6 +108,7 @@ const menuItems: MenuItem[] = [
       { icon: FileText, label: "Terms Editor", path: "/admin/content/terms" },
       { icon: Mail, label: "Email Templates", path: "/admin/email-templates" },
       { icon: Scale, label: "Legal Documents", path: "/admin/legal-documents" },
+      { icon: FileText, label: "Terms & Conditions", path: "/admin/terms" },
     ]
   },
   { icon: FileText, label: "Settings", path: "/admin/settings" },
