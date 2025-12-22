@@ -6,6 +6,11 @@ import { sendEmail } from "../_core/sendgrid";
 import { notifyOwner } from "../_core/notification";
 import { ENV } from "../_core/env";
 import { getInvitationEmail } from "../db/platformSettingsDb";
+import { hashPassword, validatePasswordStrength, generateVerificationToken } from "../utils/password";
+import { users } from "../../drizzle/schema";
+import jwt from "jsonwebtoken";
+import { COOKIE_NAME } from "@shared/const";
+import { getSessionCookieOptions } from "../_core/cookies";
 
 // Generate random invitation code
 function generateInvitationCode(): string {
@@ -19,7 +24,7 @@ function generateInvitationCode(): string {
 
 // Send invitation email
 async function sendInvitationEmail(email: string, name: string, code: string): Promise<boolean> {
-  const loginUrl = `${process.env.VITE_OAUTH_PORTAL_URL || 'https://emtelaak.com'}/register?code=${code}`;
+  const activateUrl = `${process.env.VITE_OAUTH_PORTAL_URL || 'https://emtelaak.co'}/activate-account?code=${code}`;
   
   const html = `
     <!DOCTYPE html>
@@ -41,16 +46,19 @@ async function sendInvitationEmail(email: string, name: string, code: string): P
             We are pleased to inform you that your request to join Emtelaak has been approved. 
             You are now invited to become part of our exclusive community of real estate investors.
           </p>
-          <div style="background-color: #f8f9fa; border: 2px dashed #c9a227; border-radius: 8px; padding: 20px; text-align: center; margin: 30px 0;">
-            <p style="color: #666666; font-size: 14px; margin: 0 0 10px 0;">Your Exclusive Invitation Code</p>
-            <p style="color: #1e3a5f; font-size: 32px; font-weight: bold; margin: 0; letter-spacing: 2px; font-family: monospace;">${code}</p>
-          </div>
+          <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+            Click the button below to set your password and activate your account.
+          </p>
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${loginUrl}" style="display: inline-block; background: linear-gradient(135deg, #c9a227 0%, #b8941f 100%); color: #ffffff; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: bold;">Register Now</a>
+            <a href="${activateUrl}" style="display: inline-block; background: linear-gradient(135deg, #c9a227 0%, #b8941f 100%); color: #ffffff; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: bold;">Activate Your Account</a>
+          </div>
+          <div style="background-color: #f8f9fa; border: 2px dashed #c9a227; border-radius: 8px; padding: 20px; text-align: center; margin: 30px 0;">
+            <p style="color: #666666; font-size: 14px; margin: 0 0 10px 0;">Your Invitation Code (for reference)</p>
+            <p style="color: #1e3a5f; font-size: 24px; font-weight: bold; margin: 0; letter-spacing: 2px; font-family: monospace;">${code}</p>
           </div>
           <p style="color: #666666; font-size: 14px; line-height: 1.6; margin: 20px 0 0 0;">
             If the button doesn't work, copy and paste this link into your browser:<br>
-            <a href="${loginUrl}" style="color: #c9a227;">${loginUrl}</a>
+            <a href="${activateUrl}" style="color: #c9a227;">${activateUrl}</a>
           </p>
         </div>
         <div style="background-color: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #eeeeee;">
@@ -389,5 +397,223 @@ export const accessRequestsRouter = router({
       `);
 
       return { success: true };
+    }),
+
+  // Public: Validate invitation code and get user info
+  validateInvitation: publicProcedure
+    .input(z.object({ code: z.string() }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Check if invitation code is valid
+      const invitationResult = await db.execute(sql`
+        SELECT * FROM platform_invitations 
+        WHERE code = ${input.code} 
+        AND isActive = true 
+        AND (maxUses = 0 OR usedCount < maxUses)
+        AND (expiresAt IS NULL OR expiresAt > NOW())
+        LIMIT 1
+      `);
+
+      const invitation = (invitationResult as any)[0]?.[0];
+      
+      if (!invitation) {
+        return { valid: false, error: "Invalid or expired invitation code" };
+      }
+
+      // Get the access request data for this invitation
+      const requestResult = await db.execute(sql`
+        SELECT * FROM access_requests 
+        WHERE invitationCode = ${input.code}
+        LIMIT 1
+      `);
+
+      const accessRequest = (requestResult as any)[0]?.[0];
+
+      if (!accessRequest) {
+        return { valid: false, error: "Access request not found" };
+      }
+
+      // Check if user already exists with this email
+      const existingUserResult = await db.execute(sql`
+        SELECT id FROM users WHERE email = ${accessRequest.email} LIMIT 1
+      `);
+
+      if ((existingUserResult as any)[0]?.length > 0) {
+        return { valid: false, error: "Account already exists. Please login instead.", alreadyRegistered: true };
+      }
+
+      return {
+        valid: true,
+        email: accessRequest.email,
+        fullName: accessRequest.fullName,
+        phone: accessRequest.phone,
+        country: accessRequest.country
+      };
+    }),
+
+  // Public: Activate account with invitation code (set password)
+  activateAccount: publicProcedure
+    .input(z.object({
+      code: z.string(),
+      password: z.string().min(8, "Password must be at least 8 characters")
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Validate invitation code
+      const invitationResult = await db.execute(sql`
+        SELECT * FROM platform_invitations 
+        WHERE code = ${input.code} 
+        AND isActive = true 
+        AND (maxUses = 0 OR usedCount < maxUses)
+        AND (expiresAt IS NULL OR expiresAt > NOW())
+        LIMIT 1
+      `);
+
+      const invitation = (invitationResult as any)[0]?.[0];
+      
+      if (!invitation) {
+        throw new Error("Invalid or expired invitation code");
+      }
+
+      // Get access request data
+      const requestResult = await db.execute(sql`
+        SELECT * FROM access_requests 
+        WHERE invitationCode = ${input.code}
+        LIMIT 1
+      `);
+
+      const accessRequest = (requestResult as any)[0]?.[0];
+
+      if (!accessRequest) {
+        throw new Error("Access request not found");
+      }
+
+      // Check if user already exists
+      const existingUserResult = await db.execute(sql`
+        SELECT id FROM users WHERE email = ${accessRequest.email} LIMIT 1
+      `);
+
+      if ((existingUserResult as any)[0]?.length > 0) {
+        throw new Error("Account already exists. Please login instead.");
+      }
+
+      // Validate password strength
+      const passwordValidation = validatePasswordStrength(input.password);
+      if (!passwordValidation.isValid) {
+        throw new Error(passwordValidation.error || "Invalid password");
+      }
+
+      // Hash password
+      const passwordHash = await hashPassword(input.password);
+
+      // Generate email verification token
+      const verificationToken = generateVerificationToken();
+      const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+      // Create user with data from access request
+      const openId = `local_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+      
+      await db.insert(users).values({
+        openId,
+        email: accessRequest.email,
+        name: accessRequest.fullName,
+        phone: accessRequest.phone || null,
+        password: passwordHash,
+        loginMethod: "email_password",
+        role: "user",
+        status: "pending_verification",
+        emailVerified: false,
+        emailVerificationToken: verificationToken,
+        emailVerificationExpiry: verificationExpiry,
+        lastSignedIn: new Date(),
+      });
+
+      // Get the created user
+      const newUserResult = await db.execute(sql`
+        SELECT * FROM users WHERE email = ${accessRequest.email} LIMIT 1
+      `);
+      const newUser = (newUserResult as any)[0]?.[0];
+
+      // Update invitation code usage
+      await db.execute(sql`
+        UPDATE platform_invitations 
+        SET usedCount = usedCount + 1, 
+            usedAt = NOW(),
+            usedBy = ${newUser.id}
+        WHERE code = ${input.code}
+      `);
+
+      // Send verification email
+      const verificationUrl = `${process.env.VITE_OAUTH_PORTAL_URL || 'https://emtelaak.co'}/verify-email?token=${verificationToken}`;
+      
+      const verificationHtml = `
+        <!DOCTYPE html>
+        <html dir="ltr">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+            <div style="background: linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%); padding: 40px 30px; text-align: center;">
+              <h1 style="color: #c9a227; margin: 0; font-size: 28px;">Emtelaak</h1>
+              <p style="color: #ffffff; margin: 10px 0 0 0; font-size: 14px;">Premium Real Estate Investment</p>
+            </div>
+            <div style="padding: 40px 30px;">
+              <h2 style="color: #1e3a5f; margin: 0 0 20px 0; font-size: 24px;">Verify Your Email</h2>
+              <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">Dear ${accessRequest.fullName},</p>
+              <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                Thank you for creating your Emtelaak account. Please verify your email address to complete your registration.
+              </p>
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="${verificationUrl}" style="display: inline-block; background: linear-gradient(135deg, #c9a227 0%, #b8941f 100%); color: #ffffff; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: bold;">Verify Email</a>
+              </div>
+              <p style="color: #666666; font-size: 14px; line-height: 1.6; margin: 20px 0 0 0;">
+                This link will expire in 24 hours. If you didn't create an account, please ignore this email.
+              </p>
+            </div>
+            <div style="background-color: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #eeeeee;">
+              <p style="color: #999999; font-size: 12px; margin: 0;">
+                © ${new Date().getFullYear()} Emtelaak. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+
+      await sendEmail({
+        to: accessRequest.email,
+        subject: "Verify Your Emtelaak Account",
+        html: verificationHtml
+      });
+
+      // Create JWT token for auto-login
+      const token = jwt.sign(
+        { openId: newUser.openId, userId: newUser.id, role: newUser.role },
+        ENV.jwtSecret,
+        { expiresIn: "7d" }
+      );
+
+      // Set session cookie
+      if (ctx.res) {
+        ctx.res.cookie(COOKIE_NAME, token, getSessionCookieOptions());
+      }
+
+      return {
+        success: true,
+        message: "Account created successfully. Please check your email to verify your account.",
+        user: {
+          id: newUser.id,
+          email: newUser.email,
+          name: newUser.name,
+          role: newUser.role,
+          status: newUser.status
+        }
+      };
     })
 });
