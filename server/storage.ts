@@ -1,102 +1,106 @@
-// Preconfigured storage helpers for Ofok WebDev templates
-// Uses the Biz-provided storage proxy (Authorization: Bearer <token>)
+// AWS S3 Storage Service for Emtelaak Platform
+// Uses direct AWS S3 SDK for file uploads
 
-import { ENV } from './_core/env';
+import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-type StorageConfig = { baseUrl: string; apiKey: string };
+// S3 Configuration
+const S3_BUCKET = process.env.S3_BUCKET_NAME || 'emtelaak-property-images';
+const AWS_REGION = process.env.AWS_REGION || 'us-east-1';
 
-function getStorageConfig(): StorageConfig {
-  const baseUrl = ENV.forgeApiUrl;
-  const apiKey = ENV.forgeApiKey;
-
-  if (!baseUrl || !apiKey) {
-    throw new Error(
-      "Storage proxy credentials missing: set BUILT_IN_FORGE_API_URL and BUILT_IN_FORGE_API_KEY"
-    );
-  }
-
-  return { baseUrl: baseUrl.replace(/\/+$/, ""), apiKey };
-}
-
-function buildUploadUrl(baseUrl: string, relKey: string): URL {
-  const url = new URL("v1/storage/upload", ensureTrailingSlash(baseUrl));
-  url.searchParams.set("path", normalizeKey(relKey));
-  return url;
-}
-
-async function buildDownloadUrl(
-  baseUrl: string,
-  relKey: string,
-  apiKey: string
-): Promise<string> {
-  const downloadApiUrl = new URL(
-    "v1/storage/downloadUrl",
-    ensureTrailingSlash(baseUrl)
-  );
-  downloadApiUrl.searchParams.set("path", normalizeKey(relKey));
-  const response = await fetch(downloadApiUrl, {
-    method: "GET",
-    headers: buildAuthHeaders(apiKey),
-  });
-  return (await response.json()).url;
-}
-
-function ensureTrailingSlash(value: string): string {
-  return value.endsWith("/") ? value : `${value}/`;
-}
+// Initialize S3 Client
+const s3Client = new S3Client({
+  region: AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+  },
+});
 
 function normalizeKey(relKey: string): string {
   return relKey.replace(/^\/+/, "");
 }
 
-function toFormData(
-  data: Buffer | Uint8Array | string,
-  contentType: string,
-  fileName: string
-): FormData {
-  const blob =
-    typeof data === "string"
-      ? new Blob([data], { type: contentType })
-      : new Blob([data as any], { type: contentType });
-  const form = new FormData();
-  form.append("file", blob, fileName || "file");
-  return form;
-}
-
-function buildAuthHeaders(apiKey: string): HeadersInit {
-  return { Authorization: `Bearer ${apiKey}` };
-}
-
+/**
+ * Upload a file to S3
+ * @param relKey - The relative path/key for the file (e.g., "profiles/user-123.jpg")
+ * @param data - The file data as Buffer, Uint8Array, or string
+ * @param contentType - The MIME type of the file
+ * @returns Object containing the key and public URL
+ */
 export async function storagePut(
   relKey: string,
   data: Buffer | Uint8Array | string,
   contentType = "application/octet-stream"
 ): Promise<{ key: string; url: string }> {
-  const { baseUrl, apiKey } = getStorageConfig();
-  const key = normalizeKey(relKey);
-  const uploadUrl = buildUploadUrl(baseUrl, key);
-  const formData = toFormData(data, contentType, key.split("/").pop() ?? key);
-  const response = await fetch(uploadUrl, {
-    method: "POST",
-    headers: buildAuthHeaders(apiKey),
-    body: formData,
-  });
-
-  if (!response.ok) {
-    const message = await response.text().catch(() => response.statusText);
+  // Validate AWS credentials
+  if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
     throw new Error(
-      `Storage upload failed (${response.status} ${response.statusText}): ${message}`
+      "AWS S3 credentials missing: set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables"
     );
   }
-  const url = (await response.json()).url;
-  return { key, url };
+
+  const key = normalizeKey(relKey);
+  
+  // Convert string to Buffer if needed
+  const body = typeof data === "string" ? Buffer.from(data) : data;
+
+  const command = new PutObjectCommand({
+    Bucket: S3_BUCKET,
+    Key: key,
+    Body: body,
+    ContentType: contentType,
+    // Make the object publicly readable
+    ACL: 'public-read',
+  });
+
+  try {
+    await s3Client.send(command);
+    
+    // Return the public URL
+    const url = `https://${S3_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${key}`;
+    
+    return { key, url };
+  } catch (error: any) {
+    throw new Error(`S3 upload failed: ${error.message}`);
+  }
 }
 
-export async function storageGet(relKey: string): Promise<{ key: string; url: string; }> {
-  const { baseUrl, apiKey } = getStorageConfig();
+/**
+ * Get a signed URL for downloading a file from S3
+ * @param relKey - The relative path/key for the file
+ * @returns Object containing the key and signed download URL
+ */
+export async function storageGet(relKey: string): Promise<{ key: string; url: string }> {
+  // Validate AWS credentials
+  if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+    throw new Error(
+      "AWS S3 credentials missing: set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables"
+    );
+  }
+
   const key = normalizeKey(relKey);
-  return {
-    key,
-    url: await buildDownloadUrl(baseUrl, key, apiKey),
-  };
+
+  const command = new GetObjectCommand({
+    Bucket: S3_BUCKET,
+    Key: key,
+  });
+
+  try {
+    // Generate a signed URL valid for 1 hour
+    const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+    return { key, url };
+  } catch (error: any) {
+    throw new Error(`S3 get URL failed: ${error.message}`);
+  }
+}
+
+/**
+ * Get the public URL for a file (for publicly accessible files)
+ * @param relKey - The relative path/key for the file
+ * @returns The public URL
+ */
+export function getPublicUrl(relKey: string): string {
+  const key = normalizeKey(relKey);
+  return `https://${S3_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${key}`;
 }
