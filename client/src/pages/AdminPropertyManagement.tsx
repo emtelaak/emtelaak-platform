@@ -8,7 +8,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { DollarSign, Edit, Building2, Image } from "lucide-react";
+import { DollarSign, Edit, Building2, Image, Eye, EyeOff, Lock, Globe } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Breadcrumb } from "@/components/Breadcrumb";
 
@@ -31,6 +32,25 @@ export default function AdminPropertyManagement() {
       toast.error(error.message || "Failed to update share price");
     },
   });
+
+  const toggleVisibilityMutation = trpc.propertyManagement.toggleVisibility.useMutation({
+    onSuccess: (_, variables) => {
+      const isPublic = variables.visibility === "public";
+      toast.success(isPublic ? "Property is now public" : "Property is now login-only");
+      refetch();
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to update visibility");
+    },
+  });
+
+  const handleToggleVisibility = (property: any) => {
+    const newVisibility = property.visibility === "public" ? "authenticated" : "public";
+    toggleVisibilityMutation.mutate({
+      propertyId: property.id,
+      visibility: newVisibility,
+    });
+  };
 
   const formatCurrency = (cents: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -110,6 +130,7 @@ export default function AdminPropertyManagement() {
               <TableRow>
                 <TableHead>Property</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Visibility</TableHead>
                 <TableHead>Total Shares</TableHead>
                 <TableHead>Available Shares</TableHead>
                 <TableHead>Share Price</TableHead>
@@ -136,6 +157,22 @@ export default function AdminPropertyManagement() {
                       <Badge className={getStatusColor(property.status)}>
                         {property.status}
                       </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Switch
+                          checked={property.visibility === "public"}
+                          onCheckedChange={() => handleToggleVisibility(property)}
+                          disabled={toggleVisibilityMutation.isPending}
+                        />
+                        <span className="flex items-center gap-1 text-sm">
+                          {property.visibility === "public" ? (
+                            <><Globe className="h-4 w-4 text-green-500" /> Public</>
+                          ) : (
+                            <><Lock className="h-4 w-4 text-orange-500" /> Login Only</>
+                          )}
+                        </span>
+                      </div>
                     </TableCell>
                     <TableCell>{property.totalShares.toLocaleString()}</TableCell>
                     <TableCell>{property.availableShares.toLocaleString()}</TableCell>
@@ -169,7 +206,7 @@ export default function AdminPropertyManagement() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center text-muted-foreground">
+                  <TableCell colSpan={8} className="text-center text-muted-foreground">
                     No properties found
                   </TableCell>
                 </TableRow>

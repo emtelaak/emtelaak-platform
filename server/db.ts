@@ -295,17 +295,40 @@ export async function createProperty(property: InsertProperty) {
   return result;
 }
 
-export async function getPropertyById(propertyId: number) {
+export async function getPropertyById(propertyId: number, isAuthenticated: boolean = false) {
   const db = await getDb();
   if (!db) return undefined;
+  
   const result = await db.select().from(properties).where(eq(properties.id, propertyId)).limit(1);
-  return result.length > 0 ? result[0] : undefined;
+  
+  if (result.length === 0) return undefined;
+  
+  const property = result[0];
+  
+  // If property requires authentication and user is not authenticated, return undefined
+  if (property.visibility === "authenticated" && !isAuthenticated) {
+    return undefined;
+  }
+  
+  return property;
 }
 
-export async function getAvailableProperties() {
+export async function getAvailableProperties(isAuthenticated: boolean = false) {
   const db = await getDb();
   if (!db) return [];
-  return await db.select().from(properties).where(eq(properties.status, "available")).orderBy(desc(properties.publishedAt));
+  
+  // If user is authenticated, show all available properties
+  // If not authenticated, only show public properties
+  if (isAuthenticated) {
+    return await db.select().from(properties).where(eq(properties.status, "available")).orderBy(desc(properties.publishedAt));
+  } else {
+    return await db.select().from(properties).where(
+      and(
+        eq(properties.status, "available"),
+        eq(properties.visibility, "public")
+      )
+    ).orderBy(desc(properties.publishedAt));
+  }
 }
 
 export async function getPropertiesByType(propertyType: string) {
@@ -325,6 +348,7 @@ export async function searchProperties(filters: {
   minValue?: number;
   maxValue?: number;
   status?: string;
+  isAuthenticated?: boolean;
 }) {
   const db = await getDb();
   if (!db) return [];
@@ -335,6 +359,11 @@ export async function searchProperties(filters: {
   if (filters.status) conditions.push(eq(properties.status, filters.status as any));
   if (filters.minValue) conditions.push(gte(properties.totalValue, filters.minValue));
   if (filters.maxValue) conditions.push(lte(properties.totalValue, filters.maxValue));
+  
+  // If not authenticated, only show public properties
+  if (!filters.isAuthenticated) {
+    conditions.push(eq(properties.visibility, "public"));
+  }
   
   return await db.select().from(properties).where(and(...conditions)).orderBy(desc(properties.publishedAt));
 }
