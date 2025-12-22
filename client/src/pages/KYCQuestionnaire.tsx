@@ -244,11 +244,11 @@ export default function KYCQuestionnaire() {
                       <SelectValue placeholder="Select range" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="under_50k">Under $50,000</SelectItem>
-                      <SelectItem value="50k_100k">$50,000 - $100,000</SelectItem>
-                      <SelectItem value="100k_200k">$100,000 - $200,000</SelectItem>
-                      <SelectItem value="200k_500k">$200,000 - $500,000</SelectItem>
-                      <SelectItem value="over_500k">Over $500,000</SelectItem>
+                      <SelectItem value="under_500k">Under 500,000 EGP</SelectItem>
+                      <SelectItem value="500k_1m">500,000 - 1,000,000 EGP</SelectItem>
+                      <SelectItem value="1m_2m">1,000,000 - 2,000,000 EGP</SelectItem>
+                      <SelectItem value="2m_5m">2,000,000 - 5,000,000 EGP</SelectItem>
+                      <SelectItem value="over_5m">Over 5,000,000 EGP</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -260,11 +260,11 @@ export default function KYCQuestionnaire() {
                       <SelectValue placeholder="Select range" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="under_100k">Under $100,000</SelectItem>
-                      <SelectItem value="100k_500k">$100,000 - $500,000</SelectItem>
-                      <SelectItem value="500k_1m">$500,000 - $1,000,000</SelectItem>
-                      <SelectItem value="1m_5m">$1,000,000 - $5,000,000</SelectItem>
-                      <SelectItem value="over_5m">Over $5,000,000</SelectItem>
+                      <SelectItem value="under_1m">Under 1,000,000 EGP</SelectItem>
+                      <SelectItem value="1m_5m">1,000,000 - 5,000,000 EGP</SelectItem>
+                      <SelectItem value="5m_10m">5,000,000 - 10,000,000 EGP</SelectItem>
+                      <SelectItem value="10m_50m">10,000,000 - 50,000,000 EGP</SelectItem>
+                      <SelectItem value="over_50m">Over 50,000,000 EGP</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -276,10 +276,10 @@ export default function KYCQuestionnaire() {
                       <SelectValue placeholder="Select range" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="under_50k">Under $50,000</SelectItem>
-                      <SelectItem value="50k_200k">$50,000 - $200,000</SelectItem>
-                      <SelectItem value="200k_500k">$200,000 - $500,000</SelectItem>
-                      <SelectItem value="over_500k">Over $500,000</SelectItem>
+                      <SelectItem value="under_500k">Under 500,000 EGP</SelectItem>
+                      <SelectItem value="500k_2m">500,000 - 2,000,000 EGP</SelectItem>
+                      <SelectItem value="2m_5m">2,000,000 - 5,000,000 EGP</SelectItem>
+                      <SelectItem value="over_5m">Over 5,000,000 EGP</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

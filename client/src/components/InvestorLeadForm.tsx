@@ -163,11 +163,11 @@ Additional Notes: ${formData.notes || "None"}`,
                 <SelectValue placeholder="Select amount range" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="$100-$1,000">$100 - $1,000</SelectItem>
-                <SelectItem value="$1,000-$5,000">$1,000 - $5,000</SelectItem>
-                <SelectItem value="$5,000-$10,000">$5,000 - $10,000</SelectItem>
-                <SelectItem value="$10,000-$50,000">$10,000 - $50,000</SelectItem>
-                <SelectItem value="$50,000+">$50,000+</SelectItem>
+                <SelectItem value="5k-50k">5,000 - 50,000 EGP</SelectItem>
+                <SelectItem value="50k-250k">50,000 - 250,000 EGP</SelectItem>
+                <SelectItem value="250k-500k">250,000 - 500,000 EGP</SelectItem>
+                <SelectItem value="500k-2m">500,000 - 2,000,000 EGP</SelectItem>
+                <SelectItem value="over_2m">Over 2,000,000 EGP</SelectItem>
               </SelectContent>
             </Select>
           </div>
