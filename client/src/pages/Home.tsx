@@ -75,10 +75,6 @@ export default function Home() {
   const heroCTA2 = (content as any)?.cta2 || defaultContent.cta2;
   const heroBackgroundImage = (heroContent?.content as any)?.backgroundImage || "/brand/backgrounds/hero-bg.jpg";
   
-  // Video URLs - fetch from database or use defaults (using youtube-nocookie for better embed compatibility)
-  const videoUrlEn = (heroContent?.content as any)?.videoUrl || "https://www.youtube-nocookie.com/embed/P9K-VUdc0SA?rel=0&modestbranding=1";
-  const videoUrlAr = (heroContent?.contentAr as any)?.videoUrl || "https://www.youtube-nocookie.com/embed/w7hmsuFkrmg?rel=0&modestbranding=1";
-  const videoUrl = language === "en" ? videoUrlEn : videoUrlAr;
 
   // Don't show loading spinner on homepage - let it load immediately
   // Only show loading for authenticated features
@@ -269,43 +265,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Promotional Video Section */}
-      <section className="py-24 bg-gradient-to-b from-background to-muted/30">
-        <div className="container">
-          <div className="text-center mb-12">
-            <div className="inline-block mb-4">
-              <span className="px-4 py-2 rounded-full text-sm font-semibold bg-primary/10 text-primary">
-                {language === "en" ? "📹 Platform Overview" : "📹 نظرة عامة على المنصة"}
-              </span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: '#032941' }}>
-              {language === "en" ? "Discover Emtelaak" : "اكتشف إمتلاك"}
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              {language === "en" 
-                ? "Watch our video to learn how Emtelaak is revolutionizing real estate investment in Egypt"
-                : "شاهد الفيديو لتتعرف على كيفية إحداث إمتلاك ثورة في الاستثمار العقاري في مصر"}
-            </p>
-          </div>
-          
-          <div className="max-w-5xl mx-auto">
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-[#CDE428]/20 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-300"></div>
-              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/5">
-                <iframe
-                  className="w-full h-full"
-                  src={videoUrl}
-                  title={language === "en" ? "Emtelaak Platform Introduction" : "مقدمة منصة إمتلاك"}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Why Choose Emtelaak */}
       <section className="py-24 bg-muted/30">
