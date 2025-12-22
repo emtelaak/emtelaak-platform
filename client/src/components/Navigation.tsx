@@ -180,7 +180,7 @@ export default function Navigation() {
                 {(user?.role === 'fundraiser' || user?.role === 'admin' || user?.role === 'super_admin') && (
                   <>
                     <DropdownMenuSeparator />
-                    <Link href="/fundraiser/dashboard">
+                    <Link href="/fundraiser">
                       <DropdownMenuItem className="cursor-pointer gap-3 py-3">
                         <Building2 className="h-5 w-5" />
                         <span className="font-medium">{language === 'en' ? 'Fundraiser Portal' : 'بوابة جمع التمويل'}</span>
