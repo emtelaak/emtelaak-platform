@@ -52,7 +52,7 @@ export default function FundraiserDashboard() {
     );
   }
 
-  if (!user || (user.role !== "fundraiser" && user.role !== "admin" && user.role !== "super_admin")) {
+  if (!user || (user.role !== "developer" && user.role !== "admin" && user.role !== "super_admin")) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-[400px]">
