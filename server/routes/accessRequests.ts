@@ -303,8 +303,8 @@ export const accessRequestsRouter = router({
                 <div style="background-color: #fff8e1; border: 1px solid #ffc107; border-radius: 8px; padding: 20px; margin: 20px 0;">
                   <p style="color: #856404; font-size: 14px; margin: 0;">
                     <strong>⏳ الخطوات التالية / Next Steps:</strong><br><br>
-                    سيقوم فريقنا بمراجعة طلبك خلال 24-48 ساعة. ستتلقى بريداً إلكترونياً بمجرد اتخاذ قرار بشأن طلبك.<br><br>
-                    Our team will review your request within 24-48 hours. You will receive an email once a decision has been made.
+                    سنرسل لك رابط الدعوة خلال أسبوع. يرجى مراجعة بريدك الإلكتروني.<br><br>
+                    Your invitation link will be sent within one week. Please keep an eye on your inbox.
                   </p>
                 </div>
               </div>
