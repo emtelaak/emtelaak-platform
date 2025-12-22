@@ -8,7 +8,6 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { storagePut } from './storage';
 import { saveFile, UPLOAD_CATEGORIES } from './localStorageService';
-import { uploadToCloudinary, UPLOAD_FOLDERS } from './cloudinaryService';
 import {
   getPendingKycVerifications,
   getUserKycDocuments,
@@ -701,8 +700,9 @@ export const adminRouter = router({
         const fileExtension = input.mimeType.split('/')[1];
         const fileName = `platform-logo-${Date.now()}.${fileExtension}`;
         
-        // Upload to Cloudinary
-        const { url } = await uploadToCloudinary(UPLOAD_FOLDERS.logos, buffer, fileName, 'image');
+        // Upload to S3 storage
+        const fileKey = `logos/${fileName}`;
+        const { url } = await storagePut(fileKey, buffer, input.mimeType);
         
         // Save to platform settings
         await setPlatformSetting('platform_logo', url, ctx.user.id);
