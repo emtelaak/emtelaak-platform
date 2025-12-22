@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -19,9 +19,7 @@ export function TermsAcceptanceModal() {
   const { language } = useLanguage();
   const { user, isLoading: authLoading } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   const [hasAccepted, setHasAccepted] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Only check terms acceptance if user is authenticated
   const isAuthenticated = !!user && !authLoading;
@@ -68,17 +66,6 @@ export function TermsAcceptanceModal() {
     }
   }, [acceptanceStatus]);
 
-  // Check scroll position
-  const handleScroll = () => {
-    if (scrollRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-      const isAtBottom = scrollHeight - scrollTop <= clientHeight + 50;
-      if (isAtBottom) {
-        setHasScrolledToBottom(true);
-      }
-    }
-  };
-
   const handleAccept = () => {
     if (!termsContent?.version) return;
     acceptTermsMutation.mutate({ version: termsContent.version });
@@ -95,11 +82,12 @@ export function TermsAcceptanceModal() {
   return (
     <Dialog open={isOpen} onOpenChange={() => {}}>
       <DialogContent 
-        className="max-w-3xl max-h-[90vh] flex flex-col"
+        className="max-w-3xl max-h-[90vh] overflow-hidden flex flex-col"
         onPointerDownOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
       >
-        <DialogHeader>
+        <DialogHeader className="flex-shrink-0">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-primary/10 rounded-full">
               <FileText className="h-6 w-6 text-primary" />
@@ -124,35 +112,25 @@ export function TermsAcceptanceModal() {
         ) : (
           <>
             <div 
-              ref={scrollRef}
-              onScroll={handleScroll}
-              className="flex-1 border rounded-lg p-4 overflow-y-auto"
-              style={{ maxHeight: "50vh" }}
+              className="flex-1 min-h-0 border rounded-lg p-4 overflow-auto"
+              style={{ maxHeight: "400px" }}
             >
-              <div className={`prose prose-sm max-w-none ${language === "ar" ? "prose-rtl text-right" : ""}`}>
+              <div className={`prose prose-sm max-w-none dark:prose-invert ${language === "ar" ? "text-right" : ""}`}
+                   dir={language === "ar" ? "rtl" : "ltr"}>
                 <ReactMarkdown>{content || ""}</ReactMarkdown>
               </div>
             </div>
 
-            {!hasScrolledToBottom && (
-              <p className="text-sm text-muted-foreground text-center py-2">
-                {language === "ar" 
-                  ? "يرجى التمرير لأسفل لقراءة جميع الشروط"
-                  : "Please scroll down to read all terms"}
-              </p>
-            )}
-
-            <div className="space-y-4 pt-4 border-t">
+            <div className="flex-shrink-0 space-y-4 pt-4 border-t">
               <div className="flex items-start gap-3">
                 <Checkbox
                   id="accept-terms"
                   checked={hasAccepted}
                   onCheckedChange={(checked) => setHasAccepted(checked === true)}
-                  disabled={!hasScrolledToBottom}
                 />
                 <label 
                   htmlFor="accept-terms" 
-                  className={`text-sm cursor-pointer ${!hasScrolledToBottom ? "text-muted-foreground" : ""}`}
+                  className="text-sm cursor-pointer"
                 >
                   {language === "ar"
                     ? "لقد قرأت وأوافق على الشروط والأحكام"
@@ -162,7 +140,7 @@ export function TermsAcceptanceModal() {
 
               <Button
                 onClick={handleAccept}
-                disabled={!hasAccepted || !hasScrolledToBottom || acceptTermsMutation.isPending}
+                disabled={!hasAccepted || acceptTermsMutation.isPending}
                 className="w-full"
               >
                 {acceptTermsMutation.isPending ? (
