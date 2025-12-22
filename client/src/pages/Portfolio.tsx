@@ -41,7 +41,7 @@ export default function Portfolio() {
   const formatCurrency = (cents: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'EGP',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(cents / 100);

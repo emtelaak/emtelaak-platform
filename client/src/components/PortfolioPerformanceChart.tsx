@@ -108,9 +108,9 @@ export default function PortfolioPerformanceChart({
   }, [incomeHistory]);
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat("en-EG", {
       style: "currency",
-      currency: "USD",
+      currency: "EGP",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(value);
@@ -155,7 +155,7 @@ export default function PortfolioPerformanceChart({
                 />
                 <YAxis 
                   tick={{ fontSize: 12 }}
-                  tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                  tickFormatter={(value) => `EGP ${(value / 1000).toFixed(0)}k`}
                 />
                 <Tooltip 
                   formatter={(value: number) => formatCurrency(value)}
@@ -211,7 +211,7 @@ export default function PortfolioPerformanceChart({
                 />
                 <YAxis 
                   tick={{ fontSize: 12 }}
-                  tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                  tickFormatter={(value) => `EGP ${(value / 1000).toFixed(0)}k`}
                 />
                 <Tooltip 
                   formatter={(value: number) => formatCurrency(value)}

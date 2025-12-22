@@ -199,7 +199,7 @@ export default function CRMLeads() {
                       <Input id="investmentInterest" name="investmentInterest" placeholder="e.g., Residential, Commercial" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="budget">Budget (USD)</Label>
+                      <Label htmlFor="budget">Budget (EGP)</Label>
                       <Input id="budget" name="budget" type="number" step="0.01" />
                     </div>
                   </div>

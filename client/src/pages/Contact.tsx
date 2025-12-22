@@ -304,7 +304,7 @@ export default function Contact() {
                     What is the minimum investment amount?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    The minimum investment amount is $100 USD. This low barrier to entry allows more people to participate in real estate investment and diversify their portfolio across multiple properties.
+                    The minimum investment amount is 100 EGP. This low barrier to entry allows more people to participate in real estate investment and diversify their portfolio across multiple properties.
                   </AccordionContent>
                 </AccordionItem>
 

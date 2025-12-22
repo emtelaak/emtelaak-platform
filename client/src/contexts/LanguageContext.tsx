@@ -21,9 +21,9 @@ const translations: Record<Language, Translation> = {
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => {
-    // Get language from localStorage or default to 'en'
+    // Get language from localStorage or default to 'ar' (Arabic)
     const saved = localStorage.getItem('language');
-    return (saved === 'ar' || saved === 'en') ? saved : 'en';
+    return (saved === 'ar' || saved === 'en') ? saved : 'ar';
   });
 
   const setLanguage = (lang: Language) => {
