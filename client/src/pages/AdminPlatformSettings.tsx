@@ -22,7 +22,7 @@ export default function AdminPlatformSettings() {
   const [platformFeePercentage, setPlatformFeePercentage] = useState<string>("");
   const [processingFeeDollars, setProcessingFeeDollars] = useState<string>("");
   const [isPrivateMode, setIsPrivateMode] = useState<boolean>(true);
-  const [invitationEmail, setInvitationEmail] = useState<string>("investment@emtelaak.com");
+  const [invitationEmail, setInvitationEmail] = useState<string>("noreply@emtelaak.co");
 
   // Initialize form values when data loads
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function AdminPlatformSettings() {
   useEffect(() => {
     if (accessSettings) {
       setIsPrivateMode(accessSettings.accessMode === 'private');
-      setInvitationEmail(accessSettings.invitationEmail || 'investment@emtelaak.com');
+      setInvitationEmail(accessSettings.invitationEmail || 'noreply@emtelaak.co');
     }
   }, [accessSettings]);
 
@@ -212,9 +212,9 @@ export default function AdminPlatformSettings() {
 
                 <div className="flex items-center gap-2 pt-2">
                   <Users className="h-4 w-4 text-amber-700" />
-                  <Link href="/admin/registration-requests">
+                  <Link href="/admin/access-requests">
                     <Button variant="outline" size="sm" className="text-amber-700 border-amber-300 hover:bg-amber-100">
-                      View Registration Requests
+                      View Access Requests
                     </Button>
                   </Link>
                 </div>
