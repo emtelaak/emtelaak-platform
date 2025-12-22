@@ -35,8 +35,6 @@ const AdminPropertyManagement = lazy(() => import("@/pages/AdminPropertyManageme
 const AdminPropertyImages = lazy(() => import("@/pages/AdminPropertyImages"));
 const AdminIncomeDistribution = lazy(() => import("@/pages/AdminIncomeDistribution"));
 const AdminAnalytics = lazy(() => import("@/pages/AdminAnalytics"));
-const FundraiserDashboard = lazy(() => import("./pages/FundraiserDashboard"));
-const FundraiserPropertyManagement = lazy(() => import("./pages/FundraiserPropertyManagement"));
 const AdminKYCReview = lazy(() => import("./pages/AdminKYCReview"));
 const AdminRoles = lazy(() => import("./pages/AdminRoles"));
 const AdminPermissions = lazy(() => import("./pages/AdminPermissions"));
@@ -58,6 +56,16 @@ const EmailTemplateEditor = lazy(() => import("./pages/EmailTemplateEditor"));
 const HomepageContentEditor = lazy(() => import("@/pages/HomepageContentEditor"));
 const ImageLibrary = lazy(() => import("@/pages/ImageLibrary"));
 const AboutPageEditor = lazy(() => import("@/pages/AboutPageEditor"));
+
+// Lazy load Fundraiser Portal pages (dedicated portal)
+const FundraiserDashboardNew = lazy(() => import("./pages/fundraiser/FundraiserDashboard"));
+const FundraiserProperties = lazy(() => import("./pages/fundraiser/FundraiserProperties"));
+const FundraiserPropertyNew = lazy(() => import("./pages/fundraiser/FundraiserPropertyNew"));
+const FundraiserOfferings = lazy(() => import("./pages/fundraiser/FundraiserOfferings"));
+
+// Legacy fundraiser pages (for backwards compatibility - will redirect)
+const FundraiserDashboard = lazy(() => import("./pages/FundraiserDashboard"));
+const FundraiserPropertyManagement = lazy(() => import("./pages/FundraiserPropertyManagement"));
 
 // Lazy load CRM pages
 const CRMDashboard = lazy(() => import("./pages/CRMDashboard"));
@@ -108,7 +116,6 @@ function Router() {
       <Route path="/portfolio" component={Portfolio} />
       <Route path="/wallet" component={Wallet} />
       <Route path="/admin/wallet" component={AdminWallet} />
-      <Route path="/admin/add-property" component={AddProperty} />
       <Route path="/admin/property-analytics" component={PropertyAnalytics} />
       <Route path="/invoices" component={Invoices} />
       <Route path="/admin/invoices" component={AdminInvoices} />
@@ -140,7 +147,7 @@ function Router() {
       </Route>
       <Route path="/admin/content/homepage" component={HomepageContentEditor} />
       <Route path="/admin/media-library" component={ImageLibrary} />
-        <Route path="/admin/content/about" component={AboutPageEditor} />
+      <Route path="/admin/content/about" component={AboutPageEditor} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/monitoring" component={SystemMonitoring} />
       <Route path="/admin/roles" component={AdminRoles} />
@@ -154,8 +161,35 @@ function Router() {
       <Route path="/admin/analytics" component={AdminAnalytics} />
       <Route path="/admin/access-requests" component={AdminAccessRequests} />
       <Route path="/request-access" component={RequestAccess} />
-      <Route path="/fundraiser/dashboard" component={FundraiserDashboard} />
-      <Route path="/fundraiser/property-management" component={FundraiserPropertyManagement} />
+      
+      {/* ============================================= */}
+      {/* FUNDRAISER PORTAL - Dedicated Routes */}
+      {/* ============================================= */}
+      
+      {/* Main Fundraiser Portal Routes */}
+      <Route path="/fundraiser" component={FundraiserDashboardNew} />
+      <Route path="/fundraiser/properties" component={FundraiserProperties} />
+      <Route path="/fundraiser/properties/new" component={FundraiserPropertyNew} />
+      <Route path="/fundraiser/properties/:id/edit" component={AddProperty} />
+      <Route path="/fundraiser/offerings" component={FundraiserOfferings} />
+      
+      {/* Legacy routes - redirect to new structure */}
+      <Route path="/fundraiser/dashboard">
+        {() => {
+          window.location.href = "/fundraiser";
+          return null;
+        }}
+      </Route>
+      <Route path="/fundraiser/property-management">
+        {() => {
+          window.location.href = "/fundraiser/properties";
+          return null;
+        }}
+      </Route>
+      
+      {/* ============================================= */}
+      {/* OFFERINGS - Shared between Fundraiser & Admin */}
+      {/* ============================================= */}
       <Route path="/offerings" component={OfferingsDashboard} />
       <Route path="/offerings/create" component={CreateOffering} />
       <Route path="/offerings/:id/edit" component={CreateOffering} />
@@ -163,20 +197,27 @@ function Router() {
       <Route path="/offerings/:id/financial-projections" component={FinancialProjectionForm} />
       <Route path="/offerings/:id/fee-structure" component={FeeStructureEditor} />
       <Route path="/offerings/:id/documents" component={OfferingDocuments} />
+      
+      {/* Admin Offering Approvals */}
       <Route path="/admin/offering-approvals" component={OfferingApprovals} />
       <Route path="/admin/email-settings" component={EmailSettings} />
       <Route path="/admin/kyc-review" component={AdminKYCReview} />
-        <Route path="/admin/security" component={SecurityDashboard} />
-        <Route path="/admin/ip-blocking" component={IPBlockingManagement} />
-        <Route path="/admin/users" component={AdminUserManagement} />
-        <Route path="/admin/security-settings" component={SecuritySettingsManagement} />
+      <Route path="/admin/security" component={SecurityDashboard} />
+      <Route path="/admin/ip-blocking" component={IPBlockingManagement} />
+      <Route path="/admin/users" component={AdminUserManagement} />
+      <Route path="/admin/security-settings" component={SecuritySettingsManagement} />
+      
+      {/* CRM Routes */}
       <Route path="/crm" component={CRMDashboard} />
       <Route path="/crm/leads" component={CRMLeads} />
       <Route path="/crm/cases" component={CRMCases} />
       <Route path="/lead-capture" component={LeadCapture} />
+      
+      {/* Help & Support Routes */}
       <Route path="/help" component={HelpDesk} />
       <Route path="/agent" component={AgentDashboard} />
       <Route path="/knowledge-base" component={KnowledgeBase} />
+      
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

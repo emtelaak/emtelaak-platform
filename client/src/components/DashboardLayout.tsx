@@ -86,11 +86,12 @@ const menuItems: MenuItem[] = [
   { 
     icon: BarChart3, 
     label: "Fundraiser Dashboard", 
-    path: "/fundraiser/dashboard",
+    path: "/fundraiser",
     children: [
-      { icon: BarChart3, label: "Dashboard", path: "/fundraiser/dashboard" },
-      { icon: Building2, label: "Property Management", path: "/fundraiser/property-management" },
-      { icon: Layers, label: "My Offerings", path: "/offerings" },
+      { icon: BarChart3, label: "Dashboard", path: "/fundraiser" },
+      { icon: Building2, label: "My Properties", path: "/fundraiser/properties" },
+      { icon: FileCheck, label: "New Property", path: "/fundraiser/properties/new" },
+      { icon: Layers, label: "My Offerings", path: "/fundraiser/offerings" },
       { icon: FileCheck, label: "Create Offering", path: "/offerings/create" },
     ]
   },

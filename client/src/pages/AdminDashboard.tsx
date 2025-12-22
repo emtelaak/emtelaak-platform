@@ -532,8 +532,8 @@ export default function AdminDashboard() {
           onCreateUser: () => {
             setShowCreateUserDialog(true);
           },
-          onAddProperty: () => {
-            window.location.href = "/admin/add-property";
+          onReviewProperties: () => {
+            window.location.href = "/admin/property-management";
           },
           onNewLead: () => {
             window.location.href = "/crm/leads";

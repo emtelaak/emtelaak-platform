@@ -80,7 +80,7 @@ export function FloatingActionButton({ actions }: FloatingActionButtonProps) {
 // Preset action configurations for common use cases
 export const adminQuickActions = (handlers: {
   onCreateUser?: () => void;
-  onAddProperty?: () => void;
+  onReviewProperties?: () => void;
   onNewLead?: () => void;
   onNewCase?: () => void;
 }): QuickAction[] => [
@@ -92,10 +92,10 @@ export const adminQuickActions = (handlers: {
     roles: ["admin", "super_admin"],
   },
   {
-    label: "Add Property",
-    labelAr: "إضافة عقار",
+    label: "Review Properties",
+    labelAr: "مراجعة العقارات",
     icon: Building,
-    onClick: handlers.onAddProperty || (() => {}),
+    onClick: handlers.onReviewProperties || (() => {}),
     roles: ["admin", "super_admin"],
   },
   {

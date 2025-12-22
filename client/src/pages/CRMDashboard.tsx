@@ -357,8 +357,8 @@ export default function CRMDashboard() {
           onCreateUser: () => {
             toast.info("Create User feature coming soon");
           },
-          onAddProperty: () => {
-            toast.info("Add Property feature coming soon");
+          onReviewProperties: () => {
+            window.location.href = "/admin/property-management";
           },
           onNewLead: () => {
             window.location.href = "/crm/leads";

@@ -728,8 +728,8 @@ export default function SuperAdminDashboard() {
             onCreateUser: () => {
               setShowCreateUserDialog(true);
             },
-            onAddProperty: () => {
-              toast.info("Add Property feature coming soon");
+            onReviewProperties: () => {
+              window.location.href = "/admin/property-management";
             },
             onNewLead: () => {
               window.location.href = "/crm/leads";
