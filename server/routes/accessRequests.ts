@@ -251,6 +251,83 @@ export const accessRequestsRouter = router({
         console.error("Failed to notify owner:", e);
       }
 
+      // Send confirmation email to the user
+      try {
+        const userConfirmationHtml = `
+          <!DOCTYPE html>
+          <html dir="ltr">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          </head>
+          <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+              <div style="background: linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%); padding: 40px 30px; text-align: center;">
+                <h1 style="color: #c9a227; margin: 0; font-size: 28px;">Emtelaak</h1>
+                <p style="color: #ffffff; margin: 10px 0 0 0; font-size: 14px;">Premium Real Estate Investment</p>
+              </div>
+              <div style="padding: 40px 30px;">
+                <h2 style="color: #1e3a5f; margin: 0 0 20px 0; font-size: 24px;">تم استلام طلبك / Request Received</h2>
+                <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">عزيزي/عزيزتي ${input.fullName},</p>
+                <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                  شكراً لاهتمامك بالانضمام إلى إمتلاك. لقد تم استلام طلبك بنجاح وسيتم مراجعته من قبل فريقنا.
+                </p>
+                <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                  Thank you for your interest in joining Emtelaak. Your request has been received and will be reviewed by our team.
+                </p>
+                <div style="background-color: #f8f9fa; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                  <h3 style="color: #1e3a5f; margin: 0 0 15px 0; font-size: 18px;">ملخص الطلب / Request Summary</h3>
+                  <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                      <td style="padding: 8px 0; color: #666; font-weight: bold;">الاسم / Name:</td>
+                      <td style="padding: 8px 0; color: #333;">${input.fullName}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px 0; color: #666; font-weight: bold;">البريد / Email:</td>
+                      <td style="padding: 8px 0; color: #333;">${input.email}</td>
+                    </tr>
+                    ${input.phone ? `
+                    <tr>
+                      <td style="padding: 8px 0; color: #666; font-weight: bold;">الهاتف / Phone:</td>
+                      <td style="padding: 8px 0; color: #333;">${input.phone}</td>
+                    </tr>
+                    ` : ''}
+                    ${input.country ? `
+                    <tr>
+                      <td style="padding: 8px 0; color: #666; font-weight: bold;">البلد / Country:</td>
+                      <td style="padding: 8px 0; color: #333;">${input.country}</td>
+                    </tr>
+                    ` : ''}
+                  </table>
+                </div>
+                <div style="background-color: #fff8e1; border: 1px solid #ffc107; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                  <p style="color: #856404; font-size: 14px; margin: 0;">
+                    <strong>⏳ الخطوات التالية / Next Steps:</strong><br><br>
+                    سيقوم فريقنا بمراجعة طلبك خلال 24-48 ساعة. ستتلقى بريداً إلكترونياً بمجرد اتخاذ قرار بشأن طلبك.<br><br>
+                    Our team will review your request within 24-48 hours. You will receive an email once a decision has been made.
+                  </p>
+                </div>
+              </div>
+              <div style="background-color: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #eeeeee;">
+                <p style="color: #999999; font-size: 12px; margin: 0;">
+                  © ${new Date().getFullYear()} Emtelaak for Investment. All rights reserved.<br>
+                  هذه رسالة آلية، يرجى عدم الرد عليها مباشرة.
+                </p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `;
+
+        await sendEmail({
+          to: input.email,
+          subject: "تم استلام طلبك | Your Request Has Been Received - Emtelaak",
+          html: userConfirmationHtml
+        });
+      } catch (e) {
+        console.error("Failed to send user confirmation email:", e);
+      }
+
       return { success: true };
     }),
 
