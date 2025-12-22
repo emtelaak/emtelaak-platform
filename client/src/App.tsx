@@ -27,6 +27,7 @@ import VerifyEmail from "./pages/VerifyEmail";
 import SessionManagement from "./pages/SessionManagement";
 import ActivateAccount from "./pages/ActivateAccount";
 import Workflows from "./pages/Workflows";
+import { TermsAcceptanceModal } from "./components/TermsAcceptanceModal";
 
 // Lazy load admin pages (only loaded when accessed)
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
@@ -95,6 +96,7 @@ const AdminOfferingApproval = lazy(() => import("@/pages/AdminOfferingApproval")
 const OfferingApprovals = lazy(() => import("@/pages/OfferingApprovals"));
 const RequestAccess = lazy(() => import("@/pages/RequestAccess"));
 const AdminAccessRequests = lazy(() => import("@/pages/AdminAccessRequests"));
+const AdminTerms = lazy(() => import("@/pages/AdminTerms"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -162,6 +164,7 @@ function Router() {
       <Route path="/admin/income-distribution" component={AdminIncomeDistribution} />
       <Route path="/admin/analytics" component={AdminAnalytics} />
       <Route path="/admin/access-requests" component={AdminAccessRequests} />
+      <Route path="/admin/terms" component={AdminTerms} />
       <Route path="/request-access" component={RequestAccess} />
       
       {/* ============================================= */}
@@ -292,6 +295,7 @@ function App() {
           <Toaster />
           <Suspense fallback={<PageLoader />}>
             <Router />
+            <TermsAcceptanceModal />
           </Suspense>
         </TooltipProvider>
       </ThemeProvider>
