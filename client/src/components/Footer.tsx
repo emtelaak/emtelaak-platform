@@ -118,9 +118,22 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">
-            © {currentYear} Emtelaak. {t.footer.rights}
-          </p>
+          <div className="text-center md:text-start">
+            <p className="text-sm text-muted-foreground">
+              © {currentYear} {language === "ar" ? "إمتلاك للاستثمار" : "Emtelaak for Investment"}. {t.footer.rights}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {language === "ar" ? "مدعوم من" : "Powered by"}{" "}
+              <a 
+                href="https://ofoksystems.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="font-semibold hover:text-primary transition-colors"
+              >
+                OFOKSYSTEMS
+              </a>
+            </p>
+          </div>
           <div className="flex gap-6">
             <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
