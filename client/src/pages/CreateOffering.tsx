@@ -281,7 +281,7 @@ function Step1OfferingType({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="totalOfferingAmount">Total Offering Amount (USD) *</Label>
+        <Label htmlFor="totalOfferingAmount">Total Offering Amount (EGP) *</Label>
         <Input
           id="totalOfferingAmount"
           type="number"
@@ -298,7 +298,7 @@ function Step1OfferingType({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="minimumOfferingAmount">Minimum Amount (USD)</Label>
+          <Label htmlFor="minimumOfferingAmount">Minimum Amount (EGP)</Label>
           <Input
             id="minimumOfferingAmount"
             type="number"
@@ -311,7 +311,7 @@ function Step1OfferingType({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="maximumOfferingAmount">Maximum Amount (USD)</Label>
+          <Label htmlFor="maximumOfferingAmount">Maximum Amount (EGP)</Label>
           <Input
             id="maximumOfferingAmount"
             type="number"
@@ -359,7 +359,7 @@ function Step2ShareDetails({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="pricePerShare">Price Per Share (USD) *</Label>
+          <Label htmlFor="pricePerShare">Price Per Share (EGP) *</Label>
           <Input
             id="pricePerShare"
             type="number"

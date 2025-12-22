@@ -138,7 +138,7 @@ export default function AdminInvoices() {
       "Due Date",
       "Paid Date",
       "Shares",
-      "Amount (USD)",
+      "Amount (EGP)",
       "Currency",
       "Status",
     ];

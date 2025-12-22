@@ -170,7 +170,7 @@ export default function FeeStructureEditor() {
       <Alert className="mb-6">
         <Info className="h-4 w-4" />
         <AlertDescription>
-          All percentage fees are entered as percentages (e.g., 2.5 for 2.5%). Fixed fees are in USD.
+          All percentage fees are entered as percentages (e.g., 2.5 for 2.5%). Fixed fees are in EGP.
           Provide clear descriptions to help investors understand each fee.
         </AlertDescription>
       </Alert>
@@ -199,7 +199,7 @@ export default function FeeStructureEditor() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="platformFeeFixed">Fixed Fee (USD)</Label>
+                <Label htmlFor="platformFeeFixed">Fixed Fee (EGP)</Label>
                 <Input
                   id="platformFeeFixed"
                   type="number"
@@ -246,7 +246,7 @@ export default function FeeStructureEditor() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="managementFeeFixed">Fixed Fee (USD/year)</Label>
+                <Label htmlFor="managementFeeFixed">Fixed Fee (EGP/year)</Label>
                 <Input
                   id="managementFeeFixed"
                   type="number"
@@ -330,7 +330,7 @@ export default function FeeStructureEditor() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="maintenanceFeeFixed">Fixed Fee (USD/year)</Label>
+                <Label htmlFor="maintenanceFeeFixed">Fixed Fee (EGP/year)</Label>
                 <Input
                   id="maintenanceFeeFixed"
                   type="number"
@@ -377,7 +377,7 @@ export default function FeeStructureEditor() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="acquisitionFeeFixed">Fixed Fee (USD)</Label>
+                <Label htmlFor="acquisitionFeeFixed">Fixed Fee (EGP)</Label>
                 <Input
                   id="acquisitionFeeFixed"
                   type="number"
@@ -424,7 +424,7 @@ export default function FeeStructureEditor() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="dispositionFeeFixed">Fixed Fee (USD)</Label>
+                <Label htmlFor="dispositionFeeFixed">Fixed Fee (EGP)</Label>
                 <Input
                   id="dispositionFeeFixed"
                   type="number"
@@ -472,7 +472,7 @@ export default function FeeStructureEditor() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="totalEstimatedAnnualFees">
-                    Estimated Total Annual Fees (USD)
+                    Estimated Total Annual Fees (EGP)
                   </Label>
                   <Input
                     id="totalEstimatedAnnualFees"

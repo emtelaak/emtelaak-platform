@@ -72,7 +72,7 @@ export default function RecentActivity({ activities, isLoading }: RecentActivity
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
-    return `${currency || 'USD'} ${formatted}`;
+    return `${currency || 'EGP'} ${formatted}`;
   };
 
   const formatTimestamp = (timestamp: Date) => {

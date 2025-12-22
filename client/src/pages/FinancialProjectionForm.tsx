@@ -326,7 +326,7 @@ export default function FinancialProjectionForm() {
               <CardHeader>
                 <CardTitle>Cash Flow Projections</CardTitle>
                 <CardDescription>
-                  Projected annual cash flows for the next 5 years (in USD)
+                  Projected annual cash flows for the next 5 years (in EGP)
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -400,7 +400,7 @@ export default function FinancialProjectionForm() {
 
                 <div className="space-y-2 md:col-span-2">
                   <Label htmlFor="estimatedAnnualDistribution">
-                    Estimated Annual Distribution (USD)
+                    Estimated Annual Distribution (EGP)
                   </Label>
                   <Input
                     id="estimatedAnnualDistribution"
