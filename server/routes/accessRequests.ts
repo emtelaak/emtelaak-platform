@@ -600,8 +600,8 @@ export const accessRequestsRouter = router({
       );
 
       // Set session cookie
-      if (ctx.res) {
-        ctx.res.cookie(COOKIE_NAME, token, getSessionCookieOptions());
+      if (ctx.res && ctx.req) {
+        ctx.res.cookie(COOKIE_NAME, token, getSessionCookieOptions(ctx.req));
       }
 
       return {
