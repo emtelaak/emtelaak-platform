@@ -26,7 +26,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Workflows() {
   const { t, language } = useLanguage();
-  const [selectedRole, setSelectedRole] = useState<"admin" | "investor" | "fundraiser">("investor");
+  const [selectedRole, setSelectedRole] = useState<"admin" | "investor" | "developer">("investor");
 
   const roles = [
     {
@@ -40,8 +40,8 @@ export default function Workflows() {
       bgColor: "bg-blue-50",
     },
     {
-      id: "fundraiser" as const,
-      name: language === "ar" ? "جامع التمويل" : "Fundraiser",
+      id: "developer" as const,
+      name: language === "ar" ? "مطور عقاري" : "Property Developer",
       description: language === "ar"
         ? "إدراج العقارات وإنشاء العروض وإدارة المستثمرين"
         : "List properties, create offerings, and manage investors",
@@ -572,7 +572,7 @@ export default function Workflows() {
                   </>
                 )}
 
-                {selectedRole === "fundraiser" && (
+                {selectedRole === "developer" && (
                   <>
                     <FeatureCard
                       icon={Building2}

@@ -38,11 +38,11 @@ interface NavItem {
   badge?: number;
 }
 
-const fundraiserNavItems: NavItem[] = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/fundraiser" },
-  { icon: Building2, label: "My Properties", path: "/fundraiser/properties" },
-  { icon: Plus, label: "New Submission", path: "/fundraiser/properties/new" },
-  { icon: Layers, label: "My Offerings", path: "/fundraiser/offerings" },
+const developerNavItems: NavItem[] = [
+  { icon: LayoutDashboard, label: "Dashboard", path: "/developer" },
+  { icon: Building2, label: "My Properties", path: "/developer/properties" },
+  { icon: Plus, label: "New Submission", path: "/developer/properties/new" },
+  { icon: Layers, label: "My Offerings", path: "/developer/offerings" },
 ];
 
 const bottomNavItems: NavItem[] = [
@@ -76,7 +76,7 @@ export default function FundraiserLayout({ children }: FundraiserLayoutProps) {
             <Building2 className="w-5 h-5 text-primary-foreground" />
           </div>
           {(!collapsed || mobile) && (
-            <span className="font-bold text-lg">Fundraiser Portal</span>
+            <span className="font-bold text-lg">Developer Portal</span>
           )}
         </Link>
         {!mobile && (
@@ -94,9 +94,9 @@ export default function FundraiserLayout({ children }: FundraiserLayoutProps) {
       {/* Navigation */}
       <ScrollArea className="flex-1 py-4">
         <nav className="space-y-1 px-2">
-          {fundraiserNavItems.map((item) => {
+          {developerNavItems.map((item) => {
             const isActive = location === item.path || 
-              (item.path !== "/fundraiser" && location.startsWith(item.path));
+              (item.path !== "/developer" && location.startsWith(item.path));
             return (
               <Link key={item.path} href={item.path}>
                 <Button
@@ -200,12 +200,12 @@ export default function FundraiserLayout({ children }: FundraiserLayoutProps) {
               <Avatar className="h-8 w-8">
                 <AvatarImage src={user?.profileImage || undefined} />
                 <AvatarFallback>
-                  {user?.name?.charAt(0).toUpperCase() || "F"}
+                  {user?.name?.charAt(0).toUpperCase() || "D"}
                 </AvatarFallback>
               </Avatar>
               {(!collapsed || mobile) && (
                 <div className="flex-1 text-left">
-                  <p className="text-sm font-medium truncate">{user?.name || "Fundraiser"}</p>
+                  <p className="text-sm font-medium truncate">{user?.name || "Developer"}</p>
                   <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
                 </div>
               )}

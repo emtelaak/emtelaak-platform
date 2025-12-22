@@ -327,7 +327,7 @@ export default function AdminDashboard() {
                     <SelectItem value="all">All Roles</SelectItem>
                     <SelectItem value="user">User</SelectItem>
                     <SelectItem value="investor">Investor</SelectItem>
-                    <SelectItem value="fundraiser">Fundraiser</SelectItem>
+                    <SelectItem value="developer">Fundraiser</SelectItem>
                     <SelectItem value="admin">Admin</SelectItem>
                     <SelectItem value="super_admin">Super Admin</SelectItem>
                   </SelectContent>
@@ -461,7 +461,7 @@ export default function AdminDashboard() {
                       <SelectContent>
                         <SelectItem value="user">User</SelectItem>
                         <SelectItem value="investor">Investor</SelectItem>
-                        <SelectItem value="fundraiser">Fundraiser</SelectItem>
+                        <SelectItem value="developer">Fundraiser</SelectItem>
                         <SelectItem value="admin">Admin</SelectItem>
                         <SelectItem value="super_admin">Super Admin</SelectItem>
                       </SelectContent>

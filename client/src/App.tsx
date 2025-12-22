@@ -57,13 +57,13 @@ const HomepageContentEditor = lazy(() => import("@/pages/HomepageContentEditor")
 const ImageLibrary = lazy(() => import("@/pages/ImageLibrary"));
 const AboutPageEditor = lazy(() => import("@/pages/AboutPageEditor"));
 
-// Lazy load Fundraiser Portal pages (dedicated portal)
-const FundraiserDashboardNew = lazy(() => import("./pages/fundraiser/FundraiserDashboard"));
-const FundraiserProperties = lazy(() => import("./pages/fundraiser/FundraiserProperties"));
-const FundraiserPropertyNew = lazy(() => import("./pages/fundraiser/FundraiserPropertyNew"));
-const FundraiserOfferings = lazy(() => import("./pages/fundraiser/FundraiserOfferings"));
+// Lazy load Developer Portal pages (dedicated portal for property developers)
+const DeveloperDashboard = lazy(() => import("./pages/fundraiser/FundraiserDashboard"));
+const DeveloperProperties = lazy(() => import("./pages/fundraiser/FundraiserProperties"));
+const DeveloperPropertyNew = lazy(() => import("./pages/fundraiser/FundraiserPropertyNew"));
+const DeveloperOfferings = lazy(() => import("./pages/fundraiser/FundraiserOfferings"));
 
-// Legacy fundraiser pages (for backwards compatibility - will redirect)
+// Legacy fundraiser pages (for backwards compatibility - will redirect to developer)
 const FundraiserDashboard = lazy(() => import("./pages/FundraiserDashboard"));
 const FundraiserPropertyManagement = lazy(() => import("./pages/FundraiserPropertyManagement"));
 
@@ -163,26 +163,50 @@ function Router() {
       <Route path="/request-access" component={RequestAccess} />
       
       {/* ============================================= */}
-      {/* FUNDRAISER PORTAL - Dedicated Routes */}
+      {/* DEVELOPER PORTAL - Dedicated Routes for Property Developers */}
       {/* ============================================= */}
       
-      {/* Main Fundraiser Portal Routes */}
-      <Route path="/fundraiser" component={FundraiserDashboardNew} />
-      <Route path="/fundraiser/properties" component={FundraiserProperties} />
-      <Route path="/fundraiser/properties/new" component={FundraiserPropertyNew} />
-      <Route path="/fundraiser/properties/:id/edit" component={AddProperty} />
-      <Route path="/fundraiser/offerings" component={FundraiserOfferings} />
+      {/* Main Developer Portal Routes */}
+      <Route path="/developer" component={DeveloperDashboard} />
+      <Route path="/developer/properties" component={DeveloperProperties} />
+      <Route path="/developer/properties/new" component={DeveloperPropertyNew} />
+      <Route path="/developer/properties/:id/edit" component={AddProperty} />
+      <Route path="/developer/offerings" component={DeveloperOfferings} />
       
-      {/* Legacy routes - redirect to new structure */}
+      {/* Legacy fundraiser routes - redirect to developer portal */}
+      <Route path="/fundraiser">
+        {() => {
+          window.location.href = "/developer";
+          return null;
+        }}
+      </Route>
+      <Route path="/fundraiser/properties">
+        {() => {
+          window.location.href = "/developer/properties";
+          return null;
+        }}
+      </Route>
+      <Route path="/fundraiser/properties/new">
+        {() => {
+          window.location.href = "/developer/properties/new";
+          return null;
+        }}
+      </Route>
+      <Route path="/fundraiser/offerings">
+        {() => {
+          window.location.href = "/developer/offerings";
+          return null;
+        }}
+      </Route>
       <Route path="/fundraiser/dashboard">
         {() => {
-          window.location.href = "/fundraiser";
+          window.location.href = "/developer";
           return null;
         }}
       </Route>
       <Route path="/fundraiser/property-management">
         {() => {
-          window.location.href = "/fundraiser/properties";
+          window.location.href = "/developer/properties";
           return null;
         }}
       </Route>

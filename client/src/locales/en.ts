@@ -647,7 +647,7 @@ export const en = {
   roles: {
     user: "User",
     investor: "Investor",
-    fundraiser: "Fundraiser",
+    developer: "Property Developer",
     admin: "Admin",
     superAdmin: "Super Admin",
   },
