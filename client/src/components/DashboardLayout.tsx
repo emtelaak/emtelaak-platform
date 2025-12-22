@@ -83,18 +83,6 @@ const menuItems: MenuItem[] = [
   { icon: Users, label: "Access Requests", path: "/admin/access-requests" },
   { icon: Receipt, label: "Invoices", path: "/admin/invoices" },
   { icon: Wallet, label: "Wallet", path: "/admin/wallet" },
-  { 
-    icon: BarChart3, 
-    label: "Fundraiser Dashboard", 
-    path: "/fundraiser",
-    children: [
-      { icon: BarChart3, label: "Dashboard", path: "/fundraiser" },
-      { icon: Building2, label: "My Properties", path: "/fundraiser/properties" },
-      { icon: FileCheck, label: "New Property", path: "/fundraiser/properties/new" },
-      { icon: Layers, label: "My Offerings", path: "/fundraiser/offerings" },
-      { icon: FileCheck, label: "Create Offering", path: "/offerings/create" },
-    ]
-  },
   { icon: DollarSign, label: "Platform Settings", path: "/admin/platform-settings" },
   { icon: TrendingUp, label: "Income Distribution", path: "/admin/income-distribution" },
   { icon: BarChart3, label: "Analytics", path: "/admin/analytics" },
