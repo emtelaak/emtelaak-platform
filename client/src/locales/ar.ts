@@ -649,7 +649,7 @@ export const ar: Translation = {
   roles: {
     user: "مستخدم",
     investor: "مستثمر",
-    developer: "مطور عقاري",
+    fund_manager: "مدير الصندوق",
     admin: "مسؤول",
     superAdmin: "مسؤول رئيسي",
   },

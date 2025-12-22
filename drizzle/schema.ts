@@ -22,7 +22,7 @@ export const users = mysqlTable("users", {
   emailVerificationToken: varchar("emailVerificationToken", { length: 255 }), // Token for email verification
   emailVerificationExpiry: timestamp("emailVerificationExpiry"), // Expiry time for verification token
   loginMethod: varchar("loginMethod", { length: 64 }),
-  role: mysqlEnum("role", ["user", "investor", "developer", "admin", "super_admin"]).default("user").notNull(),
+  role: mysqlEnum("role", ["user", "investor", "fund_manager", "admin", "super_admin"]).default("user").notNull(),
   status: mysqlEnum("status", ["active", "suspended", "pending_verification", "approved"]).default("pending_verification").notNull(),
   preferredLanguage: varchar("preferredLanguage", { length: 10 }).default("en"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

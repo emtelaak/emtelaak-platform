@@ -80,7 +80,7 @@ export const adminPermissionsRouter = router({
     list: adminProcedure
       .input(z.object({
         search: z.string().optional(),
-        role: z.enum(["user", "investor", "developer", "admin", "super_admin"]).optional(),
+        role: z.enum(["user", "investor", "fund_manager", "admin", "super_admin"]).optional(),
         status: z.enum(["active", "suspended", "pending_verification"]).optional(),
         limit: z.number().min(1).max(100).default(50),
         offset: z.number().min(0).default(0),
@@ -153,7 +153,7 @@ export const adminPermissionsRouter = router({
     updateRole: superAdminProcedure
       .input(z.object({
         userId: z.number(),
-        role: z.enum(["user", "investor", "developer", "admin", "super_admin"]),
+        role: z.enum(["user", "investor", "fund_manager", "admin", "super_admin"]),
       }))
       .mutation(async ({ ctx, input }) => {
         const db = await getDb();
@@ -204,7 +204,7 @@ export const adminPermissionsRouter = router({
         name: z.string().min(1, "Name is required"),
         email: z.string().email("Invalid email address"),
         phone: z.string().optional(),
-        role: z.enum(["user", "investor", "developer", "admin", "super_admin"]),
+        role: z.enum(["user", "investor", "fund_manager", "admin", "super_admin"]),
         status: z.enum(["active", "suspended", "pending_verification"]),
       }))
       .mutation(async ({ ctx, input }) => {
@@ -685,7 +685,7 @@ export const adminPermissionsRouter = router({
   export: router({
     users: superAdminProcedure
       .input(z.object({
-        role: z.enum(["user", "investor", "developer", "admin", "super_admin"]).optional(),
+        role: z.enum(["user", "investor", "fund_manager", "admin", "super_admin"]).optional(),
         status: z.enum(["active", "suspended", "pending_verification"]).optional(),
       }))
       .query(async ({ input }) => {

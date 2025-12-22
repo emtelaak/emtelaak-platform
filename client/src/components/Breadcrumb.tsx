@@ -168,8 +168,8 @@ function getSegmentLabel(segment: string, allSegments: string[], index: number):
     "help-desk": { en: "Help Desk", ar: "مكتب المساعدة" },
     "knowledge-base": { en: "Knowledge Base", ar: "قاعدة المعرفة" },
     
-    // Developer Portal routes
-    developer: { en: "Developer Portal", ar: "بوابة المطور" },
+    // Fund Manager Portal routes
+    "fund-manager": { en: "Fund Manager Portal", ar: "بوابة مدير الصندوق" },
     
     // Distribution routes
     "income-distribution": { en: "Income Distribution", ar: "توزيع الدخل" },

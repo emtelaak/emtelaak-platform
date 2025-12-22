@@ -139,7 +139,7 @@ export const investmentFlowRouter = router({
   getOfferingReservations: protectedProcedure
     .input(z.object({ offeringId: z.number() }))
     .query(async ({ ctx, input }) => {
-      if (ctx.user.role !== "admin" && ctx.user.role !== "developer") {
+      if (ctx.user.role !== "admin" && ctx.user.role !== "fund_manager") {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "Not authorized to view offering reservations",
