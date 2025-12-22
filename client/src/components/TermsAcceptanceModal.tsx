@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/_core/hooks/useAuth";
 import {
   Dialog,
   DialogContent,
@@ -17,16 +18,21 @@ import ReactMarkdown from "react-markdown";
 
 export function TermsAcceptanceModal() {
   const { language } = useLanguage();
+  const { user, isLoading: authLoading } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   const [hasAccepted, setHasAccepted] = useState(false);
 
-  // Check if user needs to accept terms
+  // Only check terms acceptance if user is authenticated
+  const isAuthenticated = !!user && !authLoading;
+
+  // Check if user needs to accept terms - only when authenticated
   const { data: acceptanceStatus, isLoading: checkingAcceptance, refetch } = trpc.terms.checkAcceptance.useQuery(
     undefined,
     {
       retry: false,
       refetchOnWindowFocus: false,
+      enabled: isAuthenticated, // Only run query when user is authenticated
     }
   );
 
@@ -75,7 +81,8 @@ export function TermsAcceptanceModal() {
     acceptTermsMutation.mutate({ version: termsContent.version });
   };
 
-  if (checkingAcceptance || !acceptanceStatus?.needsAcceptance) {
+  // Don't render anything if not authenticated or still checking
+  if (!isAuthenticated || checkingAcceptance || !acceptanceStatus?.needsAcceptance) {
     return null;
   }
 
