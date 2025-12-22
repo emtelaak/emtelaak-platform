@@ -299,9 +299,9 @@ export const appRouter = router({
         const fileExtension = input.mimeType.split('/')[1];
         const fileName = `profile-${ctx.user.id}-${Date.now()}.${fileExtension}`;
         
-        // Upload to Cloudinary
-        const { uploadToCloudinary, UPLOAD_FOLDERS } = await import('./cloudinaryService');
-        const { url } = await uploadToCloudinary(UPLOAD_FOLDERS.profiles, buffer, fileName, 'image');
+        // Upload to S3 storage
+        const fileKey = `profiles/${fileName}`;
+        const { url } = await storagePut(fileKey, buffer, input.mimeType);
         
         // Update user profile with new picture URL
         await createOrUpdateUserProfile({
