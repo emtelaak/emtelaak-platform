@@ -25,6 +25,7 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import VerifyEmail from "./pages/VerifyEmail";
 import SessionManagement from "./pages/SessionManagement";
+import ActivateAccount from "./pages/ActivateAccount";
 import Workflows from "./pages/Workflows";
 
 // Lazy load admin pages (only loaded when accessed)
@@ -110,6 +111,7 @@ function Router() {
       <Route path="/register" component={Register} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/verify-email" component={VerifyEmail} />
+      <Route path="/activate-account" component={ActivateAccount} />
       <Route path="/properties" component={Properties} />
       <Route path="/properties/create" component={AddProperty} />
       <Route path="/properties/:id" component={PropertyDetail} />
