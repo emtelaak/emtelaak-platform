@@ -11,7 +11,7 @@ Before deploying to Render, ensure you have:
 1. A Render account (https://render.com)
 2. A MySQL database (TiDB Cloud, PlanetScale, or other MySQL-compatible service)
 3. SendGrid account for email notifications
-4. (Optional) AWS S3 or Cloudinary for file storage
+4. AWS S3 for file storage (configured via Forge API)
 
 ## Deployment Steps
 
@@ -66,9 +66,7 @@ Add the following environment variables in Render's dashboard:
 | `AWS_SECRET_ACCESS_KEY` | AWS secret key |
 | `AWS_REGION` | AWS region |
 | `S3_BUCKET_NAME` | S3 bucket name |
-| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name |
-| `CLOUDINARY_API_KEY` | Cloudinary API key |
-| `CLOUDINARY_API_SECRET` | Cloudinary API secret |
+
 
 ### Step 3: Database Setup
 
