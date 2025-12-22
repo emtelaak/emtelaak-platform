@@ -394,11 +394,11 @@ export default function KYCWizard() {
                       <SelectValue placeholder="Select your income range" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="under_25k">Under $25,000</SelectItem>
-                      <SelectItem value="25k_50k">$25,000 - $50,000</SelectItem>
-                      <SelectItem value="50k_100k">$50,000 - $100,000</SelectItem>
-                      <SelectItem value="100k_250k">$100,000 - $250,000</SelectItem>
-                      <SelectItem value="over_250k">Over $250,000</SelectItem>
+                      <SelectItem value="under_500k">Under 500,000 EGP</SelectItem>
+                      <SelectItem value="500k_1m">500,000 - 1,000,000 EGP</SelectItem>
+                      <SelectItem value="1m_2m">1,000,000 - 2,000,000 EGP</SelectItem>
+                      <SelectItem value="2m_5m">2,000,000 - 5,000,000 EGP</SelectItem>
+                      <SelectItem value="over_5m">Over 5,000,000 EGP</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
