@@ -257,7 +257,7 @@ export default function RequestAccess() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-primary/10 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-primary/10 flex items-center justify-center p-4" dir={isRTL ? "rtl" : "ltr"}>
         <Card className="w-full max-w-md text-center">
           <CardContent className="pt-8 pb-6">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -269,7 +269,7 @@ export default function RequestAccess() {
               <Mail className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm">{t.success.checkEmail} <strong>{submittedEmail}</strong></span>
             </div>
-            <div className={cn("flex gap-3", isRTL ? "flex-row-reverse" : "")}>
+            <div className="flex gap-3">
               <Link href="/" className="flex-1">
                 <Button variant="outline" className="w-full">{t.success.backHome}</Button>
               </Link>
@@ -298,18 +298,18 @@ export default function RequestAccess() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-primary/10">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-primary/10" dir={isRTL ? "rtl" : "ltr"}>
       {/* Header */}
       <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container flex items-center justify-between h-16 px-4">
           <Link href="/">
-            <div className={cn("flex items-center gap-2", isRTL ? "flex-row-reverse" : "")}>
+            <div className="flex items-center gap-2">
               <img src={APP_LOGO} alt={APP_TITLE} className="h-8 w-8" />
               <span className="font-bold text-lg">{APP_TITLE}</span>
             </div>
           </Link>
           <Link href="/">
-            <Button variant="ghost" size="sm" className={cn("gap-2", isRTL ? "flex-row-reverse" : "")}>
+            <Button variant="ghost" size="sm" className="gap-2">
               <BackArrow className="h-4 w-4" />
               {t.backToHome}
             </Button>
@@ -324,14 +324,14 @@ export default function RequestAccess() {
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">{t.subtitle}</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
-          {/* Benefits Section */}
-          <div className={cn("order-2 lg:order-1", isRTL ? "lg:order-2" : "")}>
-            <h2 className={cn("text-2xl font-bold mb-6", isRTL ? "text-right" : "")}>{t.benefits.title}</h2>
+        <div className={cn("grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto", isRTL ? "direction-rtl" : "")}>
+          {/* Benefits Section - Left in LTR, Right in RTL */}
+          <div className="order-2 lg:order-1">
+            <h2 className="text-2xl font-bold mb-6">{t.benefits.title}</h2>
             <div className="grid sm:grid-cols-2 gap-4">
               <Card className="border-primary/20 hover:border-primary/40 transition-colors">
                 <CardContent className="pt-6">
-                  <div className={cn("flex items-start gap-4", isRTL ? "flex-row-reverse text-right" : "")}>
+                  <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <Building2 className="h-6 w-6 text-primary" />
                     </div>
@@ -345,7 +345,7 @@ export default function RequestAccess() {
 
               <Card className="border-primary/20 hover:border-primary/40 transition-colors">
                 <CardContent className="pt-6">
-                  <div className={cn("flex items-start gap-4", isRTL ? "flex-row-reverse text-right" : "")}>
+                  <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-lg bg-green-500/10 flex items-center justify-center flex-shrink-0">
                       <TrendingUp className="h-6 w-6 text-green-600" />
                     </div>
@@ -359,7 +359,7 @@ export default function RequestAccess() {
 
               <Card className="border-primary/20 hover:border-primary/40 transition-colors">
                 <CardContent className="pt-6">
-                  <div className={cn("flex items-start gap-4", isRTL ? "flex-row-reverse text-right" : "")}>
+                  <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
                       <Shield className="h-6 w-6 text-blue-600" />
                     </div>
@@ -373,7 +373,7 @@ export default function RequestAccess() {
 
               <Card className="border-primary/20 hover:border-primary/40 transition-colors">
                 <CardContent className="pt-6">
-                  <div className={cn("flex items-start gap-4", isRTL ? "flex-row-reverse text-right" : "")}>
+                  <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0">
                       <Users className="h-6 w-6 text-purple-600" />
                     </div>
@@ -389,23 +389,23 @@ export default function RequestAccess() {
             {/* Check Status Section */}
             <Card className="mt-6">
               <CardHeader>
-                <CardTitle className={cn("text-lg", isRTL ? "text-right" : "")}>{t.checkStatus.title}</CardTitle>
-                <CardDescription className={cn(isRTL ? "text-right" : "")}>{t.checkStatus.description}</CardDescription>
+                <CardTitle className="text-lg">{t.checkStatus.title}</CardTitle>
+                <CardDescription>{t.checkStatus.description}</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className={cn("flex gap-2", isRTL ? "flex-row-reverse" : "")}>
+                <div className="flex gap-2">
                   <Input
                     type="email"
                     placeholder={t.form.emailPlaceholder}
                     value={checkEmail}
                     onChange={(e) => setCheckEmail(e.target.value)}
-                    className={cn("flex-1", isRTL ? "text-right" : "")}
+                    className="flex-1"
                     dir="ltr"
                   />
                   <Button 
                     onClick={handleCheckStatus}
                     disabled={isCheckingStatus || !checkEmail}
-                    className={cn("gap-2 whitespace-nowrap", isRTL ? "flex-row-reverse" : "")}
+                    className="gap-2 whitespace-nowrap"
                   >
                     {isCheckingStatus ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -424,7 +424,6 @@ export default function RequestAccess() {
                   )}>
                     <p className={cn(
                       "font-medium",
-                      isRTL ? "text-right" : "",
                       requestStatus.status === 'approved' ? "text-green-700 dark:text-green-400" :
                       requestStatus.status === 'rejected' ? "text-red-700 dark:text-red-400" :
                       "text-yellow-700 dark:text-yellow-400"
@@ -432,7 +431,7 @@ export default function RequestAccess() {
                       {t.status[requestStatus.status as keyof typeof t.status]}
                     </p>
                     {requestStatus.invitationCode && (
-                      <p className={cn("mt-2 text-sm", isRTL ? "text-right" : "")}>
+                      <p className="mt-2 text-sm">
                         {language === 'ar' ? 'رمز الدعوة:' : 'Invitation Code:'} <strong>{requestStatus.invitationCode}</strong>
                       </p>
                     )}
@@ -442,35 +441,34 @@ export default function RequestAccess() {
             </Card>
           </div>
 
-          {/* Form Section */}
-          <div className={cn("order-1 lg:order-2", isRTL ? "lg:order-1" : "")}>
+          {/* Form Section - Right in LTR, Left in RTL */}
+          <div className="order-1 lg:order-2">
             <Card>
               <CardHeader>
-                <CardTitle className={cn(isRTL ? "text-right" : "")}>{t.form.title}</CardTitle>
-                <CardDescription className={cn(isRTL ? "text-right" : "")}>{t.form.description}</CardDescription>
+                <CardTitle>{t.form.title}</CardTitle>
+                <CardDescription>{t.form.description}</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="fullName" className={cn(isRTL ? "text-right block" : "")}>{t.form.fullName}</Label>
+                    <Label htmlFor="fullName">{t.form.fullName}</Label>
                     <div className="relative">
-                      <User className={cn("absolute top-3 h-4 w-4 text-muted-foreground", isRTL ? "right-3" : "left-3")} />
+                      <User className="absolute top-3 h-4 w-4 text-muted-foreground start-3" />
                       <Input
                         id="fullName"
                         required
                         value={formData.fullName}
                         onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                         placeholder={t.form.fullNamePlaceholder}
-                        className={cn(isRTL ? "pr-9 text-right" : "pl-9")}
-                        dir={isRTL ? "rtl" : "ltr"}
+                        className="ps-9"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className={cn(isRTL ? "text-right block" : "")}>{t.form.email}</Label>
+                    <Label htmlFor="email">{t.form.email}</Label>
                     <div className="relative">
-                      <Mail className={cn("absolute top-3 h-4 w-4 text-muted-foreground", isRTL ? "right-3" : "left-3")} />
+                      <Mail className="absolute top-3 h-4 w-4 text-muted-foreground start-3" />
                       <Input
                         id="email"
                         type="email"
@@ -478,41 +476,41 @@ export default function RequestAccess() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder={t.form.emailPlaceholder}
-                        className={cn(isRTL ? "pr-9" : "pl-9")}
+                        className="ps-9"
                         dir="ltr"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="phone" className={cn(isRTL ? "text-right block" : "")}>{t.form.phone}</Label>
+                    <Label htmlFor="phone">{t.form.phone}</Label>
                     <div className="relative">
-                      <Phone className={cn("absolute top-3 h-4 w-4 text-muted-foreground", isRTL ? "right-3" : "left-3")} />
+                      <Phone className="absolute top-3 h-4 w-4 text-muted-foreground start-3" />
                       <Input
                         id="phone"
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         placeholder={t.form.phonePlaceholder}
-                        className={cn(isRTL ? "pr-9" : "pl-9")}
+                        className="ps-9"
                         dir="ltr"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label className={cn(isRTL ? "text-right block" : "")}>{t.form.country}</Label>
+                    <Label>{t.form.country}</Label>
                     <Select
                       value={formData.country}
                       onValueChange={(value) => setFormData({ ...formData, country: value })}
                     >
-                      <SelectTrigger className={cn(isRTL ? "flex-row-reverse" : "")}>
-                        <Globe className={cn("h-4 w-4 text-muted-foreground", isRTL ? "ml-2" : "mr-2")} />
+                      <SelectTrigger>
+                        <Globe className="h-4 w-4 text-muted-foreground me-2" />
                         <SelectValue placeholder={t.form.countryPlaceholder} />
                       </SelectTrigger>
                       <SelectContent>
                         {Object.entries(t.countries).map(([key, value]) => (
-                          <SelectItem key={key} value={key} className={cn(isRTL ? "text-right" : "")}>{value}</SelectItem>
+                          <SelectItem key={key} value={key}>{value}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -520,35 +518,35 @@ export default function RequestAccess() {
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className={cn(isRTL ? "text-right block" : "")}>{t.form.interest}</Label>
+                      <Label>{t.form.interest}</Label>
                       <Select
                         value={formData.investmentInterest}
                         onValueChange={(value) => setFormData({ ...formData, investmentInterest: value })}
                       >
-                        <SelectTrigger className={cn(isRTL ? "flex-row-reverse" : "")}>
+                        <SelectTrigger>
                           <SelectValue placeholder={t.form.interestPlaceholder} />
                         </SelectTrigger>
                         <SelectContent>
                           {Object.entries(t.interests).map(([key, value]) => (
-                            <SelectItem key={key} value={key} className={cn(isRTL ? "text-right" : "")}>{value}</SelectItem>
+                            <SelectItem key={key} value={key}>{value}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="space-y-2">
-                      <Label className={cn(isRTL ? "text-right block" : "")}>{t.form.budget}</Label>
+                      <Label>{t.form.budget}</Label>
                       <Select
                         value={formData.investmentBudget}
                         onValueChange={(value) => setFormData({ ...formData, investmentBudget: value })}
                       >
-                        <SelectTrigger className={cn(isRTL ? "flex-row-reverse" : "")}>
-                          <DollarSign className={cn("h-4 w-4 text-muted-foreground", isRTL ? "ml-2" : "mr-2")} />
+                        <SelectTrigger>
+                          <DollarSign className="h-4 w-4 text-muted-foreground me-2" />
                           <SelectValue placeholder={t.form.budgetPlaceholder} />
                         </SelectTrigger>
                         <SelectContent>
                           {Object.entries(t.budgets).map(([key, value]) => (
-                            <SelectItem key={key} value={key} className={cn(isRTL ? "text-right" : "")}>{value}</SelectItem>
+                            <SelectItem key={key} value={key}>{value}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -556,15 +554,13 @@ export default function RequestAccess() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="message" className={cn(isRTL ? "text-right block" : "")}>{t.form.message}</Label>
+                    <Label htmlFor="message">{t.form.message}</Label>
                     <Textarea
                       id="message"
                       rows={4}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder={t.form.messagePlaceholder}
-                      className={cn(isRTL ? "text-right" : "")}
-                      dir={isRTL ? "rtl" : "ltr"}
                     />
                   </div>
 
@@ -576,7 +572,7 @@ export default function RequestAccess() {
                   >
                     {submitMutation.isPending ? (
                       <>
-                        <Loader2 className={cn("h-4 w-4 animate-spin", isRTL ? "ml-2" : "mr-2")} />
+                        <Loader2 className="h-4 w-4 animate-spin me-2" />
                         {t.form.submitting}
                       </>
                     ) : (
