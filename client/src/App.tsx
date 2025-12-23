@@ -58,6 +58,7 @@ const EmailTemplateEditor = lazy(() => import("./pages/EmailTemplateEditor"));
 const HomepageContentEditor = lazy(() => import("@/pages/HomepageContentEditor"));
 const ImageLibrary = lazy(() => import("@/pages/ImageLibrary"));
 const AboutPageEditor = lazy(() => import("@/pages/AboutPageEditor"));
+const AdminPropertyInterests = lazy(() => import("@/pages/AdminPropertyInterests"));
 
 // Lazy load Fund Manager Portal pages (dedicated portal for fund managers/property developers)
 const FundManagerDashboard = lazy(() => import("./pages/fundraiser/FundraiserDashboard"));
@@ -160,6 +161,7 @@ function Router() {
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/platform-settings" component={AdminPlatformSettings} />
       <Route path="/admin/property-management" component={AdminPropertyManagement} />
+      <Route path="/admin/property-interests" component={AdminPropertyInterests} />
       <Route path="/admin/properties/:id/images" component={AdminPropertyImages} />
       <Route path="/admin/income-distribution" component={AdminIncomeDistribution} />
       <Route path="/admin/analytics" component={AdminAnalytics} />
