@@ -240,12 +240,13 @@ export default function AdminDashboard() {
       </div>
 
       <div className="container py-8">
+        <Breadcrumb />
         <div className="space-y-8">
           {/* Stats Cards */}
           <div className="grid gap-4 md:grid-cols-3">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+                <CardTitle className="text-sm font-medium">{t.admin.stats.totalUsers}</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -253,14 +254,14 @@ export default function AdminDashboard() {
                   {statsLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : stats?.totalUsers || 0}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Registered on the platform
+                  {t.common.registeredOnPlatform || "Registered on the platform"}
                 </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Users</CardTitle>
+                <CardTitle className="text-sm font-medium">{t.admin.stats.activeUsers || "Active Users"}</CardTitle>
                 <CheckCircle2 className="h-4 w-4 text-green-600" />
               </CardHeader>
               <CardContent>
@@ -268,14 +269,14 @@ export default function AdminDashboard() {
                   {statsLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : stats?.activeUsers || 0}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Verified and active
+                  {t.common.verifiedAndActive || "Verified and active"}
                 </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Pending KYC</CardTitle>
+                <CardTitle className="text-sm font-medium">{t.admin.stats.pendingKYC}</CardTitle>
                 <Clock className="h-4 w-4 text-yellow-600" />
               </CardHeader>
               <CardContent>
@@ -283,7 +284,7 @@ export default function AdminDashboard() {
                   {statsLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : stats?.pendingKyc || 0}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Awaiting verification
+                  {t.common.awaitingVerification || "Awaiting verification"}
                 </p>
               </CardContent>
             </Card>
@@ -294,15 +295,15 @@ export default function AdminDashboard() {
             <CardHeader>
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <CardTitle>User Management</CardTitle>
+                  <CardTitle>{t.admin.users.title}</CardTitle>
                   <CardDescription>
-                    View and manage user accounts, roles, and permissions
+                    {t.admin.users.description || "View and manage user accounts, roles, and permissions"}
                   </CardDescription>
                 </div>
                 <Link href="/admin/roles">
                   <Button variant="outline">
                     <Shield className="mr-2 h-4 w-4" />
-                    Manage Roles
+                    {t.admin.roles.manageRoles || "Manage Roles"}
                   </Button>
                 </Link>
               </div>
@@ -313,7 +314,7 @@ export default function AdminDashboard() {
                 <div className="flex-1 relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search by name or email..."
+                    placeholder={t.admin.users.search}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10"
@@ -321,26 +322,26 @@ export default function AdminDashboard() {
                 </div>
                 <Select value={roleFilter} onValueChange={setRoleFilter}>
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Filter by role" />
+                    <SelectValue placeholder={t.admin.users.filterByRole || "Filter by role"} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Roles</SelectItem>
-                    <SelectItem value="user">User</SelectItem>
-                    <SelectItem value="investor">Investor</SelectItem>
-                    <SelectItem value="fund_manager">Fundraiser</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="super_admin">Super Admin</SelectItem>
+                    <SelectItem value="all">{t.common.allRoles || "All Roles"}</SelectItem>
+                    <SelectItem value="user">{t.roles.user}</SelectItem>
+                    <SelectItem value="investor">{t.roles.investor}</SelectItem>
+                    <SelectItem value="fund_manager">{t.roles.fundraiser}</SelectItem>
+                    <SelectItem value="admin">{t.roles.admin}</SelectItem>
+                    <SelectItem value="super_admin">{t.roles.superAdmin}</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Filter by status" />
+                    <SelectValue placeholder={t.admin.users.filterByStatus || "Filter by status"} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="pending_verification">Pending</SelectItem>
-                    <SelectItem value="suspended">Suspended</SelectItem>
+                    <SelectItem value="all">{t.common.allStatus || "All Status"}</SelectItem>
+                    <SelectItem value="active">{t.common.active || "Active"}</SelectItem>
+                    <SelectItem value="pending_verification">{t.common.pending || "Pending"}</SelectItem>
+                    <SelectItem value="suspended">{t.common.suspended || "Suspended"}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -350,12 +351,12 @@ export default function AdminDashboard() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>User</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Joined</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead>{t.admin.users.name}</TableHead>
+                      <TableHead>{t.admin.users.email}</TableHead>
+                      <TableHead>{t.admin.users.role}</TableHead>
+                      <TableHead>{t.admin.users.status}</TableHead>
+                      <TableHead>{t.common.joined || "Joined"}</TableHead>
+                      <TableHead className="text-right">{t.admin.users.actions}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

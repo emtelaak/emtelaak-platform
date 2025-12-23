@@ -110,6 +110,7 @@ export default function AdminPropertyManagement() {
 
   return (
     <div className="container py-8">
+      <Breadcrumb />
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Property Management</h1>
         <p className="text-muted-foreground">

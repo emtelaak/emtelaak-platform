@@ -116,13 +116,9 @@ export default function AdminPlatformSettings() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container max-w-4xl">
+        <Breadcrumb />
         {/* Header */}
         <div className="mb-8">
-          <Link href="/super-admin">
-            <Button variant="ghost" className="mb-4">
-              ← Back to Dashboard
-            </Button>
-          </Link>
           <div className="flex items-center gap-3">
             <Settings className="h-8 w-8 text-primary" />
             <div>
