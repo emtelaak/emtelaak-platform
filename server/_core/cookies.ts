@@ -50,7 +50,7 @@ export function getSessionCookieOptions(
   // Only set domain if we explicitly need subdomain sharing
   // For most cases, leaving it undefined is more reliable
   if (shouldSetDomain && hostname.split('.').length > 2) {
-    // Only for subdomains like admin.emtelaak.co, api.emtelaak.co
+    // Only for subdomains like admin.emtelaak.com, api.emtelaak.com
     const parts = hostname.split('.');
     const baseDomain = parts.slice(-2).join('.');
     domain = `.${baseDomain}`;

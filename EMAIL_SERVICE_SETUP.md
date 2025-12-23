@@ -52,7 +52,7 @@ SMTP_FROM_EMAIL=noreply@emtelaak.com
 SMTP_FROM_NAME=Emtelaak Platform
 
 # Frontend URL for email links
-FRONTEND_URL=https://emtelaak.co
+FRONTEND_URL=https://emtelaak.com
 ```
 
 ### 3. Test Configuration
@@ -116,7 +116,7 @@ SMTP_USER=apikey  # Literally the word "apikey"
 SMTP_PASSWORD=SG.xxxxxxxxxxxxxxxxxxxxx  # Your API key from step 2
 SMTP_FROM_EMAIL=noreply@emtelaak.com
 SMTP_FROM_NAME=Emtelaak Platform
-FRONTEND_URL=https://emtelaak.co
+FRONTEND_URL=https://emtelaak.com
 ```
 
 **Step 4: Verify Sender Domain (Optional but Recommended)**
@@ -154,7 +154,7 @@ SMTP_USER=AKIAXXXXXXXXXXXXXXXX  # From SMTP credentials
 SMTP_PASSWORD=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  # From SMTP credentials
 SMTP_FROM_EMAIL=noreply@emtelaak.com
 SMTP_FROM_NAME=Emtelaak Platform
-FRONTEND_URL=https://emtelaak.co
+FRONTEND_URL=https://emtelaak.com
 ```
 
 **Benefits:**
@@ -188,7 +188,7 @@ SMTP_USER=postmaster@your-domain.com  # From Mailgun dashboard
 SMTP_PASSWORD=xxxxxxxxxxxxxxxx  # From Mailgun dashboard
 SMTP_FROM_EMAIL=noreply@your-domain.com
 SMTP_FROM_NAME=Emtelaak Platform
-FRONTEND_URL=https://emtelaak.co
+FRONTEND_URL=https://emtelaak.com
 ```
 
 **Benefits:**
@@ -268,7 +268,7 @@ FRONTEND_URL=http://localhost:3000
 await sendPasswordResetEmail({
   to: "user@example.com",
   userName: "John Doe",
-  resetLink: "https://emtelaak.co/reset-password?token=xxx"
+  resetLink: "https://emtelaak.com/reset-password?token=xxx"
 });
 ```
 
@@ -323,7 +323,7 @@ await sendInvoiceEmail({
   amount: 10000, // $100.00
   shares: 10,
   dueDate: new Date("2025-01-20"),
-  invoiceUrl: "https://emtelaak.co/invoices/001"
+  invoiceUrl: "https://emtelaak.com/invoices/001"
 });
 ```
 
@@ -501,7 +501,7 @@ SMTP_USER=apikey
 SMTP_PASSWORD=SG.xxxxxxxxxxxxxxxxxxxxx
 SMTP_FROM_EMAIL=noreply@emtelaak.com
 SMTP_FROM_NAME=Emtelaak Platform
-FRONTEND_URL=https://emtelaak.co
+FRONTEND_URL=https://emtelaak.com
 ```
 
 **Step 2: Deploy**

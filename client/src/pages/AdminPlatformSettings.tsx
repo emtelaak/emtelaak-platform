@@ -22,7 +22,7 @@ export default function AdminPlatformSettings() {
   const [platformFeePercentage, setPlatformFeePercentage] = useState<string>("");
   const [processingFeeDollars, setProcessingFeeDollars] = useState<string>("");
   const [isPrivateMode, setIsPrivateMode] = useState<boolean>(true);
-  const [invitationEmail, setInvitationEmail] = useState<string>("noreply@emtelaak.co");
+  const [invitationEmail, setInvitationEmail] = useState<string>("noreply@emtelaak.com");
 
   // Initialize form values when data loads
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function AdminPlatformSettings() {
   useEffect(() => {
     if (accessSettings) {
       setIsPrivateMode(accessSettings.accessMode === 'private');
-      setInvitationEmail(accessSettings.invitationEmail || 'noreply@emtelaak.co');
+      setInvitationEmail(accessSettings.invitationEmail || 'noreply@emtelaak.com');
     }
   }, [accessSettings]);
 
