@@ -262,7 +262,7 @@ export default function AdminPropertyManagement() {
                   </span>
                 </div>
                 <div className="border-t pt-2 mt-2">
-                  <div className="flex justify-between">
+                  <div className="flex flex-col sm:flex-row justify-between gap-4">
                     <span className="font-semibold">New Total Value</span>
                     <span className="font-bold text-lg">
                       {formatCurrency(

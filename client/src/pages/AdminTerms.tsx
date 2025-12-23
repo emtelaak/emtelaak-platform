@@ -50,6 +50,7 @@ import {
   History
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminTerms() {
   const { language } = useLanguage();
@@ -175,8 +176,12 @@ export default function AdminTerms() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
+        <Breadcrumb items={[
+          { label: "Admin", labelAr: "الإدارة", href: "/admin" },
+          { label: "Terms & Conditions", labelAr: "الشروط والأحكام" }
+        ]} />
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-3">
               <FileText className="h-8 w-8 text-primary" />

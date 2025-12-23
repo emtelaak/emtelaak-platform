@@ -432,15 +432,15 @@ export default function AdminInvoices() {
           {selectedInvoice && (
             <div className="space-y-4">
               <div className="bg-muted p-4 rounded-lg space-y-2">
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row justify-between gap-4">
                   <span className="text-sm text-muted-foreground">Invoice:</span>
                   <span className="font-medium">{selectedInvoice.invoiceNumber}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row justify-between gap-4">
                   <span className="text-sm text-muted-foreground">User:</span>
                   <span className="font-medium">{selectedInvoice.userName}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row justify-between gap-4">
                   <span className="text-sm text-muted-foreground">Amount:</span>
                   <span className="font-medium">{formatCurrency(selectedInvoice.amount)}</span>
                 </div>

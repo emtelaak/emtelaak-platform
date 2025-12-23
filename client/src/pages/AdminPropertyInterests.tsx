@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Building2, Users, Search, Download, Mail, Phone, Calendar, Eye } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "wouter";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminPropertyInterests() {
   const { language } = useLanguage();
@@ -71,7 +72,11 @@ export default function AdminPropertyInterests() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
+        <Breadcrumb items={[
+          { label: "Admin", labelAr: "الإدارة", href: "/admin" },
+          { label: "Property Interests", labelAr: "اهتمامات العقارات" }
+        ]} />
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h1 className="text-3xl font-bold">
               {language === "en" ? "Property Interests" : "اهتمامات العقارات"}

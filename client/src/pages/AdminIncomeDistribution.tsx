@@ -202,14 +202,14 @@ export default function AdminIncomeDistribution() {
                 <CardTitle className="text-sm font-medium">Investor Preview</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="flex items-center gap-2">
                     <Users className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm">Total Investors</span>
                   </div>
                   <span className="font-semibold">{investorPreview?.totalInvestors || 0}</span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm">Total Ownership</span>
