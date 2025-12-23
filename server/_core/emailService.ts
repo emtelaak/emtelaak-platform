@@ -24,7 +24,7 @@ const EMAIL_CONFIG = {
 
 const FROM_EMAIL = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || "noreply@emtelaak.com";
 const FROM_NAME = process.env.SMTP_FROM_NAME || "Emtelaak Platform";
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://emtelaak.com";
 
 // Create reusable transporter
 let transporter: nodemailer.Transporter | null = null;
