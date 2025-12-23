@@ -147,7 +147,7 @@ export default function AdminOfferingApproval() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <Card>
           <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">Pending Review</p>
                 <p className="text-2xl font-bold">
@@ -161,7 +161,7 @@ export default function AdminOfferingApproval() {
 
         <Card>
           <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">Approved</p>
                 <p className="text-2xl font-bold">
@@ -175,7 +175,7 @@ export default function AdminOfferingApproval() {
 
         <Card>
           <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">Active</p>
                 <p className="text-2xl font-bold">
@@ -189,7 +189,7 @@ export default function AdminOfferingApproval() {
 
         <Card>
           <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">Total Offerings</p>
                 <p className="text-2xl font-bold">{offerings?.length || 0}</p>

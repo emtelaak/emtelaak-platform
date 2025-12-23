@@ -69,7 +69,7 @@ export default function AdminAnalytics() {
       <Breadcrumb />
       
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">Analytics Dashboard</h1>
           <p className="text-muted-foreground mt-2">
@@ -298,7 +298,7 @@ export default function AdminAnalytics() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <span className="text-sm text-muted-foreground">Pending Review</span>
                 <span className="text-sm font-medium">{kycMetrics?.pending || 0}</span>
               </div>
@@ -313,7 +313,7 @@ export default function AdminAnalytics() {
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <span className="text-sm text-muted-foreground">Approved</span>
                 <span className="text-sm font-medium">{kycMetrics?.approved || 0}</span>
               </div>
@@ -328,7 +328,7 @@ export default function AdminAnalytics() {
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <span className="text-sm text-muted-foreground">Rejected</span>
                 <span className="text-sm font-medium">{kycMetrics?.rejected || 0}</span>
               </div>
@@ -343,7 +343,7 @@ export default function AdminAnalytics() {
             </div>
 
             <div className="pt-4 border-t">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <span className="text-sm font-medium">Approval Rate</span>
                 <span className="text-lg font-bold text-green-600">
                   {kycMetrics?.total

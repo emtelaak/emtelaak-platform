@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/collapsible";
 import { APP_LOGO, APP_TITLE } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   LayoutDashboard, 
   LogOut, 
@@ -67,53 +68,56 @@ import { Button } from "./ui/button";
 type MenuItem = {
   icon: any;
   label: string;
+  labelAr: string;
   path: string;
   children?: MenuItem[];
 };
 
 const menuItems: MenuItem[] = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/admin/dashboard" },
-  { icon: Users, label: "Users", path: "/admin/users" },
-  { icon: Shield, label: "Security", path: "/admin/security" },
-  { icon: Ban, label: "IP Blocking", path: "/admin/ip-blocking" },
-  { icon: Settings, label: "Security Settings", path: "/admin/security-settings" },
-  { icon: Lock, label: "Permissions", path: "/admin/permissions" },
-  { icon: Briefcase, label: "Roles", path: "/admin/roles" },
-  { icon: UserCheck, label: "KYC Review", path: "/admin/kyc-review" },
-  { icon: Users, label: "Access Requests", path: "/admin/access-requests" },
-  { icon: Building2, label: "Property Management", path: "/admin/property-management" },
-  { icon: Building2, label: "Property Interests", path: "/admin/property-interests" },
-  { icon: Receipt, label: "Invoices", path: "/admin/invoices" },
-  { icon: Wallet, label: "Wallet", path: "/admin/wallet" },
-  { icon: DollarSign, label: "Platform Settings", path: "/admin/platform-settings" },
-  { icon: TrendingUp, label: "Income Distribution", path: "/admin/income-distribution" },
-  { icon: BarChart3, label: "Analytics", path: "/admin/analytics" },
+  { icon: LayoutDashboard, label: "Dashboard", labelAr: "لوحة التحكم", path: "/admin/dashboard" },
+  { icon: Users, label: "Users", labelAr: "المستخدمون", path: "/admin/users" },
+  { icon: Shield, label: "Security", labelAr: "الأمان", path: "/admin/security" },
+  { icon: Ban, label: "IP Blocking", labelAr: "حظر IP", path: "/admin/ip-blocking" },
+  { icon: Settings, label: "Security Settings", labelAr: "إعدادات الأمان", path: "/admin/security-settings" },
+  { icon: Lock, label: "Permissions", labelAr: "الصلاحيات", path: "/admin/permissions" },
+  { icon: Briefcase, label: "Roles", labelAr: "الأدوار", path: "/admin/roles" },
+  { icon: UserCheck, label: "KYC Review", labelAr: "مراجعة التحقق", path: "/admin/kyc-review" },
+  { icon: Users, label: "Access Requests", labelAr: "طلبات الوصول", path: "/admin/access-requests" },
+  { icon: Building2, label: "Property Management", labelAr: "إدارة العقارات", path: "/admin/property-management" },
+  { icon: Building2, label: "Property Interests", labelAr: "اهتمامات العقارات", path: "/admin/property-interests" },
+  { icon: Receipt, label: "Invoices", labelAr: "الفواتير", path: "/admin/invoices" },
+  { icon: Wallet, label: "Wallet", labelAr: "المحفظة", path: "/admin/wallet" },
+  { icon: DollarSign, label: "Platform Settings", labelAr: "إعدادات المنصة", path: "/admin/platform-settings" },
+  { icon: TrendingUp, label: "Income Distribution", labelAr: "توزيع الدخل", path: "/admin/income-distribution" },
+  { icon: BarChart3, label: "Analytics", labelAr: "التحليلات", path: "/admin/analytics" },
   { 
     icon: Layers, 
     label: "Offering Management", 
+    labelAr: "إدارة العروض",
     path: "/offerings",
     children: [
-      { icon: Layers, label: "My Offerings", path: "/offerings" },
-      { icon: FileCheck, label: "Create Offering", path: "/offerings/create" },
-      { icon: FileCheck, label: "Offering Approvals", path: "/admin/offering-approvals" },
+      { icon: Layers, label: "My Offerings", labelAr: "عروضي", path: "/offerings" },
+      { icon: FileCheck, label: "Create Offering", labelAr: "إنشاء عرض", path: "/offerings/create" },
+      { icon: FileCheck, label: "Offering Approvals", labelAr: "موافقات العروض", path: "/admin/offering-approvals" },
     ]
   },
   { 
     icon: Edit3, 
     label: "Content Management", 
+    labelAr: "إدارة المحتوى",
     path: "/admin/content",
     children: [
-      { icon: Home, label: "Homepage Content", path: "/admin/content/homepage" },
-      { icon: Info, label: "About Page", path: "/admin/content/about" },
-      { icon: HelpCircle, label: "FAQ Editor", path: "/admin/content/faq" },
-      { icon: Phone, label: "Contact Editor", path: "/admin/content/contact" },
-      { icon: FileText, label: "Terms Editor", path: "/admin/content/terms" },
-      { icon: Mail, label: "Email Templates", path: "/admin/email-templates" },
-      { icon: Scale, label: "Legal Documents", path: "/admin/legal-documents" },
-      { icon: FileText, label: "Terms & Conditions", path: "/admin/terms" },
+      { icon: Home, label: "Homepage Content", labelAr: "محتوى الرئيسية", path: "/admin/content/homepage" },
+      { icon: Info, label: "About Page", labelAr: "صفحة عنا", path: "/admin/content/about" },
+      { icon: HelpCircle, label: "FAQ Editor", labelAr: "محرر الأسئلة", path: "/admin/content/faq" },
+      { icon: Phone, label: "Contact Editor", labelAr: "محرر الاتصال", path: "/admin/content/contact" },
+      { icon: FileText, label: "Terms Editor", labelAr: "محرر الشروط", path: "/admin/content/terms" },
+      { icon: Mail, label: "Email Templates", labelAr: "قوالب البريد", path: "/admin/email-templates" },
+      { icon: Scale, label: "Legal Documents", labelAr: "المستندات القانونية", path: "/admin/legal-documents" },
+      { icon: FileText, label: "Terms & Conditions", labelAr: "الشروط والأحكام", path: "/admin/terms" },
     ]
   },
-  { icon: FileText, label: "Settings", path: "/admin/settings" },
+  { icon: FileText, label: "Settings", labelAr: "الإعدادات", path: "/admin/settings" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
@@ -203,6 +207,7 @@ function DashboardLayoutContent({
   setSidebarWidth,
 }: DashboardLayoutContentProps) {
   const { user, logout } = useAuth();
+  const { language } = useLanguage();
   const { data: profile } = trpc.profile.get.useQuery(undefined, {
     enabled: !!user,
   });
@@ -215,6 +220,9 @@ function DashboardLayoutContent({
     item.path === location || item.children?.some(child => child.path === location)
   );
   const isMobile = useIsMobile();
+  
+  // Helper function to get localized label
+  const getLabel = (item: MenuItem) => language === 'ar' ? item.labelAr : item.label;
 
   useEffect(() => {
     if (isCollapsed) {
@@ -310,11 +318,11 @@ function DashboardLayoutContent({
                       <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
                           <SidebarMenuButton
-                            tooltip={item.label}
+                            tooltip={getLabel(item)}
                             className="h-10 transition-all font-normal"
                           >
                             <item.icon className="h-4 w-4" />
-                            <span>{item.label}</span>
+                            <span>{getLabel(item)}</span>
                             <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                           </SidebarMenuButton>
                         </CollapsibleTrigger>
@@ -329,7 +337,7 @@ function DashboardLayoutContent({
                                     onClick={() => setLocation(child.path)}
                                   >
                                     <child.icon className={`h-4 w-4 ${isActive ? "text-primary" : ""}`} />
-                                    <span>{child.label}</span>
+                                    <span>{getLabel(child)}</span>
                                   </SidebarMenuSubButton>
                                 </SidebarMenuSubItem>
                               );
@@ -348,13 +356,13 @@ function DashboardLayoutContent({
                     <SidebarMenuButton
                       isActive={isActive}
                       onClick={() => setLocation(item.path)}
-                      tooltip={item.label}
+                      tooltip={getLabel(item)}
                       className={`h-10 transition-all font-normal`}
                     >
                       <item.icon
                         className={`h-4 w-4 ${isActive ? "text-primary" : ""}`}
                       />
-                      <span>{item.label}</span>
+                      <span>{getLabel(item)}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
@@ -412,7 +420,7 @@ function DashboardLayoutContent({
               <div className="flex items-center gap-3">
                 <div className="flex flex-col gap-1">
                   <span className="tracking-tight text-foreground">
-                    {activeMenuItem?.label ?? APP_TITLE}
+                    {activeMenuItem ? getLabel(activeMenuItem) : APP_TITLE}
                   </span>
                 </div>
               </div>

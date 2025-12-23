@@ -16,8 +16,9 @@ interface BreadcrumbProps {
 }
 
 export function Breadcrumb({ items, showHome = true, className }: BreadcrumbProps) {
-  const { language } = useLanguage();
+  const { language, dir } = useLanguage();
   const [location] = useLocation();
+  const isRTL = dir === 'rtl';
   
   // Auto-generate breadcrumbs if not provided
   const breadcrumbItems = items || generateBreadcrumbs(location);
@@ -31,15 +32,23 @@ export function Breadcrumb({ items, showHome = true, className }: BreadcrumbProp
   }
 
   return (
-    <nav aria-label="Breadcrumb" className={cn("flex items-center space-x-2 text-sm text-muted-foreground mb-4", className)}>
+    <nav 
+      aria-label="Breadcrumb" 
+      className={cn(
+        "flex items-center gap-2 text-sm text-muted-foreground mb-4",
+        isRTL && "flex-row-reverse",
+        className
+      )}
+      dir={dir}
+    >
       {allItems.map((item, index) => {
         const isLast = index === allItems.length - 1;
         const label = language === "ar" && item.labelAr ? item.labelAr : item.label;
 
         return (
-          <div key={index} className="flex items-center">
+          <div key={index} className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
             {index === 0 && showHome && (
-              <Home className="h-4 w-4 mr-2" />
+              <Home className="h-4 w-4" />
             )}
             
             {item.href && !isLast ? (
@@ -55,7 +64,7 @@ export function Breadcrumb({ items, showHome = true, className }: BreadcrumbProp
             )}
             
             {!isLast && (
-              <ChevronRight className="h-4 w-4 mx-2" />
+              <ChevronRight className={cn("h-4 w-4", isRTL && "rotate-180")} />
             )}
           </div>
         );
@@ -118,6 +127,7 @@ function getSegmentLabel(segment: string, allSegments: string[], index: number):
     "add-property": { en: "Add Property", ar: "إضافة عقار" },
     "property-analytics": { en: "Property Analytics", ar: "تحليلات العقارات" },
     "property-management": { en: "Property Management", ar: "إدارة العقارات" },
+    "property-interests": { en: "Property Interests", ar: "اهتمامات العقارات" },
     
     // Offering routes
     offerings: { en: "Offerings", ar: "العروض" },
@@ -153,6 +163,7 @@ function getSegmentLabel(segment: string, allSegments: string[], index: number):
     "user-management": { en: "User Management", ar: "إدارة المستخدمين" },
     permissions: { en: "Permissions", ar: "الصلاحيات" },
     roles: { en: "Roles", ar: "الأدوار" },
+    "access-requests": { en: "Access Requests", ar: "طلبات الوصول" },
     
     // KYC routes
     kyc: { en: "KYC", ar: "التحقق من الهوية" },
