@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
-import { Link } from "wouter";
-import { APP_LOGO, APP_TITLE } from "@/const";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,6 +16,7 @@ import {
 import Footer from "@/components/Footer";
 import { InvestorLeadForm } from "@/components/InvestorLeadForm";
 import { useLanguage } from "@/contexts/LanguageContext";
+import Navigation from "@/components/Navigation";
 
 export default function Contact() {
   const { t, language, isRTL } = useLanguage();
@@ -60,19 +59,8 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-background" dir={isRTL ? "rtl" : "ltr"}>
-      {/* Header */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container flex h-16 items-center justify-between">
-          <Link href="/">
-            <div className="flex items-center gap-3 cursor-pointer">
-              <img src={APP_LOGO} alt={APP_TITLE} className="h-20 w-auto" />
-            </div>
-          </Link>
-          <Link href="/">
-            <Button variant="outline">{t.contact.backToHome}</Button>
-          </Link>
-        </div>
-      </nav>
+      {/* Navigation */}
+      <Navigation />
 
       {/* Hero Section - Matching emtelaak.com design */}
       <section className="relative overflow-hidden py-24 md:py-32" style={{
