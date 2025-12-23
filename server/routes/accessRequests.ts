@@ -142,7 +142,7 @@ export const accessRequestsRouter = router({
       phone: z.string().optional(),
       country: z.string().optional(),
       investmentInterest: z.string().optional(),
-      investmentBudget: z.string().optional(),
+
       message: z.string().optional()
     }))
     .mutation(async ({ input }) => {
@@ -160,9 +160,9 @@ export const accessRequestsRouter = router({
       }
 
       await db.execute(sql`
-        INSERT INTO access_requests (fullName, email, phone, country, investmentInterest, investmentBudget, message, status, createdAt)
+        INSERT INTO access_requests (fullName, email, phone, country, investmentInterest, message, status, createdAt)
         VALUES (${input.fullName}, ${input.email}, ${input.phone || null}, ${input.country || null}, 
-                ${input.investmentInterest || null}, ${input.investmentBudget || null}, ${input.message || null}, 
+                ${input.investmentInterest || null}, ${input.message || null}, 
                 'pending', NOW())
       `);
 
@@ -208,10 +208,7 @@ export const accessRequestsRouter = router({
                       <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Interest / الاهتمام:</td>
                       <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${input.investmentInterest || 'Not specified'}</td>
                     </tr>
-                    <tr>
-                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Budget / الميزانية:</td>
-                      <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${input.investmentBudget || 'Not specified'}</td>
-                    </tr>
+
                     ${input.message ? `
                     <tr>
                       <td style="padding: 10px 0; font-weight: bold; color: #666;">Message / الرسالة:</td>
@@ -245,7 +242,7 @@ export const accessRequestsRouter = router({
 
         await notifyOwner({
           title: "New Access Request",
-          content: `New access request from ${input.fullName} (${input.email}). Investment interest: ${input.investmentInterest || 'Not specified'}. Budget: ${input.investmentBudget || 'Not specified'}.`
+          content: `New access request from ${input.fullName} (${input.email}). Investment interest: ${input.investmentInterest || 'Not specified'}.`
         });
       } catch (e) {
         console.error("Failed to notify owner:", e);

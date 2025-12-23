@@ -59,14 +59,14 @@ export default function GuestMobileMenu() {
       {/* Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/70 z-40"
+          className="fixed inset-0 bg-black/70 z-[60]"
           onClick={closeMenu}
         />
       )}
 
       {/* Slide-out Menu */}
       <div
-        className={`fixed top-0 ${language === "ar" ? "left-0" : "right-0"} h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 ${language === "ar" ? "left-0" : "right-0"} h-full w-80 bg-white shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : language === "ar" ? "-translate-x-full" : "translate-x-full"
         }`}
       >
