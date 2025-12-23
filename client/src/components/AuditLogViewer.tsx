@@ -268,7 +268,13 @@ export default function AuditLogViewer() {
                             {language === "en" ? "View details" : "عرض التفاصيل"}
                           </summary>
                           <pre className="mt-2 text-xs bg-muted p-2 rounded overflow-x-auto">
-                            {JSON.stringify(JSON.parse(log.details), null, 2)}
+                            {(() => {
+                              try {
+                                return JSON.stringify(JSON.parse(log.details), null, 2);
+                              } catch (e) {
+                                return log.details;
+                              }
+                            })()}
                           </pre>
                         </details>
                       )}

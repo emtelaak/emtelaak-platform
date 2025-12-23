@@ -504,7 +504,12 @@ export default function AdminInvoices() {
           ) : auditLogs && auditLogs.length > 0 ? (
             <div className="space-y-4">
               {auditLogs.map((entry, index) => {
-                const details = entry.log.details ? JSON.parse(entry.log.details) : {};
+                let details = {};
+                try {
+                  details = entry.log.details ? JSON.parse(entry.log.details) : {};
+                } catch (e) {
+                  console.error('Failed to parse audit log details:', e);
+                }
                 return (
                   <div key={entry.log.id} className="border rounded-lg p-4 space-y-2">
                     <div className="flex items-start justify-between">
