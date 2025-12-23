@@ -306,36 +306,54 @@ export const ar: Translation = {
 
   // Contact Page
   contact: {
-    title: "اتصل بنا",
-    subtitle: "تواصل مع فريقنا",
+    title: "تواصل معنا",
+    subtitle: "هل لديك أسئلة؟ يسعدنا سماعك. أرسل لنا رسالة وسنرد في أقرب وقت ممكن.",
+    backToHome: "العودة للرئيسية",
     form: {
       title: "أرسل لنا رسالة",
-      name: "اسمك",
-      email: "بريدك الإلكتروني",
+      description: "املأ النموذج أدناه وسيتواصل معك فريقنا قريباً",
+      name: "الاسم الكامل",
+      namePlaceholder: "أدخل اسمك الكامل",
+      email: "البريد الإلكتروني",
+      emailPlaceholder: "example@email.com",
       subject: "الموضوع",
+      subjectPlaceholder: "كيف يمكننا مساعدتك؟",
       message: "الرسالة",
+      messagePlaceholder: "أخبرنا المزيد عن استفسارك...",
       send: "إرسال الرسالة",
       sending: "جاري الإرسال...",
+      sendAnother: "إرسال رسالة أخرى",
+      required: "*",
     },
     info: {
       email: {
-        title: "البريد الإلكتروني",
+        title: "راسلنا",
         value: "support@emtelaak.com",
+        description: "سنرد خلال 24 ساعة",
       },
       phone: {
-        title: "الهاتف",
+        title: "اتصل بنا",
         value: "+971 4 123 4567",
+        description: "الاثنين-الجمعة 9ص-6م بتوقيت الخليج",
       },
       address: {
-        title: "المكتب",
-        value: "DIFC، دبي، الإمارات",
+        title: "زرنا",
+        value: "مركز الابتكار DIFC",
+        city: "دبي، الإمارات",
       },
     },
     success: {
       title: "تم إرسال الرسالة!",
-      description: "شكراً لتواصلك معنا. سنعود إليك قريباً.",
+      description: "شكراً لتواصلك معنا. سنعود إليك في أقرب وقت ممكن.",
       backToHome: "العودة للرئيسية",
     },
+    investor: {
+      title: "مهتم بالاستثمار؟",
+      subtitle: "أخبرنا عن أهدافك الاستثمارية وسنساعدك للبدء",
+      formTitle: "نموذج استفسار المستثمر",
+      formDescription: "أكمل هذا النموذج وسيتواصل معك فريق الاستثمار خلال 24 ساعة",
+    },
+    divider: "أو أرسل لنا رسالة عامة",
     faq: {
       title: "الأسئلة الشائعة",
     },
