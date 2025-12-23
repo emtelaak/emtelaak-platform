@@ -28,7 +28,7 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function Profile() {
   const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
-  const { t } = useLanguage();
+  const { t, language, isRTL } = useLanguage();
   const [isEditing, setIsEditing] = useState(false);
 
   const { data: profile, refetch: refetchProfile } = trpc.profile.get.useQuery(
@@ -117,11 +117,11 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" dir={isRTL ? "rtl" : "ltr"}>
       {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container py-6">
-          <div className="flex items-center gap-4">
+          <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
             <Link href="/">
               <img src={APP_LOGO} alt={APP_TITLE} className="h-20 w-auto cursor-pointer" />
             </Link>
@@ -159,10 +159,9 @@ export default function Profile() {
             <TabsTrigger value="overview">{t.profile.tabs.overview}</TabsTrigger>
             <TabsTrigger value="personal">{t.profile.tabs.personal}</TabsTrigger>
             <TabsTrigger value="verification">{t.profile.tabs.verification}</TabsTrigger>
-            {/* @ts-expect-error - Translation key to be added */}
-            <TabsTrigger value="security">{t.profile.tabs.security || "Security"}</TabsTrigger>
+            <TabsTrigger value="security">{language === 'ar' ? 'الأمان' : 'Security'}</TabsTrigger>
             <TabsTrigger value="preferences">{t.profile.tabs.preferences}</TabsTrigger>
-            <TabsTrigger value="additional">Additional</TabsTrigger>
+            <TabsTrigger value="additional">{language === 'ar' ? 'إضافي' : 'Additional'}</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
