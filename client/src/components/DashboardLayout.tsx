@@ -81,6 +81,7 @@ const menuItems: MenuItem[] = [
   { icon: Briefcase, label: "Roles", path: "/admin/roles" },
   { icon: UserCheck, label: "KYC Review", path: "/admin/kyc-review" },
   { icon: Users, label: "Access Requests", path: "/admin/access-requests" },
+  { icon: Building2, label: "Property Management", path: "/admin/property-management" },
   { icon: Building2, label: "Property Interests", path: "/admin/property-interests" },
   { icon: Receipt, label: "Invoices", path: "/admin/invoices" },
   { icon: Wallet, label: "Wallet", path: "/admin/wallet" },

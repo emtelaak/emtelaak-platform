@@ -281,6 +281,9 @@ export const properties = mysqlTable("properties", {
   // Developer/Fundraiser
   fundraiserId: int("fundraiserId").references(() => users.id),
   
+  // Visibility
+  visibility: mysqlEnum("visibility", ["public", "authenticated"]).default("authenticated").notNull(),
+  
   // Waitlist
   waitlistEnabled: boolean("waitlistEnabled").default(false),
   waitlistCount: int("waitlistCount").default(0),
