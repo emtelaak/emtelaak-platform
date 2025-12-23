@@ -24,7 +24,7 @@ function generateInvitationCode(): string {
 
 // Send invitation email
 async function sendInvitationEmail(email: string, name: string, code: string): Promise<boolean> {
-  const activateUrl = `${process.env.VITE_OAUTH_PORTAL_URL || 'https://emtelaak.co'}/activate-account?code=${code}`;
+  const activateUrl = `${process.env.VITE_OAUTH_PORTAL_URL || 'https://emtelaak.com'}/activate-account?code=${code}`;
   
   const html = `
     <!DOCTYPE html>
@@ -218,7 +218,7 @@ export const accessRequestsRouter = router({
                   </table>
                 </div>
                 <div style="text-align: center; margin: 30px 0;">
-                  <a href="${process.env.VITE_OAUTH_PORTAL_URL || 'https://emtelaak.co'}/admin/access-requests" 
+                  <a href="${process.env.VITE_OAUTH_PORTAL_URL || 'https://emtelaak.com'}/admin/access-requests" 
                      style="display: inline-block; background: linear-gradient(135deg, #c9a227 0%, #b8941f 100%); color: #ffffff; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: bold;">
                     Review Request / مراجعة الطلب
                   </a>
@@ -622,7 +622,7 @@ export const accessRequestsRouter = router({
       `);
 
       // Send verification email
-      const verificationUrl = `${process.env.VITE_OAUTH_PORTAL_URL || 'https://emtelaak.co'}/verify-email?token=${verificationToken}`;
+      const verificationUrl = `${process.env.VITE_OAUTH_PORTAL_URL || 'https://emtelaak.com'}/verify-email?token=${verificationToken}`;
       
       const verificationHtml = `
         <!DOCTYPE html>

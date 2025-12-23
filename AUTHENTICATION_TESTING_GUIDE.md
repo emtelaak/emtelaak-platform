@@ -33,7 +33,7 @@ Three test accounts have been created for testing:
 - **Purpose:** Test all features before production deployment
 
 ### Production Environment
-- **URL:** https://emtelaak.co
+- **URL:** https://emtelaak.com
 - **Purpose:** Final verification in live environment
 
 ---
@@ -44,7 +44,7 @@ Three test accounts have been created for testing:
 
 #### Test 1.1: Successful Sign-In (Admin)
 **Steps:**
-1. Navigate to https://emtelaak.co/login
+1. Navigate to https://emtelaak.com/login
 2. Enter email: `admin@emtelaak-test.com`
 3. Enter password: `TestPassword123!`
 4. Click "Sign In"
@@ -57,7 +57,7 @@ Three test accounts have been created for testing:
 
 #### Test 1.2: Successful Sign-In (Investor)
 **Steps:**
-1. Navigate to https://emtelaak.co/login
+1. Navigate to https://emtelaak.com/login
 2. Enter email: `investor1@emtelaak-test.com`
 3. Enter password: `TestPassword123!`
 4. Click "Sign In"
@@ -70,7 +70,7 @@ Three test accounts have been created for testing:
 
 #### Test 1.3: Failed Sign-In (Wrong Password)
 **Steps:**
-1. Navigate to https://emtelaak.co/login
+1. Navigate to https://emtelaak.com/login
 2. Enter email: `admin@emtelaak-test.com`
 3. Enter password: `WrongPassword123!`
 4. Click "Sign In"
@@ -82,7 +82,7 @@ Three test accounts have been created for testing:
 
 #### Test 1.4: Failed Sign-In (Non-existent Email)
 **Steps:**
-1. Navigate to https://emtelaak.co/login
+1. Navigate to https://emtelaak.com/login
 2. Enter email: `nonexistent@test.com`
 3. Enter password: `TestPassword123!`
 4. Click "Sign In"
@@ -234,7 +234,7 @@ Repeat 5 times:
 1. Sign in with any account
 2. Close browser completely
 3. Reopen browser
-4. Navigate to https://emtelaak.co
+4. Navigate to https://emtelaak.com
 
 **Expected Result:**
 - ✅ User still logged in (if "Remember Me" enabled)
@@ -284,7 +284,7 @@ Repeat 5 times:
 
 #### Test 7.1: All Tests on Production
 **Steps:**
-Repeat ALL above tests on production URL: https://emtelaak.co
+Repeat ALL above tests on production URL: https://emtelaak.com
 
 **Expected Result:**
 - ✅ All tests pass on production

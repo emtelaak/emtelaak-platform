@@ -34,7 +34,7 @@ January 10, 2025
 4. Backend sends email
    │
    ├─> Calls sendPasswordResetEmail() from emailService
-   ├─> Generates reset link: https://emtelaak.co/reset-password?token=xxx
+   ├─> Generates reset link: https://emtelaak.com/reset-password?token=xxx
    ├─> Sends beautiful HTML email with reset link
    ├─> If SMTP not configured: Logs token to console (dev mode)
    │
@@ -321,7 +321,7 @@ const passwordHash = await bcrypt.hash(input.newPassword, SALT_ROUNDS);
 **Solution:** All links use HTTPS in production.
 
 ```typescript
-const resetLink = `https://emtelaak.co/reset-password?token=${resetToken}`;
+const resetLink = `https://emtelaak.com/reset-password?token=${resetToken}`;
 ```
 
 ### 6. Password Requirements
@@ -579,7 +579,7 @@ SMTP_FROM_EMAIL=noreply@emtelaak.com
 SMTP_FROM_NAME=Emtelaak Platform
 
 # Frontend URL (for email links)
-FRONTEND_URL=https://emtelaak.co
+FRONTEND_URL=https://emtelaak.com
 
 # JWT Secret (for token signing)
 JWT_SECRET=your-secure-random-secret

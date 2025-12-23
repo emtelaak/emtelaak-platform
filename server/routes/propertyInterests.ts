@@ -102,7 +102,7 @@ export const propertyInterestsRouter = router({
                   </table>
                 </div>
                 <div style="text-align: center; margin: 30px 0;">
-                  <a href="${process.env.VITE_OAUTH_PORTAL_URL || 'https://emtelaak.co'}/admin/property-interests" 
+                  <a href="${process.env.VITE_OAUTH_PORTAL_URL || 'https://emtelaak.com'}/admin/property-interests" 
                      style="display: inline-block; background: linear-gradient(135deg, #c9a227 0%, #b8941f 100%); color: #ffffff; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: bold;">
                     View All Interests / عرض جميع المهتمين
                   </a>
@@ -123,7 +123,7 @@ export const propertyInterestsRouter = router({
           SELECT value FROM platform_settings WHERE \`key\` = 'invitationEmail'
         `) as any)[0];
 
-        const adminEmail = settings?.value || 'noreply@emtelaak.co';
+        const adminEmail = settings?.value || 'noreply@emtelaak.com';
 
         await sendEmail({
           to: adminEmail,

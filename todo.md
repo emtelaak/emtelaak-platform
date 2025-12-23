@@ -2856,13 +2856,13 @@
 - [x] Added 500ms delay before redirect to allow cookie processing
 - [x] Tested logout multiple times - redirects to home but session persists in preview
 - [x] CONCLUSION: httpOnly cookies with sameSite="none" have limitations in preview environment
-- [x] RECOMMENDATION: Test logout on production deployment (emtelaak.co) where cookies work reliably
+- [x] RECOMMENDATION: Test logout on production deployment (emtelaak.com) where cookies work reliably
 - [ ] TODO: Verify logout works correctly on production domain after deployment
 
 
 ## Phase: Fix Production Login Session Persistence (COMPLETED)
 - [x] Investigate why login succeeds but session doesn't persist in production
-- [x] Check cookie domain configuration for emtelaak.co
+- [x] Check cookie domain configuration for emtelaak.com
 - [x] Review sameSite and secure cookie settings for production
 - [x] FIXED: Changed sameSite from "none" to "lax" for better compatibility
 - [x] Test login in preview - session persists correctly
@@ -2870,7 +2870,7 @@
 - [x] Test logout functionality - clears session and redirects
 - [x] Test protected route access after logout - shows login prompt
 - [ ] Push fixes to GitHub and redeploy to production
-- [ ] Test complete auth flow on production (emtelaak.co)
+- [ ] Test complete auth flow on production (emtelaak.com)
 
 
 ## Phase: Implement Remember Me Feature (COMPLETED)
@@ -2994,13 +2994,13 @@
 - [x] Applied fix to both Login and Register pages
 
 
-## Phase 66: Fix emtelaak.co Production Cookie Issue (Completed)
-- [x] Investigate cookie domain settings for .emtelaak.co
-- [x] Fixed cookie domain logic to not set domain for base domains (emtelaak.co)
-- [x] Only set domain attribute for subdomains (admin.emtelaak.co)
+## Phase 66: Fix emtelaak.com Production Cookie Issue (Completed)
+- [x] Investigate cookie domain settings for .emtelaak.com
+- [x] Fixed cookie domain logic to not set domain for base domains (emtelaak.com)
+- [x] Only set domain attribute for subdomains (admin.emtelaak.com)
 - [x] Add comprehensive cookie debugging logs
 - [x] Add login mutation debugging
-- [ ] Deploy and test on emtelaak.co production
+- [ ] Deploy and test on emtelaak.com production
 - [ ] Verify session persistence after fix
 
 
@@ -3009,7 +3009,7 @@
 - [x] Commit all changes (cookie fix, email verification, architecture audit)
 - [x] Push to GitHub repository (emtelaak/emtelaak-platform-test)
 - [ ] Verify Render auto-deployment (user to check)
-- [ ] Test login on emtelaak.co production (user to test)
+- [ ] Test login on emtelaak.com production (user to test)
 
 
 ## Phase 68: Fix Production Database Schema (Completed)
@@ -3652,7 +3652,7 @@
 - [x] Verify session persistence across page refreshes - Manual test guide created
 
 ### Production Testing (Render)
-- [x] Access production URL (emtelaak.co) - Ready for manual testing
+- [x] Access production URL (emtelaak.com) - Ready for manual testing
 - [x] Test registration in production - Manual test guide created
 - [x] Test email verification in production - Manual test guide created
 - [x] Test sign-in/sign-out in production - Manual test guide created
@@ -3690,7 +3690,7 @@
 - [ ] Commit all changes to git
 - [ ] Push to GitHub main branch
 - [ ] Verify Render auto-deployment triggered
-- [ ] Test login on production (emtelaak.co)
+- [ ] Test login on production (emtelaak.com)
 - [ ] Verify no session creation errors in production
 
 
@@ -3939,9 +3939,9 @@
 - [x] Push code to GitHub (https://github.com/emtelaak/emtelaak-platform)
 - [x] Fix logo display issue (logo.png added to public directory)
 - [x] Fix production database session management (user_sessions sessionId column changed to TEXT)
-- [x] Implement admin subdomain redirect (admin.emtelaak.co → emtelaak.co/admin)
+- [x] Implement admin subdomain redirect (admin.emtelaak.com → emtelaak.com/admin)
 - [ ] Connect Render to GitHub repository (user needs to configure)
-- [ ] Configure DNS for admin.emtelaak.co subdomain
+- [ ] Configure DNS for admin.emtelaak.com subdomain
 - [ ] Test authentication on production (waleed@emtelaak.com)
 - [ ] Document deployment process for future updates
 
@@ -3957,7 +3957,7 @@
 
 
 ## Phase 102: Production Fundraiser Workflow Testing
-- [x] Create fundraiser account on production (emtelaak.co)
+- [x] Create fundraiser account on production (emtelaak.com)
 - [x] Identify JWT token missing role issue (admin link not showing)
 - [x] Fix JWT token to include user role in payload (login & registration)
 - [ ] Deploy fix to production and test admin link appears
