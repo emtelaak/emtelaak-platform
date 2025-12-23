@@ -53,6 +53,22 @@ export default function PropertyDetail() {
     },
   });
 
+  // Check if user has registered interest in this property
+  const { data: interestStatus, refetch: refetchInterest } = trpc.propertyInterests.checkInterest.useQuery(
+    { propertyId },
+    { enabled: propertyId > 0 && isAuthenticated }
+  );
+
+  const registerInterestMutation = trpc.propertyInterests.registerInterest.useMutation({
+    onSuccess: () => {
+      toast.success(language === "en" ? "Your interest has been registered! We'll notify you when this property becomes available." : "تم تسجيل اهتمامك! سنعلمك عندما يصبح هذا العقار متاحاً.");
+      refetchInterest();
+    },
+    onError: (error) => {
+      toast.error(error.message || (language === "en" ? "Failed to register interest" : "فشل تسجيل الاهتمام"));
+    },
+  });
+
   // Calculate investment with fees
   const { data: investmentCalculation } = trpc.investmentTransactions.calculateInvestment.useQuery(
     {
@@ -180,9 +196,10 @@ export default function PropertyDetail() {
               </Link>
             </div>
             {property.status === "coming_soon" ? (
-              waitlistStatus?.isOnWaitlist ? (
-                <Button disabled size="lg">
-                  {language === "en" ? "On Waitlist" : "في قائمة الانتظار"}
+              interestStatus?.hasInterest ? (
+                <Button disabled size="lg" variant="outline" className="bg-green-50 border-green-500 text-green-700">
+                  <CheckCircle2 className="mr-2 h-4 w-4" />
+                  {language === "en" ? "Interest Registered" : "تم تسجيل الاهتمام"}
                 </Button>
               ) : (
                 <Button 
@@ -191,14 +208,15 @@ export default function PropertyDetail() {
                       window.location.href = "/login";
                       return;
                     }
-                    joinWaitlistMutation.mutate({ propertyId });
+                    registerInterestMutation.mutate({ propertyId });
                   }} 
                   size="lg"
-                  disabled={joinWaitlistMutation.isPending}
+                  disabled={registerInterestMutation.isPending}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-black"
                 >
-                  {joinWaitlistMutation.isPending 
-                    ? (language === "en" ? "Joining..." : "جاري الانضمام...") 
-                    : (language === "en" ? "Join Waitlist" : "انضم لقائمة الانتظار")}
+                  {registerInterestMutation.isPending 
+                    ? (language === "en" ? "Registering..." : "جاري التسجيل...") 
+                    : (language === "en" ? "I'm Interested" : "أنا مهتم")}
                 </Button>
               )
             ) : (
@@ -312,23 +330,23 @@ export default function PropertyDetail() {
                 </div>
               )}
 
-              {property.status === "coming_soon" && property.waitlistEnabled ? (
+              {property.status === "coming_soon" ? (
                 <Button 
                   onClick={() => {
                     if (!isAuthenticated) {
                       window.location.href = "/login";
                       return;
                     }
-                    joinWaitlistMutation.mutate({ propertyId });
+                    registerInterestMutation.mutate({ propertyId });
                   }} 
-                  className="w-full" 
+                  className={`w-full ${interestStatus?.hasInterest ? 'bg-green-50 border-green-500 text-green-700' : 'bg-yellow-500 hover:bg-yellow-600 text-black'}`}
                   size="lg"
-                  disabled={waitlistStatus?.isOnWaitlist || joinWaitlistMutation.isPending}
-                  variant={waitlistStatus?.isOnWaitlist ? "outline" : "default"}
+                  disabled={interestStatus?.hasInterest || registerInterestMutation.isPending}
+                  variant={interestStatus?.hasInterest ? "outline" : "default"}
                 >
-                  {waitlistStatus?.isOnWaitlist 
-                    ? (language === "en" ? "On Waitlist" : "في قائمة الانتظار")
-                    : (language === "en" ? "Join the Waitlist" : "انضم إلى قائمة الانتظار")
+                  {interestStatus?.hasInterest 
+                    ? (<><CheckCircle2 className="mr-2 h-4 w-4" />{language === "en" ? "Interest Registered" : "تم تسجيل الاهتمام"}</>)
+                    : (language === "en" ? "I'm Interested" : "أنا مهتم")
                   }
                 </Button>
               ) : (
