@@ -9,6 +9,22 @@ import App from "./App";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import "./index.css";
 
+// PWA Service Worker Registration
+import { registerSW } from 'virtual:pwa-register';
+
+// Register service worker with auto-update
+const updateSW = registerSW({
+  onNeedRefresh() {
+    // Show a prompt to the user to refresh for new content
+    if (confirm('New content available. Reload to update?')) {
+      updateSW(true);
+    }
+  },
+  onOfflineReady() {
+    console.log('App ready to work offline');
+  },
+});
+
 const queryClient = new QueryClient();
 
 const redirectToLoginIfUnauthorized = (error: unknown) => {
