@@ -155,7 +155,7 @@ export const localAuthRouter = router({
       ctx.res.cookie(COOKIE_NAME, token, cookieOptions);
 
       // Send verification email
-      const verificationLink = `${process.env.FRONTEND_URL || "http://localhost:3000"}/verify-email?token=${verificationToken}`;
+      const verificationLink = `${process.env.FRONTEND_URL || "https://emtelaak.com"}/verify-email?token=${verificationToken}`;
       
       try {
         const { sendEmail, generateEmailVerificationEmail } = await import("../_core/emailService");
@@ -432,7 +432,7 @@ export const localAuthRouter = router({
         .where(eq(users.id, user.id));
 
       // Send password reset email
-      const resetLink = `${process.env.FRONTEND_URL || "http://localhost:3000"}/reset-password?token=${resetToken}`;
+      const resetLink = `${process.env.FRONTEND_URL || "https://emtelaak.com"}/reset-password?token=${resetToken}`;
       
       try {
         const { sendEmail, generatePasswordResetEmail } = await import("../_core/emailService");
@@ -640,7 +640,7 @@ export const localAuthRouter = router({
         .where(eq(users.id, user.id));
 
       // Send verification email
-      const verificationLink = `${process.env.FRONTEND_URL || "http://localhost:3000"}/verify-email?token=${verificationToken}`;
+      const verificationLink = `${process.env.FRONTEND_URL || "https://emtelaak.com"}/verify-email?token=${verificationToken}`;
       
       try {
         const { sendEmail, generateEmailVerificationEmail } = await import("../_core/emailService");

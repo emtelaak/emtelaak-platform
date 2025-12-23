@@ -301,7 +301,7 @@ export const standardAuthRouter = router({
       );
 
       // Generate reset link
-      const resetLink = `${process.env.FRONTEND_URL || "http://localhost:3000"}/reset-password?token=${resetToken}`;
+      const resetLink = `${process.env.FRONTEND_URL || "https://emtelaak.com"}/reset-password?token=${resetToken}`;
 
       // Send password reset email
       const emailSent = await sendPasswordResetEmail({
