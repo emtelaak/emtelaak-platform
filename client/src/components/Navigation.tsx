@@ -64,6 +64,7 @@ export default function Navigation() {
   };
 
   const nav = language === "en" ? t.en : t.ar;
+  const isRTL = language === "ar";
 
   const mainMenuItems = [
     { href: "/", label: nav.home },
@@ -82,7 +83,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 sticky top-0 z-50 shadow-sm">
+    <nav className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 sticky top-0 z-50 shadow-sm" dir={isRTL ? "rtl" : "ltr"}>
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/">
@@ -92,7 +93,7 @@ export default function Navigation() {
         </Link>
 
         {/* Main Menu - Desktop */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className={`hidden md:flex items-center gap-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
           {mainMenuItems.map((item) => (
             <Link key={item.href} href={item.href}>
               <span
@@ -109,7 +110,7 @@ export default function Navigation() {
         </div>
 
         {/* Right Side Actions */}
-        <div className="flex items-center gap-4">
+        <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
           {/* Language Switcher */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
