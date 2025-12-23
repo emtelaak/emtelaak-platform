@@ -17,7 +17,6 @@ import {
   Phone, 
   User, 
   Globe, 
-  DollarSign,
   Shield,
   TrendingUp,
   Users,
@@ -205,7 +204,6 @@ export default function RequestAccess() {
     phone: "",
     country: "",
     investmentInterest: "",
-    investmentBudget: "",
     message: ""
   });
 
@@ -283,7 +281,6 @@ export default function RequestAccess() {
                     phone: "",
                     country: "",
                     investmentInterest: "",
-                    investmentBudget: "",
                     message: ""
                   });
                 }}
@@ -516,41 +513,21 @@ export default function RequestAccess() {
                     </Select>
                   </div>
 
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>{t.form.interest}</Label>
-                      <Select
-                        value={formData.investmentInterest}
-                        onValueChange={(value) => setFormData({ ...formData, investmentInterest: value })}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder={t.form.interestPlaceholder} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Object.entries(t.interests).map(([key, value]) => (
-                            <SelectItem key={key} value={key}>{value}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label>{t.form.budget}</Label>
-                      <Select
-                        value={formData.investmentBudget}
-                        onValueChange={(value) => setFormData({ ...formData, investmentBudget: value })}
-                      >
-                        <SelectTrigger>
-                          <DollarSign className="h-4 w-4 text-muted-foreground me-2" />
-                          <SelectValue placeholder={t.form.budgetPlaceholder} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Object.entries(t.budgets).map(([key, value]) => (
-                            <SelectItem key={key} value={key}>{value}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                  <div className="space-y-2">
+                    <Label>{t.form.interest}</Label>
+                    <Select
+                      value={formData.investmentInterest}
+                      onValueChange={(value) => setFormData({ ...formData, investmentInterest: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={t.form.interestPlaceholder} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.entries(t.interests).map(([key, value]) => (
+                          <SelectItem key={key} value={key}>{value}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="space-y-2">
