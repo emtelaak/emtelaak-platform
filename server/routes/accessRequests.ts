@@ -11,13 +11,15 @@ import { users } from "../../drizzle/schema";
 import jwt from "jsonwebtoken";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "../_core/cookies";
+import crypto from "crypto";
 
 // Generate random invitation code
+// SECURITY FIX: Use crypto.randomInt instead of Math.random for cryptographically secure random
 function generateInvitationCode(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let code = 'EMT-';
   for (let i = 0; i < 8; i++) {
-    code += chars.charAt(Math.floor(Math.random() * chars.length));
+    code += chars.charAt(crypto.randomInt(0, chars.length));
   }
   return code;
 }
@@ -589,7 +591,8 @@ export const accessRequestsRouter = router({
       const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
       // Create user with data from access request
-      const openId = `local_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+      // SECURITY FIX: Use crypto for secure random ID generation
+      const openId = `local_${Date.now()}_${crypto.randomBytes(6).toString('hex')}`;
       
       await db.insert(users).values({
         openId,

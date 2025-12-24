@@ -8,6 +8,7 @@ import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { ENV } from "../_core/env";
 import { sendPasswordResetEmail, sendWelcomeEmail } from "../_core/emailService";
+import crypto from "crypto";
 
 const SALT_ROUNDS = 10;
 const JWT_EXPIRY = "7d"; // 7 days
@@ -56,7 +57,8 @@ export const standardAuthRouter = router({
       const passwordHash = await bcrypt.hash(input.password, SALT_ROUNDS);
 
       // Generate unique openId for compatibility with existing system
-      const openId = `local_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+      // SECURITY FIX: Use crypto for secure random ID generation
+      const openId = `local_${Date.now()}_${crypto.randomBytes(6).toString('hex')}`;
 
       // Create user
       const result = await db.insert(users).values({
