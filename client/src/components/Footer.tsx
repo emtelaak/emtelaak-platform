@@ -1,9 +1,11 @@
 import { Link } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { APP_LOGO, APP_TITLE } from "@/const";
 
 export default function Footer() {
   const { t, language } = useLanguage();
+  const { isAuthenticated } = useAuth();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -33,11 +35,13 @@ export default function Footer() {
                   {t.nav.properties}
                 </Link>
               </li>
-              <li>
-                <Link href="/workflows" className="text-muted-foreground hover:text-primary transition-colors">
-                  {language === "ar" ? "سير العمل" : "Workflows"}
-                </Link>
-              </li>
+              {isAuthenticated && (
+                <li>
+                  <Link href="/workflows" className="text-muted-foreground hover:text-primary transition-colors">
+                    {language === "ar" ? "سير العمل" : "Workflows"}
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link href="/how-it-works" className="text-muted-foreground hover:text-primary transition-colors">
                   {t.nav.howItWorks}
@@ -48,11 +52,13 @@ export default function Footer() {
                   {t.nav.about}
                 </Link>
               </li>
-              <li>
-                <Link href="/portfolio" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t.nav.portfolio}
-                </Link>
-              </li>
+              {isAuthenticated && (
+                <li>
+                  <Link href="/portfolio" className="text-muted-foreground hover:text-primary transition-colors">
+                    {t.nav.portfolio}
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
 
