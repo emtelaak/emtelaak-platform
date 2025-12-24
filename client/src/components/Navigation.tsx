@@ -232,6 +232,15 @@ export default function Navigation() {
                 </Button>
               </div>
 
+              {/* Mobile Auth Buttons */}
+              <div className="flex md:hidden items-center gap-2">
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/login">{nav.login}</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href="/register">{nav.getStarted}</Link>
+                </Button>
+              </div>
             </>
           )}
 
