@@ -4,6 +4,7 @@
 
 import { router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
+import crypto from "crypto";
 import { TRPCError } from "@trpc/server";
 import { notifySuperAdmins } from "./_core/emailNotification";
 import {
@@ -218,7 +219,8 @@ export const adminPermissionsRouter = router({
         }
 
         // Generate a unique openId for the user (using email as base)
-        const openId = `manual_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+        // SECURITY FIX: Use crypto for secure random ID generation
+        const openId = `manual_${Date.now()}_${crypto.randomBytes(6).toString('hex')}`;
 
         // Create the user
         const result = await db.insert(users).values({

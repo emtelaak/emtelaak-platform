@@ -109,7 +109,8 @@ export const localAuthRouter = router({
       const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
 
       // Create user with a generated openId for compatibility
-      const openId = `local_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+      // SECURITY FIX: Use crypto for secure random ID generation
+      const openId = `local_${Date.now()}_${crypto.randomBytes(6).toString('hex')}`;
       
       await db.insert(users).values({
         openId,
