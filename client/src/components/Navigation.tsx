@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { trpc } from "@/lib/trpc";
-import GuestMobileMenu from "./GuestMobileMenu";
+
 
 
 export default function Navigation() {
@@ -231,11 +231,7 @@ export default function Navigation() {
                   <Link href="/register">{nav.getStarted}</Link>
                 </Button>
               </div>
-              
-              {/* Mobile Hamburger Menu for Guests */}
-              <div className="md:hidden">
-                <GuestMobileMenu />
-              </div>
+
             </>
           )}
 
