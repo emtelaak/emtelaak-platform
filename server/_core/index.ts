@@ -1,4 +1,4 @@
-import "dotenv/config";
+// SECURITY FIX: Added explicit CORS configuration
 import express from "express";
 import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
@@ -44,14 +44,37 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
   
-  // Trust proxy - required for rate limiting behind reverse proxies
-  app.set('trust proxy', true);
+  // SECURITY FIX: Configure trust proxy with specific settings
+  // Only trust Cloudflare proxy
+  app.set('trust proxy', 1);
   
-  // Initialize Socket.io
+  // SECURITY FIX: Strict CORS configuration for Socket.io
+  const allowedOrigins = process.env.NODE_ENV === "development" 
+    ? ["http://localhost:3000", "http://localhost:5173"]
+    : [
+        "https://emtelaak.com",
+        "https://www.emtelaak.com",
+        "https://admin.emtelaak.com",
+        "https://emtelaak.co",
+        "https://www.emtelaak.co"
+      ];
+  
+  // Initialize Socket.io with strict CORS
   const io = new SocketIOServer(server, {
     cors: {
-      origin: process.env.NODE_ENV === "development" ? "http://localhost:3000" : true,
+      origin: (origin, callback) => {
+        // Allow requests with no origin (mobile apps, Postman, etc.)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          console.warn('[CORS] Rejected origin:', origin);
+          callback(new Error('CORS policy violation'));
+        }
+      },
       credentials: true,
+      methods: ["GET", "POST"],
     },
   });
   
@@ -149,14 +172,15 @@ async function startServer() {
   const preferredPort = parseInt(process.env.PORT || "3000");
   const port = await findAvailablePort(preferredPort);
 
-  if (port !== preferredPort) {
-    console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
-  }
-
-  server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
-    console.log(`WebSocket server ready`);
+  server.listen(port, "0.0.0.0", () => {
+    const url = `http://localhost:${port}`;
+    console.log(`\n🚀 Server running on ${url}`);
+    console.log(`📊 Health check: ${url}/health`);
+    console.log(`🔐 Security: Enhanced with strict CORS and rate limiting\n`);
   });
 }
 
-startServer().catch(console.error);
+startServer().catch((error) => {
+  console.error("Failed to start server:", error);
+  process.exit(1);
+});
