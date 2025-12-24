@@ -292,8 +292,8 @@ export default function Contact() {
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
                     {language === 'ar' 
-                      ? 'امتلاك هي منصة استثمار عقاري جزئي تتيح لك الاستثمار في العقارات المميزة في أسواق الشرق الأوسط وأفريقيا وجنوب آسيا بدءاً من 100 دولار فقط. نقوم بتقسيم العقارات إلى حصص، مما يمكّن العديد من المستثمرين من امتلاك أسهم وكسب دخل إيجاري أو مكاسب رأسمالية بما يتناسب مع استثماراتهم.'
-                      : 'Emtelaak is a fractional real estate investment platform that allows you to invest in premium properties across MEASA markets starting from just $100. We divide properties into fractions, enabling multiple investors to own shares and earn rental income or capital gains proportional to their investment.'}
+                      ? 'امتلاك هي منصة استثمار عقاري جزئي تتيح لك الاستثمار في العقارات المميزة في مصر بدءاً من 10,000 جنيه فقط. نقوم بتقسيم العقارات إلى حصص، مما يمكّن العديد من المستثمرين من امتلاك أسهم وكسب دخل إيجاري أو مكاسب رأسمالية بما يتناسب مع استثماراتهم.'
+                      : 'Emtelaak is a fractional real estate investment platform that allows you to invest in premium properties across Egypt starting from just 10,000 EGP. We divide properties into fractions, enabling multiple investors to own shares and earn rental income or capital gains proportional to their investment.'}
                   </AccordionContent>
                 </AccordionItem>
 
@@ -305,8 +305,8 @@ export default function Contact() {
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
                     {language === 'ar' 
-                      ? 'يمكنك البدء بالاستثمار بمبلغ 100 دولار فقط. هذا يجعل الاستثمار العقاري متاحاً للجميع، بغض النظر عن حجم رأس المال.'
-                      : 'You can start investing with as little as $100. This makes real estate investment accessible to everyone, regardless of capital size.'}
+                      ? 'يمكنك البدء بالاستثمار بمبلغ 10,000 جنيه فقط. هذا يجعل الاستثمار العقاري متاحاً للجميع، بغض النظر عن حجم رأس المال.'
+                      : 'You can start investing with as little as 10,000 EGP. This makes real estate investment accessible to everyone, regardless of capital size.'}
                   </AccordionContent>
                 </AccordionItem>
 

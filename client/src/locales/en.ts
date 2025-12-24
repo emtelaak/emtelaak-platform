@@ -58,8 +58,8 @@ export const en = {
     hero: {
       title: "Invest in Real Estate",
       subtitle: "Starting from",
-      amount: "$100",
-      description: "Democratizing property investment across MEASA markets. Own fractions of premium properties and earn rental income or capital gains.",
+      amount: "10,000 EGP",
+      description: "Democratizing property investment across Egypt. Own fractions of premium properties and earn rental income or capital gains.",
       startInvesting: "Start Investing Today",
       learnMore: "Learn More",
     },
@@ -68,7 +68,7 @@ export const en = {
       subtitle: "We make real estate investment accessible, transparent, and profitable for everyone.",
       lowMinimum: {
         title: "Low Minimum Investment",
-        description: "Start with just $100 instead of hundreds of thousands. Diversify across multiple properties.",
+        description: "Start with just 10,000 EGP instead of hundreds of thousands. Diversify across multiple properties.",
       },
       highReturns: {
         title: "High Returns",
@@ -138,7 +138,7 @@ export const en = {
 
   // Footer
   footer: {
-    tagline: "Democratizing real estate investment across MEASA markets.",
+    tagline: "Democratizing real estate investment across Egypt.",
     platform: "Platform",
     legal: "Legal",
     support: "Support",
@@ -564,7 +564,7 @@ export const en = {
   // About Page
   about: {
     title: "About Emtelaak",
-    subtitle: "Pioneering fractional real estate investment across MEASA markets",
+    subtitle: "Pioneering fractional real estate investment across Egypt",
     ourStory: {
       title: "Our Story",
       description: "Emtelaak is the pioneer company in providing a unique experience for investing in real estate as a popular and high-value investment product by dividing this investment into real-estate stakes at reasonable values to enable clients to seize the opportunity of fractional ownership across residential, commercial, administrative, medical and educational assets from foundation to operation and management.",
@@ -593,7 +593,7 @@ export const en = {
     },
     vision: {
       title: "Our Vision",
-      description: "To become the leading fractional real estate investment platform across MEASA markets, setting the standard for transparency, compliance, and investor returns.",
+      description: "To become the leading fractional real estate investment platform across Egypt, setting the standard for transparency, compliance, and investor returns.",
     },
     compliance: {
       title: "Trusted & Secure",
@@ -624,7 +624,7 @@ export const en = {
         {
           name: "Ahmed Al-Masri",
           title: "Chief Executive Officer",
-          bio: "With over 15 years of experience in real estate and fintech, Ahmed leads Emtelaak's vision to make property investment accessible to everyone across MEASA markets.",
+          bio: "With over 15 years of experience in real estate and fintech, Ahmed leads Emtelaak's vision to make property investment accessible to everyone across Egypt.",
         },
         {
           name: "Sarah Hassan",
@@ -685,7 +685,7 @@ export const en = {
     service6Description: "Liquidity options through our marketplace to buy or sell fractional ownership shares.",
     benefitsTitle: "Why Choose Fractional Ownership?",
     benefitsSubtitle: "Experience the advantages of modern real estate investing",
-    benefit1: "Low minimum investment starting from $100",
+    benefit1: "Low minimum investment starting from 10,000 EGP",
     benefit2: "Diversify across multiple properties and asset types",
     benefit3: "No property management hassles or maintenance costs",
     benefit4: "Passive income through regular rental distributions",
