@@ -19,9 +19,6 @@ export default function Footer() {
                 <img src={APP_LOGO} alt={APP_TITLE} className="h-12 w-auto" />
               </div>
             </Link>
-            <p className="text-xs text-muted-foreground">
-              Licensed by FRA Sandbox & DIFC Innovation License
-            </p>
           </div>
 
           {/* Platform Links */}
