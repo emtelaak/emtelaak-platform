@@ -66,7 +66,7 @@ export default function Navigation() {
   const nav = language === "en" ? t.en : t.ar;
   const isRTL = language === "ar";
 
-  const mainMenuItems = [
+  const mainMenuItemsBase = [
     { href: "/", label: nav.home },
     { href: "/properties", label: nav.properties },
     { href: "/how-it-works", label: nav.howItWorks },
@@ -74,6 +74,9 @@ export default function Navigation() {
     { href: "/faq", label: nav.faq },
     { href: "/contact", label: nav.contact },
   ];
+
+  // Reverse menu items for RTL to display in correct order (Home first from right)
+  const mainMenuItems = isRTL ? [...mainMenuItemsBase].reverse() : mainMenuItemsBase;
 
   const userMenuItems = [
     { href: "/dashboard", label: nav.dashboard, icon: LayoutDashboard },
