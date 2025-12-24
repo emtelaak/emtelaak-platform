@@ -40,10 +40,10 @@ export async function createContext(
   // If we have a JWT token, verify and load user
   if (jwtToken) {
     try {
-      // Add clock tolerance to handle server time skew issues
-      // This allows tokens to be valid even if server clocks are slightly off
+      // SECURITY FIX: Reduced clock tolerance from 30 days to 5 minutes
+      // This prevents expired tokens from remaining valid for extended periods
       const decoded = jwt.verify(jwtToken, ENV.jwtSecret, {
-        clockTolerance: 30 * 24 * 60 * 60, // 30 days tolerance in seconds
+        clockTolerance: 300, // 5 minutes tolerance in seconds (was 30 days)
       }) as {
         openId: string;
         userId: number;
@@ -59,11 +59,24 @@ export async function createContext(
 
         if (userResult.length > 0) {
           user = userResult[0];
+          
+          // SECURITY ENHANCEMENT: Check if user is suspended or inactive
+          if (user.status === 'suspended') {
+            console.log("[Auth] Suspended user attempted access:", user.id);
+            user = null; // Reject suspended users
+          }
         }
       }
     } catch (error) {
       // JWT verification failed - user remains null (not authenticated)
       console.log("[Auth] JWT verification failed:", error instanceof Error ? error.message : "Unknown error");
+      
+      // SECURITY ENHANCEMENT: Log failed authentication attempts
+      if (error instanceof jwt.TokenExpiredError) {
+        console.log("[Auth] Token expired for request");
+      } else if (error instanceof jwt.JsonWebTokenError) {
+        console.log("[Auth] Invalid token signature");
+      }
     }
   }
 
