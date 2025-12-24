@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Globe, Bell, User, LayoutDashboard, TrendingUp, Briefcase, Wallet as WalletIcon, LogOut, ChevronDown, Shield, Building2 } from "lucide-react";
+import { Bell, User, LayoutDashboard, TrendingUp, Briefcase, Wallet as WalletIcon, LogOut, ChevronDown, Shield, Building2 } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { APP_LOGO } from "@/const";
@@ -114,16 +114,18 @@ export default function Navigation() {
           {/* Language Switcher */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Globe className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="text-2xl">
+                {language === "en" ? "🇺🇸" : "🇸🇦"}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setLanguage("en")}>
-                English
+              <DropdownMenuItem onClick={() => setLanguage("en")} className="gap-2">
+                <span className="text-xl">🇺🇸</span>
+                <span>English</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setLanguage("ar")}>
-                العربية
+              <DropdownMenuItem onClick={() => setLanguage("ar")} className="gap-2">
+                <span className="text-xl">🇸🇦</span>
+                <span>العربية</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
