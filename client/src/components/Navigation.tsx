@@ -96,7 +96,7 @@ export default function Navigation() {
         </Link>
 
         {/* Main Menu - Desktop */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className={`hidden md:flex items-center gap-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
           {mainMenuItems.map((item) => (
             <Link key={item.href} href={item.href}>
               <span
