@@ -148,7 +148,7 @@ export default function Home() {
                 </p>
 
                 {/* Trust Badges */}
-                <div className="flex flex-wrap gap-4">
+                <div className={`flex flex-wrap gap-4 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                   <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
                     <Users className="h-5 w-5 text-[#CDE428]" />
                     <span className="text-sm">{language === 'en' ? 'Individual & Institutional Investors' : 'مستثمرون أفراد ومؤسسات'}</span>
