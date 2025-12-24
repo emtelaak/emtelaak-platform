@@ -104,20 +104,19 @@ export default function Contact() {
             <Card>
               <CardHeader className="text-center">
                 <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Phone className="h-6 w-6 text-primary" />
+                  <Send className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle className="text-lg">{t.contact.info.phone.title}</CardTitle>
+                <CardTitle className="text-lg">{language === 'ar' ? 'تواصل معنا' : 'Contact Us'}</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <a 
-                  href="tel:+971-4-123-4567" 
-                  className="text-primary hover:underline"
-                  dir="ltr"
+                <Button 
+                  onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="w-full"
                 >
-                  {t.contact.info.phone.value}
-                </a>
+                  {language === 'ar' ? 'افتح نموذج الاتصال' : 'Open Contact Form'}
+                </Button>
                 <p className="text-sm text-muted-foreground mt-2">
-                  {t.contact.info.phone.description}
+                  {language === 'ar' ? 'املأ النموذج وسنتواصل معك قريباً' : 'Fill the form and we\'ll get back to you soon'}
                 </p>
               </CardContent>
             </Card>
@@ -177,7 +176,7 @@ export default function Contact() {
           </div>
 
           {/* Contact Form */}
-          <Card className="max-w-2xl mx-auto">
+          <Card id="contact-form" className="max-w-2xl mx-auto">
             <CardHeader>
               <CardTitle>{t.contact.form.title}</CardTitle>
               <CardDescription>

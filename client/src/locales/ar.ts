@@ -338,8 +338,8 @@ export const ar: Translation = {
       },
       address: {
         title: "زرنا",
-        value: "مركز الابتكار DIFC",
-        city: "دبي، الإمارات",
+        value: "الشيخ زايد",
+        city: "الجيزة، مصر",
       },
     },
     success: {

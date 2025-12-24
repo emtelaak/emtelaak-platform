@@ -336,8 +336,8 @@ export const en = {
       },
       address: {
         title: "Visit Us",
-        value: "DIFC Innovation Hub",
-        city: "Dubai, UAE",
+        value: "Sheikh Zayed",
+        city: "Giza, Egypt",
       },
     },
     success: {
