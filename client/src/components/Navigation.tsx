@@ -84,7 +84,7 @@ export default function Navigation() {
 
   return (
     <nav className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 sticky top-0 z-50 shadow-sm" dir={isRTL ? "rtl" : "ltr"}>
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-16 items-center justify-between" dir={isRTL ? "rtl" : "ltr"}>
         {/* Logo */}
         <Link href="/">
           <div className="flex items-center gap-3 cursor-pointer">
@@ -93,7 +93,7 @@ export default function Navigation() {
         </Link>
 
         {/* Main Menu - Desktop */}
-        <div className={`hidden md:flex items-center gap-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
+        <div className="hidden md:flex items-center gap-6">
           {mainMenuItems.map((item) => (
             <Link key={item.href} href={item.href}>
               <span
@@ -110,7 +110,7 @@ export default function Navigation() {
         </div>
 
         {/* Right Side Actions */}
-        <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+        <div className="flex items-center gap-4">
           {/* Language Switcher */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

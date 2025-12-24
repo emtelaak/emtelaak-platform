@@ -66,9 +66,10 @@ export default function GuestMobileMenu() {
 
       {/* Slide-out Menu */}
       <div
-        className={`fixed top-0 ${language === "ar" ? "left-0" : "right-0"} h-full w-80 bg-white shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : language === "ar" ? "-translate-x-full" : "translate-x-full"
+        className={`fixed top-0 ${language === "ar" ? "right-0" : "left-0"} h-full w-80 bg-white shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out ${
+          isOpen ? "translate-x-0" : language === "ar" ? "translate-x-full" : "-translate-x-full"
         }`}
+        dir={language === "ar" ? "rtl" : "ltr"}
       >
         {/* Header */}
         <div className="p-6 border-b border-gray-200 flex items-center justify-between" style={{ backgroundColor: "#002B49" }}>
@@ -90,7 +91,7 @@ export default function GuestMobileMenu() {
               <Link key={link.href} href={link.href}>
                 <a
                   onClick={closeMenu}
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-gray-700 hover:text-[#032941]"
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-gray-700 hover:text-[#032941] ${language === "ar" ? "flex-row-reverse" : ""}`}
                 >
                   <Icon className="h-5 w-5" />
                   <span className="font-medium">{link.label}</span>
