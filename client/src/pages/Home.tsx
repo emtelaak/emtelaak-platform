@@ -123,9 +123,9 @@ export default function Home() {
           </div>
 
           <div className="container relative z-10 py-16">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className={`grid lg:grid-cols-2 gap-12 items-center ${language === 'ar' ? 'lg:flex lg:flex-row-reverse' : ''}`}>
               {/* Left Column - Content */}
-              <div className={`text-white space-y-8 ${language === 'ar' ? 'lg:order-2' : ''}`}>
+              <div className="text-white space-y-8 lg:flex-1">
                 <div className="inline-block">
                   <span className="px-4 py-2 rounded-full text-sm font-semibold bg-[#CDE428] text-[#032941]">
                     🏢 {language === 'en' ? 'Fractional Real Estate Investment' : 'الاستثمار العقاري الجزئي'}
@@ -204,7 +204,7 @@ export default function Home() {
               </div>
 
               {/* Right Column - Hero Card */}
-              <div className={`hidden lg:block ${language === 'ar' ? 'lg:order-1' : ''}`}>
+              <div className="hidden lg:block lg:flex-1">
                 <div className="relative">
                   <div className="bg-white rounded-2xl p-8 shadow-2xl">
                     <div className="space-y-6">
