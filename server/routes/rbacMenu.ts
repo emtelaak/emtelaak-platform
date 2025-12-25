@@ -189,7 +189,7 @@ export const rbacMenuRouter = router({
       // Log the change in audit table
       await db.execute(sql`
         INSERT INTO menu_visibility_audit 
-        (role_id, menu_item_id, is_visible, changed_by)
+        (role_id, menu_item_id, new_visibility, changed_by_user_id)
         VALUES (${roleId}, ${menuItemId}, ${isVisible ? 1 : 0}, ${ctx.user.id})
       `);
 
@@ -236,14 +236,14 @@ export const rbacMenuRouter = router({
           r.name as roleName,
           m.name as menuItemName,
           m.label_en as menuItemLabel,
-          mva.is_visible as isVisible,
+          mva.new_visibility as isVisible,
           u.email as changedByEmail,
-          mva.changed_at as changedAt
+          mva.change_timestamp as changedAt
         FROM menu_visibility_audit mva
         JOIN roles r ON mva.role_id = r.id
         JOIN menu_items m ON mva.menu_item_id = m.id
-        JOIN users u ON mva.changed_by = u.id
-        ORDER BY mva.changed_at DESC
+        JOIN users u ON mva.changed_by_user_id = u.id
+        ORDER BY mva.change_timestamp DESC
         LIMIT ${limit} OFFSET ${offset}
       `);
 
