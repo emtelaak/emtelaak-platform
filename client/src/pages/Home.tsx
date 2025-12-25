@@ -139,7 +139,7 @@ export default function Home() {
           </div>
 
           <div className="container relative z-10 py-16">
-            <div className={`grid lg:grid-cols-2 gap-12 items-center ${isRTL ? 'lg:flex lg:flex-row-reverse' : ''}`}>
+            <div className={`flex flex-col lg:flex-row gap-12 items-center ${isRTL ? 'lg:flex-row-reverse' : ''}`}>
               {/* Main Content */}
               <div className="text-white space-y-8 lg:flex-1">
                 <div className="inline-block">
