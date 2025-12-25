@@ -289,3 +289,5 @@ export function MenuManagement() {
     </div>
   );
 }
+
+export default MenuManagement;
