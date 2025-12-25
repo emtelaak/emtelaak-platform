@@ -23,6 +23,8 @@ const plugins = [
   VitePWA({
     registerType: "autoUpdate",
     includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
+    injectRegister: "auto",
+    strategies: "generateSW",
     manifest: {
       name: "Emtelaak - Fractional Real Estate Investment",
       short_name: "Emtelaak",
@@ -36,6 +38,7 @@ const plugins = [
       categories: ["finance", "business", "investment"],
       lang: "en",
       dir: "auto",
+      prefer_related_applications: false,
       icons: [
         {
           src: "/pwa-192x192.png",

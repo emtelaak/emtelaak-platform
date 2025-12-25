@@ -28,6 +28,7 @@ import SessionManagement from "./pages/SessionManagement";
 import ActivateAccount from "./pages/ActivateAccount";
 import Workflows from "./pages/Workflows";
 import { TermsAcceptanceModal } from "./components/TermsAcceptanceModal";
+import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
 // Lazy load admin pages (only loaded when accessed)
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
@@ -298,6 +299,7 @@ function App() {
           <Suspense fallback={<PageLoader />}>
             <Router />
             <TermsAcceptanceModal />
+            <PWAInstallPrompt />
           </Suspense>
         </TooltipProvider>
       </ThemeProvider>
