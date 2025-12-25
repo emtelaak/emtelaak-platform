@@ -1099,7 +1099,40 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {!isAuthenticated ? (
+              /* Sign-in prompt for non-authenticated users */
+              <div className="max-w-2xl mx-auto text-center py-16">
+                <div className="bg-white rounded-2xl shadow-xl p-12 border-2 border-[#CDE428]">
+                  <div className="w-20 h-20 rounded-full bg-[#CDE428] flex items-center justify-center mx-auto mb-6">
+                    <Shield className="h-10 w-10 text-[#032941]" />
+                  </div>
+                  <h3 className="text-3xl font-bold text-[#032941] mb-4">
+                    {language === 'ar' ? 'سجل الدخول لرؤية العقارات المتاحة' : 'Sign In to See Available Properties'}
+                  </h3>
+                  <p className="text-lg text-gray-600 mb-8">
+                    {language === 'ar' 
+                      ? 'قم بتسجيل الدخول أو إنشاء حساب للوصول إلى مجموعتنا الحصرية من فرص الاستثمار العقاري.'
+                      : 'Sign in or create an account to access our exclusive collection of real estate investment opportunities.'}
+                  </p>
+                  <div className={`flex flex-col sm:flex-row gap-4 justify-center ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
+                    <Link href="/login">
+                      <Button className="bg-[#032941] hover:bg-[#064B66] text-white px-8 py-6 text-lg font-semibold w-full sm:w-auto">
+                        {language === 'ar' ? 'تسجيل الدخول' : 'Sign In'}
+                        <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
+                      </Button>
+                    </Link>
+                    <Link href="/register">
+                      <Button variant="outline" className="border-2 border-[#032941] text-[#032941] hover:bg-[#032941] hover:text-white px-8 py-6 text-lg font-semibold w-full sm:w-auto">
+                        {language === 'ar' ? 'إنشاء حساب' : 'Create Account'}
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* Property cards for authenticated users */
+              <>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
               {/* Property Card 1 */}
               <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                 <div className="relative h-64">
@@ -1249,16 +1282,18 @@ export default function Home() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
+              </div>
 
-            <div className="text-center">
-              <Link href="/properties">
-                <Button className="bg-[#CDE428] hover:bg-[#d9ed3a] text-[#032941] px-8 py-6 text-lg font-semibold">
-                  {language === 'ar' ? 'عرض جميع العقارات' : 'View All Properties'}
-                  <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
-                </Button>
-              </Link>
-            </div>
+              <div className="text-center">
+                <Link href="/properties">
+                  <Button className="bg-[#CDE428] hover:bg-[#d9ed3a] text-[#032941] px-8 py-6 text-lg font-semibold">
+                    {language === 'ar' ? 'عرض جميع العقارات' : 'View All Properties'}
+                    <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
+                  </Button>
+                </Link>
+              </div>
+              </>
+            )}
           </div>
         </section>
       </div>
