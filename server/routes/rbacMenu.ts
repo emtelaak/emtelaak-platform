@@ -7,18 +7,19 @@ import { router, publicProcedure, protectedProcedure } from "../_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { getDb } from "../db";
+import { sql } from "drizzle-orm";
 
 // Helper function to check if user is super admin
 async function isSuperAdmin(userId: number): Promise<boolean> {
   const db = await getDb();
   if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database unavailable" });
 
-  const result: any = await db.execute(`
+  const result: any = await db.execute(sql`
     SELECT r.name
     FROM user_roles ur
     JOIN roles r ON ur.roleId = r.id
-    WHERE ur.userId = ?
-  `, [userId]);
+    WHERE ur.userId = ${userId}
+  `);
 
   return result[0]?.some((row: any) => row.name === 'super_admin') ?? false;
 }
@@ -28,9 +29,9 @@ async function getUserRoleId(userId: number): Promise<number | null> {
   const db = await getDb();
   if (!db) return null;
 
-  const result: any = await db.execute(`
-    SELECT roleId FROM user_roles WHERE userId = ? LIMIT 1
-  `, [userId]);
+  const result: any = await db.execute(sql`
+    SELECT roleId FROM user_roles WHERE userId = ${userId} LIMIT 1
+  `);
 
   return result[0]?.[0]?.roleId ?? null;
 }
@@ -60,7 +61,7 @@ export const rbacMenuRouter = router({
     }
 
     // Get all menu items
-    const menuItemsResult: any = await db.execute(`
+    const menuItemsResult: any = await db.execute(sql`
       SELECT 
         id,
         name,
@@ -76,7 +77,7 @@ export const rbacMenuRouter = router({
     `);
 
     // Get all roles
-    const rolesResult: any = await db.execute(`
+    const rolesResult: any = await db.execute(sql`
       SELECT id, name, description
       FROM roles
       WHERE id IN (90001, 90002, 90003, 90004)
@@ -91,7 +92,7 @@ export const rbacMenuRouter = router({
     `);
 
     // Get role-menu visibility matrix
-    const visibilityResult: any = await db.execute(`
+    const visibilityResult: any = await db.execute(sql`
       SELECT 
         role_id as roleId,
         menu_item_id as menuItemId,
@@ -159,40 +160,38 @@ export const rbacMenuRouter = router({
       const { menuItemId, roleId, isVisible } = input;
 
       // Check if menu item exists
-      const menuItemResult: any = await db.execute(
-        'SELECT id, name FROM menu_items WHERE id = ?',
-        [menuItemId]
-      );
+      const menuItemResult: any = await db.execute(sql`
+        SELECT id, name FROM menu_items WHERE id = ${menuItemId}
+      `);
 
       if (!menuItemResult[0] || menuItemResult[0].length === 0) {
         throw new TRPCError({ code: "NOT_FOUND", message: "Menu item not found" });
       }
 
       // Check if role exists
-      const roleResult: any = await db.execute(
-        'SELECT id, name FROM roles WHERE id = ?',
-        [roleId]
-      );
+      const roleResult: any = await db.execute(sql`
+        SELECT id, name FROM roles WHERE id = ${roleId}
+      `);
 
       if (!roleResult[0] || roleResult[0].length === 0) {
         throw new TRPCError({ code: "NOT_FOUND", message: "Role not found" });
       }
 
       // Update or insert visibility setting
-      await db.execute(`
+      await db.execute(sql`
         INSERT INTO role_menu_visibility (role_id, menu_item_id, is_visible)
-        VALUES (?, ?, ?)
+        VALUES (${roleId}, ${menuItemId}, ${isVisible ? 1 : 0})
         ON DUPLICATE KEY UPDATE 
           is_visible = VALUES(is_visible),
           updated_at = CURRENT_TIMESTAMP
-      `, [roleId, menuItemId, isVisible ? 1 : 0]);
+      `);
 
       // Log the change in audit table
-      await db.execute(`
+      await db.execute(sql`
         INSERT INTO menu_visibility_audit 
         (role_id, menu_item_id, is_visible, changed_by)
-        VALUES (?, ?, ?, ?)
-      `, [roleId, menuItemId, isVisible ? 1 : 0, ctx.user.id]);
+        VALUES (${roleId}, ${menuItemId}, ${isVisible ? 1 : 0}, ${ctx.user.id})
+      `);
 
       return {
         success: true,
@@ -231,7 +230,7 @@ export const rbacMenuRouter = router({
 
       const { limit, offset } = input;
 
-      const auditLogsResult: any = await db.execute(`
+      const auditLogsResult: any = await db.execute(sql`
         SELECT 
           mva.id,
           r.name as roleName,
@@ -245,10 +244,10 @@ export const rbacMenuRouter = router({
         JOIN menu_items m ON mva.menu_item_id = m.id
         JOIN users u ON mva.changed_by = u.id
         ORDER BY mva.changed_at DESC
-        LIMIT ? OFFSET ?
-      `, [limit, offset]);
+        LIMIT ${limit} OFFSET ${offset}
+      `);
 
-      const totalCountResult: any = await db.execute(`
+      const totalCountResult: any = await db.execute(sql`
         SELECT COUNT(*) as total FROM menu_visibility_audit
       `);
 
@@ -289,19 +288,19 @@ export const rbacMenuRouter = router({
     }
 
     // Get user's permissions
-    const userPermissionsResult: any = await db.execute(`
+    const userPermissionsResult: any = await db.execute(sql`
       SELECT p.name
       FROM role_permissions rp
       JOIN permissions p ON rp.permissionId = p.id
-      WHERE rp.roleId = ?
-    `, [roleId]);
+      WHERE rp.roleId = ${roleId}
+    `);
 
     const permissionSet = new Set(
       (userPermissionsResult[0] || []).map((p: any) => p.name)
     );
 
     // Get visible menu items for this role
-    const menuItemsResult: any = await db.execute(`
+    const menuItemsResult: any = await db.execute(sql`
       SELECT 
         m.id,
         m.name,
@@ -314,10 +313,10 @@ export const rbacMenuRouter = router({
         COALESCE(rmv.is_visible, 1) as isVisible
       FROM menu_items m
       LEFT JOIN role_menu_visibility rmv 
-        ON m.id = rmv.menu_item_id AND rmv.role_id = ?
+        ON m.id = rmv.menu_item_id AND rmv.role_id = ${roleId}
       WHERE m.is_active = 1 AND COALESCE(rmv.is_visible, 1) = 1
       ORDER BY m.order_index ASC
-    `, [roleId]);
+    `);
 
     const menuItems = menuItemsResult[0] || [];
 
@@ -364,12 +363,12 @@ export const rbacMenuRouter = router({
       }
 
       // Check if role has the permission
-      const hasPermissionResult: any = await db.execute(`
+      const hasPermissionResult: any = await db.execute(sql`
         SELECT COUNT(*) as count
         FROM role_permissions rp
         JOIN permissions p ON rp.permissionId = p.id
-        WHERE rp.roleId = ? AND p.name = ?
-      `, [roleId, permission]);
+        WHERE rp.roleId = ${roleId} AND p.name = ${permission}
+      `);
 
       const count = hasPermissionResult[0]?.[0]?.count || 0;
 
@@ -396,13 +395,13 @@ export const rbacMenuRouter = router({
     const userId = ctx.user.id;
 
     // Get user's role
-    const userRoleResult: any = await db.execute(`
+    const userRoleResult: any = await db.execute(sql`
       SELECT r.id, r.name, r.description
       FROM user_roles ur
       JOIN roles r ON ur.roleId = r.id
-      WHERE ur.userId = ?
+      WHERE ur.userId = ${userId}
       LIMIT 1
-    `, [userId]);
+    `);
 
     if (!userRoleResult[0] || userRoleResult[0].length === 0) {
       throw new TRPCError({ code: "NOT_FOUND", message: "User role not found" });
@@ -411,7 +410,7 @@ export const rbacMenuRouter = router({
     const role = userRoleResult[0][0];
 
     // Get all permissions for this role
-    const permissionsResult: any = await db.execute(`
+    const permissionsResult: any = await db.execute(sql`
       SELECT 
         p.id,
         p.name,
@@ -419,9 +418,9 @@ export const rbacMenuRouter = router({
         p.description
       FROM role_permissions rp
       JOIN permissions p ON rp.permissionId = p.id
-      WHERE rp.roleId = ?
+      WHERE rp.roleId = ${role.id}
       ORDER BY p.category, p.name
-    `, [role.id]);
+    `);
 
     return {
       role: {
