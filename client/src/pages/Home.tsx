@@ -296,7 +296,7 @@ export default function Home() {
             </div>
 
             <div className="max-w-6xl mx-auto">
-              <div className={`grid md:grid-cols-4 gap-8 relative ${isRTL ? 'md:flex md:flex-row-reverse' : ''}`}>
+              <div className={`flex flex-col md:flex-row gap-8 relative ${isRTL ? 'md:flex-row-reverse' : ''}`}>
                 {/* Step 1 */}
                 <div className="relative md:flex-1">
                   <div className="flex flex-col items-center text-center">
