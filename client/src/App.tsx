@@ -42,6 +42,7 @@ const AdminKYCReview = lazy(() => import("./pages/AdminKYCReview"));
 const AdminRoles = lazy(() => import("./pages/AdminRoles"));
 const AdminPermissions = lazy(() => import("./pages/AdminPermissions"));
 const RoleManagement = lazy(() => import("./pages/admin/RoleManagement"));
+const MenuManagement = lazy(() => import("./pages/admin/MenuManagement"));
 const SuperAdminDashboard = lazy(() => import("./pages/SuperAdminDashboard"));
 const EmailSettings = lazy(() => import("./pages/EmailSettings"));
 const AdminWallet = lazy(() => import("./pages/AdminWallet"));
@@ -158,6 +159,7 @@ function Router() {
       <Route path="/admin/monitoring" component={SystemMonitoring} />
       <Route path="/admin/roles" component={AdminRoles} />
       <Route path="/admin/role-management" component={RoleManagement} />
+      <Route path="/admin/menu-management" component={MenuManagement} />
       <Route path="/admin/permissions" component={AdminPermissions} />
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/platform-settings" component={AdminPlatformSettings} />

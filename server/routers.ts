@@ -32,6 +32,7 @@ import { sessionManagementRouter } from "./routes/sessionManagement";
 import { accessRequestsRouter } from "./routes/accessRequests";
 import { termsRouter } from "./routes/terms";
 import { propertyInterestsRouter } from "./routes/propertyInterests";
+import { rbacMenuRouter } from "./routes/rbacMenu";
 // import { getUnifiedPortfolioSummary } from "./db/unifiedInvestmentsDb";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -132,6 +133,7 @@ export const appRouter = router({
   sessionManagement: sessionManagementRouter,
   terms: termsRouter,
   propertyInterests: propertyInterestsRouter,
+  rbacMenu: rbacMenuRouter,
   
   // Standard email/password authentication
   standardAuth: standardAuthRouter,
