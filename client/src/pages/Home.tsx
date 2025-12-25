@@ -164,21 +164,21 @@ export default function Home() {
                 </p>
 
                 {/* Trust Badges */}
-                <div className={`flex flex-wrap gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                  <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur">
-                    <CheckCircle2 className="h-5 w-5 text-[#CDE428]" />
+                <div className={`grid grid-cols-2 gap-3 max-w-2xl ${isRTL ? 'text-right' : 'text-left'}`}>
+                  <div className="flex items-center gap-3 bg-[#0a3d52] px-4 py-3 rounded-lg">
+                    <CheckCircle2 className="h-5 w-5 text-[#CDE428] flex-shrink-0" />
                     <span className="text-sm">{language === 'ar' ? 'مرخص من الهيئة العامة للرقابة المالية' : 'FRA Licensed'}</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur">
-                    <HomeIcon className="h-5 w-5 text-[#CDE428]" />
-                    <span className="text-sm">{language === 'ar' ? 'مدعوم بالأصول' : 'Asset-Backed'}</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur">
-                    <BarChart3 className="h-5 w-5 text-[#CDE428]" />
+                  <div className="flex items-center gap-3 bg-[#0a3d52] px-4 py-3 rounded-lg">
+                    <BarChart3 className="h-5 w-5 text-[#CDE428] flex-shrink-0" />
                     <span className="text-sm">{language === 'ar' ? '7 أنواع من العقارات' : '7 Property Types'}</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur">
-                    <Users className="h-5 w-5 text-[#CDE428]" />
+                  <div className="flex items-center gap-3 bg-[#0a3d52] px-4 py-3 rounded-lg">
+                    <HomeIcon className="h-5 w-5 text-[#CDE428] flex-shrink-0" />
+                    <span className="text-sm">{language === 'ar' ? 'مدعوم بالأصول' : 'Asset-Backed'}</span>
+                  </div>
+                  <div className="flex items-center gap-3 bg-[#0a3d52] px-4 py-3 rounded-lg">
+                    <Users className="h-5 w-5 text-[#CDE428] flex-shrink-0" />
                     <span className="text-sm">{language === 'ar' ? 'مستثمرون أفراد ومؤسسات' : 'Individual & Institutional'}</span>
                   </div>
                 </div>
