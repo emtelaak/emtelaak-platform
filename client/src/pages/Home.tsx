@@ -159,7 +159,7 @@ export default function Home() {
                 
                 <p className="text-xl md:text-2xl text-gray-200 leading-relaxed max-w-xl">
                   {language === 'ar' 
-                    ? 'استثمر في العقارات الجزئية وابنِ محفظتك العقارية بدءاً من 10,000 جنيه مصري.'
+                    ? 'استثمر في العقارات الجزئية وابنِ محفظتك العقارية بدءاً من ١٠٬٠٠٠ جنيه مصري.'
                     : 'Invest in fractional real estate and build your property portfolio starting from EGP 10,000.'}
                 </p>
 
@@ -246,7 +246,7 @@ export default function Home() {
                             <span className="text-sm font-bold text-[#032941]">2</span>
                           </div>
                           <div>
-                            <p className="font-semibold text-[#032941]">{language === 'ar' ? 'استثمر من 10,000 ج.م' : 'Invest from EGP 10,000'}</p>
+                            <p className="font-semibold text-[#032941]">{language === 'ar' ? 'استثمر من ١٠٬٠٠٠ ج.م' : 'Invest from EGP 10,000'}</p>
                             <p className="text-sm text-gray-600">{language === 'ar' ? 'امتلك حصص جزئية في عقارات مميزة' : 'Own fractional shares in premium properties'}</p>
                           </div>
                         </div>
@@ -487,7 +487,7 @@ export default function Home() {
                   </h3>
                   <p className="text-gray-600">
                     {language === 'ar' 
-                      ? 'ابدأ بمبلغ 10,000 جنيه مصري بدلاً من الملايين. نوّع استثماراتك عبر عقارات متعددة للتخفيف من المخاطر وتعظيم العوائد.'
+                      ? 'ابدأ بمبلغ ١٠٬٠٠٠ جنيه مصري بدلاً من الملايين. نوّع استثماراتك عبر عقارات متعددة للتخفيف من المخاطر وتعظيم العوائد.'
                       : 'Start with 10,000 EGP instead of millions. Diversify your investments across multiple properties to reduce risk and maximize returns.'}
                   </p>
                 </CardContent>
@@ -589,7 +589,7 @@ export default function Home() {
                   <div className="bg-green-50 rounded-xl p-6 mb-6">
                     <div className="text-center">
                       <p className="text-sm text-gray-600 mb-2">{language === 'ar' ? 'العائد السنوي' : 'Annual Return'}</p>
-                      <p className="text-5xl font-bold text-green-600">8-12%</p>
+                      <p className="text-5xl font-bold text-green-600">{language === 'ar' ? '٨-١٢٪' : '8-12%'}</p>
                     </div>
                   </div>
 
@@ -665,7 +665,7 @@ export default function Home() {
                   <div className="bg-blue-50 rounded-xl p-6 mb-6">
                     <div className="text-center">
                       <p className="text-sm text-gray-600 mb-2">{language === 'ar' ? 'العائد المتوقع' : 'Expected Return'}</p>
-                      <p className="text-5xl font-bold text-blue-600">15-25%</p>
+                      <p className="text-5xl font-bold text-blue-600">{language === 'ar' ? '١٥-٢٥٪' : '15-25%'}</p>
                     </div>
                   </div>
 
@@ -1248,7 +1248,7 @@ export default function Home() {
                   <div className="border-t pt-4">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">{language === 'ar' ? 'الحد الأدنى للاستثمار' : 'Min. Investment'}</span>
-                      <span className="font-semibold">10,000 {language === 'ar' ? 'ج.م' : 'EGP'}</span>
+                      <span className="font-semibold">{language === 'ar' ? '١٠٬٠٠٠ ج.م' : '10,000 EGP'}</span>
                     </div>
                     <div className="flex items-center justify-between text-sm mt-2">
                       <span className="text-gray-600">{language === 'ar' ? 'التمويل المستهدف' : 'Target Funding'}</span>
