@@ -209,12 +209,12 @@ export default function Home() {
                 {/* Trust Indicators */}
                 <div className={`flex items-center gap-6 pt-4 text-sm text-gray-300 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <CheckCircle2 className="h-5 w-5 text-[#CDE428]" />
-                    <span>{language === 'ar' ? 'منظم بالكامل' : 'Fully Regulated'}</span>
-                  </div>
-                  <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                     <Shield className="h-5 w-5 text-[#CDE428]" />
                     <span>{language === 'ar' ? 'منصة آمنة' : 'Secure Platform'}</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <CheckCircle2 className="h-5 w-5 text-[#CDE428]" />
+                    <span>{language === 'ar' ? 'منظم بالكامل' : 'Fully Regulated'}</span>
                   </div>
                 </div>
               </div>
@@ -408,12 +408,35 @@ export default function Home() {
         {/* Fund Banner */}
         <div className="bg-gradient-to-r from-[#064B66] to-[#032941] py-4">
           <div className="container">
-            <div className={`flex items-center justify-center gap-5 flex-wrap ${isRTL ? 'flex-row-reverse' : ''}`}>
-              <p className="text-white font-bold text-lg">
-                {language === 'ar' ? 'صندوق امتلاك للاستثمار العقاري' : 'Emtelaak Real Estate Investment Fund'}
-              </p>
-              <span className="text-[#CDE428] text-2xl opacity-70">|</span>
-              <div className={`flex items-center gap-4 flex-wrap ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <div className={`flex items-center justify-center gap-5 flex-wrap ${isRTL ? '' : ''}`}>
+              {isRTL ? (
+                <>
+                  <div className="flex items-center gap-4 flex-wrap flex-row-reverse">
+                    <span className="flex items-center gap-2 text-[#CDE428] text-sm font-semibold bg-white/10 px-3 py-1 rounded-full">
+                      ✓ {language === 'ar' ? 'اختار' : 'Selected'}
+                    </span>
+                    <span className="flex items-center gap-2 text-[#CDE428] text-sm font-semibold bg-white/10 px-3 py-1 rounded-full">
+                      💚 {language === 'ar' ? 'مستدام' : 'Sustainable'}
+                    </span>
+                    <span className="flex items-center gap-2 text-[#CDE428] text-sm font-semibold bg-white/10 px-3 py-1 rounded-full">
+                      💡 {language === 'ar' ? 'ذكي' : 'Smart'}
+                    </span>
+                    <span className="flex items-center gap-2 text-[#CDE428] text-sm font-semibold bg-white/10 px-3 py-1 rounded-full">
+                      🏢 {language === 'ar' ? 'متنوع' : 'Diverse'}
+                    </span>
+                  </div>
+                  <span className="text-[#CDE428] text-2xl opacity-70">|</span>
+                  <p className="text-white font-bold text-lg">
+                    {language === 'ar' ? 'صندوق امتلاك للاستثمار العقاري' : 'Emtelaak Real Estate Investment Fund'}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-white font-bold text-lg">
+                    {language === 'ar' ? 'صندوق امتلاك للاستثمار العقاري' : 'Emtelaak Real Estate Investment Fund'}
+                  </p>
+                  <span className="text-[#CDE428] text-2xl opacity-70">|</span>
+                  <div className="flex items-center gap-4 flex-wrap">
                 <span className="flex items-center gap-2 text-[#CDE428] text-sm font-semibold bg-white/10 px-3 py-1 rounded-full">
                   ✓ {language === 'ar' ? 'اختار' : 'Selected'}
                 </span>
@@ -426,7 +449,9 @@ export default function Home() {
                 <span className="flex items-center gap-2 text-[#CDE428] text-sm font-semibold bg-white/10 px-3 py-1 rounded-full">
                   🏢 {language === 'ar' ? 'متنوع' : 'Diverse'}
                 </span>
-              </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -541,7 +566,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            <div className={`grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto ${isRTL ? 'lg:flex lg:flex-row-reverse' : ''}`}>
               {/* Buy to Let */}
               <Card className="border-2 border-green-200 shadow-xl hover:shadow-2xl transition-all overflow-hidden">
                 <div className="bg-gradient-to-br from-green-50 to-white p-8">
@@ -555,7 +580,7 @@ export default function Home() {
                   </div>
                   
                   <h3 className="text-3xl font-bold text-[#032941] mb-2">
-                    {language === 'ar' ? 'الشراء للتأجر' : 'Buy-to-Let'}
+                    {language === 'ar' ? 'الشراء للتأجير' : 'Buy-to-Let'}
                   </h3>
                   <p className="text-gray-600 mb-6">
                     {language === 'ar' ? 'دخل إيجاري ثابت' : 'Steady Rental Income'}
@@ -611,7 +636,7 @@ export default function Home() {
 
                   <Link href="/properties?type=buyToLet">
                     <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-6 text-lg font-semibold">
-                      {language === 'ar' ? 'استكشف الشراء للتأجر' : 'Explore Buy-to-Let'}
+                      {language === 'ar' ? 'استكشف الشراء للتأجير' : 'Explore Buy-to-Let'}
                       <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
                     </Button>
                   </Link>
@@ -1143,7 +1168,7 @@ export default function Home() {
                   />
                   <div className="absolute top-4 left-4 flex gap-2">
                     <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-500 text-white">
-                      {language === 'ar' ? 'الشراء للتأجر' : 'Buy-to-Let'}
+                      {language === 'ar' ? 'الشراء للتأجير' : 'Buy-to-Let'}
                     </span>
                     <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#CDE428] text-[#032941]">
                       {language === 'ar' ? 'ممول' : 'Funded'}
@@ -1193,7 +1218,7 @@ export default function Home() {
                   />
                   <div className="absolute top-4 left-4 flex gap-2">
                     <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-500 text-white">
-                      {language === 'ar' ? 'الشراء للتأجر' : 'Buy-to-Let'}
+                      {language === 'ar' ? 'الشراء للتأجير' : 'Buy-to-Let'}
                     </span>
                     <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#CDE428] text-[#032941]">
                       {language === 'ar' ? 'متاح' : 'Available'}
