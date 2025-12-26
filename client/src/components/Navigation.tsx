@@ -20,6 +20,11 @@ export default function Navigation() {
   const { user, isAuthenticated, loading } = useAuth();
   const { language, setLanguage } = useLanguage();
   const logoutMutation = trpc.auth.logout.useMutation();
+  
+  // Fetch user's visible menu items from RBAC system
+  const { data: userMenuData } = trpc.rbacMenu.getUserMenuItems.useQuery(undefined, {
+    enabled: true, // Always fetch, backend will determine visibility based on user role
+  });
 
   const handleLogout = async () => {
     await logoutMutation.mutateAsync();
@@ -66,17 +71,31 @@ export default function Navigation() {
   const nav = language === "en" ? t.en : t.ar;
   const isRTL = language === "ar";
 
+  // Map menu paths to their names in the database
+  const menuPathMap: Record<string, string> = {
+    '/': 'home',
+    '/properties': 'properties',
+    '/how-it-works': 'how_it_works',
+    '/about': 'about',
+    '/faq': 'faq',
+    '/contact': 'contact',
+  };
+
   const mainMenuItemsBase = [
-    { href: "/", label: nav.home },
-    { href: "/properties", label: nav.properties },
-    { href: "/how-it-works", label: nav.howItWorks },
-    { href: "/about", label: nav.about },
-    { href: "/faq", label: nav.faq },
-    { href: "/contact", label: nav.contact },
+    { href: "/", label: nav.home, name: 'home' },
+    { href: "/properties", label: nav.properties, name: 'properties' },
+    { href: "/how-it-works", label: nav.howItWorks, name: 'how_it_works' },
+    { href: "/about", label: nav.about, name: 'about' },
+    { href: "/faq", label: nav.faq, name: 'faq' },
+    { href: "/contact", label: nav.contact, name: 'contact' },
   ];
 
+  // Filter menu items based on RBAC visibility
+  const visibleMenuNames = new Set(userMenuData?.menuItems?.map((item: any) => item.name) || []);
+  const filteredMenuItems = mainMenuItemsBase.filter(item => visibleMenuNames.has(item.name));
+
   // Reverse menu items for RTL to display in correct order (Home first from right)
-  const mainMenuItems = isRTL ? [...mainMenuItemsBase].reverse() : mainMenuItemsBase;
+  const mainMenuItems = isRTL ? [...filteredMenuItems].reverse() : filteredMenuItems;
 
   const userMenuItems = [
     { href: "/dashboard", label: nav.dashboard, icon: LayoutDashboard },
