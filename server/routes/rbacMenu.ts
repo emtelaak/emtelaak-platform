@@ -178,11 +178,12 @@ export const rbacMenuRouter = router({
       }
 
       // Update or insert visibility setting
+      const visibilityValue = isVisible ? 1 : 0;
       await db.execute(sql`
         INSERT INTO role_menu_visibility (role_id, menu_item_id, is_visible)
-        VALUES (${roleId}, ${menuItemId}, ${isVisible ? 1 : 0})
+        VALUES (${roleId}, ${menuItemId}, ${visibilityValue})
         ON DUPLICATE KEY UPDATE 
-          is_visible = VALUES(is_visible),
+          is_visible = ${visibilityValue},
           updated_at = CURRENT_TIMESTAMP
       `);
 
