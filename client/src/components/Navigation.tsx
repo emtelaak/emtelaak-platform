@@ -92,7 +92,12 @@ export default function Navigation() {
 
   // Filter menu items based on RBAC visibility
   const visibleMenuNames = new Set(userMenuData?.menuItems?.map((item: any) => item.name) || []);
-  const filteredMenuItems = mainMenuItemsBase.filter(item => visibleMenuNames.has(item.name));
+  
+  // If RBAC data is available and has items, filter based on visibility
+  // Otherwise, show all menu items as fallback
+  const filteredMenuItems = (userMenuData?.menuItems && userMenuData.menuItems.length > 0)
+    ? mainMenuItemsBase.filter(item => visibleMenuNames.has(item.name))
+    : mainMenuItemsBase; // Fallback: show all menus if RBAC data is not available
 
   // Reverse menu items for RTL to display in correct order (Home first from right)
   const mainMenuItems = isRTL ? [...filteredMenuItems].reverse() : filteredMenuItems;

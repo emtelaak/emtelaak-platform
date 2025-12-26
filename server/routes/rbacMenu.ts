@@ -268,24 +268,26 @@ export const rbacMenuRouter = router({
 
   /**
    * Get menu items visible to the current user based on their role
-   * Requires: Authentication
+   * Works for both authenticated and unauthenticated (guest) users
    */
-  getUserMenuItems: protectedProcedure.query(async ({ ctx }) => {
-    if (!ctx.user) {
-      throw new TRPCError({ code: "UNAUTHORIZED", message: "Authentication required" });
-    }
-
+  getUserMenuItems: publicProcedure.query(async ({ ctx }) => {
     const db = await getDb();
     if (!db) {
       throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database unavailable" });
     }
 
-    const userId = ctx.user.id;
-
-    // Get user's role
-    const roleId = await getUserRoleId(userId);
-    if (!roleId) {
-      throw new TRPCError({ code: "NOT_FOUND", message: "User role not found" });
+    let roleId;
+    
+    // If user is authenticated, get their role
+    if (ctx.user) {
+      const userId = ctx.user.id;
+      roleId = await getUserRoleId(userId);
+      if (!roleId) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "User role not found" });
+      }
+    } else {
+      // For unauthenticated users, use guest role (roleId: 90004)
+      roleId = 90004;
     }
 
     // Get user's permissions
