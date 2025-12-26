@@ -89,6 +89,9 @@ export function MenuManagement() {
   const menuItems = menuData?.menuItems || [];
   const roles = menuData?.roles || [];
   const selectedRoleData = roles.find(r => r.name === selectedRole);
+  
+  // Filter to show only the selected role
+  const displayRoles = selectedRoleData ? [selectedRoleData] : roles;
 
   return (
     <div className="min-h-screen bg-gray-50 p-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
@@ -152,7 +155,7 @@ export function MenuManagement() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {language === 'ar' ? 'الصلاحية المطلوبة' : 'Required Permission'}
                   </th>
-                  {roles.map(role => (
+                  {displayRoles.map(role => (
                     <th key={role.id} className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                       {role.name.replace('_', ' ')}
                     </th>
@@ -175,7 +178,7 @@ export function MenuManagement() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {item.permissionRequired || '-'}
                     </td>
-                    {roles.map(role => {
+                    {displayRoles.map(role => {
                       const key = `${item.id}-${role.id}`;
                       const isVisible = pendingChanges.has(key) 
                         ? pendingChanges.get(key)! 
