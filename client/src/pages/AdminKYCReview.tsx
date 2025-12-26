@@ -158,13 +158,25 @@ export default function AdminKYCReview() {
                           <CardTitle className="text-lg">User ID: {q.userId}</CardTitle>
                           <CardDescription>
                             Submitted: {new Date(q.submittedAt).toLocaleDateString()}
+                            {q.updatedAt && new Date(q.updatedAt).getTime() !== new Date(q.submittedAt).getTime() && (
+                              <span className="ml-2 text-orange-600 dark:text-orange-400 font-medium">
+                                • Updated: {new Date(q.updatedAt).toLocaleDateString()}
+                              </span>
+                            )}
                           </CardDescription>
                         </div>
                       </div>
-                      <Badge variant="outline" className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        Pending
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        {q.updatedAt && new Date(q.updatedAt).getTime() !== new Date(q.submittedAt).getTime() && (
+                          <Badge variant="secondary" className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
+                            Updated
+                          </Badge>
+                        )}
+                        <Badge variant="outline" className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          Pending
+                        </Badge>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-6">

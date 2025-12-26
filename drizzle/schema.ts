@@ -196,6 +196,7 @@ export const kycQuestionnaires = mysqlTable("kyc_questionnaires", {
   status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("pending").notNull(),
   reviewNotes: text("reviewNotes"),
   submittedAt: timestamp("submittedAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").onUpdateNow(),
   reviewedAt: timestamp("reviewedAt"),
   reviewedBy: int("reviewedBy").references(() => users.id),
 }, (table) => ({
