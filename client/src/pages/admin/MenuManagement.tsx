@@ -41,14 +41,23 @@ export function MenuManagement() {
 
   // Update single menu visibility
   const updateVisibility = trpc.rbacMenu.updateMenuVisibility.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('✅ Visibility updated successfully:', data);
       utils.rbacMenu.getMenuItemsWithRoles.invalidate();
+      // Remove from pending changes after successful save
+      setPendingChanges(new Map());
+    },
+    onError: (error) => {
+      console.error('❌ Failed to update visibility:', error);
+      alert(`Error: ${error.message}`);
     }
   });
 
   const handleToggleVisibility = (menuItemId: number, roleId: number, currentValue: boolean) => {
     const key = `${menuItemId}-${roleId}`;
     const newValue = !currentValue;
+    console.log('🔄 Toggling visibility:', { menuItemId, roleId, currentValue, newValue });
+    
     setPendingChanges(new Map(pendingChanges.set(key, newValue)));
     
     // Auto-save immediately
