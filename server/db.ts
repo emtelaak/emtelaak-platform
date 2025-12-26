@@ -267,8 +267,29 @@ export async function updateKycDocumentStatus(docId: number, status: "pending" |
 export async function createKycQuestionnaire(questionnaire: InsertKycQuestionnaire) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
-  const result = await db.insert(kycQuestionnaires).values(questionnaire);
-  return result;
+  
+  // Check if questionnaire already exists for this user
+  const existing = await db.select().from(kycQuestionnaires)
+    .where(eq(kycQuestionnaires.userId, questionnaire.userId))
+    .limit(1);
+  
+  if (existing.length > 0) {
+    // Update existing questionnaire
+    const result = await db.update(kycQuestionnaires)
+      .set({
+        ...questionnaire,
+        status: "pending", // Reset to pending when resubmitted
+        reviewNotes: null,
+        reviewedBy: null,
+        reviewedAt: null,
+      })
+      .where(eq(kycQuestionnaires.userId, questionnaire.userId));
+    return result;
+  } else {
+    // Insert new questionnaire
+    const result = await db.insert(kycQuestionnaires).values(questionnaire);
+    return result;
+  }
 }
 
 export async function getUserKycQuestionnaire(userId: number) {
