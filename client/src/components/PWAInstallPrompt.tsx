@@ -34,9 +34,12 @@ export default function PWAInstallPrompt() {
     if (!standalone && daysSinceDismissed > 7) {
       // Listen for beforeinstallprompt event (Android/Desktop)
       const handler = (e: Event) => {
-        e.preventDefault();
-        setDeferredPrompt(e as BeforeInstallPromptEvent);
-        setShowPrompt(true);
+        // Only prevent default if we're going to show our custom prompt
+        if (!iOS || daysSinceDismissed > 7) {
+          e.preventDefault();
+          setDeferredPrompt(e as BeforeInstallPromptEvent);
+          setShowPrompt(true);
+        }
       };
 
       window.addEventListener('beforeinstallprompt', handler);
