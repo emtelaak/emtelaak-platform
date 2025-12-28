@@ -33,6 +33,7 @@ import { accessRequestsRouter } from "./routes/accessRequests";
 import { termsRouter } from "./routes/terms";
 import { propertyInterestsRouter } from "./routes/propertyInterests";
 import { rbacMenuRouter } from "./routes/rbacMenu";
+import { knowledgeTestRouter } from "./knowledgeTestRouter";
 // import { getUnifiedPortfolioSummary } from "./db/unifiedInvestmentsDb";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -134,6 +135,7 @@ export const appRouter = router({
   terms: termsRouter,
   propertyInterests: propertyInterestsRouter,
   rbacMenu: rbacMenuRouter,
+  knowledgeTest: knowledgeTestRouter,
   
   // Standard email/password authentication
   standardAuth: standardAuthRouter,

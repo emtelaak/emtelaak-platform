@@ -15,6 +15,7 @@ import About from "./pages/About";
 import HowItWorks from "./pages/HowItWorks";
 import PropertyDetail from "./pages/PropertyDetail";
 import KYCQuestionnaire from "./pages/KYCQuestionnaire";
+import KnowledgeTest from "./pages/KnowledgeTest";
 import LeadCapture from "./pages/LeadCapture";
 import Wallet from "./pages/Wallet";
 import Menu from "./pages/Menu";
@@ -140,6 +141,7 @@ function Router() {
       <Route path="/sessions" component={SessionManagement} />
       <Route path="/workflows" component={Workflows} />
       <Route path="/kyc-questionnaire" component={KYCQuestionnaire} />
+      <Route path="/knowledge-test" component={KnowledgeTest} />
       <Route path="/reset-password" component={ResetPassword} />
       <Route path={"/contact"} component={Contact} />
       <Route path={"/faq"} component={FAQ} />

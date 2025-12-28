@@ -2026,3 +2026,9 @@ export * from "./investments-schema";
 // ============================================
 
 export * from "./investment-flow-schema";
+
+// ============================================
+// INVESTOR QUALIFICATION SYSTEM (FRA Compliance)
+// ============================================
+
+export * from "./investor-qualification-schema";
