@@ -13,7 +13,8 @@
     "test:e2e": "vitest run tests/e2e",
     "test:e2e:watch": "vitest tests/e2e",
     "test:e2e:coverage": "vitest run tests/e2e --coverage",
-    "db:push": "drizzle-kit generate && drizzle-kit migrate"
+    "db:push": "drizzle-kit generate && drizzle-kit migrate",
+    "migrate:knowledge-test": "node scripts/migrate-knowledge-test.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.907.0",
