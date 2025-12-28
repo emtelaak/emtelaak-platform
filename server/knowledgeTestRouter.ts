@@ -7,7 +7,7 @@ import {
   knowledgeTestAttempts,
   knowledgeTestResponses 
 } from "../drizzle/schema";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, sql } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -38,7 +38,7 @@ export const knowledgeTestRouter = router({
           eq(knowledgeTestQuestions.difficulty, "easy"),
           eq(knowledgeTestQuestions.isActive, true)
         ))
-        .orderBy(db.raw("RAND()"))
+        .orderBy(sql`RAND()`)
         .limit(easyCount);
 
       const mediumQuestions = await db
@@ -48,7 +48,7 @@ export const knowledgeTestRouter = router({
           eq(knowledgeTestQuestions.difficulty, "medium"),
           eq(knowledgeTestQuestions.isActive, true)
         ))
-        .orderBy(db.raw("RAND()"))
+        .orderBy(sql`RAND()`)
         .limit(mediumCount);
 
       const hardQuestions = await db
@@ -58,7 +58,7 @@ export const knowledgeTestRouter = router({
           eq(knowledgeTestQuestions.difficulty, "hard"),
           eq(knowledgeTestQuestions.isActive, true)
         ))
-        .orderBy(db.raw("RAND()"))
+        .orderBy(sql`RAND()`)
         .limit(hardCount);
 
       const allQuestions = [...easyQuestions, ...mediumQuestions, ...hardQuestions];
