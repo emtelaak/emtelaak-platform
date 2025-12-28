@@ -6,7 +6,7 @@ import {
   knowledgeTestAnswers, 
   knowledgeTestAttempts,
   knowledgeTestResponses 
-} from "../drizzle/investor-qualification-schema";
+} from "../drizzle/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 
