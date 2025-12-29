@@ -56,7 +56,8 @@ export default function ROICalculator({
   defaultInvestmentAmount = 5000,
   compact = false,
 }: ROICalculatorProps) {
-  const { language } = useLanguage();
+  const { language, dir } = useLanguage();
+  const isRTL = dir === "rtl";
   const [isExpanded, setIsExpanded] = useState(!compact);
   const [investmentAmount, setInvestmentAmount] = useState(defaultInvestmentAmount);
   const [propertyValue, setPropertyValue] = useState(defaultPropertyValue);
@@ -172,7 +173,7 @@ export default function ROICalculator({
   return (
     <Card className="w-full">
       <CardHeader className="cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
-        <div className="flex items-center justify-between">
+        <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
           <div>
             <CardTitle className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5" />
@@ -184,7 +185,7 @@ export default function ROICalculator({
                 : "قارن العوائد عبر أنواع العقارات المختلفة"}
             </CardDescription>
           </div>
-          {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+          {isExpanded ? <ChevronUp className={`h-5 w-5 ${isRTL ? 'rtl-mirror' : ''}`} /> : <ChevronDown className={`h-5 w-5 ${isRTL ? 'rtl-mirror' : ''}`} />}
         </div>
       </CardHeader>
 
