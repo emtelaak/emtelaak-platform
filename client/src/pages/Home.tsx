@@ -24,7 +24,7 @@ import { Slider } from "@/components/ui/slider";
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
-  const { language } = useLanguage();
+  const { language, dir } = useLanguage();
   const [location, setLocation] = useLocation();
   const [show2FAModal, setShow2FAModal] = useState(false);
   const [showBanner, setShowBanner] = useState(true);
@@ -35,7 +35,7 @@ export default function Home() {
   const [appreciation, setAppreciation] = useState(15);
   const [investmentPeriod, setInvestmentPeriod] = useState(5);
   const utils = trpc.useUtils();
-  const isRTL = language === 'ar';
+  const isRTL = dir === 'rtl';
 
   // Check if 2FA verification is required
   useEffect(() => {
