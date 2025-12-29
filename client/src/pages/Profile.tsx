@@ -25,6 +25,7 @@ import { TrustedDevicesManager } from "@/components/TrustedDevicesManager";
 import { ChangePassword } from "@/components/ChangePassword";
 import { CustomFieldsForm } from "@/components/CustomFieldsForm";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import Navigation from "@/components/Navigation";
 
 export default function Profile() {
   const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
@@ -118,23 +119,19 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-background" dir={isRTL ? "rtl" : "ltr"}>
-      {/* Header */}
-      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      {/* Navigation Menu */}
+      <Navigation />
+      
+      {/* Page Header */}
+      <div className="border-b bg-muted/30">
         <div className="container py-6">
           <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-            <Link href="/">
-              <img src={APP_LOGO} alt={APP_TITLE} className="h-20 w-auto cursor-pointer" />
-            </Link>
             <div className="flex-1">
               <h1 className="text-3xl font-bold mb-2">{t.profile.title}</h1>
               <p className="text-muted-foreground">
                 {t.profile.subtitle}
               </p>
             </div>
-            <LanguageSwitcher />
-            <Button variant="outline" onClick={() => logout()}>
-              {t.nav.logout}
-            </Button>
           </div>
         </div>
       </div>
