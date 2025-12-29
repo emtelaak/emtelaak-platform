@@ -14,8 +14,8 @@ import { toast } from "sonner";
 export default function Register() {
   const [, setLocation] = useLocation();
   const searchString = useSearch();
-  const { language } = useLanguage();
-  const isRTL = language === 'ar';
+  const { language, dir } = useLanguage();
+  const isRTL = dir === 'rtl';
   const [formData, setFormData] = useState({
     name: "",
     email: "",

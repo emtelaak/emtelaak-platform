@@ -14,8 +14,8 @@ import { toast } from "sonner";
 
 export default function Login() {
   const [, setLocation] = useLocation();
-  const { language } = useLanguage();
-  const isRTL = language === 'ar';
+  const { language, dir } = useLanguage();
+  const isRTL = dir === 'rtl';
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -127,7 +127,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className={`absolute top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 ${isRTL ? 'left-3' : 'right-3'}`}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -135,7 +135,7 @@ export default function Login() {
             </div>
             
             <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center space-x-2">
+              <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
                 <Checkbox
                   id="rememberMe"
                   checked={rememberMe}
@@ -168,7 +168,7 @@ export default function Login() {
             >
               {loginMutation.isPending ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className={`h-4 w-4 animate-spin ${isRTL ? 'ml-2' : 'mr-2'}`} />
                   Signing in...
                 </>
               ) : (

@@ -42,7 +42,8 @@ interface Answer {
 
 export default function KnowledgeTest() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
-  const { t, language } = useLanguage();
+  const { t, language, dir } = useLanguage();
+  const isRTL = dir === 'rtl';
   const [, setLocation] = useLocation();
 
   const [testStarted, setTestStarted] = useState(false);

@@ -21,7 +21,8 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function KYCQuestionnaire() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
-  const { t } = useLanguage();
+  const { t, dir } = useLanguage();
+  const isRTL = dir === 'rtl';
   const [, setLocation] = useLocation();
 
   const { data: questionnaire, isLoading: questionnaireLoading } = trpc.kyc.getQuestionnaire.useQuery(
