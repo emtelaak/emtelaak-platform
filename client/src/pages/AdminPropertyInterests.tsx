@@ -14,7 +14,8 @@ import { Link } from "wouter";
 import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminPropertyInterests() {
-  const { language } = useLanguage();
+  const { language, dir } = useLanguage();
+  const isRTL = dir === 'rtl';
   const [propertyFilter, setPropertyFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
 

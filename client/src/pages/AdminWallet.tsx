@@ -43,7 +43,8 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminWallet() {
   const { user, loading } = useAuth();
-  const { language } = useLanguage();
+  const { language, dir } = useLanguage();
+  const isRTL = dir === 'rtl';
   const [statusFilter, setStatusFilter] = useState<"pending" | "completed" | "failed" | "cancelled" | "all">("pending");
   const [typeFilter, setTypeFilter] = useState<"deposit" | "withdrawal" | "all">("all");
   const [selectedTransaction, setSelectedTransaction] = useState<any>(null);

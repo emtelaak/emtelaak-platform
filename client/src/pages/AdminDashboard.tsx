@@ -57,7 +57,8 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
-  const { t } = useLanguage();
+  const { t, dir } = useLanguage();
+  const isRTL = dir === 'rtl';
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");

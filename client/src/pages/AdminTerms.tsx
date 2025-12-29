@@ -53,7 +53,8 @@ import ReactMarkdown from "react-markdown";
 import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminTerms() {
-  const { language } = useLanguage();
+  const { language, dir } = useLanguage();
+  const isRTL = dir === 'rtl';
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingTerms, setEditingTerms] = useState<any>(null);
   const [previewContent, setPreviewContent] = useState<string | null>(null);

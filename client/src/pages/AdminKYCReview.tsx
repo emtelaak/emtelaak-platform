@@ -18,7 +18,8 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function AdminKYCReview() {
   const { user, isAuthenticated } = useAuth();
-  const { t } = useLanguage();
+  const { t, dir } = useLanguage();
+  const isRTL = dir === 'rtl';
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
   const [reviewNotes, setReviewNotes] = useState("");
 
