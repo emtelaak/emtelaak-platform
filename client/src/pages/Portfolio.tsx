@@ -156,7 +156,7 @@ export default function Portfolio() {
         {/* Summary Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6">
+            <CardHeader className={`flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <CardTitle className="text-xs md:text-sm font-medium truncate">{t.portfolio.overview.totalInvested}</CardTitle>
               <DollarSign className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground flex-shrink-0" />
             </CardHeader>
@@ -177,7 +177,7 @@ export default function Portfolio() {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6">
+            <CardHeader className={`flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <CardTitle className="text-xs md:text-sm font-medium truncate">{t.portfolio.income.title}</CardTitle>
               <TrendingUp className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground flex-shrink-0" />
             </CardHeader>
@@ -198,7 +198,7 @@ export default function Portfolio() {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6">
+            <CardHeader className={`flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <CardTitle className="text-xs md:text-sm font-medium truncate">ROI</CardTitle>
               <TrendingUp className="h-3 w-3 md:h-4 md:w-4 text-primary flex-shrink-0" />
             </CardHeader>
@@ -219,7 +219,7 @@ export default function Portfolio() {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6">
+            <CardHeader className={`flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <CardTitle className="text-xs md:text-sm font-medium truncate">Active</CardTitle>
               <Building2 className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground flex-shrink-0" />
             </CardHeader>
@@ -309,7 +309,7 @@ export default function Portfolio() {
                           <TableCell>
                             <Link href={`/properties/${investment.propertyId}`}>
                               <Button variant="ghost" size="sm">
-                                <ArrowUpRight className="h-4 w-4" />
+                                <ArrowUpRight className="h-4 w-4 rtl-mirror" />
                               </Button>
                             </Link>
                           </TableCell>

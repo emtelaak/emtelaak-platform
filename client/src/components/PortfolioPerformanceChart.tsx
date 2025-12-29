@@ -13,6 +13,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { TrendingUp } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Investment {
   id: number;
@@ -41,6 +42,8 @@ export default function PortfolioPerformanceChart({
   investments = [],
   incomeHistory = [],
 }: PortfolioPerformanceChartProps) {
+  const { dir } = useLanguage();
+  const isRTL = dir === "rtl";
   
   // Generate monthly data for portfolio value over time
   const portfolioValueData = useMemo(() => {
