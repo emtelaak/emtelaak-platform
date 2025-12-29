@@ -8,7 +8,7 @@ import {
   knowledgeTestResponses 
 } from "../drizzle/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
 
 /**
  * Knowledge Test Router
@@ -133,7 +133,7 @@ export const knowledgeTestRouter = router({
       const passed = score >= 70; // 70% passing grade
 
       // Generate certificate ID if passed
-      const certificateId = passed ? `KT-${uuidv4().substring(0, 8).toUpperCase()}` : null;
+      const certificateId = passed ? `KT-${randomUUID().substring(0, 8).toUpperCase()}` : null;
 
       // Calculate expiration date (2 years from now if passed)
       const expiresAt = passed ? new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000) : null;
