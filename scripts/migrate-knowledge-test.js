@@ -47,6 +47,7 @@ async function runMigration() {
     // TiDB requires SSL connections
     const connectionConfig = {
       uri: process.env.DATABASE_URL,
+      multipleStatements: true,  // Allow multiple SQL statements in one query
       ssl: {
         rejectUnauthorized: true,
         minVersion: 'TLSv1.2'
@@ -62,38 +63,31 @@ async function runMigration() {
     const migrationSQL = readFileSync(migrationPath, 'utf8');
     log('✅ Migration file loaded', 'green');
     
-    // Split SQL into individual statements (handle multi-line statements)
+    // Execute all SQL as a single multi-statement query
     log('\n⚙️  Executing migration statements...', 'blue');
-    const statements = migrationSQL
-      .split(';')
-      .map(stmt => stmt.trim())
-      .filter(stmt => stmt.length > 0 && !stmt.startsWith('--'));
     
-    let successCount = 0;
-    for (const statement of statements) {
-      try {
-        await connection.query(statement);
-        successCount++;
-        
-        // Extract table name from CREATE TABLE statement for better logging
-        const tableMatch = statement.match(/CREATE TABLE.*?`([^`]+)`/i);
-        if (tableMatch) {
-          log(`  ✓ Created table: ${tableMatch[1]}`, 'green');
-        }
-      } catch (error) {
-        // Check if error is "table already exists"
-        if (error.code === 'ER_TABLE_EXISTS_ERROR') {
-          const tableMatch = statement.match(/CREATE TABLE.*?`([^`]+)`/i);
-          if (tableMatch) {
-            log(`  ⚠️  Table already exists: ${tableMatch[1]} (skipping)`, 'yellow');
-          }
-        } else {
-          throw error;
-        }
+    try {
+      // Enable multi-statement queries and execute all at once
+      await connection.query(migrationSQL);
+      
+      // Count tables created
+      const tableMatches = migrationSQL.match(/CREATE TABLE.*?`([^`]+)`/gi);
+      if (tableMatches) {
+        tableMatches.forEach(match => {
+          const tableName = match.match(/`([^`]+)`/)[1];
+          log(`  ✓ Created table: ${tableName}`, 'green');
+        });
+      }
+      
+      log(`\n✅ Migration completed successfully`, 'green');
+    } catch (error) {
+      // Check if error is "table already exists"
+      if (error.code === 'ER_TABLE_EXISTS_ERROR') {
+        log(`  ⚠️  Some tables already exist (skipping)`, 'yellow');
+      } else {
+        throw error;
       }
     }
-    
-    log(`\n✅ Migration completed: ${successCount} statements executed`, 'green');
     
     // Read seed data file
     log('\n📄 Reading seed data file...', 'blue');
