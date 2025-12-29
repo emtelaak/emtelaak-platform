@@ -43,7 +43,17 @@ async function runMigration() {
     }
     
     log('\n📡 Connecting to TiDB database...', 'blue');
-    connection = await mysql.createConnection(process.env.DATABASE_URL);
+    
+    // TiDB requires SSL connections
+    const connectionConfig = {
+      uri: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: true,
+        minVersion: 'TLSv1.2'
+      }
+    };
+    
+    connection = await mysql.createConnection(connectionConfig);
     log('✅ Connected successfully', 'green');
     
     // Read migration file
