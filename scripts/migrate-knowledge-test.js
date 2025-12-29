@@ -89,42 +89,55 @@ async function runMigration() {
       }
     }
     
-    // Read seed data file
-    log('\n📄 Reading seed data file...', 'blue');
-    const seedPath = join(projectRoot, 'drizzle', 'seed_knowledge_test_questions.sql');
-    const seedSQL = readFileSync(seedPath, 'utf8');
-    log('✅ Seed data file loaded', 'green');
-    
-    // Execute seed data
+     // Seed data programmatically (avoids variable issues)
     log('\n⚙️  Seeding knowledge test questions...', 'blue');
     
-    // Check if questions already exist
-    const [existingQuestions] = await connection.query(
-      'SELECT COUNT(*) as count FROM knowledge_test_questions'
-    );
-    
-    if (existingQuestions[0].count > 0) {
-      log(`  ⚠️  Found ${existingQuestions[0].count} existing questions`, 'yellow');
-      log('  ℹ️  Skipping seed data to avoid duplicates', 'yellow');
-      log('  💡 To reseed, delete existing questions first', 'yellow');
-    } else {
-      // Split and execute seed statements
-      const seedStatements = seedSQL
-        .split(';')
-        .map(stmt => stmt.trim())
-        .filter(stmt => stmt.length > 0 && !stmt.startsWith('--'));
-      
-      for (const statement of seedStatements) {
-        await connection.query(statement);
+    const sampleQuestions = [
+      {
+        questionText: 'What is the primary purpose of diversification in an investment portfolio?',
+        questionTextAr: 'ما هو الغرض الأساسي من التنويع في محفظة الاستثمار؟',
+        category: 'Risk Management',
+        difficulty: 'easy',
+        answers: [
+          { answerText: 'To maximize returns by investing in a single asset', answerTextAr: 'لتعظيم العوائد من خلال الاستثمار في أصل واحد', isCorrect: false },
+          { answerText: 'To reduce risk by spreading investments across different assets', answerTextAr: 'لتقليل المخاطر من خلال توزيع الاستثمارات عبر أصول مختلفة', isCorrect: true },
+          { answerText: 'To avoid paying taxes on investment gains', answerTextAr: 'لتجنب دفع الضرائب على أرباح الاستثمار', isCorrect: false },
+          { answerText: 'To guarantee profits in all market conditions', answerTextAr: 'لضمان الأرباح في جميع ظروف السوق', isCorrect: false }
+        ]
+      },
+      {
+        questionText: 'In real estate crowdfunding, what does "fractional ownership" mean?',
+        questionTextAr: 'في التمويل الجماعي العقاري، ماذا تعني "الملكية الجزئية"؟',
+        category: 'Real Estate Basics',
+        difficulty: 'easy',
+        answers: [
+          { answerText: 'Owning a complete property', answerTextAr: 'امتلاك عقار كامل', isCorrect: false },
+          { answerText: 'Owning a portion or share of a property', answerTextAr: 'امتلاك جزء أو حصة من عقار', isCorrect: true },
+          { answerText: 'Renting a property for a fraction of the year', answerTextAr: 'استئجار عقار لجزء من السنة', isCorrect: false },
+          { answerText: 'Buying property at a discounted price', answerTextAr: 'شراء عقار بسعر مخفض', isCorrect: false }
+        ]
       }
-      
-      // Count inserted questions
-      const [newQuestions] = await connection.query(
-        'SELECT COUNT(*) as count FROM knowledge_test_questions'
+    ];
+    
+    for (const question of sampleQuestions) {
+      // Insert question
+      const [result] = await connection.query(
+        'INSERT INTO `knowledge_test_questions` (`questionText`, `questionTextAr`, `category`, `difficulty`) VALUES (?, ?, ?, ?)',
+        [question.questionText, question.questionTextAr, question.category, question.difficulty]
       );
       
-      log(`  ✓ Seeded ${newQuestions[0].count} questions`, 'green');
+      const questionId = result.insertId;
+      
+      // Insert answers
+      for (const answer of question.answers) {
+        await connection.query(
+          'INSERT INTO `knowledge_test_answers` (`questionId`, `answerText`, `answerTextAr`, `isCorrect`) VALUES (?, ?, ?, ?)',
+          [questionId, answer.answerText, answer.answerTextAr, answer.isCorrect]
+        );
+      }
     }
+    
+    log(`  ✓ Seeded ${sampleQuestions.length} questions`, 'green');
     
     // Verify tables were created
     log('\n🔍 Verifying migration...', 'blue');
