@@ -1,0 +1,220 @@
+/**
+ * RTL (Right-to-Left) Support Styles
+ * This file contains global RTL-specific styles using CSS Logical Properties
+ * for proper bidirectional text support.
+ */
+
+/* ============================================
+   GLOBAL RTL UTILITIES
+   ============================================ */
+
+/* Ensure smooth transitions when switching between LTR and RTL */
+[dir="rtl"] *,
+[dir="ltr"] * {
+  transition: margin 0.2s ease, padding 0.2s ease;
+}
+
+/* ============================================
+   ICON MIRRORING
+   ============================================ */
+
+/* Mirror directional icons in RTL mode */
+[dir="rtl"] .rtl-mirror {
+  transform: scaleX(-1);
+}
+
+/* Specific icons that should be mirrored */
+[dir="rtl"] .lucide-chevron-right,
+[dir="rtl"] .lucide-chevron-left,
+[dir="rtl"] .lucide-arrow-right,
+[dir="rtl"] .lucide-arrow-left,
+[dir="rtl"] .lucide-log-out,
+[dir="rtl"] .lucide-log-in {
+  transform: scaleX(-1);
+}
+
+/* ============================================
+   FLEXBOX & GRID RTL SUPPORT
+   ============================================ */
+
+/* Ensure flex containers respect RTL direction */
+[dir="rtl"] .flex {
+  direction: rtl;
+}
+
+/* ============================================
+   TEXT ALIGNMENT
+   ============================================ */
+
+/* Use logical properties for text alignment */
+.text-start {
+  text-align: start;
+}
+
+.text-end {
+  text-align: end;
+}
+
+/* ============================================
+   SPACING UTILITIES (Logical Properties)
+   ============================================ */
+
+/* Margin Inline (replaces margin-left/right) */
+.ms-auto {
+  margin-inline-start: auto;
+}
+
+.me-auto {
+  margin-inline-end: auto;
+}
+
+/* Padding Inline */
+.ps-4 {
+  padding-inline-start: 1rem;
+}
+
+.pe-4 {
+  padding-inline-end: 1rem;
+}
+
+/* ============================================
+   POSITIONING (Logical Properties)
+   ============================================ */
+
+.inset-inline-start-0 {
+  inset-inline-start: 0;
+}
+
+.inset-inline-end-0 {
+  inset-inline-end: 0;
+}
+
+/* ============================================
+   BORDER RADIUS (Logical Properties)
+   ============================================ */
+
+.rounded-s {
+  border-start-start-radius: 0.375rem;
+  border-end-start-radius: 0.375rem;
+}
+
+.rounded-e {
+  border-start-end-radius: 0.375rem;
+  border-end-end-radius: 0.375rem;
+}
+
+/* ============================================
+   DROPDOWN & POPOVER ALIGNMENT
+   ============================================ */
+
+/* Ensure dropdowns align correctly in RTL */
+[dir="rtl"] [data-radix-popper-content-wrapper] {
+  direction: rtl;
+}
+
+/* ============================================
+   FORM INPUTS
+   ============================================ */
+
+/* Ensure input text aligns correctly */
+[dir="rtl"] input[type="text"],
+[dir="rtl"] input[type="email"],
+[dir="rtl"] input[type="password"],
+[dir="rtl"] input[type="search"],
+[dir="rtl"] input[type="tel"],
+[dir="rtl"] input[type="url"],
+[dir="rtl"] textarea {
+  text-align: start;
+}
+
+/* Input icons positioning */
+[dir="rtl"] .input-icon-start {
+  right: auto;
+  left: 0.75rem;
+}
+
+[dir="rtl"] .input-icon-end {
+  left: auto;
+  right: 0.75rem;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+/* Position scrollbar on the left in RTL */
+[dir="rtl"] ::-webkit-scrollbar {
+  width: 8px;
+}
+
+[dir="rtl"] * {
+  scrollbar-gutter: stable;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+/* Slide animations should respect direction */
+@keyframes slideInFromEnd {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromStart {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+[dir="rtl"] .slide-in-end {
+  animation: slideInFromEnd 0.3s ease-out;
+}
+
+[dir="ltr"] .slide-in-end {
+  animation: slideInFromStart 0.3s ease-out;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+/* Ensure proper line height for Arabic text */
+[dir="rtl"] {
+  font-family: 'Cairo', 'Inter', sans-serif;
+  line-height: 1.8;
+}
+
+[dir="ltr"] {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+}
+
+/* ============================================
+   MOBILE BOTTOM NAVIGATION
+   ============================================ */
+
+/* Ensure mobile nav respects RTL */
+[dir="rtl"] .mobile-nav-item {
+  direction: rtl;
+}
+
+/* ============================================
+   SHADOWS
+   ============================================ */
+
+/* Adjust shadows for RTL (if needed) */
+[dir="rtl"] .shadow-end {
+  box-shadow: -4px 0 6px -1px rgb(0 0 0 / 0.1);
+}
+
+[dir="ltr"] .shadow-end {
+  box-shadow: 4px 0 6px -1px rgb(0 0 0 / 0.1);
+}

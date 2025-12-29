@@ -18,7 +18,7 @@ import { trpc } from "@/lib/trpc";
 export default function Navigation() {
   const [location] = useLocation();
   const { user, isAuthenticated, loading } = useAuth();
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, dir } = useLanguage();
   const logoutMutation = trpc.auth.logout.useMutation();
   
   // Fetch user's visible menu items from RBAC system
@@ -69,7 +69,7 @@ export default function Navigation() {
   };
 
   const nav = language === "en" ? t.en : t.ar;
-  const isRTL = language === "ar";
+  const isRTL = dir === "rtl";
 
   // Map menu paths to their names in the database
   const menuPathMap: Record<string, string> = {
@@ -99,8 +99,8 @@ export default function Navigation() {
     ? mainMenuItemsBase.filter(item => visibleMenuNames.has(item.name))
     : mainMenuItemsBase; // Fallback: show all menus if RBAC data is not available
 
-  // Reverse menu items for RTL to display in correct order (Home first from right)
-  const mainMenuItems = isRTL ? [...filteredMenuItems].reverse() : filteredMenuItems;
+  // No need to reverse - natural order works with dir="rtl"
+  const mainMenuItems = filteredMenuItems;
 
   const userMenuItems = [
     { href: "/dashboard", label: nav.dashboard, icon: LayoutDashboard },
@@ -110,8 +110,8 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 sticky top-0 z-50 shadow-sm" dir={isRTL ? "rtl" : "ltr"}>
-      <div className="container flex h-16 items-center justify-between" dir={isRTL ? "rtl" : "ltr"}>
+    <nav className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 sticky top-0 z-50 shadow-sm">
+      <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/">
           <div className="flex items-center gap-3 cursor-pointer">
@@ -120,7 +120,7 @@ export default function Navigation() {
         </Link>
 
         {/* Main Menu - Desktop */}
-        <div className={`hidden md:flex items-center gap-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
+        <div className="hidden md:flex items-center gap-6">
           {mainMenuItems.map((item) => (
             <Link key={item.href} href={item.href}>
               <span
@@ -145,7 +145,7 @@ export default function Navigation() {
                 {language === "en" ? "🇺🇸" : "🇸🇦"}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align={isRTL ? "start" : "end"}>
               <DropdownMenuItem onClick={() => setLanguage("en")} className="gap-2">
                 <span className="text-xl">🇺🇸</span>
                 <span>English</span>
@@ -173,10 +173,10 @@ export default function Navigation() {
                 <Button variant="ghost" className="gap-2">
                   <User className="h-5 w-5" />
                   <span className="hidden md:inline">{user?.name || nav.profile}</span>
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown className={`h-4 w-4 ${isRTL ? 'rtl-mirror' : ''}`} />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuContent align={isRTL ? "start" : "end"} className="w-56">
                 {/* User Info */}
                 <div className="px-2 py-3 border-b">
                   <p className="text-sm font-semibold">{user?.name}</p>
@@ -239,7 +239,7 @@ export default function Navigation() {
                   onClick={handleLogout}
                   className="cursor-pointer gap-3 py-3 text-red-600 focus:text-red-600"
                 >
-                  <LogOut className="h-5 w-5" />
+                  <LogOut className={`h-5 w-5 ${isRTL ? 'rtl-mirror' : ''}`} />
                   <span className="font-medium">{nav.logout}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>

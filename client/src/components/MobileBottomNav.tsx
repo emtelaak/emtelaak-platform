@@ -1,74 +1,60 @@
 import { Home, TrendingUp, Briefcase, Wallet, Menu } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useAuth } from "@/_core/hooks/useAuth";
-import { cn } from "@/lib/utils";
 
 export default function MobileBottomNav() {
   const [location] = useLocation();
-  const { language } = useLanguage();
+  const { language, dir } = useLanguage();
   
-
   const navItems = [
     {
       icon: Home,
       label: language === "en" ? "Home" : "الرئيسية",
       href: "/",
-      active: location === "/"
     },
     {
       icon: TrendingUp,
       label: language === "en" ? "Invest" : "استثمر",
       href: "/properties",
-      active: location.startsWith("/properties")
     },
     {
       icon: Briefcase,
       label: language === "en" ? "Portfolio" : "المحفظة",
       href: "/portfolio",
-      active: location === "/portfolio"
     },
     {
       icon: Wallet,
       label: language === "en" ? "Wallet" : "المحفظة المالية",
       href: "/wallet",
-      active: location === "/wallet"
     },
     {
       icon: Menu,
       label: language === "en" ? "Menu" : "القائمة",
       href: "/menu",
-      active: location === "/menu"
-    }
+    },
   ];
 
+  const isRTL = dir === "rtl";
+
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t border-border shadow-lg safe-area-inset-bottom">
-      <div className="grid grid-cols-5 h-16">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-border z-50 safe-area-bottom">
+      <div className={`flex items-center justify-around h-16 ${isRTL ? 'flex-row-reverse' : ''}`}>
         {navItems.map((item) => {
           const Icon = item.icon;
+          const isActive = location === item.href;
+          
           return (
             <Link key={item.href} href={item.href}>
-              <button
-                className={cn(
-                  "flex flex-col items-center justify-center w-full h-full transition-all duration-200 active:scale-95",
-                  item.active
+              <div
+                className={`flex flex-col items-center justify-center px-3 py-2 transition-colors mobile-nav-item ${
+                  isActive
                     ? "text-primary"
                     : "text-muted-foreground hover:text-foreground"
-                )}
+                }`}
               >
-                <Icon className={cn(
-                  "mb-1 transition-all",
-                  item.active ? "h-6 w-6" : "h-5 w-5"
-                )} />
-                <span className={cn(
-                  "text-xs transition-all",
-                  item.active ? "font-bold" : "font-medium"
-                )}>{item.label}</span>
-                {item.active && (
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-primary rounded-t-full" />
-                )}
-              </button>
+                <Icon className="h-5 w-5 mb-1" />
+                <span className="text-xs font-medium">{item.label}</span>
+              </div>
             </Link>
           );
         })}
