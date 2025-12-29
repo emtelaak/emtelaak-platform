@@ -36,6 +36,9 @@ export default function Home() {
   const [investmentPeriod, setInvestmentPeriod] = useState(5);
   const utils = trpc.useUtils();
   const isRTL = dir === 'rtl';
+  
+  // Debug logging
+  console.log('Home Page RTL Debug:', { language, dir, isRTL, documentDir: document.documentElement.dir });
 
   // Check if 2FA verification is required
   useEffect(() => {
