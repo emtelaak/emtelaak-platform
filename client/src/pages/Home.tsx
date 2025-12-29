@@ -103,7 +103,7 @@ export default function Home() {
               </Button>
               <button
                 onClick={() => setShowBanner(false)}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#032941] hover:opacity-70"
+                className={`absolute top-1/2 -translate-y-1/2 text-[#032941] hover:opacity-70 ${isRTL ? 'right-4' : 'left-4'}`}
               >
                 <X className="h-5 w-5" />
               </button>
@@ -191,7 +191,7 @@ export default function Home() {
                       className="text-lg px-8 py-6 h-auto font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-[#CDE428] text-[#032941] hover:bg-[#d9ed3a]"
                     >
                       {language === 'ar' ? 'استكشف العقارات' : 'Explore Properties'}
-                      <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
+                      <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rtl-mirror' : 'ml-2'}`} />
                     </Button>
                   </Link>
                   {!isAuthenticated && (
@@ -265,7 +265,7 @@ export default function Home() {
                       <Link href="/how-it-works">
                         <Button variant="outline" className="w-full border-2 border-[#032941] text-[#032941] hover:bg-[#032941] hover:text-white">
                           {language === 'ar' ? 'كيف يعمل' : 'How It Works'}
-                          <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
+                          <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rtl-mirror' : 'ml-2'}`} />
                         </Button>
                       </Link>
                     </div>
@@ -637,7 +637,7 @@ export default function Home() {
                   <Link href="/properties?type=buyToLet">
                     <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-6 text-lg font-semibold">
                       {language === 'ar' ? 'استكشف الشراء للتأجير' : 'Explore Buy-to-Let'}
-                      <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
+                      <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rtl-mirror' : 'ml-2'}`} />
                     </Button>
                   </Link>
                 </div>
@@ -713,7 +713,7 @@ export default function Home() {
                   <Link href="/properties?type=buyToSell">
                     <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-lg font-semibold">
                       {language === 'ar' ? 'استكشف الشراء للبيع' : 'Explore Buy-to-Sell'}
-                      <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
+                      <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rtl-mirror' : 'ml-2'}`} />
                     </Button>
                   </Link>
                 </div>
@@ -1048,7 +1048,7 @@ export default function Home() {
                     <Link href="/register">
                       <Button className="w-full bg-[#CDE428] hover:bg-[#d9ed3a] text-[#032941] py-6 text-lg font-semibold">
                         {language === 'ar' ? 'ابدأ الاستثمار' : 'Start Investing'}
-                        <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
+                        <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rtl-mirror' : 'ml-2'}`} />
                       </Button>
                     </Link>
                   </div>
@@ -1083,7 +1083,7 @@ export default function Home() {
               <Link href="/register">
                 <Button className="bg-[#CDE428] hover:bg-[#d9ed3a] text-[#032941] px-8 py-6 text-lg font-semibold">
                   {language === 'ar' ? 'ابدأ الآن' : 'Start Now'}
-                  <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
+                  <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rtl-mirror' : 'ml-2'}`} />
                 </Button>
               </Link>
               <Link href="/properties">
@@ -1143,7 +1143,7 @@ export default function Home() {
                     <Link href="/login">
                       <Button className="bg-[#032941] hover:bg-[#064B66] text-white px-8 py-6 text-lg font-semibold w-full sm:w-auto">
                         {language === 'ar' ? 'تسجيل الدخول' : 'Sign In'}
-                        <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
+                        <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rtl-mirror' : 'ml-2'}`} />
                       </Button>
                     </Link>
                     <Link href="/register">
@@ -1313,7 +1313,7 @@ export default function Home() {
                 <Link href="/properties">
                   <Button className="bg-[#CDE428] hover:bg-[#d9ed3a] text-[#032941] px-8 py-6 text-lg font-semibold">
                     {language === 'ar' ? 'عرض جميع العقارات' : 'View All Properties'}
-                    <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rotate-180' : 'ml-2'}`} />
+                    <ArrowRight className={`h-5 w-5 ${isRTL ? 'mr-2 rtl-mirror' : 'ml-2'}`} />
                   </Button>
                 </Link>
               </div>
