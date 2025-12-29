@@ -30,7 +30,7 @@ import ActivateAccount from "./pages/ActivateAccount";
 import Workflows from "./pages/Workflows";
 import { TermsAcceptanceModal } from "./components/TermsAcceptanceModal";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
-import MobileBottomNav from "./components/MobileBottomNav";
+import AuthenticatedMobileNav from "./components/AuthenticatedMobileNav";
 
 // Lazy load admin pages (only loaded when accessed)
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
@@ -305,7 +305,7 @@ function App() {
             <Router />
             <TermsAcceptanceModal />
             <PWAInstallPrompt />
-            <MobileBottomNav />
+            <AuthenticatedMobileNav />
           </Suspense>
         </TooltipProvider>
       </ThemeProvider>

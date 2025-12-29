@@ -7,15 +7,7 @@ import { cn } from "@/lib/utils";
 export default function MobileBottomNav() {
   const [location] = useLocation();
   const { language } = useLanguage();
-  const { isAuthenticated, loading, user } = useAuth();
-
-  console.log('[MobileBottomNav] Rendering:', { isAuthenticated, loading, user });
-
-  // Don't show navigation if not authenticated or still loading
-  if (!isAuthenticated || loading) {
-    console.log('[MobileBottomNav] Not rendering due to auth state:', { isAuthenticated, loading });
-    return null;
-  }
+  
 
   const navItems = [
     {
