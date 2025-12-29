@@ -141,11 +141,15 @@ async function runMigration() {
     
     // Verify tables were created
     log('\n🔍 Verifying migration...', 'blue');
-    const [tables] = await connection.query(`
-      SHOW TABLES LIKE 'knowledge_test%' 
-      OR SHOW TABLES LIKE 'investor_qualification%'
-      OR SHOW TABLES LIKE 'investment_limit%'
-    `);
+    
+    // Get all tables and filter by our prefixes
+    const [allTables] = await connection.query('SHOW TABLES');
+    const tableNames = allTables.map(row => Object.values(row)[0]);
+    const tables = tableNames.filter(name => 
+      name.startsWith('knowledge_test') || 
+      name.startsWith('investor_qualification') || 
+      name.startsWith('investment_limit')
+    );
     
     const expectedTables = [
       'knowledge_test_questions',
@@ -156,11 +160,9 @@ async function runMigration() {
       'investment_limit_tracking',
     ];
     
-    const createdTables = tables.map(row => Object.values(row)[0]);
-    
     log('\n📊 Created Tables:', 'cyan');
     expectedTables.forEach(tableName => {
-      if (createdTables.includes(tableName)) {
+      if (tables.includes(tableName)) {
         log(`  ✓ ${tableName}`, 'green');
       } else {
         log(`  ✗ ${tableName} (MISSING!)`, 'red');
@@ -169,7 +171,7 @@ async function runMigration() {
     
     // Get row counts
     log('\n📈 Table Statistics:', 'cyan');
-    for (const tableName of createdTables) {
+    for (const tableName of tables) {
       const [rows] = await connection.query(`SELECT COUNT(*) as count FROM ${tableName}`);
       log(`  ${tableName}: ${rows[0].count} rows`, 'blue');
     }
