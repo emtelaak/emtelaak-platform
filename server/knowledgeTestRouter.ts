@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { router, protectedProcedure, adminProcedure } from "./_core/trpc";
-import { db } from "./db";
+import { getDb } from "./db";
 import { 
   knowledgeTestQuestions, 
   knowledgeTestAnswers, 
@@ -25,6 +25,8 @@ export const knowledgeTestRouter = router({
       numberOfQuestions: z.number().min(10).max(50).default(20),
     }))
     .query(async ({ input }) => {
+      const db = await getDb();
+      
       // Get random questions from database
       // Mix of difficulties: 40% easy, 40% medium, 20% hard
       const easyCount = Math.floor(input.numberOfQuestions * 0.4);
@@ -101,6 +103,7 @@ export const knowledgeTestRouter = router({
       })),
     }))
     .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
       const { responses } = input;
       const userId = ctx.user.id;
 
@@ -175,6 +178,8 @@ export const knowledgeTestRouter = router({
    */
   getTestHistory: protectedProcedure
     .query(async ({ ctx }) => {
+      const db = await getDb();
+      
       const attempts = await db
         .select()
         .from(knowledgeTestAttempts)
@@ -189,6 +194,8 @@ export const knowledgeTestRouter = router({
    */
   getCertificate: protectedProcedure
     .query(async ({ ctx }) => {
+      const db = await getDb();
+      
       const [certificate] = await db
         .select()
         .from(knowledgeTestAttempts)
@@ -219,6 +226,8 @@ export const knowledgeTestRouter = router({
       attemptId: z.number(),
     }))
     .query(async ({ input, ctx }) => {
+      const db = await getDb();
+      
       const [attempt] = await db
         .select()
         .from(knowledgeTestAttempts)
@@ -270,6 +279,7 @@ export const knowledgeTestRouter = router({
       })).min(2).max(6),
     }))
     .mutation(async ({ input }) => {
+      const db = await getDb();
       const { answers, ...questionData } = input;
 
       // Insert question
@@ -300,6 +310,7 @@ export const knowledgeTestRouter = router({
       difficulty: z.enum(["easy", "medium", "hard"]).optional(),
     }))
     .query(async ({ input }) => {
+      const db = await getDb();
       let query = db.select().from(knowledgeTestQuestions);
 
       if (input.category) {
@@ -343,6 +354,7 @@ export const knowledgeTestRouter = router({
       isActive: z.boolean().optional(),
     }))
     .mutation(async ({ input }) => {
+      const db = await getDb();
       const { id, ...updateData } = input;
 
       await db
@@ -361,6 +373,8 @@ export const knowledgeTestRouter = router({
       id: z.number(),
     }))
     .mutation(async ({ input }) => {
+      const db = await getDb();
+      
       await db
         .delete(knowledgeTestQuestions)
         .where(eq(knowledgeTestQuestions.id, input.id));
