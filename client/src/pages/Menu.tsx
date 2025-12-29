@@ -90,37 +90,38 @@ export default function Menu() {
 
         {/* Menu Items */}
         <div className="space-y-2">
-          {/* Account Section */}
-          <div className="mb-4">
-            <h3 className="text-sm font-semibold text-muted-foreground px-4 mb-2">
-              {language === "en" ? "ACCOUNT" : "الحساب"}
-            </h3>
-            <Card>
-              <CardContent className="p-0">
-                <Link href="/profile">
-                  <button className="w-full flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors border-b last:border-b-0">
-                    <User className="h-5 w-5 text-muted-foreground" />
-                    <span className="flex-1 text-left">{language === "en" ? "Profile" : "الملف الشخصي"}</span>
-                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                  </button>
-                </Link>
-                <Link href="/settings">
-                  <button className="w-full flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors border-b last:border-b-0">
-                    <Settings className="h-5 w-5 text-muted-foreground" />
-                    <span className="flex-1 text-left">{language === "en" ? "Settings" : "الإعدادات"}</span>
-                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                  </button>
-                </Link>
-                <Link href="/notifications">
-                  <button className="w-full flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors border-b last:border-b-0">
-                    <Bell className="h-5 w-5 text-muted-foreground" />
-                    <span className="flex-1 text-left">{language === "en" ? "Notifications" : "الإشعارات"}</span>
-                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                  </button>
-                </Link>
-              </CardContent>
-            </Card>
-          </div>
+          {isAuthenticated && (
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-muted-foreground px-4 mb-2">
+                {language === "en" ? "ACCOUNT" : "الحساب"}
+              </h3>
+              <Card>
+                <CardContent className="p-0">
+                  <Link href="/profile">
+                    <button className="w-full flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors border-b last:border-b-0">
+                      <User className="h-5 w-5 text-muted-foreground" />
+                      <span className="flex-1 text-left">{language === "en" ? "Profile" : "الملف الشخصي"}</span>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </button>
+                  </Link>
+                  <Link href="/settings">
+                    <button className="w-full flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors border-b last:border-b-0">
+                      <Settings className="h-5 w-5 text-muted-foreground" />
+                      <span className="flex-1 text-left">{language === "en" ? "Settings" : "الإعدادات"}</span>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </button>
+                  </Link>
+                  <Link href="/notifications">
+                    <button className="w-full flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors border-b last:border-b-0">
+                      <Bell className="h-5 w-5 text-muted-foreground" />
+                      <span className="flex-1 text-left">{language === "en" ? "Notifications" : "الإشعارات"}</span>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           {/* Information Section */}
           <div className="mb-4">
