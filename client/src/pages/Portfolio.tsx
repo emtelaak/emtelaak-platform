@@ -21,7 +21,8 @@ import { useState } from "react";
 
 export default function Portfolio() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
-  const { t } = useLanguage();
+  const { t, language, dir } = useLanguage();
+  const isRTL = dir === "rtl";
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("investments");
 
@@ -137,7 +138,7 @@ export default function Portfolio() {
                 <Button variant="outline">{t.nav.properties}</Button>
               </Link>
               <Button>
-                <Download className="mr-2 h-4 w-4" />
+                <Download className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
                 Export Report
               </Button>
             </div>

@@ -27,7 +27,8 @@ export default function PropertyDetail() {
   const { id } = useParams();
   const [, setLocation] = useLocation();
   const { user, isAuthenticated } = useAuth();
-  const { language } = useLanguage();
+  const { language, dir } = useLanguage();
+  const isRTL = dir === "rtl";
   const [investModalOpen, setInvestModalOpen] = useState(false);
   const [numberOfShares, setNumberOfShares] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("bank_transfer");
@@ -190,7 +191,7 @@ export default function PropertyDetail() {
               </Link>
               <Link href="/properties">
                 <Button variant="ghost" size="sm">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  <ArrowLeft className={`h-4 w-4 rtl-mirror ${isRTL ? 'ml-2' : 'mr-2'}`} />
                   Back to Properties
                 </Button>
               </Link>
@@ -198,7 +199,7 @@ export default function PropertyDetail() {
             {property.status === "coming_soon" ? (
               interestStatus?.hasInterest ? (
                 <Button disabled size="lg" variant="outline" className="bg-green-50 border-green-500 text-green-700">
-                  <CheckCircle2 className="mr-2 h-4 w-4" />
+                  <CheckCircle2 className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
                   {language === "en" ? "Interest Registered" : "تم تسجيل الاهتمام"}
                 </Button>
               ) : (

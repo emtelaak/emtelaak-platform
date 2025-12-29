@@ -21,7 +21,8 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import Navigation from "@/components/Navigation";
 
 export default function Properties() {
-  const { language } = useLanguage();
+  const { language, dir } = useLanguage();
+  const isRTL = dir === "rtl";
   const { user, isAuthenticated } = useAuth();
   const [statusFilter, setStatusFilter] = useState<string>("available");
   const [filters, setFilters] = useState({
@@ -170,7 +171,7 @@ export default function Properties() {
                   {language === "en" ? "Coming Soon" : "قريباً"}
                 </TabsTrigger>
                 <TabsTrigger value="saved">
-                  <Bookmark className="h-4 w-4 mr-1" />
+                  <Bookmark className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
                   {language === "en" ? "Saved" : "محفوظ"}
                 </TabsTrigger>
               </TabsList>
@@ -180,10 +181,10 @@ export default function Properties() {
           {/* Filters */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-4">
             <div className="relative md:col-span-2">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Search className={`absolute top-3 h-4 w-4 text-muted-foreground ${isRTL ? 'right-3' : 'left-3'}`} />
               <Input
                 placeholder="Search properties..."
-                className="pl-9 h-11 md:h-10"
+                className={`h-11 md:h-10 ${isRTL ? 'pr-9' : 'pl-9'}`}
               />
             </div>
 
@@ -269,7 +270,7 @@ export default function Properties() {
                   <Card key={property.id} className="property-card-hover overflow-hidden">
                     <div className="relative h-48 bg-muted">
                       <PropertyImageDisplay propertyId={property.id} className="absolute inset-0" />
-                      <div className="absolute top-4 right-4 flex gap-2 z-10">
+                      <div className={`absolute top-4 flex gap-2 z-10 ${isRTL ? 'left-4' : 'right-4'}`}>
                         <Button
                           variant="ghost"
                           size="icon"
@@ -292,7 +293,7 @@ export default function Properties() {
                           {PROPERTY_TYPES[property.propertyType as keyof typeof PROPERTY_TYPES]}
                         </Badge>
                       </div>
-                      <div className="absolute top-4 left-4 flex flex-col gap-2">
+                      <div className={`absolute top-4 flex flex-col gap-2 ${isRTL ? 'right-4' : 'left-4'}`}>
                         {property.status === "coming_soon" && (
                           <Badge className="bg-yellow-500 text-black font-semibold">
                             {language === "en" ? "Coming Soon" : "قريباً"}
