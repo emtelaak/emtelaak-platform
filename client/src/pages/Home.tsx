@@ -142,9 +142,9 @@ export default function Home() {
           </div>
 
           <div className="container relative z-10 py-16">
-            <div className={`flex flex-col lg:flex-row gap-12 items-center justify-between ${isRTL ? 'lg:flex-row-reverse' : ''}`}>
+            <div className="flex flex-col ltr:lg:flex-row rtl:lg:flex-row-reverse items-center">
               {/* Main Content */}
-              <div className="text-white space-y-8">
+              <div className="text-white space-y-8 ltr:lg:me-12 rtl:lg:ms-12">
                 <div className="inline-block">
                   <span className="px-4 py-2 rounded-full text-sm font-semibold bg-[#CDE428] text-[#032941]">
                     🏢 {language === 'ar' ? 'الاستثمار العقاري الجزئي' : 'Fractional Real Estate Investment'}

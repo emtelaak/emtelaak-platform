@@ -218,3 +218,18 @@
 [dir="ltr"] .shadow-end {
   box-shadow: 4px 0 6px -1px rgb(0 0 0 / 0.1);
 }
+
+/* ============================================
+   HERO SECTION RTL FIX
+   ============================================ */
+
+/* Force flex-row-reverse in RTL mode for hero section */
+/* This ensures the layout visually mirrors regardless of Tailwind class order */
+[dir="rtl"] section.relative.overflow-hidden .container > div[class*="flex"] {
+  flex-direction: row-reverse !important;
+}
+
+/* Ensure items don't fill container width in RTL */
+[dir="rtl"] section.relative.overflow-hidden .container > div[class*="flex"] > * {
+  flex: 0 1 auto;
+}
