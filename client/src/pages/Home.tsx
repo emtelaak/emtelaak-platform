@@ -142,9 +142,9 @@ export default function Home() {
           </div>
 
           <div className="container relative z-10 py-16">
-            <div className="flex flex-col lg:flex-row rtl:lg:flex-row-reverse gap-8 lg:gap-16">
+            <div className="flex flex-col lg:flex-row rtl:lg:flex-row-reverse items-center justify-between gap-12">
               {/* Main Content */}
-              <div className="text-white space-y-8 lg:w-1/2 rtl:text-right">
+              <div className="text-white space-y-8 flex-1 lg:w-1/2 lg:max-w-[50%] rtl:text-right">
                 <div className="inline-block">
                   <span className="px-4 py-2 rounded-full text-sm font-semibold bg-[#CDE428] text-[#032941]">
                     🏢 {language === 'ar' ? 'الاستثمار العقاري الجزئي' : 'Fractional Real Estate Investment'}
@@ -223,7 +223,7 @@ export default function Home() {
               </div>
 
               {/* Hero Card */}
-              <div className="block lg:w-1/2">
+              <div className="flex-1 lg:w-1/2 lg:max-w-[50%]">
                 <div className="relative">
                   <div className="bg-white rounded-2xl p-8 shadow-2xl">
                     <div className="space-y-6">
