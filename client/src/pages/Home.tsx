@@ -144,7 +144,7 @@ export default function Home() {
           <div className="container relative z-10 py-16">
             <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-12 items-center">
               {/* Main Content */}
-              <div className="text-white space-y-8 ltr:lg:order-1 rtl:lg:order-2">
+              <div className="text-white space-y-8 ltr:lg:col-start-1 rtl:lg:col-start-2">
                 <div className="inline-block">
                   <span className="px-4 py-2 rounded-full text-sm font-semibold bg-[#CDE428] text-[#032941]">
                     🏢 {language === 'ar' ? 'الاستثمار العقاري الجزئي' : 'Fractional Real Estate Investment'}
@@ -223,7 +223,7 @@ export default function Home() {
               </div>
 
               {/* Hero Card */}
-              <div className="hidden lg:block ltr:lg:order-2 rtl:lg:order-1">
+              <div className="hidden lg:block ltr:lg:col-start-2 rtl:lg:col-start-1">
                 <div className="relative">
                   <div className="bg-white rounded-2xl p-8 shadow-2xl">
                     <div className="space-y-6">
