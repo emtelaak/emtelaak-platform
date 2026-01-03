@@ -743,6 +743,25 @@ export const ar: Translation = {
     superAdmin: "مسؤول رئيسي",
   },
 
+  // Login Page
+  login: {
+    title: "مرحباً بعودتك",
+    subtitle: "سجل الدخول إلى حسابك في",
+    email: "البريد الإلكتروني",
+    emailPlaceholder: "your@email.com",
+    password: "كلمة المرور",
+    passwordPlaceholder: "أدخل كلمة المرور",
+    rememberMe: "تذكرني لمدة 30 يوماً",
+    forgotPassword: "نسيت كلمة المرور؟",
+    signIn: "تسجيل الدخول",
+    signingIn: "جاري تسجيل الدخول...",
+    noAccount: "ليس لديك حساب؟",
+    createAccount: "إنشاء حساب",
+    backToHome: "العودة للرئيسية",
+    loginSuccess: "تم تسجيل الدخول بنجاح!",
+    enterBoth: "يرجى إدخال البريد الإلكتروني وكلمة المرور",
+  },
+
   // Password Reset
   resetPassword: {
     title: "إعادة تعيين كلمة المرور",

@@ -196,7 +196,7 @@ export default function AdminDashboard() {
             <div className="flex-1">
               <div className="flex items-center gap-3">
                 <h1 className="text-3xl font-bold">{t.admin.title}</h1>
-                <Badge variant="default">{user.role === "super_admin" ? "Super Admin" : "Admin"}</Badge>
+                <Badge variant="default">{user.role === "super_admin" ? t.roles.superAdmin : t.roles.admin}</Badge>
               </div>
               <p className="text-muted-foreground mt-2">
                 {t.admin.subtitle}
@@ -208,32 +208,32 @@ export default function AdminDashboard() {
                 <>
                   <Link href="/admin/role-management">
                     <Button variant="outline">
-                      <Shield className="mr-2 h-4 w-4" />
-                      Role Management
+                      <Shield className={isRTL ? "ml-2 h-4 w-4" : "mr-2 h-4 w-4"} />
+                      {t.admin.roles.title}
                     </Button>
                   </Link>
                   <Link href="/admin/permissions">
                     <Button variant="outline">
-                      <UserCog className="mr-2 h-4 w-4" />
-                      Permissions
+                      <UserCog className={isRTL ? "ml-2 h-4 w-4" : "mr-2 h-4 w-4"} />
+                      {t.admin.permissions.title}
                     </Button>
                   </Link>
                   <Link href="/admin/invoices">
                     <Button variant="outline">
-                      <FileText className="mr-2 h-4 w-4" />
-                      Invoices
+                      <FileText className={isRTL ? "ml-2 h-4 w-4" : "mr-2 h-4 w-4"} />
+                      {t.admin.invoices.title}
                     </Button>
                   </Link>
                   <Link href="/admin/settings">
                     <Button variant="outline">
-                      <Settings className="mr-2 h-4 w-4" />
+                      <Settings className={isRTL ? "ml-2 h-4 w-4" : "mr-2 h-4 w-4"} />
                       {t.nav.settings}
                     </Button>
                   </Link>
                 </>
               )}
               <Button variant="outline" onClick={() => logout()}>
-                Logout
+                {t.common.logout}
               </Button>
             </div>
           </div>

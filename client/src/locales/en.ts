@@ -741,6 +741,25 @@ export const en = {
     superAdmin: "Super Admin",
   },
 
+  // Login Page
+  login: {
+    title: "Welcome Back",
+    subtitle: "Sign in to your account at",
+    email: "Email",
+    emailPlaceholder: "your@email.com",
+    password: "Password",
+    passwordPlaceholder: "Enter your password",
+    rememberMe: "Remember me for 30 days",
+    forgotPassword: "Forgot password?",
+    signIn: "Sign In",
+    signingIn: "Signing in...",
+    noAccount: "Don't have an account?",
+    createAccount: "Create account",
+    backToHome: "Back to Home",
+    loginSuccess: "Login successful!",
+    enterBoth: "Please enter both email and password",
+  },
+
   // Password Reset
   resetPassword: {
     title: "Reset Your Password",

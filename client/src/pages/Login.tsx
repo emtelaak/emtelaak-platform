@@ -14,7 +14,7 @@ import { toast } from "sonner";
 
 export default function Login() {
   const [, setLocation] = useLocation();
-  const { language, dir } = useLanguage();
+  const { t, language, dir } = useLanguage();
   const isRTL = dir === 'rtl';
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +26,7 @@ export default function Login() {
 
   const loginMutation = trpc.localAuth.login.useMutation({
     onSuccess: async () => {
-      toast.success("Login successful!");
+      toast.success(t.login.loginSuccess);
       
       // Wait for cookie to be set and refetch auth state
       await new Promise(resolve => setTimeout(resolve, 200));
@@ -51,7 +51,7 @@ export default function Login() {
     setError("");
     
     if (!email || !password) {
-      setError("Please enter both email and password");
+      setError(t.login.enterBoth);
       return;
     }
 
@@ -71,12 +71,12 @@ export default function Login() {
         {isRTL ? (
           <>
             <ArrowRight className="ml-2 h-4 w-4" />
-            العودة للرئيسية
+            {t.login.backToHome}
           </>
         ) : (
           <>
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
+            {t.login.backToHome}
           </>
         )}
       </Button>
@@ -86,9 +86,9 @@ export default function Login() {
           <div className="flex justify-center mb-4">
             <img src={APP_LOGO} alt={APP_TITLE} className="h-16" />
           </div>
-          <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
+          <CardTitle className="text-2xl font-bold">{t.login.title}</CardTitle>
           <CardDescription>
-            Sign in to your {APP_TITLE} account
+            {t.login.subtitle} {APP_TITLE}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -100,11 +100,11 @@ export default function Login() {
             )}
             
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t.login.email}</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="your@email.com"
+                placeholder={t.login.emailPlaceholder}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loginMutation.isPending}
@@ -113,12 +113,12 @@ export default function Login() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t.login.password}</Label>
               <div className="relative">
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
+                  placeholder={t.login.passwordPlaceholder}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loginMutation.isPending}
@@ -146,7 +146,7 @@ export default function Login() {
                   htmlFor="rememberMe"
                   className="text-sm font-normal cursor-pointer"
                 >
-                  Remember me for 30 days
+                  {t.login.rememberMe}
                 </Label>
               </div>
               <Button
@@ -155,7 +155,7 @@ export default function Login() {
                 className="p-0 h-auto text-[#003366] hover:text-[#004080]"
                 onClick={() => setLocation("/forgot-password")}
               >
-                Forgot password?
+                {t.login.forgotPassword}
               </Button>
             </div>
           </CardContent>
@@ -169,22 +169,22 @@ export default function Login() {
               {loginMutation.isPending ? (
                 <>
                   <Loader2 className={`h-4 w-4 animate-spin ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                  Signing in...
+                  {t.login.signingIn}
                 </>
               ) : (
-                "Sign In"
+                t.login.signIn
               )}
             </Button>
             
             <div className="text-center text-sm text-gray-600">
-              Don't have an account?{" "}
+              {t.login.noAccount}{" "}
               <Button
                 type="button"
                 variant="link"
                 className="p-0 h-auto text-[#003366] hover:text-[#004080] font-semibold"
                 onClick={() => setLocation("/register")}
               >
-                Create account
+                {t.login.createAccount}
               </Button>
             </div>
           </CardFooter>
